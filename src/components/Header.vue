@@ -74,7 +74,7 @@
         <span>Zaloguj się</span>
       </div>
     </div>
-    <search-input />
+
   </div>
 </template>
 
@@ -84,13 +84,11 @@ import "vue3-carousel/dist/carousel.css";
 import { Carousel, Slide, Pagination, Navigation } from "vue3-carousel";
 
 import "vue3-carousel/dist/carousel.css";
-import SearchInput from "@/features/home/SearchInput.vue";
 import RoomCard from "@/features/home/RoomCard.vue";
 import RoomCardJoin from "@/features/home/RoomCardJoin.vue";
 
 @Options({
   components: {
-    SearchInput,
     RoomCard,
     RoomCardJoin,
     Carousel,

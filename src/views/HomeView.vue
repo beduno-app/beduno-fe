@@ -1,6 +1,7 @@
 <template>
   <div class="home">
     <Header />
+    <search-input />
     <h2 class="mt-3 desktop-content text-center">Potrzebne zakwaterowanie?</h2>
     <h2 class="desktop-content text-center" style="margin-left: 175px">
       Wejdź na BedOK i masz spanie!
@@ -117,6 +118,7 @@ import CityTile from "@/features/home/CityTile.vue";
 import RoomCard from "@/features/home/RoomCard.vue";
 import CardsCarousel from "@/features/home/CardsCarousel.vue";
 import CardsCarouselJoin from "@/features/home/CardsCarouselJoin.vue";
+import SearchInput from "@/features/home/SearchInput.vue";
 
 @Options({
   components: {
@@ -126,6 +128,7 @@ import CardsCarouselJoin from "@/features/home/CardsCarouselJoin.vue";
     Footer,
     CardsCarousel,
     CardsCarouselJoin,
+    SearchInput,
   },
 })
 export default class HomeView extends Vue {}
