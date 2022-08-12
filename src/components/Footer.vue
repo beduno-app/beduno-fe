@@ -56,7 +56,7 @@
       </b-row>
     </div>
   </div>
-  <p class="p-3">
+  <p class="p-3 text-center">
     Prawa autorskie <font-awesome-icon icon="fa-solid fa-copyright" /> 2022
     bed!Ok. Wszelkie prawa autorskie zastrzeżone.
   </p>

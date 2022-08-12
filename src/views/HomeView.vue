@@ -1,8 +1,8 @@
 <template>
   <div class="home">
     <Header />
-    <h2 class="mt-3 desktop-content">Potrzebne zakwaterowanie?</h2>
-    <h2 class="desktop-content" style="margin-left: 175px">
+    <h2 class="mt-3 desktop-content text-center">Potrzebne zakwaterowanie?</h2>
+    <h2 class="desktop-content text-center" style="margin-left: 175px">
       Wejdź na BedOK i masz spanie!
     </h2>
     <cards-carousel />
@@ -21,12 +21,19 @@
       </div>
     </div>
     <div class="news p-5 container-fluid">
-      <h2 class="join-to-room py-4">NOWOŚĆ! Dołącz do pokoju</h2>
+      <h2 class="join-to-room py-4 text-center">NOWOŚĆ! Dołącz do pokoju</h2>
       <cards-carousel-join />
     </div>
 
     <div class="container-fluid">
-      <img class="mt-3" width="300" src="../assets/img/logo_bedOK_01_OK.png" />
+      <div class="d-flex justify-content-center">
+        <img
+          class="mt-3"
+          width="300"
+          src="../assets/img/logo_bedOK_01_OK.png"
+        />
+      </div>
+
       <p class="pt-4 text-center">W którym mieście chcesz znaleźć nocleg?</p>
       <b-row>
         <b-col
@@ -81,7 +88,7 @@
           </div>
         </div>
 
-        <p class="mt-3">
+        <p class="mt-3 text-center">
           Chcę otrzymać link do bezpłatnej aplikacji
           <img
             width="60"
