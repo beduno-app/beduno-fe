@@ -18,22 +18,22 @@
             <h5>Informacje</h5>
           </div>
           <ul class="text-start">
-            <li>Ceny</li>
-            <li>Lista miast</li>
-            <li>Program partnerski</li>
-            <li>Pytania i odpowiedzi Q&A</li>
-            <li>Centrum pomocy</li>
-            <li>Kontakt</li>
+            <li><a href="">Ceny</a></li>
+            <li><a href="">Lista miast</a></li>
+            <li><a href="">Program partnerski</a></li>
+            <li><a href="">Pytania i odpowiedzi Q&A</a></li>
+            <li><a href="">Centrum pomocy</a></li>
+            <li><a href="">Kontakt</a></li>
           </ul>
         </b-col>
         <b-col class="col-sm-4 col">
           <ul class="text-start" style="padding-top: 32px">
-            <li>O bed!OK</li>
-            <li>Kariera</li>
-            <li>Informacje</li>
-            <li>Zasady współpracy</li>
-            <li>Oświadczenie o ochronie prywatności i plikach cookies</li>
-            <li>Zarządzaj ustawieniami dotyczącymi plików cookies</li>
+            <li><a href="">O bed!OK</a></li>
+            <li><a href="">Kariera</a></li>
+            <li><a href="">Informacje</a></li>
+            <li><a href="">Zasady współpracy</a></li>
+            <li><a href="">Oświadczenie o ochronie prywatności i plikach cookies</a></li>
+            <li><a href="">Zarządzaj ustawieniami dotyczącymi plików cookies</a></li>
           </ul>
         </b-col>
         <b-col class="col-sm-4 col text-start">
@@ -48,9 +48,9 @@
             <h5>klient</h5>
           </div>
           <ul class="text-start">
-            <li>Logowanie</li>
-            <li>Rejestracja</li>
-            <li>Oferty specjalne</li>
+            <li><a href="">Logowanie</a></li>
+            <li><a href="">Rejestracja</a></li>
+            <li><a href="">Oferty specjalne</a></li>
           </ul>
         </b-col>
       </b-row>
@@ -78,7 +78,10 @@ export default class Footer extends Vue {}
   color: $light-gray;
   li {
     list-style: none;
+  }
+  a {
     color: $medium-gray;
+    text-decoration: none;
   }
   h5 {
     text-transform: uppercase;
