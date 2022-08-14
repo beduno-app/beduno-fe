@@ -1,15 +1,12 @@
 <template>
-  <div>
     <carousel :items-to-show="3" :wrap-around="true" :breakpoints="breakpoints">
       <slide v-for="slide in slides" :key="slide">
         <room-card-join :city="slide.city" :district="slide.district" />
       </slide>
-
       <template #addons>
         <navigation />
       </template>
     </carousel>
-  </div>
 </template>
 
 <script lang="ts">
@@ -47,8 +44,10 @@ export default class CardsCarouselJoin extends Vue {
     // 1024 and up
     1200: {
       itemsToShow: 3,
-      itemsToScroll: 3,
+      itemsToScroll: 1,
       snapAlign: "start",
+      dir: 'ltr',
+      transition:  600
     },
   };
 }

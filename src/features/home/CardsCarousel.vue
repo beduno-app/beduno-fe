@@ -47,8 +47,10 @@ export default class CardsCarousel extends Vue {
     // 1024 and up
     1200: {
       itemsToShow: 3,
+      itemsToScroll: 1,
       snapAlign: "start",
-      itemsToScroll: 3,
+      dir: "ltr",
+      transition: 600,
     },
   };
 }

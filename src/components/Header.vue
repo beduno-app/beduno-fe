@@ -74,15 +74,12 @@
         <span>Zaloguj się</span>
       </div>
     </div>
-
   </div>
 </template>
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 import "vue3-carousel/dist/carousel.css";
-import { Carousel, Slide, Pagination, Navigation } from "vue3-carousel";
-
 import "vue3-carousel/dist/carousel.css";
 import RoomCard from "@/features/home/RoomCard.vue";
 import RoomCardJoin from "@/features/home/RoomCardJoin.vue";
@@ -91,10 +88,6 @@ import RoomCardJoin from "@/features/home/RoomCardJoin.vue";
   components: {
     RoomCard,
     RoomCardJoin,
-    Carousel,
-    Slide,
-    Pagination,
-    Navigation,
   },
 })
 export default class Header extends Vue {

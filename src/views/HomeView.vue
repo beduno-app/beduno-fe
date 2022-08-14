@@ -81,17 +81,17 @@
         <p class="py-3 text-center">
           Zapisz się aby otrzymywać najświeższe informacje i promocje
         </p>
-        <div class="d-flex justify-content-between save-input m-auto">
-          <input id="type-text" type="text" placeholder="Wpisz adres email" />
-          <div class="d-flex align-items-center">
-            <span class="px-1 btn-save">Zapisz</span>
-            <img src="../assets/img/search_green.png" alt="save" class="pl-2" />
-          </div>
-        </div>
-
-        <p class="mt-3 text-center">
+        <input
+          class="d-flex m-auto"
+          type="text"
+          name="email"
+          id="email"
+          placeholder="Wpisz adres email"
+        />
+        <p class="mt-3 text-center link-app">
           Chcę otrzymać link do bezpłatnej aplikacji
           <img
+            class="mb-1"
             width="60"
             src="../assets/img/logo_bedOK_01_OK.png"
             alt="app-download"
@@ -142,7 +142,7 @@ export default class HomeView extends Vue {}
   }
   .img-how-it-works {
     width: 100%;
-    border: 1px solid grey;
+    border: 1px solid $dark-gray;
     padding: 30px;
     border-radius: 10px;
   }
@@ -154,20 +154,6 @@ export default class HomeView extends Vue {}
     font-weight: 700;
     font-size: 1.8rem;
   }
-  .save-input {
-    width: 40%;
-    padding: 10px;
-    border: 1px solid grey;
-    border-radius: 10px;
-    input {
-      border: none;
-      outline: none;
-    }
-    input:active {
-      border: none;
-      outline: none;
-    }
-  }
   .desktop-content {
     display: none;
   }
@@ -177,12 +163,28 @@ export default class HomeView extends Vue {}
   .news {
     background: $light-background;
   }
-
+  .link-app {
+    font-size: 0.9rem;
+  }
+  input {
+    background-image: url("../assets/img/icon_zapisz.png");
+    box-sizing: border-box;
+    width: 321px;
+    padding-left: 42px;
+    height: 48px;
+    border: 1px solid $dark-gray;
+    background-size: 32px;
+    background-position-x: 279px;
+    background-position-y: 50%;
+    background-repeat: no-repeat;
+    border-radius: 10px;
+    cursor: pointer;
+  }
   .buttons {
     button {
       border-radius: 10px;
       padding: 10px 20px;
-      border: 1px solid grey;
+      border: 1px solid $dark-gray;
       background: $white-color;
     }
     .btn-looking-for {

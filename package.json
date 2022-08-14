@@ -25,7 +25,6 @@
     "vue-router": "^4.0.3",
     "vue3-carousel": "^0.1.40",
     "vueperslides": "^3.4.2",
-    "vuetify": "^2.6.7",
     "vuex": "^4.0.0"
   },
   "devDependencies": {

@@ -13,11 +13,11 @@
           </b-col>
           <b-col class="col-md-2 col-sm-6 col-12">
             <label-cols class="d-flex p-2">Od kiedy</label-cols>
-            <b-form-input id="type-date" type="date"></b-form-input>
+            <b-form-input id="type-date-from" type="date"></b-form-input>
           </b-col>
           <b-col class="col-md-2 col-sm-6 col-12">
             <label-cols class="d-flex p-2">Do kiedy</label-cols>
-            <b-form-input id="type-date" type="date"></b-form-input>
+            <b-form-input id="type-date-to" type="date"></b-form-input>
           </b-col>
           <b-col class="col-md-3 col-sm-6 col-12">
             <label-cols class="d-flex p-2">Kto</label-cols>
@@ -27,7 +27,7 @@
               placeholder="Ile osób"
             ></b-form-input>
           </b-col>
-          <b-col class="d-flex align-items-center col-md-2 col-sm-6 col-12 search">
+          <b-col class="d-flex align-items-center justify-content-end col-md-2 col-sm-12 col-12 search">
             <span class="p-2">Szukaj</span>
             <img src="../../assets/img/search_green.png" />
           </b-col>

@@ -21,7 +21,7 @@
             <li><a href="">Ceny</a></li>
             <li><a href="">Lista miast</a></li>
             <li><a href="">Program partnerski</a></li>
-            <li><a href="">Pytania i odpowiedzi Q&A</a></li>
+            <li><a href="">Pytania i odpowiedzi Q&amp;A</a></li>
             <li><a href="">Centrum pomocy</a></li>
             <li><a href="">Kontakt</a></li>
           </ul>
@@ -32,8 +32,14 @@
             <li><a href="">Kariera</a></li>
             <li><a href="">Informacje</a></li>
             <li><a href="">Zasady współpracy</a></li>
-            <li><a href="">Oświadczenie o ochronie prywatności i plikach cookies</a></li>
-            <li><a href="">Zarządzaj ustawieniami dotyczącymi plików cookies</a></li>
+            <li>
+              <a href=""
+                >Oświadczenie o ochronie prywatności i plikach cookies</a
+              >
+            </li>
+            <li>
+              <a href="">Zarządzaj ustawieniami dotyczącymi plików cookies</a>
+            </li>
           </ul>
         </b-col>
         <b-col class="col-sm-4 col text-start">

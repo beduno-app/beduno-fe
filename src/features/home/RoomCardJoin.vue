@@ -62,7 +62,7 @@
         <div class="col-8">
           <div class="row">
             <span class="col text-start">Ania, lat 34</span>
-            <div class="col d-flex">
+            <div class="col d-flex align-items-center">
               <img class="img-flag" src="../../assets/img/pl.png" /><span
                 class="px-2"
                 >Polski</span
@@ -75,7 +75,7 @@
           </div>
           <div class="row">
             <span class="col text-start">Julka, lat 34</span>
-            <div class="col d-flex">
+            <div class="col d-flex  align-items-center">
               <img class="img-flag" src="../../assets/img/pl.png" /><span
                 class="px-2"
                 >Polski</span
@@ -88,7 +88,7 @@
           </div>
           <div class="row">
             <span class="col text-start">Patrycja, lat 34</span>
-            <div class="col d-flex">
+            <div class="col d-flex  align-items-center">
               <img class="img-flag" src="../../assets/img/pl.png" /><span
                 class="px-2"
                 >Polski</span
