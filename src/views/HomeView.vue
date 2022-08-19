@@ -10,14 +10,14 @@
     <div class="container-fluid desktop-content">
       <div class="d-flex justify-content-center m-5 buttons">
         <button class="mx-4 btn-looking-for d-flex align-items-center">
-          <img src="../assets/img/kropek_green_big.png" /><span class="mx-4"
+          <img src="../assets/img/dot_green_big.png" /><span class="mx-4"
             >szukam</span
           >
         </button>
         <button class="btn-offers d-flex align-items-center">
           <span class="mx-4">oferuję</span>
 
-          <img src="../assets/img/kropek_orange_big.png" />
+          <img src="../assets/img/dot_orange_big.png" />
         </button>
       </div>
     </div>
@@ -137,7 +137,8 @@ export default class HomeView extends Vue {}
 @import "@/assets/_variables.scss";
 
 .home {
-  h2 {
+  h2,
+  span {
     font-weight: 600;
   }
   .img-how-it-works {
@@ -167,7 +168,7 @@ export default class HomeView extends Vue {}
     font-size: 0.9rem;
   }
   input {
-    background-image: url("../assets/img/icon_zapisz.png");
+    background-image: url("../assets/img/icon_save.png");
     box-sizing: border-box;
     width: 321px;
     padding-left: 42px;

@@ -3,7 +3,7 @@
     <div class="container">
       <button class="btn-landlord">
         <span class="mx-4">Zostań wynajmującym bez opłat</span
-        ><img width="30" src="../assets/img/kropek_orange_big.png" />
+        ><img width="30" src="../assets/img/dot_orange_big.png" />
       </button>
       <b-row>
         <b-col class="col-sm-4 col">
@@ -12,7 +12,7 @@
               class="dot-big"
               width="20"
               height="20"
-              src="../assets/img/kropek_green.png"
+              src="../assets/img/dot_green.png"
               alt="img-square"
             />
             <h5>Informacje</h5>
@@ -48,7 +48,7 @@
               class="dot-big"
               width="20"
               height="20"
-              src="../assets/img/kropek_orange.png"
+              src="../assets/img/dot_orange.png"
               alt="img-square"
             />
             <h5>klient</h5>

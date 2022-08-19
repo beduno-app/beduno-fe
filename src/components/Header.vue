@@ -14,7 +14,7 @@
         </div>
         <div class="display-flexalign-items-center btn-text-orange p-2">
           <div class="px-2">Wynajmij i zarabiaj bez opłat</div>
-          <img height="20" src="../assets/img/icon_kasa_sakwa.png" />
+          <img height="20" src="../assets/img/icon_money_bag.png" />
         </div>
       </div>
       <div class="align-items-center justify-content-sm-around desktop-content">
