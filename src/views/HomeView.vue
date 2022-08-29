@@ -1,6 +1,5 @@
 <template>
   <div class="home">
-    <Header />
     <search-input />
     <h2 class="mt-3 desktop-content text-center">Potrzebne zakwaterowanie?</h2>
     <h2 class="desktop-content text-center" style="margin-left: 175px">
@@ -106,14 +105,11 @@
         alt="image"
       />
     </div>
-    <Footer />
   </div>
 </template>
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import Header from "@/components/Header.vue"; // @ is an alias to /src
-import Footer from "@/components/Footer.vue"; // @ is an alias to /src
 import CityTile from "@/features/home/CityTile.vue";
 import RoomCard from "@/features/home/RoomCard.vue";
 import CardsCarousel from "@/features/home/CardsCarousel.vue";
@@ -124,8 +120,6 @@ import SearchInput from "@/features/home/SearchInput.vue";
   components: {
     CityTile,
     RoomCard,
-    Header,
-    Footer,
     CardsCarousel,
     CardsCarouselJoin,
     SearchInput,
