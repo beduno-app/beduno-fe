@@ -17,8 +17,10 @@ import {faBars}  from '@fortawesome/free-solid-svg-icons'
 import {faCopyright}  from '@fortawesome/free-solid-svg-icons'
 import {faHeart}  from '@fortawesome/free-regular-svg-icons'
 
-// <font-awesome-icon icon="fa-thin fa-heart" />
+import { UploadMedia, UpdateMedia } from 'vue-media-upload';
+
 // /* add icons to the library */
+
 library.add(faAngleDown)
 library.add(faBars)
 library.add(faCopyright)
@@ -27,4 +29,12 @@ library.add(faHeart)
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue-3/dist/bootstrap-vue-3.css'
 
-createApp(App).use(store).use(BootstrapVue3).use(router).component('font-awesome-icon', FontAwesomeIcon).mount("#app");
+import { plugin, defaultConfig } from '@formkit/vue'
+import '@formkit/themes/genesis'
+
+createApp(App).use(store).use(BootstrapVue3).use(router).use(plugin, defaultConfig).use(
+    plugin,
+    defaultConfig({
+        theme: 'genesis' 
+    })
+  ).component('font-awesome-icon', FontAwesomeIcon).component('upload-media' , UploadMedia).component('update-media' , UpdateMedia).mount("#app");
