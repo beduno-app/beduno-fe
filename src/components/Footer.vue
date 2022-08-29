@@ -113,7 +113,8 @@ export default class Footer extends Vue {}
   }
   @media (min-width: 767.98px) {
     .btn-landlord {
-      display: block;
+      display: flex;
+      padding: 5px;
     }
   }
 }
