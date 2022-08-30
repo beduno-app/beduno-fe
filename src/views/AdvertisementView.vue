@@ -1,12 +1,10 @@
 <template>
-  <Header />
   <div class="add container-fluid">
     <h3>Dodaj ogłoszenie</h3>
     <base-form>
       <main-section />
     </base-form>
   </div>
-  <Footer />
 </template>
 
 <script lang="ts">
