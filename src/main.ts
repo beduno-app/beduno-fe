@@ -32,7 +32,7 @@ import 'bootstrap-vue-3/dist/bootstrap-vue-3.css'
 import { plugin, defaultConfig } from '@formkit/vue'
 import '@formkit/themes/genesis'
 
-createApp(App).use(store).use(BootstrapVue3).use(router).use(plugin, defaultConfig).use(
+createApp(App).use(store).use(BootstrapVue3).use(router).use(
     plugin,
     defaultConfig({
         theme: 'genesis' 
