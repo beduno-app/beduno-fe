@@ -115,7 +115,7 @@ import { UploadMedia, UpdateMedia } from "vue-media-upload";
 @Options({
   components: { UploadMedia, UpdateMedia },
 })
-export default class Header extends Vue {}
+export default class MainSection extends Vue {}
 </script>
 
 <style lang="scss">
