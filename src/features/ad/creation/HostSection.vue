@@ -3,7 +3,7 @@
     <div class="row">
       <div class="col-lg-3 col-md-6 col-sx-12 pb-3">
         <FormKit
-          label="Nazwa godpodarza*"
+          label="Nazwa gospodarza*"
           type="text"
           placeholder="Imię"
           validation="required"
@@ -140,10 +140,10 @@ export default class HostSection extends Vue {
     { content: "słowacki", key: "slovak", icon: "sk" },
   ];
   communicators = [
-    { key: "viber", icon: "icon__viber" },
-    { key: "whats-up", icon: "icon__whats_up" },
-    { key: "signal", icon: "icon__signal" },
-    { key: "telegram", icon: "icon__telegram" },
+    { key: "viber", icon: "icon_viber" },
+    { key: "whats-app", icon: "icon_whats_app" },
+    { key: "signal", icon: "icon_signal" },
+    { key: "telegram", icon: "icon_telegram" },
   ];
   image = computed(() => {
     return this.imageData
