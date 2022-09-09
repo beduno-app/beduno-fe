@@ -54,13 +54,7 @@
           <span class="label d-block pb-3">Zdjęcie gospodarza</span>
           <div class="image-upload">
             <label for="file-input">
-              <img
-                :src="
-                  imageData
-                    ? imageData
-                    : 'https://st4.depositphotos.com/11574170/23771/v/600/depositphotos_237717406-stock-illustration-user-add-glyph-vector-icon.jpg'
-                "
-              />
+              <img :src="image" />
             </label>
 
             <input
@@ -82,7 +76,7 @@
           >
             <label class="form-check-label">
               <img
-                :src="require(`../../../assets/img//${language.icon}.png`)"
+                :src="require(`../../../assets/img/${language.icon}.png`)"
                 class="px-1"
               />{{ language.content }}
               <input
@@ -111,6 +105,7 @@
               <img
                 :src="require(`../../../assets/img//${communicator.icon}.png`)"
                 class="px-1"
+                width="30"
               />{{ communicator.content }}
               <input type="checkbox" class="form-check-input" />
               <span class="form-check-sign"></span>
@@ -126,6 +121,7 @@
 </template>
 
 <script lang="ts">
+import { computed } from "@vue/runtime-core";
 import { Options, Vue } from "vue-class-component";
 import { UploadMedia, UpdateMedia } from "vue-media-upload";
 
@@ -144,11 +140,16 @@ export default class HostSection extends Vue {
     { content: "słowacki", key: "slovak", icon: "sk" },
   ];
   communicators = [
-    { key: "polish", icon: "pl" },
-    { key: "ukrainian", icon: "ua" },
-    { key: "russian", icon: "ru" },
-    { key: "englsh", icon: "uk" },
+    { key: "viber", icon: "icon__viber" },
+    { key: "whats-up", icon: "icon__whats_up" },
+    { key: "signal", icon: "icon__signal" },
+    { key: "telegram", icon: "icon__telegram" },
   ];
+  image = computed(() => {
+    return this.imageData
+      ? this.imageData
+      : require(`../../../assets/img/add_pic.png`);
+  });
   previewImage(event) {
     var input = event.target;
     if (input.files && input.files[0]) {
