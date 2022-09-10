@@ -31,10 +31,17 @@ import 'bootstrap-vue-3/dist/bootstrap-vue-3.css'
 
 import { plugin, defaultConfig } from '@formkit/vue'
 import '@formkit/themes/genesis'
+import { createI18n } from 'vue-i18n';
+import translations from './assets/translations';
 
-createApp(App).use(store).use(BootstrapVue3).use(router).use(
+const i18n = createI18n({
+    locale: 'pl',
+    messages: translations,
+});
+
+createApp(App).use(store).use(i18n).use(BootstrapVue3).use(router).use(
     plugin,
     defaultConfig({
-        theme: 'genesis' 
+        theme: 'genesis'
     })
   ).component('font-awesome-icon', FontAwesomeIcon).component('upload-media' , UploadMedia).component('update-media' , UpdateMedia).mount("#app");
