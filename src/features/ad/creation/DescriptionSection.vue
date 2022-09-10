@@ -20,13 +20,7 @@
               >
             </b-tab>
             <b-tab title="Szablon 1">
-              <textarea
-                name="template1"
-                id="2"
-                cols="30"
-                rows="10"
-                v-model="templateOne"
-              >
+              <textarea name="template1" id="2" cols="30" rows="10">
 Oferuję komfortowy, nowoczesny oraz niezależny pokój w centrum miasta .
 Pokój w pełni umeblowany oraz przestronny.
 Łazienka oraz kuchnia ogólnodostępna.
@@ -35,23 +29,11 @@ W pobliżu restauracje, sklepy oraz miejsca usługowe.
 
 Możesz zamieszkać u Nas już dziś.</textarea
               >
-              <span class="description-characters"
-                >Pozostało {{ 5000 - templateOne.length }} znaki</span
-              >
             </b-tab>
             <b-tab title="Szablon 2">
-              <textarea
-                name="template2"
-                id="3"
-                cols="30"
-                rows="10"
-                v-model="templateTwo"
-              >
+              <textarea name="template2" id="3" cols="30" rows="10">
 Jeżeli szukasz wygodnego i przytulnego pokoju to ta oferta będzie idealna dla Ciebie. Pokój jest jasny i dobrze doświetlony oraz w pełni wyposażony. Znajduje się w cichej i spokojnej okolicy. Łazienka i kuchnia ogólnodostępna w pełni wyposażona.
 Każdy gość jest mile widziany, zapraszmy.</textarea
-              >
-              <span class="description-characters"
-                >Pozostało {{ 5000 - templateTwo.length }} znaki</span
               >
             </b-tab>
           </b-tabs>
@@ -185,8 +167,6 @@ import { Vue } from "vue-class-component";
 
 export default class HostSection extends Vue {
   ownDescription = <string>"";
-  templateOne = <string>"";
-  templateTwo = <string>"";
   selectedLanguages = <string[]>[];
   selectedRentalTime = <string[]>[];
 
