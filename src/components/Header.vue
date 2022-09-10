@@ -31,10 +31,10 @@
           />
         </div>
 
-        <b-dropdown :text="selected ? selected.text : 'Polski'" class="mx-4">
+        <b-dropdown :text="selectedLocale ? selectedLocale.text : 'Polski'" class="mx-4">
           <b-dropdown-item
             :disabled="option.disabled"
-            @click="select(option)"
+            @click="handleLanguageChange(option)"
             v-for="option in languageOptions"
             :key="option.value"
           >
@@ -92,31 +92,37 @@ import RoomCardJoin from "@/features/home/RoomCardJoin.vue";
 })
 export default class Header extends Vue {
   selected = null;
+  selectedLocale = null;
   languageOptions = [
     {
       value: "Polski",
       text: "Polski",
       src: "pl",
+      languageCode: 'pl'
     },
     {
       value: "English",
       text: "English",
       src: "uk",
+      languageCode: 'en'
     },
     {
       value: "Українська",
       text: "Українська",
       src: "ua",
+      languageCode: 'uk'
     },
     {
       value: "Русский",
       text: "Русский",
       src: "ru",
+      languageCode: 'ru'
     },
     {
       value: "Deutsch",
       text: "Deutsch",
       src: "de",
+      languageCode: 'de'
     },
   ];
   currencyOptions = [
@@ -125,6 +131,11 @@ export default class Header extends Vue {
     { value: "USD", text: "USD" },
     { value: "UAH", text: "UAH" },
   ];
+
+  handleLanguageChange(selectedLocale) {
+    this.$i18n.locale = selectedLocale.languageCode;
+    this.selectedLocale = selectedLocale;
+  }
 }
 </script>
 

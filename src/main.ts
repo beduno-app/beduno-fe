@@ -37,6 +37,7 @@ import translations from './assets/translations';
 const i18n = createI18n({
     locale: 'pl',
     messages: translations,
+    globalInjection: true
 });
 
 createApp(App).use(store).use(i18n).use(BootstrapVue3).use(router).use(
