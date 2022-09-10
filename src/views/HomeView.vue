@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <search-input />
-    <h2 class="mt-3 desktop-content text-center">Potrzebne zakwaterowanie?</h2>
+    <h2 class="mt-3 desktop-content text-center">{{ $t('homeView.header1') }}</h2>
     <h2 class="desktop-content text-center" style="margin-left: 175px">
       Wejdź na BedOK i masz spanie!
     </h2>
