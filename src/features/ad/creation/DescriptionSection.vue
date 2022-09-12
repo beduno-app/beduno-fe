@@ -59,15 +59,15 @@ Każdy gość jest mile widziany, zapraszmy.</textarea
         />
 
         <span class="label">Pokój dzielony na łóżka</span>
-        <b-form-checkbox
+        <b-form-radio
           id="checkbox-1"
           v-model="divide"
-          name="checkbox-1"
+          name="checkbox"
           value="accepted"
           unchecked-value="not_accepted"
         >
           Podziel
-        </b-form-checkbox>
+        </b-form-radio>
       </div>
       <div class="col-lg-3 col-md-12 py-2">
         <span class="label pb-2">Liczba łóżek w pokoju*</span>
@@ -87,55 +87,22 @@ Każdy gość jest mile widziany, zapraszmy.</textarea
         />
         <div formGroupName="roomsType">
           <span class="label pb-2">Typ pokoju</span>
-          <div class="form-check">
+          <div v-for="room in roomsType" :key="room.key" class="form-check">
             <input
               class="form-check-input"
               type="radio"
               name="exampleRadios"
-              id="exampleRadiosq1"
-              value="option1"
+              :id="room.id"
+              :value="room.value"
             />
             <img
-              src="../../../assets/img/icon_woman.png"
+              :src="require(`../../../assets/img/${room.icon}.png`)"
               class="px-1"
               width="30"
             />
-            <label class="form-check-label" for="exampleRadios2">
-              Tylko żeński
-            </label>
-          </div>
-          <div class="form-check">
-            <input
-              class="form-check-input"
-              type="radio"
-              name="exampleRadios"
-              id="exampleRadios2"
-              value="option2"
-            />
-            <img
-              src="../../../assets/img/icon_man.png"
-              class="px-1"
-              width="30"
-            />
-            <label class="form-check-label" for="exampleRadios2">
-              Tylko męski
-            </label>
-          </div>
-          <div class="form-check">
-            <input
-              class="form-check-input"
-              type="radio"
-              name="exampleRadios"
-              id="exampleRadios3"
-              value="option2"
-            />
-            <img
-              src="../../../assets/img/icon_people.png"
-              class="px-1"
-              width="50"
-            />
-            <label class="form-check-label" for="exampleRadios2">
-              Rodzinny
+
+            <label class="form-check-label" for="room.for"
+              >{{ room.content }}
             </label>
           </div>
         </div>
@@ -169,7 +136,32 @@ export default class HostSection extends Vue {
   ownDescription = <string>"";
   selectedLanguages = <string[]>[];
   selectedRentalTime = <string[]>[];
-
+  roomsType = [
+    {
+      content: "Tylko żeński",
+      key: "male",
+      icon: "icon_man",
+      value: "male",
+      for: "male",
+      id: "checkbox-1",
+    },
+    {
+      content: "Tylko męski",
+      key: "female",
+      icon: "icon_woman",
+      value: "female",
+      for: "female",
+      id: "checkbox-2",
+    },
+    {
+      content: "Rodzinny",
+      key: "family",
+      icon: "icon_people",
+      value: "family",
+      for: "family",
+      id: "checkbox-3",
+    },
+  ];
   rentalTime = [
     { key: "days", content: "Krótkoterminowy (dni)" },
     { key: "weeks", content: "Krótkoterminowy (tygodnie)" },
