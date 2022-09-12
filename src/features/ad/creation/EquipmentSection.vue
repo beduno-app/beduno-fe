@@ -158,11 +158,11 @@ export default class HostSection extends Vue {
     { content: "Balkon", key: "balcony", icon: "icon_balcony" },
     {
       content: "Klimatyzacja",
-      key: "airConditioning",
+      key: "air_conditioning",
       icon: "icon_air_conditioning",
     },
     { content: "Wentylacja", key: "tv", icon: "tv" },
-    { content: " Biurko", key: "table", icon: "icon_desk" },
+    { content: "Biurko", key: "table", icon: "icon_desk" },
     { content: "Łazienka", key: "bathRoom", icon: "icon_table" },
   ];
   roomEquipment2 = [
