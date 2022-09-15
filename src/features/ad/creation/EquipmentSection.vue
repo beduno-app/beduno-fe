@@ -3,7 +3,7 @@
     <div class="row">
       <div class="col-sx-12 col-sm-6 col-lg-2">
         <div>
-          <span class="label">Wyposażenie pokoju</span>
+          <span class="label">{{ $t('advertisementView.equipmentSection.roomEquipment.label') }}</span>
           <div
             v-for="(element, idx) in roomEquipment1"
             :key="idx"
@@ -50,7 +50,7 @@
         </div>
         <FormKit
           type="text"
-          placeholder="np. lampka, dywan"
+          :placeholder="$t('advertisementView.equipmentSection.roomEquipment.placeholder')"
           :classes="{
             outer: 'foo-bar',
             inner: {
@@ -61,7 +61,7 @@
       </div>
       <div class="col-sx-12 col-sm-6 col-lg-3">
         <div>
-          <span class="label">Wyposażenie strefy wspólnej</span>
+          <span class="label">{{ $t('advertisementView.equipmentSection.sharedEquipment.label') }}</span>
           <div
             v-for="(element, idx) in commonAreaEquipment1"
             :key="idx"
@@ -132,7 +132,7 @@
         </div>
         <FormKit
           type="text"
-          placeholder="np. lampka, dywan"
+          :placeholder="$t('advertisementView.equipmentSection.sharedEquipment.placeholder')"
           :classes="{
             outer: 'foo-bar',
             inner: {

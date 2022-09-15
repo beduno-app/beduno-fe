@@ -2,10 +2,7 @@
   <div>
     <div class="guests-section p-3">
       <div class="row">
-        <span class="label pb-3"
-          >Podaj informację o aktualnych lokatorach, tj. imię, wiek, języki,
-          którymi się posługują</span
-        >
+        <span class="label pb-3">{{ $t('advertisementView.currentGuestsSection.title') }}</span>
         <guest-section />
         <guest-section />
         <guest-section />

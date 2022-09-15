@@ -2,11 +2,11 @@
   <div class="description-section p-3">
     <div class="row">
       <div class="col-sm-12 col-md-12 col-lg-6">
-        <span class="label d-block">Opis*</span>
-        <div class="input-characters pb-2">maksimum 5000 znaków</div>
+        <span class="label d-block">{{ $t('advertisementView.descriptionSection.description.label') }}</span>
+        <div class="input-characters pb-2">{{ $t('advertisementView.descriptionSection.description.tip') }}</div>
         <b-card no-body>
           <b-tabs pills card>
-            <b-tab title="Własny" active>
+            <b-tab :title="$t('advertisementView.descriptionSection.description.tabs.own')" active>
               <textarea
                 name="own-description"
                 id="3"
@@ -15,11 +15,11 @@
                 v-model="ownDescription"
                 placeholder="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
               ></textarea>
-              <span class="description-characters"
-                >Pozostało {{ 5000 - ownDescription.length }} znaki</span
-              >
+              <span class="description-characters">{{
+                  $t('advertisementView.descriptionSection.description.charactersCounter', { count: 5000 - ownDescription.length})
+              }}</span>
             </b-tab>
-            <b-tab title="Szablon 1">
+            <b-tab :title="$t('advertisementView.descriptionSection.description.tabs.preset1')">
               <textarea name="template1" id="2" cols="30" rows="10">
 Oferuję komfortowy, nowoczesny oraz niezależny pokój w centrum miasta .
 Pokój w pełni umeblowany oraz przestronny.
@@ -30,7 +30,7 @@ W pobliżu restauracje, sklepy oraz miejsca usługowe.
 Możesz zamieszkać u Nas już dziś.</textarea
               >
             </b-tab>
-            <b-tab title="Szablon 2">
+            <b-tab :title="$t('advertisementView.descriptionSection.description.tabs.preset2')">
               <textarea name="template2" id="3" cols="30" rows="10">
 Jeżeli szukasz wygodnego i przytulnego pokoju to ta oferta będzie idealna dla Ciebie. Pokój jest jasny i dobrze doświetlony oraz w pełni wyposażony. Znajduje się w cichej i spokojnej okolicy. Łazienka i kuchnia ogólnodostępna w pełni wyposażona.
 Każdy gość jest mile widziany, zapraszmy.</textarea
@@ -42,13 +42,13 @@ Każdy gość jest mile widziany, zapraszmy.</textarea
     </div>
     <div class="row pt-3">
       <div class="col-lg-3 col-md-12 py-2">
-        <span class="label pb-2">Powierzchnia pokoju (m2)*</span>
+        <span class="label pb-2">{{ $t('advertisementView.descriptionSection.roomSize.label') }}</span>
         <FormKit
           type="text"
-          placeholder="np. 4.86"
+          :placeholder="$t('advertisementView.descriptionSection.roomSize.placeholder')"
           validation="required"
           :validation-messages="{
-            required: 'To pole jest wymagane.',
+            required: $t('advertisementView.descriptionSection.roomSize.validationMessages.required'),
           }"
           :classes="{
             outer: 'foo-bar',
@@ -58,7 +58,7 @@ Każdy gość jest mile widziany, zapraszmy.</textarea
           }"
         />
 
-        <span class="label">Pokój dzielony na łóżka</span>
+        <span class="label">{{ $t('advertisementView.descriptionSection.splitIntoBeds.label') }}</span>
         <b-form-radio
           id="checkbox-1"
           v-model="divide"
@@ -66,17 +66,17 @@ Każdy gość jest mile widziany, zapraszmy.</textarea
           value="accepted"
           unchecked-value="not_accepted"
         >
-          Podziel
+          {{ $t('advertisementView.descriptionSection.splitIntoBeds.value') }}
         </b-form-radio>
       </div>
       <div class="col-lg-3 col-md-12 py-2">
-        <span class="label pb-2">Liczba łóżek w pokoju*</span>
+        <span class="label pb-2">{{ $t('advertisementView.descriptionSection.bedsCount.label') }}</span>
         <FormKit
           type="text"
-          placeholder="np. 6"
+          :placeholder="$t('advertisementView.descriptionSection.bedsCount.placeholder')"
           validation="required"
           :validation-messages="{
-            required: 'To pole jest wymagane.',
+            required: $t('advertisementView.descriptionSection.bedsCount.validationMessages.required'),
           }"
           :classes="{
             outer: 'foo-bar',
@@ -86,7 +86,7 @@ Każdy gość jest mile widziany, zapraszmy.</textarea
           }"
         />
         <div formGroupName="roomsType">
-          <span class="label pb-2">Typ pokoju</span>
+          <span class="label pb-2">{{ $t('advertisementView.descriptionSection.roomType.label') }}</span>
           <div v-for="room in roomsType" :key="room.key" class="form-check">
             <input
               class="form-check-input"
@@ -109,13 +109,13 @@ Każdy gość jest mile widziany, zapraszmy.</textarea
         </div>
       </div>
       <div class="col-lg-3 col-md-12 py-2">
-        <span class="label pb-2">Liczba wolnych łóżek w pokoj*</span>
+        <span class="label pb-2">{{ $t('advertisementView.descriptionSection.freeBedsCount.label') }}</span>
         <FormKit
           type="text"
           placeholder="1"
           validation="required"
           :validation-messages="{
-            required: 'To pole jest wymagane.',
+            required: $t('advertisementView.descriptionSection.freeBedsCount.validationMessages.required'),
           }"
           :classes="{
             outer: 'foo-bar',

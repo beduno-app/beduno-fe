@@ -4,8 +4,8 @@
       <div class="d-flex justify-content-between align-items-center">
         <div>
           <h5 class="card-title text-start">{{ city }}</h5>
-          <span class="px-1">Dzielnica: </span
-          ><span class="card-text"> {{ district }}</span>
+          <span class="px-1">{{ $t('roomCard.district') }}&nbsp;</span>
+          <span class="card-text"> {{ district }}</span>
         </div>
         <font-awesome-icon icon="fa-regular fa-heart fa-10x" />
       </div>
@@ -38,12 +38,12 @@
     </div>
     <div class="card-body">
       <ul>
-        <li class="text-start">3 łóżka w pokoju</li>
+        <li class="text-start">{{ $t('roomCard.bedsInRoom', { count: 3 }) }}</li>
         <li class="text-start">700m-Biedronka</li>
       </ul>
       <div class="d-flex pt-2">
-        <h5 class="px-2">15 zł / dzień</h5>
-        <div>(5zł / dzień / łóżko)</div>
+        <h5 class="px-2">{{ $t('roomCard.dayPrice', { price: '15 zł' }) }}</h5>
+        <div>({{ $t('roomCard.bedDayPrice', { price: '5 zł' }) }})</div>
       </div>
     </div>
   </div>

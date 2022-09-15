@@ -1,13 +1,13 @@
 <template>
   <div class="payment-secrion p-3">
     <div formGroupName="paymentForms">
-      <span class="label">Formy płatności:</span>
+      <span class="label">{{ $t('advertisementView.paymentSection.paymentMethod.label') }}</span>
       <div class="row mb-4 mt-4">
         <div v-for="(form, idx) in paymentForms" :key="idx" class="col-sm-2">
           <div class="form-check">
             <label :for="form.key" class="form-check-label">
               <img
-                :src="require(`../../../assets/img//${form.icon}.png`)"
+                :src="require(`../../../assets/img/${form.icon}.png`)"
                 class="px-1"
               />
               {{ form.content }}
@@ -18,7 +18,7 @@
           </div>
         </div>
       </div>
-      <span class="label">Ceny (zł): </span>
+      <span class="label">{{ $t('advertisementView.paymentSection.pricing.label') }}</span>
       <div class="row mt-5">
         <div class="col-md-4">
           <div class="row pb-3 align-items-center">
@@ -36,8 +36,8 @@
                 border: 1px solid grey;
               "
             />
-            <span class="col" style="font-size: 10px">doba</span>
-            <span class="text-left">Ilość dni (od 1 do 30 dni)</span>
+            <span class="col" style="font-size: 10px">{{ $t('advertisementView.paymentSection.day') }}</span>
+            <span class="text-left">{{ $t('advertisementView.paymentSection.shortRentRange') }}</span>
           </div>
           <div class="row pb-3 pt-4 align-items-center">
             <Slider
@@ -54,8 +54,8 @@
                 border: 1px solid grey;
               "
             />
-            <span class="col" style="font-size: 10px">doba</span>
-            <span class="text-left">Ilość dni (od 1 do 30 dni)</span>
+            <span class="col" style="font-size: 10px">{{ $t('advertisementView.paymentSection.day') }}</span>
+            <span class="text-left">{{ $t('advertisementView.paymentSection.shortRentRange') }}</span>
           </div>
           <div class="d-flex pb-5">
             <img
@@ -64,7 +64,7 @@
               class="px-2"
               style="cursor: pointer"
             />
-            <span>Dodaj kolejny zakres cen</span>
+            <span>{{ $t('advertisementView.paymentSection.addPriceRange') }}</span>
           </div>
         </div>
 
@@ -84,8 +84,8 @@
                 border: 1px solid grey;
               "
             />
-            <span class="col" style="font-size: 10px">miesiąc</span>
-            <span class="text-left">Ilość miesięcy (powyżej 1 miesiąca)</span>
+            <span class="col" style="font-size: 10px">{{ $t('advertisementView.paymentSection.month') }}</span>
+            <span class="text-left">{{ $t('advertisementView.paymentSection.longRentRange') }}</span>
           </div>
           <div class="d-flex">
             <img
@@ -94,7 +94,7 @@
               class="px-2"
               style="cursor: pointer"
             />
-            <span>Dodaj kolejny zakres cen</span>
+            <span>{{ $t('advertisementView.paymentSection.addPriceRange') }}</span>
           </div>
         </div>
       </div>

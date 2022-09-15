@@ -1,9 +1,9 @@
 <template>
   <div class="rules-section p-3">
-    <span class="label pt-2">Zasady pobytu:</span>
+    <span class="label pt-2">{{ $t('advertisementView.rulesSection.termsOfStay') }}</span>
     <div class="row">
       <div class="col-lg-3 col-sm-6 col-sx-12">
-        <span class="label">Akceptujemy zwierzęta:</span>
+        <span class="label">{{ $t('advertisementView.rulesSection.animals') }}</span>
         <div class="d-flex align-items-center">
           <div>
             <div class="form-check form-check-radio">
@@ -41,7 +41,7 @@
         </div>
       </div>
       <div class="col-lg-3 col-sm-6 col-sx-12">
-        <span class="label">Cisza nocna (22:00 - 6:00):</span>
+        <span class="label">{{ $t('advertisementView.rulesSection.curfew') }}</span>
         <div class="d-flex align-items-center">
           <div>
             <div class="form-check form-check-radio">
@@ -80,7 +80,7 @@
         </div>
       </div>
       <div class="col-lg-3 col-sm-6 col-sx-12">
-        <span class="label">Palenie w budynku dozwolone:</span>
+        <span class="label">{{ $t('advertisementView.rulesSection.smoking') }}</span>
         <div class="d-flex align-items-center">
           <div>
             <div class="form-check form-check-radio">
@@ -119,10 +119,10 @@
         </div>
       </div>
       <div class="col-lg-3 col-sm-6 col-sx-12">
-        <span class="label">Inne:</span>
+        <span class="label">{{ $t('advertisementView.rulesSection.others.label') }}</span>
         <FormKit
           type="text"
-          placeholder="np. brak parkingu, grill w ogrodzie"
+          :placeholder="$t('advertisementView.rulesSection.others.placeholder')"
           :classes="{
             outer: 'foo-bar',
             inner: {
@@ -135,7 +135,7 @@
   </div>
 </template>
 <script lang="ts">
-import { Options, Vue } from "vue-class-component";
+import { Vue } from "vue-class-component";
 
 export default class RulesSection extends Vue {}
 </script>

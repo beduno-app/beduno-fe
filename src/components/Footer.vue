@@ -2,8 +2,8 @@
   <div class="footer p-4 my-8">
     <div class="container">
       <button class="btn-landlord">
-        <span class="mx-4">Zostań wynajmującym bez opłat</span
-        ><img width="30" src="../assets/img/dot_orange_big.png" />
+        <span class="mx-4">{{ $t('footer.callToAction') }}</span>
+        <img width="30" src="../assets/img/dot_orange_big.png" />
       </button>
       <b-row>
         <b-col class="col-sm-4 col">
@@ -15,30 +15,28 @@
               src="../assets/img/dot_green.png"
               alt="img-square"
             />
-            <h5>Informacje</h5>
+            <h5>{{ $t('footer.informationSection') }}</h5>
           </div>
           <ul class="text-start">
-            <li><a href="">Ceny</a></li>
-            <li><a href="">Lista miast</a></li>
-            <li><a href="">Program partnerski</a></li>
-            <li><a href="">Pytania i odpowiedzi Q&amp;A</a></li>
-            <li><a href="">Centrum pomocy</a></li>
-            <li><a href="">Kontakt</a></li>
+            <li><a href="">{{ $t('footer.prices') }}</a></li>
+            <li><a href="">{{ $t('footer.cityList') }}</a></li>
+            <li><a href="">{{ $t('footer.partnerProgram') }}</a></li>
+            <li><a href="">{{ $t('footer.faq') }}</a></li>
+            <li><a href="">{{ $t('footer.help') }}</a></li>
+            <li><a href="">{{ $t('footer.contact') }}</a></li>
           </ul>
         </b-col>
         <b-col class="col-sm-4 col">
           <ul class="text-start" style="padding-top: 32px">
-            <li><a href="">O bed!OK</a></li>
-            <li><a href="">Kariera</a></li>
-            <li><a href="">Informacje</a></li>
-            <li><a href="">Zasady współpracy</a></li>
+            <li><a href="">{{ $t('footer.about') }}</a></li>
+            <li><a href="">{{ $t('footer.careers') }}</a></li>
+            <li><a href="">{{ $t('footer.information') }}</a></li>
+            <li><a href="">{{ $t('footer.termsOfCooperation') }}</a></li>
             <li>
-              <a href=""
-                >Oświadczenie o ochronie prywatności i plikach cookies</a
-              >
+              <a href="">{{ $t('footer.privacyPolicy') }}</a>
             </li>
             <li>
-              <a href="">Zarządzaj ustawieniami dotyczącymi plików cookies</a>
+              <a href="">{{ $t('footer.cookies') }}</a>
             </li>
           </ul>
         </b-col>
@@ -51,20 +49,20 @@
               src="../assets/img/dot_orange.png"
               alt="img-square"
             />
-            <h5>klient</h5>
+            <h5>{{ $t('footer.clientSection') }}</h5>
           </div>
           <ul class="text-start">
-            <li><a href="">Logowanie</a></li>
-            <li><a href="">Rejestracja</a></li>
-            <li><a href="">Oferty specjalne</a></li>
+            <li><a href="">{{ $t('footer.login') }}</a></li>
+            <li><a href="">{{ $t('footer.registration') }}</a></li>
+            <li><a href="">{{ $t('footer.specialOffers') }}</a></li>
           </ul>
         </b-col>
       </b-row>
     </div>
   </div>
   <p class="p-3 text-center">
-    Prawa autorskie <font-awesome-icon icon="fa-solid fa-copyright" /> 2022
-    bed!Ok. Wszelkie prawa autorskie zastrzeżone.
+    {{ $t('footer.copyrightsNote.firstPart') }} <font-awesome-icon icon="fa-solid fa-copyright" /> {{ $t('footer.copyrightsNote.year') }}
+    {{ $t('footer.copyrightsNote.lastPart') }}
   </p>
 </template>
 

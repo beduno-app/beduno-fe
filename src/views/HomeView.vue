@@ -1,27 +1,25 @@
 <template>
   <div class="home">
     <search-input />
-    <h2 class="mt-3 desktop-content text-center">{{ $t('homeView.header1') }}</h2>
+    <h2 class="mt-3 desktop-content text-center">{{ $t('homeView.title.firstLine') }}</h2>
     <h2 class="desktop-content text-center" style="margin-left: 175px">
-      Wejdź na BedOK i masz spanie!
+      {{  $t('homeView.title.secondLine') }}
     </h2>
     <cards-carousel />
     <div class="container-fluid desktop-content">
       <div class="d-flex justify-content-center m-5 buttons">
         <button class="mx-4 btn-looking-for d-flex align-items-center">
-          <img src="../assets/img/dot_green_big.png" /><span class="mx-4"
-            >szukam</span
-          >
+          <img src="../assets/img/dot_green_big.png" />
+          <span class="mx-4">{{ $t('homeView.looking') }}</span>
         </button>
         <button class="btn-offers d-flex align-items-center">
-          <span class="mx-4">oferuję</span>
-
+          <span class="mx-4">{{ $t('homeView.offering') }}</span>
           <img src="../assets/img/dot_orange_big.png" />
         </button>
       </div>
     </div>
     <div class="news p-5 container-fluid">
-      <h2 class="join-to-room py-4 text-center">NOWOŚĆ! Dołącz do pokoju</h2>
+      <h2 class="join-to-room py-4 text-center">{{ $t('homeView.joinRoom') }}</h2>
       <cards-carousel-join />
     </div>
 
@@ -34,7 +32,7 @@
         />
       </div>
 
-      <p class="pt-4 text-center">W którym mieście chcesz znaleźć nocleg?</p>
+      <p class="pt-4 text-center">{{ $t('homeView.citiesTitle') }}</p>
       <b-row>
         <b-col
           class="d-flex my-1 justify-content-center col-lg-3 col-md-6 col-sm-12"
@@ -70,16 +68,14 @@
         /></b-col>
       </b-row>
 
-      <p class="pt-4 text-center">Jak to działa?</p>
+      <p class="pt-4 text-center">{{ $t('homeView.howItWorks') }}</p>
       <div class="desktop-content">
         <img
           class="img-how-it-works"
           src="../assets/img/howitworks_noframe.png"
           alt="how-it-workd-image"
         />
-        <p class="py-3 text-center">
-          Zapisz się aby otrzymywać najświeższe informacje i promocje
-        </p>
+        <p class="py-3 text-center">{{ $t('homeView.subscribe') }}</p>
         <input
           class="d-flex m-auto"
           type="text"
@@ -88,7 +84,7 @@
           placeholder="Wpisz adres email"
         />
         <p class="mt-3 text-center link-app">
-          Chcę otrzymać link do bezpłatnej aplikacji
+          {{ $t('homeView.freeAppLink') }}
           <img
             class="mb-1"
             width="60"
