@@ -1,7 +1,7 @@
 <template>
   <div class="description-section p-3">
     <div class="row">
-      <div class="col-sm-6 col-sm-12 col-md-6">
+      <div class="col-sm-12 col-md-12 col-lg-6">
         <span class="label d-block">Opis*</span>
         <div class="input-characters pb-2">maksimum 5000 znaków</div>
         <b-card no-body>
@@ -99,6 +99,7 @@ Każdy gość jest mile widziany, zapraszmy.</textarea
               :src="require(`../../../assets/img/${room.icon}.png`)"
               class="px-1"
               width="30"
+              :style="room.key === 'family' ? 'width: 45px' : 'width: 30px'"
             />
 
             <label class="form-check-label" for="room.for"
@@ -136,6 +137,7 @@ export default class HostSection extends Vue {
   ownDescription = <string>"";
   selectedLanguages = <string[]>[];
   selectedRentalTime = <string[]>[];
+  divide = false;
   roomsType = [
     {
       content: "Tylko żeński",
@@ -174,11 +176,8 @@ export default class HostSection extends Vue {
 <style lang="scss">
 @import "@/assets/_variables.scss";
 @import "@formkit/themes/genesis";
+@import "@/assets/style.scss";
 .description-section {
-  .label {
-    font-size: 1rem;
-    font-weight: 700;
-  }
   .input-characters,
   .description-characters {
     color: $dark-gray;
@@ -197,16 +196,6 @@ export default class HostSection extends Vue {
   .error {
     color: var(--fk-color-error);
     font-size: 0.8rem;
-  }
-  .formkit-input {
-    background: $white-color !important;
-    border: 1px solid $dark-gray;
-    &:focus {
-      border: 2px solid $dark-gray !important;
-    }
-    &::-webkit-input-placeholder {
-      font-size: 0.7rem;
-    }
   }
 }
 </style>
