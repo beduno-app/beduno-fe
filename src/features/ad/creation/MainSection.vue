@@ -121,27 +121,13 @@ export default class MainSection extends Vue {}
 <style lang="scss">
 @import "@/assets/_variables.scss";
 @import "@formkit/themes/genesis";
-
+@import "@/assets/style.scss";
 .main-section {
-  .label {
-    font-size: 1rem;
-    font-weight: 700;
-  }
   .input-characters {
     color: $dark-gray;
   }
   path {
     fill: $orange-bg;
-  }
-  .formkit-input {
-    background: white !important;
-    border: 1px solid $dark-gray;
-    &:focus {
-      border: 2px solid $dark-gray !important;
-    }
-    &::-webkit-input-placeholder {
-      font-size: 0.7rem;
-    }
   }
 }
 </style>

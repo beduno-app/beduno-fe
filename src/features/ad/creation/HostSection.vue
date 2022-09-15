@@ -166,6 +166,7 @@ export default class HostSection extends Vue {
 <style lang="scss">
 @import "@/assets/_variables.scss";
 @import "@formkit/themes/genesis";
+@import "@/assets/style.scss";
 .file-upload-form,
 .image-preview {
   padding: 20px;
@@ -178,10 +179,6 @@ img.preview {
 }
 
 .host-section {
-  .label {
-    font-size: 1rem;
-    font-weight: 700;
-  }
   p {
     color: $dark-gray;
     font-size: 0.9rem;
@@ -189,16 +186,6 @@ img.preview {
   .error {
     color: var(--fk-color-error);
     font-size: 0.8rem;
-  }
-  .formkit-input {
-    background: white !important;
-    border: 1px solid $dark-gray;
-    &:focus {
-      border: 2px solid $dark-gray !important;
-    }
-    &::-webkit-input-placeholder {
-      font-size: 0.7rem;
-    }
   }
   .gallery {
     width: 57% !important;
