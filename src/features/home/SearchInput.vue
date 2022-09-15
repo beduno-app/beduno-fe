@@ -4,31 +4,31 @@
       <div class="search-input p-3">
         <b-row>
           <b-col class="col-md-3 col-sm-6 col-12">
-            <label-cols class="d-flex p-2">Lokalizacja</label-cols>
+            <label-cols class="d-flex p-2">{{ $t('searchInput.localization.label') }}</label-cols>
             <b-form-input
               id="type-text"
               type="text"
-              placeholder="Gdzie szukasz noclegu"
+              :placeholder="$t('searchInput.localization.placeholder')"
             ></b-form-input>
           </b-col>
           <b-col class="col-md-2 col-sm-6 col-12">
-            <label-cols class="d-flex p-2">Od kiedy</label-cols>
+            <label-cols class="d-flex p-2">{{ $t('searchInput.since') }}</label-cols>
             <b-form-input id="type-date-from" type="date"></b-form-input>
           </b-col>
           <b-col class="col-md-2 col-sm-6 col-12">
-            <label-cols class="d-flex p-2">Do kiedy</label-cols>
+            <label-cols class="d-flex p-2">{{ $t('searchInput.to') }}</label-cols>
             <b-form-input id="type-date-to" type="date"></b-form-input>
           </b-col>
           <b-col class="col-md-3 col-sm-6 col-12">
-            <label-cols class="d-flex p-2">Kto</label-cols>
+            <label-cols class="d-flex p-2">{{ $t('searchInput.who.label') }}</label-cols>
             <b-form-input
               id="type-number"
               type="number"
-              placeholder="Ile osób"
+              :placeholder="$t('searchInput.who.placeholder')"
             ></b-form-input>
           </b-col>
           <b-col class="d-flex align-items-center justify-content-end col-md-2 col-sm-12 col-12 search">
-            <span class="p-2">Szukaj</span>
+            <span class="p-2">{{ $t('searchInput.search') }}</span>
             <img src="../../assets/img/search_green.png" />
           </b-col>
         </b-row>

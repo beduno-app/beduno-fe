@@ -10,19 +10,19 @@
             alt="Bed!Ok logo"
             src="../assets/img/logo_bedOK_01_OK.png"
           />
-          <div class="logo-subtitle">i masz spanie!</div>
+          <div class="logo-subtitle">{{ $t('header.logoSubtitle') }}</div>
         </div>
         <div class="display-flexalign-items-center btn-text-orange p-2">
-          <div class="px-2">Wynajmij i zarabiaj bez opłat</div>
+          <div class="px-2">{{ $t('header.callToAction') }}</div>
           <img height="20" src="../assets/img/icon_money_bag.png" />
         </div>
       </div>
       <div class="align-items-center justify-content-sm-around desktop-content">
         <div class="download-app mx-4 align-items-center">
           <div class="text-end px-2">
-            Pobierz naszą aplikację
-            <img width="50" src="../assets/img/logo_bedOK_01_OK.png" /> na
-            system Android i IOS
+            {{ $t('header.download.firstLine.beforeLogo') }}
+            <img width="50" src="../assets/img/logo_bedOK_01_OK.png" />&nbsp;{{ $t('header.download.firstLine.afterLogo') }}
+            {{ $t('header.download.secondLine') }}
           </div>
           <img
             class="img-download"
@@ -71,7 +71,7 @@
       </div>
       <div class="flex-column align-items-center icon-login">
         <img src="../assets/img/icon_login_top_01.png" />
-        <span>Zaloguj się</span>
+        <span>{{ $t('header.login') }}</span>
       </div>
     </div>
   </div>
