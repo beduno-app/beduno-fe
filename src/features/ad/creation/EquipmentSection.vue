@@ -150,7 +150,7 @@ import { Vue } from "vue-class-component";
 export default class HostSection extends Vue {
   selectedEquipment = <string[]>[];
   roomEquipment1 = [
-    { content: "Brak pościeli", key: "duvet", icon: "icon_duvet" },
+    { content: "Brak pościeli", key: "no_linen", icon: "icon_no_linen" },
     { content: "Pralka", key: "washer", icon: "washing_machine" },
     { content: "Radio", key: "radio", icon: "icon_radio" },
     { content: "WiFi", key: "wifi", icon: "icon_wifi" },
@@ -163,7 +163,7 @@ export default class HostSection extends Vue {
     },
     { content: "Wentylacja", key: "tv", icon: "tv" },
     { content: "Biurko", key: "table", icon: "icon_desk" },
-    { content: "Łazienka", key: "bathRoom", icon: "icon_table" },
+    { content: "Łazienka", key: "bathroom", icon: "icon_bathroom" },
   ];
   roomEquipment2 = [
     { content: "Krzesła", key: "chair", icon: "icon_chair" },
@@ -184,8 +184,8 @@ export default class HostSection extends Vue {
     { content: "Stolik", key: "table", icon: "icon_table" },
     {
       content: "Naczynia",
-      key: "airConditioning",
-      icon: "icon_air_conditioning",
+      key: "dishes",
+      icon: "icon_dishes",
     },
     { content: "Garnki i patelnie", key: "pan", icon: "icon_pan" },
     {
@@ -217,7 +217,7 @@ export default class HostSection extends Vue {
       icon: "icon_air_conditioning",
     },
     { content: "Czujnik dymu", key: "tv", icon: "tv" },
-    { content: "Wentylacja", key: "tv", icon: "tv" },
+    { content: "Wentylacja", key: "ventilation", icon: "icon_ventilation" },
     { content: "Łazienka", key: "bathRoom", icon: "icon_table" },
     { content: "Prysznic", key: "showe", icon: "icon_shower" },
   ];
@@ -228,7 +228,7 @@ export default class HostSection extends Vue {
       key: "coffee_machine",
       icon: "icon_coffee_machine",
     },
-    { content: "Czujnik elektryczny", key: "radio", icon: "icon_radio" },
+    { content: "Czujnik elektryczny", key: "sensor", icon: "icon_sensor" },
     {
       content: "Odkurzacz",
       key: "icon_vacuum_cleaner",
@@ -242,21 +242,8 @@ export default class HostSection extends Vue {
 <style lang="scss">
 @import "@/assets/_variables.scss";
 @import "@formkit/themes/genesis";
+@import "@/assets/style.scss";
 .equipment-section {
   font-size: 0.94rem;
-  .label {
-    font-size: 1rem;
-    font-weight: 700;
-  }
-  .formkit-input {
-    background: $white-color !important;
-    border: 1px solid $dark-gray;
-    &:focus {
-      border: 2px solid $dark-gray !important;
-    }
-    &::-webkit-input-placeholder {
-      font-size: 0.7rem;
-    }
-  }
 }
 </style>
