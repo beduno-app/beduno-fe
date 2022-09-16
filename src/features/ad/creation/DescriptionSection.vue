@@ -137,7 +137,6 @@ export default class HostSection extends Vue {
   ownDescription = <string>"";
   selectedLanguages = <string[]>[];
   selectedRentalTime = <string[]>[];
-  divide = false;
   roomsType = [
     {
       content: "Tylko żeński",
@@ -169,7 +168,6 @@ export default class HostSection extends Vue {
     { key: "weeks", content: "Krótkoterminowy (tygodnie)" },
     { key: "months", content: "Długoterminowy (miesiące)" },
   ];
-  description = computed(() => {});
 }
 </script>
 
