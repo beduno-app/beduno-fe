@@ -96,16 +96,13 @@ export default class GuestSection extends Vue {
     },
   ];
   years = computed(() => {
-    const year = new Date().getFullYear();
-    return Array.from({ length: year - 1900 }, (value, index) => 2007 + index);
+    const year = new Date().getFullYear() -18;
+    return Array.from({ length: year - 1900 }, (_value, index) => 1901 + index);
   });
   blockRemoval = computed(() => this.lines.length <= 1);
 
   addLine = () => {
-    let checkEmptyLines = this.lines.filter(
-      (line: any) => line.language === ""
-    );
-    if (checkEmptyLines.length >= 1 && this.lines.length > 0) {
+    if (this.lines.some((line) => line.language === "")) {
       return;
     }
 
