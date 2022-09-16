@@ -3,12 +3,12 @@
     <div class="row">
       <div class="col-lg-3 col-md-6 col-sx-12 pb-3">
         <FormKit
-          label="Nazwa gospodarza*"
+          :label="$t('advertisementView.hostSection.hostName.label')"
           type="text"
-          placeholder="Imię"
+          :placeholder="$t('advertisementView.hostSection.hostName.placeholder')"
           validation="required"
           :validation-messages="{
-            required: 'To pole jest wymagane.',
+            required: $t('advertisementView.hostSection.hostName.validationMessages.required'),
           }"
           :classes="{
             outer: 'foo-bar',
@@ -18,12 +18,12 @@
           }"
         />
         <FormKit
-          label=" Nr telefonu*"
+          :label="$t('advertisementView.hostSection.phoneNumber.label')"
           type="text"
-          placeholder="Np. +48 000 000 000"
+          :placeholder="$t('advertisementView.hostSection.phoneNumber.placeholder')"
           validation="required"
           :validation-messages="{
-            required: 'To pole jest wymagane.',
+            required: $t('advertisementView.hostSection.phoneNumber.validationMessages.required'),
           }"
           :classes="{
             outer: 'foo-bar',
@@ -33,13 +33,13 @@
           }"
         />
         <FormKit
-          label="E-mail*"
+          :label="$t('advertisementView.hostSection.email.label')"
           type="text"
-          placeholder="Np. jan_kowalski@o2.pl"
+          :placeholder="$t('advertisementView.hostSection.email.placeholder')"
           validation="required|email"
           :validation-messages="{
-            required: 'To pole jest wymagane.',
-            email: 'Nieprawdiłowy email',
+            required: $t('advertisementView.hostSection.email.validationMessages.required'),
+            email: $t('advertisementView.hostSection.email.validationMessages.email'),
           }"
           :classes="{
             outer: 'foo-bar',
@@ -51,7 +51,7 @@
       </div>
       <div class="col-lg-2 col-md-6 col-sx-12 pb-2">
         <div class="image-upload">
-          <span class="label d-block pb-3">Zdjęcie gospodarza</span>
+          <span class="label d-block pb-3">{{ $t('advertisementView.hostSection.photo.label') }}</span>
           <div class="image-upload">
             <label for="file-input">
               <img :src="image" />
@@ -68,7 +68,7 @@
       </div>
       <div class="col-lg-3 col-md-6 col-sx-12 pb-2">
         <div formGroupName="languages">
-          <span class="label">Języki, którymi posługuje się gospodarz*</span>
+          <span class="label">{{ $t('advertisementView.hostSection.languages.label') }}</span>
           <div
             v-for="language in languages"
             :key="language.key"
@@ -88,14 +88,14 @@
             </label>
           </div>
           <div class="error" v-if="!selectedLanguages.length">
-            To pole jest wymagane.
+            {{ $t('advertisementView.hostSection.languages.validationMessages.required') }}
           </div>
         </div>
       </div>
       <div class="col-lg-4 col-md-6 col-sx-12">
         <div formGroupName="communicators">
-          <span class="label">Komunikatory, których używa gospodarz*</span>
-          <p>Aplikacje do komnikacji przez internet</p>
+          <span class="label">{{ $t('advertisementView.hostSection.communicators.label') }}</span>
+          <p>{{ $t('advertisementView.hostSection.communicators.tip') }}</p>
           <div
             v-for="communicator in communicators"
             :key="communicator.key"
@@ -112,7 +112,7 @@
             </label>
           </div>
           <div class="error" v-if="!selectedCommunicators.length">
-            To pole jest wymagane.
+            {{ $t('advertisementView.hostSection.communicators.validationMessages.required') }}
           </div>
         </div>
       </div>

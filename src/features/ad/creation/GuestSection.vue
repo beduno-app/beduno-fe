@@ -5,7 +5,7 @@
         <div class="col-md-6 mt-3">
           <FormKit
             type="text"
-            placeholder="Imię"
+            :placeholder="$t('advertisementView.currentGuestsSection.name.placeholder')"
             :classes="{
               outer: 'foo-bar',
               inner: {
@@ -15,7 +15,7 @@
           />
         </div>
         <div class="col-md-6">
-          <span class="small-label">Rok urodzenia*</span>
+          <span class="small-label">{{ $t('advertisementView.currentGuestsSection.birthYear.label') }}</span>
           <select class="mb-2">
             <option v-for="(year, idx) in years" :value="year" :key="idx">
               {{ year }}
