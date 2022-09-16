@@ -1,6 +1,6 @@
 <template>
   <div class="add container-fluid">
-    <h3>Dodaj ogłoszenie</h3>
+    <h3>{{ $t('advertisementView.header') }}</h3>
     <base-form>
       <main-section />
     </base-form>
@@ -34,10 +34,8 @@
             alt="icon_preview"
           />
           <div class="pt-2 w-500">
-            <span class="btn-text m-0 label">Zobacz podgląd ogłoszenia</span>
-            <p class="text-small">
-              (zobaczysz jak podgląd ogłoszenie przed jego publikacją)
-            </p>
+            <span class="btn-text m-0 label">{{ $t('advertisementView.actions.preview.label') }}</span>
+            <p class="text-small">{{ $t('advertisementView.actions.preview.tip') }}</p>
           </div>
         </div>
       </div>
@@ -50,11 +48,8 @@
             alt="icon_save"
           />
           <div class="pt-2 w-500">
-            <span class="btn-text m-0 label">Zapisz ogłoszenie</span>
-            <p class="text-small">
-              (nadal będziesz mieć możliwość wprowadzenia zmian w dowolnym
-              momencie)
-            </p>
+            <span class="btn-text m-0 label">{{ $t('advertisementView.actions.save.label') }}</span>
+            <p class="text-small">{{ $t('advertisementView.actions.save.tip') }}</p>
           </div>
         </div>
       </div>
@@ -67,11 +62,8 @@
             alt="icon_save"
           />
           <div class="pt-2 w-500">
-            <span class="btn-text m-0 label">Opublikuj ogłoszenie</span>
-            <p class="text-small">
-              (nadal będziesz mieć możliwość wprowadzenia zmian w dowolnym
-              momencie)
-            </p>
+            <span class="btn-text m-0 label">{{ $t('advertisementView.actions.publish.label') }}</span>
+            <p class="text-small">{{ $t('advertisementView.actions.publish.tip') }}</p>
           </div>
         </div>
       </div>
@@ -84,12 +76,8 @@
             alt="icon_duplicate"
           />
           <div class="pt-2 w-500">
-            <span class="btn-text m-0 label">
-              Zduplikuj ogłoszenie z wypełnionymi danymi
-            </span>
-            <p class="text-small">
-              (zaoszczędzisz czas dodając pokoje w tym samymy budynku)
-            </p>
+            <span class="btn-text m-0 label">{{ $t('advertisementView.actions.duplicate.label') }}</span>
+            <p class="text-small">{{ $t('advertisementView.actions.duplicate.tip') }}</p>
           </div>
         </div>
       </div>
