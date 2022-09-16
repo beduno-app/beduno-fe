@@ -1,0 +1,19 @@
+:root {
+    --slider-connect-bg: #8cbe2e;
+    --slider-tooltip-bg: #8cbe2e;
+    --slider-handle-ring-color: #8cbe2e;
+}
+.label {
+    font-size: 1rem;
+    font-weight: 700;
+}
+.formkit-input {
+    background: $white-color !important;
+    border: 1px solid $dark-gray;
+    &:focus {
+        border: 2px solid $dark-gray !important;
+    }
+    &::-webkit-input-placeholder {
+        font-size: 0.7rem;
+    }
+}

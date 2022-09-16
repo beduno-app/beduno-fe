@@ -114,7 +114,7 @@ $opacity-2: rgba(255, 255, 255, 0.2) !default;
 
 $transparent-bg: transparent !default;
 $dark-background: #555555 !default;
-$light-background: #E6E6E6 !default;
+$light-background: #e6e6e6 !default;
 
 $default-color: #888888 !default;
 $default-states-color: lighten($default-color, 6%) !default;
@@ -170,3 +170,4 @@ $grid-breakpoints: (
     xl: 1200px,
     xxl: 1400px,
 );
+
