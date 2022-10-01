@@ -16,6 +16,7 @@ import {  faAngleDown } from '@fortawesome/free-solid-svg-icons'
 import {faBars}  from '@fortawesome/free-solid-svg-icons'
 import {faCopyright}  from '@fortawesome/free-solid-svg-icons'
 import {faHeart}  from '@fortawesome/free-regular-svg-icons'
+import {faLocationDot}  from '@fortawesome/free-solid-svg-icons'
 
 import { UploadMedia, UpdateMedia } from 'vue-media-upload';
 
@@ -25,7 +26,7 @@ library.add(faAngleDown)
 library.add(faBars)
 library.add(faCopyright)
 library.add(faHeart)
-
+library.add(faLocationDot)
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue-3/dist/bootstrap-vue-3.css'
 
