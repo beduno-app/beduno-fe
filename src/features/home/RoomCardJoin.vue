@@ -158,12 +158,5 @@ export default class RoomCard extends Vue {
       width: 50px;
     }
   }
-
-  .row-images {
-    --bs-gutter-x: 0.01rem;
-    .img-card-big {
-      padding-right: 1px;
-    }
-  }
 }
 </style>

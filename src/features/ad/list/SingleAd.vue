@@ -24,7 +24,7 @@
       <div class="d-flex mb-3 align-items-center">
         <font-awesome-icon
           icon="fa-solid fa-location-dot"
-          class="location-icon mx-2 fa-2x"
+          class="location-icon mx-2"
         />
         <u>Mazowieckie </u>,<u> Warszawa </u>,<u>Bemowo</u>
       </div>
@@ -40,8 +40,10 @@
       </div>
       <div class="row"><p class="locators">Aktualnie u nas mieszka: 1</p></div>
       <div class="row">
-        <div class="col-md-3 col-sm-6 col"><span>Sasza, </span><span>lat 30</span></div>
-        <div class="col-md-3  col-sm-6 col">
+        <div class="col-md-3 col-sm-6 col">
+          <span>Sasza, </span><span>lat 30</span>
+        </div>
+        <div class="col-md-3 col-sm-6 col">
           <img
             src="../../../assets/img/uk.png"
             alt="nationality-icon"
@@ -155,7 +157,7 @@ export default class SingleAd extends Vue {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 @import "@/assets/_variables.scss";
 
 .advertisement-section {
