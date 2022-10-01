@@ -9,32 +9,7 @@
         </div>
         <font-awesome-icon icon="fa-regular fa-heart fa-10x" />
       </div>
-      <div class="row row-images pt-4">
-        <div class="col">
-          <img
-            class="img-card-big p-0"
-            src="../../assets/img/placeholder.png"
-          />
-        </div>
-        <div class="col">
-          <div class="row row-images">
-            <div class="col">
-              <img src="../../assets/img/placeholder.png" />
-            </div>
-            <div class="col">
-              <img src="../../assets/img/placeholder.png" />
-            </div>
-          </div>
-          <div class="row row-images">
-            <div class="col">
-              <img src="../../assets/img/placeholder.png" />
-            </div>
-            <div class="col">
-              <img src="../../assets/img/placeholder.png" />
-            </div>
-          </div>
-        </div>
-      </div>
+      <gallery />
     </div>
     <div class="card-body">
       <ul>
@@ -52,7 +27,11 @@
 </template>
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
+import Gallery from "../ad/details/Gallery.vue";
 @Options({
+  components: {
+    Gallery,
+  },
   props: {
     district: String,
     city: String,
