@@ -1,0 +1,147 @@
+<template>
+  <div class="row justify-content-center advertisement-section py-5">
+    <div class="single-section pb-4">
+      <Header />
+      <subheader />
+      <gallery />
+      <div class="row">
+        <div class="col-md-8 mb-3">
+          <div class="row">
+            <div class="col-lg-3 col-md-6 col-sm-6 col-xs-3">
+              <ul>
+                <li>2 łóżka</li>
+                <li>1 pokój</li>
+              </ul>
+            </div>
+            <div class="col-lg-4 col-md-6 col-sm-6 col-xs-9 mb-2">
+              <span class="me-1">Pokój męski</span>
+              <img src="../../../assets/img/icon_man.png" alt="icon-man" />
+            </div>
+            <div class="col-lg-5">
+              <div class="col-md-9 mb-2">
+                Powierzchnia pokoju: 24m<sup>2</sup>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+              Część wspólna: lobby , kuchnia , łazienka
+            </div>
+          </div>
+          <div class="row mt-3">
+            <div class="col-lg-5 col-md-12 col shared-room">
+              Pokój dzielony na łóżka
+            </div>
+            <br />
+            <p class="room-desc">Współdzielony z innymi mieszkańcami</p>
+            <div class="col-lg-7 col-md-12 col">
+              Ilość osób aktualnie zamieszkująych pokój: 2
+            </div>
+          </div>
+          <div class="row mt-4">
+            <div class="col-sm-12 col-md-4">Aktualnie mieszka u nas:</div>
+            <div class="col-sm-12 col-md-8">
+              <locator />
+              <locator />
+              <locator />
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <host />
+        </div>
+      </div>
+      <div class="row mt-4">
+        <div class="col-md-12 mb-2">Wyposażenie pokoju:</div>
+        <equipments />
+      </div>
+    </div>
+    <div class="single-section py-3">
+      <div class="row">
+        <div class="col-md-12 mb-2">Wyposażenie częsci wspólnej:</div>
+        <shared-equipments />
+      </div>
+    </div>
+    <div class="single-section py-3">
+      <description-with-map />
+    </div>
+    <div class="single-section py-3">
+      <div class="row">
+        <div class="col-md-12 mb-2">Formy platności:</div>
+        <payments />
+      </div>
+    </div>
+    <div class="single-section py-3">
+      <div class="row">
+        <div class="col-md-12 mb-2">Zasady pobytu:</div>
+        <rules />
+      </div>
+    </div>
+    <div class="py-3">
+      <div class="row">
+        <div class="col-md-5 mb-3">Cena za łóżko 88zł (4 noce)</div>
+        <div class="col md-7" style="cursor: pointer">
+          <img
+            src="../../../assets/img/dot_green_big.png"
+            alt="green-dot"
+            class="me-2"
+          /><span>Zarezerwuj łóżko</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script lang="ts" scoped>
+import { Options, Vue } from "vue-class-component";
+import Header from "../details/Header.vue";
+import Subheader from "../details/Subheader.vue";
+import Gallery from "../details/Gallery.vue";
+import Host from "../details/Host.vue";
+import Equipments from "../details/Equipments.vue";
+import SharedEquipments from "../details/SharedEquipments.vue";
+import Rules from "../details/Rules.vue";
+import Payments from "../details/Payments.vue";
+import DescriptionWithMap from "../details/DescriptionWithMap.vue";
+import Locator from "../details/Locator.vue";
+
+@Options({
+  components: {
+    Header,
+    Subheader,
+    Gallery,
+    Host,
+    Equipments,
+    SharedEquipments,
+    Rules,
+    Payments,
+    DescriptionWithMap,
+    Locator,
+  },
+})
+export default class SingleAd extends Vue {}
+</script>
+
+<style lang="scss">
+@import "@/assets/_variables.scss";
+@import "@/assets/style.scss";
+.advertisement-section {
+  font-size: 0.9rem;
+  max-width: 1400px;
+  font-weight: 500;
+  margin: auto;
+  .single-section {
+    border-bottom: 1px solid $dark-gray;
+  }
+  .heart-icon {
+    color: $success-color;
+  }
+  .shared-room {
+    color: $primary-color;
+  }
+  .room-desc {
+    font-size: 0.8rem;
+    color: $dark-gray;
+  }
+}
+</style>
