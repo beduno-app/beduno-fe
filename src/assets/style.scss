@@ -17,3 +17,19 @@
         font-size: 0.7rem;
     }
 }
+.row-images {
+    --bs-gutter-x: 0.01rem;
+    .img-card-big {
+        padding-right: 1px;
+    }
+    .col {
+        padding: 1px !important;
+    }
+    img {
+        border-radius: 10px;
+    }
+    .room-img {
+        width: 100%;
+        height: 100%;
+    }
+}
