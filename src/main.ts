@@ -20,6 +20,9 @@ import {faLocationDot}  from '@fortawesome/free-solid-svg-icons'
 
 import { UploadMedia, UpdateMedia } from 'vue-media-upload';
 
+import axios from 'axios'
+import VueAxios from 'vue-axios'
+
 // /* add icons to the library */
 
 library.add(faAngleDown)
@@ -41,7 +44,7 @@ const i18n = createI18n({
     globalInjection: true
 });
 
-createApp(App).use(store).use(i18n).use(BootstrapVue3).use(router).use(
+createApp(App).use(store).use(i18n).use(BootstrapVue3).use(router).use(VueAxios, axios).use(
     plugin,
     defaultConfig({
         theme: 'genesis'
