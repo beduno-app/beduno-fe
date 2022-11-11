@@ -9,6 +9,7 @@
             <b-tab :title="$t('advertisementView.descriptionSection.description.tabs.own')" active>
               <textarea
                 name="own-description"
+                ref="descriptionOwn"
                 id="3"
                 cols="30"
                 rows="10"
@@ -20,7 +21,7 @@
               }}</span>
             </b-tab>
             <b-tab :title="$t('advertisementView.descriptionSection.description.tabs.preset1')">
-              <textarea name="template1" id="2" cols="30" rows="10">
+              <textarea ref="descriptionTemplate1" name="template1" id="2" cols="30" rows="10">
 Oferuję komfortowy, nowoczesny oraz niezależny pokój w centrum miasta .
 Pokój w pełni umeblowany oraz przestronny.
 Łazienka oraz kuchnia ogólnodostępna.
@@ -31,7 +32,7 @@ Możesz zamieszkać u Nas już dziś.</textarea
               >
             </b-tab>
             <b-tab :title="$t('advertisementView.descriptionSection.description.tabs.preset2')">
-              <textarea name="template2" id="3" cols="30" rows="10">
+              <textarea ref="descriptionTemplate2" name="template2" id="3" cols="30" rows="10">
 Jeżeli szukasz wygodnego i przytulnego pokoju to ta oferta będzie idealna dla Ciebie. Pokój jest jasny i dobrze doświetlony oraz w pełni wyposażony. Znajduje się w cichej i spokojnej okolicy. Łazienka i kuchnia ogólnodostępna w pełni wyposażona.
 Każdy gość jest mile widziany, zapraszmy.</textarea
               >
@@ -45,6 +46,7 @@ Każdy gość jest mile widziany, zapraszmy.</textarea
         <span class="label pb-2">{{ $t('advertisementView.descriptionSection.roomSize.label') }}</span>
         <FormKit
           type="text"
+          ref="roomSize"
           :placeholder="$t('advertisementView.descriptionSection.roomSize.placeholder')"
           validation="required"
           :validation-messages="{
@@ -61,6 +63,7 @@ Każdy gość jest mile widziany, zapraszmy.</textarea
         <span class="label">{{ $t('advertisementView.descriptionSection.splitIntoBeds.label') }}</span>
         <b-form-radio
           id="checkbox-1"
+          ref="sharedBeds"
           v-model="divide"
           name="checkbox"
           value="accepted"
@@ -73,6 +76,7 @@ Każdy gość jest mile widziany, zapraszmy.</textarea
         <span class="label pb-2">{{ $t('advertisementView.descriptionSection.bedsCount.label') }}</span>
         <FormKit
           type="text"
+          ref="bedsCount"
           :placeholder="$t('advertisementView.descriptionSection.bedsCount.placeholder')"
           validation="required"
           :validation-messages="{
@@ -91,6 +95,7 @@ Każdy gość jest mile widziany, zapraszmy.</textarea
             <input
               class="form-check-input"
               type="radio"
+              v-model="roomType"
               name="exampleRadios"
               :id="room.id"
               :value="room.value"
@@ -112,6 +117,7 @@ Każdy gość jest mile widziany, zapraszmy.</textarea
         <span class="label pb-2">{{ $t('advertisementView.descriptionSection.freeBedsCount.label') }}</span>
         <FormKit
           type="text"
+          ref="freeBeds"
           placeholder="1"
           validation="required"
           :validation-messages="{
@@ -163,11 +169,25 @@ export default class HostSection extends Vue {
       id: "checkbox-3",
     },
   ];
+  roomType
   rentalTime = [
     { key: "days", content: "Krótkoterminowy (dni)" },
     { key: "weeks", content: "Krótkoterminowy (tygodnie)" },
     { key: "months", content: "Długoterminowy (miesiące)" },
   ];
+
+  getData() {
+    return {
+      descriptionOwn: (this.$refs.descriptionOwn as any).value,
+      descriptionTemplate1: (this.$refs.descriptionTemplate1 as any).value,
+      descriptionTemplate2: (this.$refs.descriptionTemplate2 as any).value,
+      roomSize: (this.$refs.roomSize as any).node.value,
+      sharedBeds: (this.$refs.sharedBeds as any).value,
+      bedsCount: (this.$refs.bedsCount as any).node.value,
+      freeBeds: (this.$refs.freeBeds as any).node.value,
+      roomType: this.roomType
+    }
+  }
 }
 </script>
 

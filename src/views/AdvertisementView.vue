@@ -1,26 +1,29 @@
 <template>
   <div class="add container-fluid">
     <h3>{{ $t('advertisementView.header') }}</h3>
+    <button @click="x">XXX</button>
+    <button @click="y">YYY</button>
+    <button @click="checkData">Check data</button>
     <base-form>
-      <main-section />
+      <main-section ref="main" />
     </base-form>
     <base-form>
-      <host-section />
+      <host-section ref="host" />
     </base-form>
     <base-form>
-      <description-section />
+      <description-section ref="description" />
     </base-form>
     <base-form>
-      <current-guests-section />
+      <current-guests-section ref="guests" />
     </base-form>
     <base-form>
-      <equipment-section />
+      <equipment-section ref="equipment" />
     </base-form>
     <base-form>
-      <payment-section />
+      <payment-section ref="payment" />
     </base-form>
     <base-form>
-      <rules-section />
+      <rules-section ref="rules" />
     </base-form>
   </div>
   <div class="p-3 container">
@@ -113,7 +116,98 @@ import PaymentSection from "@/features/ad/creation/PaymentSection.vue";
     Footer,
   },
 })
-export default class AdvertisementView extends Vue {}
+export default class AdvertisementView extends Vue {
+  checkData() {
+    const mainData = (this.$refs.main as any).getData();
+    const hostData = (this.$refs.host as any).getData();
+    const descriptionData = (this.$refs.description as any).getData();
+    const guestsData = (this.$refs.guests as any).getData();
+    const equipmentData = (this.$refs.equipment as any).getData();
+    const paymentData = (this.$refs.payment as any).getData();
+    const rulesData = (this.$refs.rules as any).getData();
+
+    // extract hostId - separate request
+
+    console.log({
+      mainData,
+      hostData,
+      descriptionData,
+      guestsData,
+      equipmentData,
+      paymentData,
+      rulesData
+    });
+
+    const advertisementData = {
+      hostId: '12af9758-f690-4098-9985-d9886bc62a8d',
+      postCode: mainData.zipCode,
+      hostStreet: mainData.street,
+      numBeds: 3,
+      usedBeds: 1,
+      sharedBeds: true,
+      language: 'pl',
+      priceList: [
+        {rangeFrom: 1, rangeTo: 2, value: 3},
+        {rangeFrom: 4, rangeTo: 5, value: 6},
+      ],
+      roomEquipment: ['TV', 'RADIO'],
+      sharedEquipment: ['BATHROOM', 'IRON'],
+      paymentType: ['CACHE', 'BLIK'],
+      rentalRules: []
+    };
+
+    // save id
+
+    // const photosFormData = new FormData();
+    // use saved id
+    // iterate through photos - mainData.images
+    // photosFormData.append('advertisementId', 'f3d277d0-4698-4d07-9842-4834dbc034cc')
+    // photosFormData.append('photos', mainData.images[0]);
+    // photosFormData.append('photos', mainData.images[1]);
+  }
+
+  x() {
+    this.axios.post('http://localhost:8080/advertisement', {
+      hostId: '12af9758-f690-4098-9985-d9886bc62a8d',
+      postCode: '53312',
+      hostStreet: 'Drukarska',
+      numBeds: 3,
+      usedBeds: 1,
+      sharedBeds: true,
+      language: 'pl',
+      priceList: [
+        {rangeFrom: 1, rangeTo: 2, value: 3},
+        {rangeFrom: 4, rangeTo: 5, value: 6},
+      ],
+      roomEquipment: ['TV', 'RADIO'],
+      sharedEquipment: ['BATHROOM', 'IRON'],
+      paymentType: ['CACHE', 'BLIK'],
+      rentalRules: []
+    }, { headers: {
+      'Content-Type': 'application/json'
+      }})
+  }
+
+  y() {
+    let formData = new FormData();
+
+    const mainData = (this.$refs.main as any).getData();
+    // console.log(mainData);
+    // Object.entries(mainData).forEach(([key, value]) => {
+    //   console.log(key, value);
+    //   formData.append(key, value as string | Blob);
+    // });
+    // console.log(...formData);
+
+    formData.append('advertisementId', 'f3d277d0-4698-4d07-9842-4834dbc034cc')
+    formData.append('photos', mainData.images[0]);
+    formData.append('photos', mainData.images[1]);
+
+    this.axios.put('http://localhost:8080/advertisement/photos', formData, { headers: {
+        'Content-Type': 'multipart/form-data'
+      }})
+  }
+}
 </script>
 <style>
 .text-small {
