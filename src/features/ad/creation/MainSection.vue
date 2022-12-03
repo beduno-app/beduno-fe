@@ -134,7 +134,7 @@ export default class MainSection extends Vue {
       street: (this.$refs.street as any).node.value,
       streetNumber: (this.$refs.streetNumber as any).node.value,
       flatNumber: (this.$refs.flatNumber as any).node.value,
-      images: (this.$refs.image as any).files
+      images: Array.from((this.$refs.image as any).files)
     }
   }
 }

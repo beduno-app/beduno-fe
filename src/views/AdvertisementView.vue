@@ -1,9 +1,6 @@
 <template>
   <div class="add container-fluid">
     <h3>{{ $t('advertisementView.header') }}</h3>
-    <button @click="x">XXX</button>
-    <button @click="y">YYY</button>
-    <button @click="checkData">Check data</button>
     <base-form>
       <main-section ref="main" />
     </base-form>
@@ -57,7 +54,7 @@
         </div>
       </div>
       <div class="col-md-3 col-sm-6 col-sx-12">
-        <div class="d-flex align-items-center">
+        <div class="d-flex align-items-center" @click="publishAdvertisement">
           <img
             src="../assets/img/icon_save.png"
             style="width: 40px; height: 40px"
@@ -117,7 +114,7 @@ import PaymentSection from "@/features/ad/creation/PaymentSection.vue";
   },
 })
 export default class AdvertisementView extends Vue {
-  checkData() {
+  publishAdvertisement() {
     const mainData = (this.$refs.main as any).getData();
     const hostData = (this.$refs.host as any).getData();
     const descriptionData = (this.$refs.description as any).getData();
@@ -126,86 +123,50 @@ export default class AdvertisementView extends Vue {
     const paymentData = (this.$refs.payment as any).getData();
     const rulesData = (this.$refs.rules as any).getData();
 
-    // extract hostId - separate request
-
-    console.log({
-      mainData,
-      hostData,
-      descriptionData,
-      guestsData,
-      equipmentData,
-      paymentData,
-      rulesData
-    });
+    // todo: hide host section when user is logged in; separate request for creating host if not logged in
+    // change the value according to the ID in your DB
+    const hostId = '12af9758-f690-4098-9985-d9886bc62a8d';
 
     const advertisementData = {
-      hostId: '12af9758-f690-4098-9985-d9886bc62a8d',
+      hostId,
       postCode: mainData.zipCode,
       hostStreet: mainData.street,
-      numBeds: 3,
-      usedBeds: 1,
-      sharedBeds: true,
-      language: 'pl',
-      priceList: [
-        {rangeFrom: 1, rangeTo: 2, value: 3},
-        {rangeFrom: 4, rangeTo: 5, value: 6},
-      ],
-      roomEquipment: ['TV', 'RADIO'],
-      sharedEquipment: ['BATHROOM', 'IRON'],
-      paymentType: ['CACHE', 'BLIK'],
-      rentalRules: []
+      roomDescription: descriptionData.descriptionOwn, // todo: handle descriptions from templates
+      roomArea: descriptionData.roomSize,
+      numBeds: descriptionData.bedsCount,
+      usedBeds: descriptionData.bedsCount - descriptionData.freeBeds,
+      priceList: paymentData.priceList,
+      sharedBeds: descriptionData.sharedBeds,
+      language: 'pl', // todo: where do we get that from?
+      roomEquipment: equipmentData.roomEquipment,
+      sharedEquipment: equipmentData.commonEquipment,
+      paymentType: paymentData.paymentForms,
+      rentalRules: Object.keys(rulesData).filter(key => !!rulesData[key])
     };
 
-    // save id
+    this.axios.post(
+        'http://localhost:8080/advertisement',
+        advertisementData,
+        { headers: { 'Content-Type': 'application/json' } }
+    )
+        .then(response => response.data)
+        .then(id => {
+          if (!mainData.images || mainData.images.length === 0) {
+            return;
+          }
 
-    // const photosFormData = new FormData();
-    // use saved id
-    // iterate through photos - mainData.images
-    // photosFormData.append('advertisementId', 'f3d277d0-4698-4d07-9842-4834dbc034cc')
-    // photosFormData.append('photos', mainData.images[0]);
-    // photosFormData.append('photos', mainData.images[1]);
-  }
+          let formData = new FormData();
+          formData.append('advertisementId', id)
+          mainData.images.forEach(image => {
+            formData.append('photos', image);
+          });
 
-  x() {
-    this.axios.post('http://localhost:8080/advertisement', {
-      hostId: '12af9758-f690-4098-9985-d9886bc62a8d',
-      postCode: '53312',
-      hostStreet: 'Drukarska',
-      numBeds: 3,
-      usedBeds: 1,
-      sharedBeds: true,
-      language: 'pl',
-      priceList: [
-        {rangeFrom: 1, rangeTo: 2, value: 3},
-        {rangeFrom: 4, rangeTo: 5, value: 6},
-      ],
-      roomEquipment: ['TV', 'RADIO'],
-      sharedEquipment: ['BATHROOM', 'IRON'],
-      paymentType: ['CACHE', 'BLIK'],
-      rentalRules: []
-    }, { headers: {
-      'Content-Type': 'application/json'
-      }})
-  }
-
-  y() {
-    let formData = new FormData();
-
-    const mainData = (this.$refs.main as any).getData();
-    // console.log(mainData);
-    // Object.entries(mainData).forEach(([key, value]) => {
-    //   console.log(key, value);
-    //   formData.append(key, value as string | Blob);
-    // });
-    // console.log(...formData);
-
-    formData.append('advertisementId', 'f3d277d0-4698-4d07-9842-4834dbc034cc')
-    formData.append('photos', mainData.images[0]);
-    formData.append('photos', mainData.images[1]);
-
-    this.axios.put('http://localhost:8080/advertisement/photos', formData, { headers: {
-        'Content-Type': 'multipart/form-data'
-      }})
+          this.axios.put(
+              'http://localhost:8080/advertisement/photos',
+              formData,
+              { headers: { 'Content-Type': 'multipart/form-data' } }
+          );
+        });
   }
 }
 </script>
