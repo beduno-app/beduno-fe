@@ -3,7 +3,7 @@
     <div class="guests-section p-3">
       <div class="row">
         <span class="label pb-3">{{ $t('advertisementView.currentGuestsSection.title') }}</span>
-        <guest-section ref="guests" v-for="item in [0, 1, 2, 3, 4, 5]" />
+        <guest-section ref="guests" v-for="(item, index) in [0, 1, 2, 3, 4, 5]" :key="index" />
       </div>
     </div>
   </div>

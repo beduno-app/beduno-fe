@@ -60,6 +60,9 @@
       </div>
     </div>
   </div>
+
+  <!--  todo: more data needed in the DTO in order to fill everything -->
+  {{ advertisementData }}
 </template>
 
 <script lang="ts">
@@ -70,6 +73,8 @@ import Locator from "../details/Locator.vue";
 
 @Options({
   components: { Equipments, Host, Locator },
+  // todo: make required, migrate whole component to use only props
+  props: { advertisementData: Object }
 })
 export default class SingleAd extends Vue {}
 </script>

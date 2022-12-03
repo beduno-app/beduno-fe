@@ -136,7 +136,6 @@ Każdy gość jest mile widziany, zapraszmy.</textarea
 </template>
 
 <script lang="ts">
-import { computed } from "@vue/runtime-core";
 import { Vue } from "vue-class-component";
 
 export default class HostSection extends Vue {
@@ -182,7 +181,7 @@ export default class HostSection extends Vue {
       descriptionTemplate1: (this.$refs.descriptionTemplate1 as any).value,
       descriptionTemplate2: (this.$refs.descriptionTemplate2 as any).value,
       roomSize: (this.$refs.roomSize as any).node.value,
-      sharedBeds: (this.$refs.sharedBeds as any).value,
+      sharedBeds: (this.$refs.sharedBeds as any).value === 'accepted',
       bedsCount: (this.$refs.bedsCount as any).node.value,
       freeBeds: (this.$refs.freeBeds as any).node.value,
       roomType: this.roomType
