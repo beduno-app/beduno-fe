@@ -26,6 +26,12 @@ const routes: Array<RouteRecordRaw> = [
     component: () =>
       import("../views/HostAdvertisementsView.vue"),
   },
+  {
+    path: "/advertisements-panel-expert",
+    name: "AdvertisementsPanelExpert",
+    component: () =>
+      import("../views/AdvertisementsPanelExpert.vue"),
+  },
 ];
 
 const router = createRouter({
