@@ -5,6 +5,7 @@
       <div class="input-characters pb-2">{{ $t('advertisementView.mainSection.title.tip') }}</div>
       <FormKit
           type="textarea"
+          ref="title"
           :placeholder="$t('advertisementView.mainSection.title.placeholder')"
           validation="required|?length:7,70"
           :validation-messages="{
@@ -24,6 +25,7 @@
       <div class="col-sm-6 col-lg-2">
         <FormKit
             type="text"
+            ref="city"
             :placeholder="$t('advertisementView.mainSection.address.cityPlaceholder')"
             validation="required"
             :validation-messages="{
@@ -40,6 +42,7 @@
       <div class="col-sm-6 col-lg-2">
         <FormKit
             type="text"
+            ref="zipCode"
             :placeholder="$t('advertisementView.mainSection.address.zipCodePlaceholder')"
             validation="required"
             :validation-messages="{
@@ -56,6 +59,7 @@
       <div class="col-sm-6 col-lg-2">
         <FormKit
             type="text"
+            ref="street"
             :placeholder="$t('advertisementView.mainSection.address.streetPlaceholder')"
             validation="required"
             :validation-messages="{
@@ -72,6 +76,7 @@
       <div class="col-sm-3 col-lg-2">
         <FormKit
             type="text"
+            ref="streetNumber"
             :placeholder="$t('advertisementView.mainSection.address.streetNumberPlaceholder')"
             validation="required"
             :validation-messages="{
@@ -88,6 +93,7 @@
       <div class="col-sm-3 col-lg-2">
         <FormKit
             type="text"
+            ref="flatNumber"
             :placeholder="$t('advertisementView.mainSection.address.flatNumberPlaceholder')"
             validation="required"
             :validation-messages="{
@@ -107,6 +113,8 @@
     <div class="input-characters pb-2">{{ $t('advertisementView.mainSection.photos.tip') }}</div>
 
     <upload-media server="/api/upload"></upload-media>
+
+    <input ref="image" type="file" multiple/>
   </div>
 </template>
 
@@ -117,7 +125,19 @@ import { UploadMedia, UpdateMedia } from "vue-media-upload";
 @Options({
   components: { UploadMedia, UpdateMedia },
 })
-export default class MainSection extends Vue {}
+export default class MainSection extends Vue {
+  getData() {
+    return {
+      title: (this.$refs.title as any).node.value,
+      city: (this.$refs.city as any).node.value,
+      zipCode: (this.$refs.zipCode as any).node.value,
+      street: (this.$refs.street as any).node.value,
+      streetNumber: (this.$refs.streetNumber as any).node.value,
+      flatNumber: (this.$refs.flatNumber as any).node.value,
+      images: Array.from((this.$refs.image as any).files)
+    }
+  }
+}
 </script>
 
 <style lang="scss">

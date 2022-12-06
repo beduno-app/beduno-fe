@@ -2,25 +2,25 @@
   <div class="add container-fluid">
     <h3>{{ $t('advertisementView.header') }}</h3>
     <base-form>
-      <main-section />
+      <main-section ref="main" />
     </base-form>
     <base-form>
-      <host-section />
+      <host-section ref="host" />
     </base-form>
     <base-form>
-      <description-section />
+      <description-section ref="description" />
     </base-form>
     <base-form>
-      <current-guests-section />
+      <current-guests-section ref="guests" />
     </base-form>
     <base-form>
-      <equipment-section />
+      <equipment-section ref="equipment" />
     </base-form>
     <base-form>
-      <payment-section />
+      <payment-section ref="payment" />
     </base-form>
     <base-form>
-      <rules-section />
+      <rules-section ref="rules" />
     </base-form>
   </div>
   <div class="p-3 container">
@@ -54,7 +54,7 @@
         </div>
       </div>
       <div class="col-md-3 col-sm-6 col-sx-12">
-        <div class="d-flex align-items-center">
+        <div class="d-flex align-items-center" @click="publishAdvertisement">
           <img
             src="../assets/img/icon_save.png"
             style="width: 40px; height: 40px"
@@ -113,7 +113,62 @@ import PaymentSection from "@/features/ad/creation/PaymentSection.vue";
     Footer,
   },
 })
-export default class AdvertisementView extends Vue {}
+export default class AdvertisementView extends Vue {
+  publishAdvertisement() {
+    const mainData = (this.$refs.main as any).getData();
+    const hostData = (this.$refs.host as any).getData();
+    const descriptionData = (this.$refs.description as any).getData();
+    const guestsData = (this.$refs.guests as any).getData();
+    const equipmentData = (this.$refs.equipment as any).getData();
+    const paymentData = (this.$refs.payment as any).getData();
+    const rulesData = (this.$refs.rules as any).getData();
+
+    // todo: hide host section when user is logged in; separate request for creating host if not logged in
+    // change the value according to the ID in your DB
+    const hostId = '12af9758-f690-4098-9985-d9886bc62a8d';
+
+    const advertisementData = {
+      hostId,
+      postCode: mainData.zipCode,
+      hostStreet: mainData.street,
+      roomDescription: descriptionData.descriptionOwn, // todo: handle descriptions from templates
+      roomArea: descriptionData.roomSize,
+      numBeds: descriptionData.bedsCount,
+      usedBeds: descriptionData.bedsCount - descriptionData.freeBeds,
+      priceList: paymentData.priceList,
+      sharedBeds: descriptionData.sharedBeds,
+      language: 'pl', // todo: where do we get that from?
+      roomEquipment: equipmentData.roomEquipment,
+      sharedEquipment: equipmentData.commonEquipment,
+      paymentType: paymentData.paymentForms,
+      rentalRules: Object.keys(rulesData).filter(key => !!rulesData[key])
+    };
+
+    this.axios.post(
+        'http://localhost:8080/advertisement',
+        advertisementData,
+        { headers: { 'Content-Type': 'application/json' } }
+    )
+        .then(response => response.data)
+        .then(id => {
+          if (!mainData.images || mainData.images.length === 0) {
+            return;
+          }
+
+          let formData = new FormData();
+          formData.append('advertisementId', id)
+          mainData.images.forEach(image => {
+            formData.append('photos', image);
+          });
+
+          this.axios.put(
+              'http://localhost:8080/advertisement/photos',
+              formData,
+              { headers: { 'Content-Type': 'multipart/form-data' } }
+          );
+        });
+  }
+}
 </script>
 <style>
 .text-small {

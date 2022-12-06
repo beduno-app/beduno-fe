@@ -11,6 +11,7 @@
                 <input
                   class="form-check-input"
                   id="exampleRadios1"
+                  v-on:change="setPets(true)"
                   type="radio"
                   value="yes"
                   checked
@@ -24,6 +25,7 @@
                 <input
                   class="form-check-input"
                   id="exampleRadios1"
+                  v-on:change="setPets(false)"
                   type="radio"
                   formControlName="pets"
                   value="no"
@@ -49,6 +51,7 @@
                 <input
                   class="form-check-input"
                   type="radio"
+                  v-on:change="setCurfew(false)"
                   id="exampleRadios2"
                   value="no"
                   formControlName="curfew"
@@ -63,6 +66,7 @@
                   class="form-check-input"
                   type="radio"
                   id="exampleRadios2"
+                  v-on:change="setCurfew(true)"
                   value="yes"
                   checked
                   formControlName="curfew"
@@ -89,6 +93,7 @@
                   class="form-check-input"
                   type="radio"
                   id="exampleRadios3"
+                  v-on:change="setSmoking(false)"
                   value="no"
                   formControlName="smoking"
                 />
@@ -102,6 +107,7 @@
                   class="form-check-input"
                   type="radio"
                   id="exampleRadios3"
+                  v-on:change="setSmoking(true)"
                   value="yes"
                   formControlName="smoking"
                   checked
@@ -122,6 +128,7 @@
         <span class="label">{{ $t('advertisementView.rulesSection.others.label') }}</span>
         <FormKit
           type="text"
+          ref="others"
           :placeholder="$t('advertisementView.rulesSection.others.placeholder')"
           :classes="{
             outer: 'foo-bar',
@@ -137,7 +144,32 @@
 <script lang="ts">
 import { Vue } from "vue-class-component";
 
-export default class RulesSection extends Vue {}
+export default class RulesSection extends Vue {
+  pets = true;
+  curfew = true;
+  smoking = true;
+
+  setPets(value) {
+    this.pets = value;
+  }
+
+  setCurfew(value) {
+    this.curfew = value;
+  }
+
+  setSmoking(value) {
+    this.smoking = value;
+  }
+
+  getData() {
+    return {
+      pets: this.pets,
+      curfew: this.curfew,
+      smoking: this.smoking,
+      others: (this.$refs.others as any).node.value
+    }
+  }
+}
 </script>
 <style lang="scss">
 @import "@/assets/_variables.scss";
