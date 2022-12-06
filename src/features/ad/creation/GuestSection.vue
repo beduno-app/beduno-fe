@@ -5,6 +5,7 @@
         <div class="col-md-6 mt-3">
           <FormKit
             type="text"
+            ref="name"
             :placeholder="$t('advertisementView.currentGuestsSection.name.placeholder')"
             :classes="{
               outer: 'foo-bar',
@@ -16,7 +17,7 @@
         </div>
         <div class="col-md-6">
           <span class="small-label">{{ $t('advertisementView.currentGuestsSection.birthYear.label') }}</span>
-          <select class="mb-2">
+          <select class="mb-2" v-on:change="selectedYear = Number($event.target.value)">
             <option v-for="(year, idx) in years" :value="year" :key="idx">
               {{ year }}
             </option>
@@ -26,7 +27,7 @@
       <div class="row" v-for="(line, index) in lines" :key="index">
         <div class="col-md-6">
           <div>
-            <select v-model="line.language" class="mb-2">
+            <select v-on:change="changeValue($event, index)" class="mb-2">
               <option
                 :value="languageOptions.option"
                 v-for="(option, idx) in languageOptions"
@@ -39,7 +40,7 @@
             <img
               src="../../../assets/img/icon_plus.png"
               alt="icon_add"
-              v-if="index + 1 === lines.length"
+              v-if="index + 1 === lines.length && lines.length < 5"
               class="pt-3"
               @click="addLine"
             />
@@ -67,7 +68,6 @@ export default class GuestSection extends Vue {
   lines = <any>[];
 
   selectedYear = 1997;
-  languages = ["polski"];
   languageOptions = [
     {
       value: "Polski",
@@ -101,14 +101,20 @@ export default class GuestSection extends Vue {
   });
   blockRemoval = computed(() => this.lines.length <= 1);
 
-  addLine = () => {
-    if (this.lines.some((line) => line.language === "")) {
-      return;
+  getData() {
+    return {
+      name: (this.$refs.name as any).node.value,
+      birthYear: this.selectedYear,
+      languages: this.lines,
     }
+  }
 
-    this.lines.push({
-      language: "",
-    });
+  changeValue(event, index) {
+    this.lines[index] = event.target.value;
+  }
+
+  addLine = () => {
+    this.lines.push('Polski');
   };
 
   removeLine(lineId) {
@@ -116,6 +122,7 @@ export default class GuestSection extends Vue {
       this.lines.splice(lineId, 1);
     }
   }
+
   mounted() {
     this.addLine();
   }

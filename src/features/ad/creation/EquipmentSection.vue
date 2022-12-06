@@ -17,6 +17,7 @@
               {{ element.content }}
               <input
                 type="checkbox"
+                v-on:change="roomEquipmentChecked(element.key, $event.target.checked)"
                 :id="element.key"
                 class="form-check-input"
               />
@@ -41,6 +42,7 @@
               {{ element.content }}
               <input
                 type="checkbox"
+                v-on:change="roomEquipmentChecked(element.key, $event.target.checked)"
                 :id="element.key"
                 class="form-check-input"
               />
@@ -75,6 +77,7 @@
               {{ element.content }}
               <input
                 type="checkbox"
+                v-on:change="commonEquipmentChecked(element.key, $event.target.checked)"
                 :id="element.key"
                 class="form-check-input"
               />
@@ -99,6 +102,7 @@
               {{ element.content }}
               <input
                 type="checkbox"
+                v-on:change="commonEquipmentChecked(element.key, $event.target.checked)"
                 :id="element.key"
                 class="form-check-input"
               />
@@ -123,6 +127,7 @@
               {{ element.content }}
               <input
                 type="checkbox"
+                v-on:change="commonEquipmentChecked(element.key, $event.target.checked)"
                 :id="element.key"
                 class="form-check-input"
               />
@@ -148,7 +153,8 @@
 import { Vue } from "vue-class-component";
 
 export default class HostSection extends Vue {
-  selectedEquipment = <string[]>[];
+  selectedRoomEquipment = <string[]>[];
+  selectedCommonEquipment = <string[]>[];
   roomEquipment1 = [
     { content: "Brak pościeli", key: "no_linen", icon: "icon_no_linen" },
     { content: "Pralka", key: "washer", icon: "washing_machine" },
@@ -236,6 +242,31 @@ export default class HostSection extends Vue {
     },
     { content: "Inne", key: "other", icon: "icon_others" },
   ];
+
+  getData() {
+    return {
+      roomEquipment: this.selectedRoomEquipment,
+      commonEquipment: this.selectedCommonEquipment
+    }
+  }
+
+  roomEquipmentChecked(key, checked) {
+    if (checked && !this.selectedRoomEquipment.includes(key)) {
+      this.selectedRoomEquipment.push(key);
+    }
+    if (!checked && this.selectedRoomEquipment.includes(key)) {
+      this.selectedRoomEquipment = this.selectedRoomEquipment.filter(eq => eq !== key);
+    }
+  }
+
+  commonEquipmentChecked(key, checked) {
+    if (checked && !this.selectedCommonEquipment.includes(key)) {
+      this.selectedCommonEquipment.push(key);
+    }
+    if (!checked && this.selectedCommonEquipment.includes(key)) {
+      this.selectedCommonEquipment = this.selectedCommonEquipment.filter(eq => eq !== key);
+    }
+  }
 }
 </script>
 

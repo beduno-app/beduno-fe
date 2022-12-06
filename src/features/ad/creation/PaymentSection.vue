@@ -11,7 +11,12 @@
                 class="px-1"
               />
               {{ form.content }}
-              <input type="checkbox" :id="form.key" class="form-check-input" />
+              <input
+                  type="checkbox"
+                  :id="form.key"
+                  class="form-check-input"
+                  v-on:change="paymentFormChecked(form.key, $event.target.checked)"
+              />
               <span class="form-check-sign"></span>
               {{ form.label }}
             </label>
@@ -29,9 +34,10 @@
               :max="maxDay"
             /><input
               type="number"
+              v-model="price1"
               class="col"
               style="
-                max-width: 50px;
+                max-width: 90px;
                 border-radius: 10px;
                 border: 1px solid grey;
               "
@@ -48,8 +54,9 @@
             /><input
               type="number"
               class="col"
+              v-model="price2"
               style="
-                max-width: 50px;
+                max-width: 90px;
                 border-radius: 10px;
                 border: 1px solid grey;
               "
@@ -78,8 +85,9 @@
             /><input
               type="number"
               class="col"
+              v-model="price3"
               style="
-                max-width: 50px;
+                max-width: 90px;
                 border-radius: 10px;
                 border: 1px solid grey;
               "
@@ -110,11 +118,14 @@ export default class HostSection extends Vue {
   value1 = [1, 10];
   value2 = [11, 15];
   value3 = [2, 5];
+  price1 = 25;
+  price2 = 20;
+  price3 = 500;
   minDay = 1;
   maxDay = 30;
   minMonth = 1;
   maxMonth = 12;
-  selectedPaymentForm = <string[]>[];
+  selectedPaymentForms = <string[]>[];
   paymentForms = [
     { label: "gotówka", key: "cash", icon: "icon_cash" },
     {
@@ -129,6 +140,26 @@ export default class HostSection extends Vue {
     },
     { label: "BLIK", key: "blik", icon: "icon_BLIK" },
   ];
+
+  paymentFormChecked(form, checked) {
+    if (checked && !this.selectedPaymentForms.includes(form)) {
+      this.selectedPaymentForms.push(form);
+    }
+    if (!checked && this.selectedPaymentForms.includes(form)) {
+      this.selectedPaymentForms = this.selectedPaymentForms.filter(sf => sf !== form);
+    }
+  }
+
+  getData() {
+    return {
+      paymentForms: this.selectedPaymentForms,
+      priceList: [
+          { rangeFrom: this.value1[0], rangeTo: this.value1[1], value: this.price1 },
+          { rangeFrom: this.value2[0], rangeTo: this.value2[1], value: this.price2 },
+          { rangeFrom: this.value3[0] * 30, rangeTo: this.value3[1] * 30, value: this.price3 },
+      ]
+    }
+  }
 }
 </script>
 <style src="@vueform/slider/themes/default.css">

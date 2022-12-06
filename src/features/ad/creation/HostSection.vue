@@ -4,6 +4,7 @@
       <div class="col-lg-3 col-md-6 col-sx-12 pb-3">
         <FormKit
           :label="$t('advertisementView.hostSection.hostName.label')"
+          ref="name"
           type="text"
           :placeholder="$t('advertisementView.hostSection.hostName.placeholder')"
           validation="required"
@@ -19,6 +20,7 @@
         />
         <FormKit
           :label="$t('advertisementView.hostSection.phoneNumber.label')"
+          ref="phone"
           type="text"
           :placeholder="$t('advertisementView.hostSection.phoneNumber.placeholder')"
           validation="required"
@@ -34,6 +36,7 @@
         />
         <FormKit
           :label="$t('advertisementView.hostSection.email.label')"
+          ref="email"
           type="text"
           :placeholder="$t('advertisementView.hostSection.email.placeholder')"
           validation="required|email"
@@ -59,6 +62,7 @@
 
             <input
               id="file-input"
+              ref="image"
               type="file"
               @change="previewImage"
               accept="image/*"
@@ -107,7 +111,12 @@
                 class="px-1"
                 width="30"
               />{{ communicator.content }}
-              <input type="checkbox" class="form-check-input" />
+              <input
+                  type="checkbox"
+                  class="form-check-input"
+                  v-model="selectedCommunicators"
+                  :value="communicator.key"
+              />
               <span class="form-check-sign"></span>
             </label>
           </div>
@@ -158,6 +167,16 @@ export default class HostSection extends Vue {
         this.imageData = e.target?.result;
       };
       reader.readAsDataURL(input.files[0]);
+    }
+  }
+  getData() {
+    return {
+      name: (this.$refs.name as any).node.value,
+      phone: (this.$refs.phone as any).node.value,
+      email: (this.$refs.email as any).node.value,
+      image: (this.$refs.image as any).files,
+      languages: this.selectedLanguages,
+      communicators: this.selectedCommunicators
     }
   }
 }
