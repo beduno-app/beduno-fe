@@ -29,7 +29,7 @@
     <div class="inactive-ad pt-5">
       <div class="d-flex inactive cursor-pointer pb-4">
         <img
-          src="../assets/img/dot_orange_big.png"
+          src="../assets/img/dot_red_big.png"
           alt="green-dot"
           class="me-2"
         />
@@ -65,7 +65,7 @@ export default class HostAdvertisementsView extends Vue {
     border-bottom: 1px solid $dark-gray;
   }
   .inactive {
-    color: $primary-color;
+    color: $danger-color-alert;
     border-bottom: 1px solid $dark-gray;
   }
   .panel-expert-btn {
