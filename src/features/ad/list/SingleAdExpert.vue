@@ -1,5 +1,4 @@
 <template>
-  
   <div class="row">
     <div class="column pt-2 col-2">
       <div class="d-flex align-items-center">
@@ -39,22 +38,28 @@
                 <img
                   src="../../../assets/img/icon_del_small_expert.png"
                   alt="remove-locator"
+                  class="cursor-pointer"
                 />
-                <span>Usuń lokatora</span>
+                <span class="cursor-pointer">Usuń lokatora</span>
               </div>
             </div>
           </div>
           <div class="d-flex justify-content-end align-items-center pe-2">
             <img
+              class="cursor-pointer"
               src="../../../assets/img/icon_add_small_expert.png"
               alt="add-locator"
             />
-            <span>Dodaj lokatora</span>
+            <span class="cursor-pointer">Dodaj lokatora</span>
           </div>
         </div>
         <div class="col-5 d-flex align-items-center">
-          <img src="../../../assets/img/icon_del_big_expert.png" alt="remove" />
-          <div>Usuń wszystkich lokatorów</div>
+          <img
+            class="cursor-pointer"
+            src="../../../assets/img/icon_del_big_expert.png"
+            alt="remove"
+          />
+          <div class="cursor-pointer">Usuń wszystkich lokatorów</div>
         </div>
       </div>
     </div>
@@ -64,15 +69,15 @@
           <img
             src="../../../assets/img/icon_preview.png"
             alt="nationality-icon"
-            class="me-2"
+            class="me-2 cursor-pointer"
           />
         </div>
-        <div class="col-2">
+        <div class="col-2 cursor-pointer">
           <p>Edytuj ogłoszenie</p>
         </div>
       </div>
       <div class="d-flex pt-3">
-        <div class="col-2">
+        <div class="col-2 cursor-pointer">
           <img
             src="../../../assets/img/icon_duplicate.png"
             alt="nationality-icon"
@@ -80,7 +85,9 @@
           />
         </div>
         <div class="col-8">
-          <p>Stwórz nowe ogłoszenie na podstawie obecnego</p>
+          <p class="cursor-pointer">
+            Stwórz nowe ogłoszenie na podstawie obecnego
+          </p>
         </div>
       </div>
     </div>
