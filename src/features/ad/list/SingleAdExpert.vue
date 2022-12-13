@@ -1,7 +1,7 @@
 <template>
   
   <div class="row">
-    <div class="column pt-2 col-md-2">
+    <div class="column pt-2 col-2">
       <div class="d-flex align-items-center">
         <font-awesome-icon
           icon="fa-solid fa-location-dot"
@@ -13,21 +13,21 @@
         </div>
       </div>
     </div>
-    <div class="column pt-2 col-md-1">
+    <div class="column pt-2 col-1">
       <span>Pokój nr 1</span>
     </div>
-    <div class="column pt-2 col-md-1">
+    <div class="column pt-2 col-1">
       <span>2</span>
     </div>
-    <div class="column pt-2 col-md-1">
+    <div class="column pt-2 col-1">
       <span>2</span>
     </div>
-    <div class="column pt-2 col-md-4">
+    <div class="column pt-2 col-4">
       <div class="row">
-        <div class="col-md-7">
+        <div class="col-7">
           <div v-for="(locator, idx) in locators" :key="idx" class="">
             <div class="row">
-              <div class="col-md-5 d-flex align-items-center">
+              <div class="col-5 d-flex align-items-center">
                 <img
                   :src="require(`../../../assets/img/${locator.icon}.png`)"
                   :alt="locator.icon"
@@ -35,7 +35,7 @@
                 />
                 <span>{{ locator.text }}</span>
               </div>
-              <div class="col-md-7 d-flex align-items-center">
+              <div class="col-7 d-flex align-items-center">
                 <img
                   src="../../../assets/img/icon_del_small_expert.png"
                   alt="remove-locator"
@@ -52,34 +52,34 @@
             <span>Dodaj lokatora</span>
           </div>
         </div>
-        <div class="col-md-5 d-flex align-items-center">
+        <div class="col-5 d-flex align-items-center">
           <img src="../../../assets/img/icon_del_big_expert.png" alt="remove" />
-          <p>Usuń wszystkich lokatorów</p>
+          <div>Usuń wszystkich lokatorów</div>
         </div>
       </div>
     </div>
-    <div class="col-md-3 settings pt-2">
-      <div class="d-flex align-items-end">
-        <div class="col-sm-1 col-lg-2">
+    <div class="col-3 settings pt-2">
+      <div class="d-flex align-items-center">
+        <div class="col-2">
           <img
             src="../../../assets/img/icon_preview.png"
             alt="nationality-icon"
             class="me-2"
           />
         </div>
-        <div class="col-sm-9 col-lg-10">
+        <div class="col-2">
           <p>Edytuj ogłoszenie</p>
         </div>
       </div>
       <div class="d-flex pt-3">
-        <div class="col-sm-1 col-lg-2">
+        <div class="col-2">
           <img
             src="../../../assets/img/icon_duplicate.png"
             alt="nationality-icon"
             class="me-2"
           />
         </div>
-        <div class="col-sm-9 col-lg-10">
+        <div class="col-8">
           <p>Stwórz nowe ogłoszenie na podstawie obecnego</p>
         </div>
       </div>
@@ -114,8 +114,4 @@ export default class SingleAdExpert extends Vue {
 .location-icon {
   color: $primary-color;
 }
-// .form-check-input:checked {
-//   color: $primary-color !important;
-//   background: $primary-color !important;
-// }
 </style>
