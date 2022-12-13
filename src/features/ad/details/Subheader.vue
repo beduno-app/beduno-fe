@@ -11,13 +11,12 @@
       <font-awesome-icon
         icon="fa-regular fa-heart"
         class="mx-2 heart-icon"
+        style="font-size: large"
       />Dodaj do ulubionych
     </div>
     <div class="col-lg-2 col-md-6">
-      <font-awesome-icon
-        icon="fa-regular fa-heart"
-        class="mx-2 heart-icon"
-      />Udostepnij
+      <img class="mx-2" src="../../../assets/img/icon_share_orange.png" />
+      Udostępnij
     </div>
   </div>
 </template>

@@ -62,11 +62,11 @@
         </b-dropdown>
         <button class="login-person mx-2">
           <font-awesome-icon
-            icon="fa-solid fa-bars"
+            icon="fa-solid fa-bars fa-2x"
             style="color: black"
             class="mx-2"
           />
-          <img class="mx-2" src="../assets/img/icon_login_top_01.png" />
+          <img class="mx-2" src="../assets/img/icon_login_top_01.png" alt="share"/>
         </button>
       </div>
       <div class="flex-column align-items-center icon-login">
