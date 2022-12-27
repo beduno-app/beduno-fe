@@ -29,13 +29,34 @@
             </div>
           </div>
           <div class="row mt-3">
-            <div class="col-lg-5 col-md-12 col shared-room">
-              Pokój dzielony na łóżka
+            <div class="col-md-6">
+              <div class="d-flex align-items-center">
+                <img
+                  src="../../../assets/img/icon_exclamation_orange.png"
+                  alt="icon-exclamantion-orange"
+                  class="pe-2"
+                />
+
+                <div class="col-lg-5 col-md-12 col shared-room">
+                  Pokój dzielony na łóżka
+                </div>
+              </div>
+
+              <p class="room-desc">Współdzielony z innymi mieszkańcami</p>
             </div>
-            <br />
-            <p class="room-desc">Współdzielony z innymi mieszkańcami</p>
-            <div class="col-lg-7 col-md-12 col">
-              Ilość osób aktualnie zamieszkująych pokój: 2
+            <div class="col-md-6">
+              <div class="d-flex">
+                <img
+                  src="../../../assets/img/icon_exclamation_grey.png"
+                  alt="icon-exclamantion-grey"
+                  class="pe-2"
+                  width="34" height="27"
+                />
+
+                <div class="col-lg-7 col-md-12 col">
+                  Ilość osób aktualnie zamieszkująych pokój: 2
+                </div>
+              </div>
             </div>
           </div>
           <div class="row mt-4">
