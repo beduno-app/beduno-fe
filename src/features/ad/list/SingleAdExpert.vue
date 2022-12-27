@@ -7,8 +7,8 @@
           class="location-icon mx-2"
         />
         <div class="d-flex flex-column">
-          <span>ul. Kokosowa 4/8</span>
-          <span>Warszawa</span>
+          <span>{{advertisement.street}}</span>
+          <span>{{advertisement.city}}</span>
         </div>
       </div>
     </div>
@@ -16,15 +16,15 @@
       <span>Pokój nr 1</span>
     </div>
     <div class="column pt-2 col-1">
-      <span>2</span>
+      <span>{{advertisement.occupied_beds}}</span>
     </div>
     <div class="column pt-2 col-1">
-      <span>2</span>
+      <span>{{advertisement.free_beds}}</span>
     </div>
     <div class="column pt-2 col-4">
       <div class="row">
         <div class="col-7">
-          <div v-for="(locator, idx) in locators" :key="idx" class="">
+          <div v-for="(locator, idx) in advertisement.locators" :key="idx" class="">
             <div class="row">
               <div class="col-5 d-flex align-items-center">
                 <img
@@ -97,12 +97,12 @@
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 
-@Options({})
+@Options({
+  props: {
+   advertisement: Object, 
+  },
+})
 export default class SingleAdExpert extends Vue {
-  locators = [
-    { content: "polski", key: "polish", text: "Grzegorz", icon: "pl" },
-    { content: "angielski", key: "englsh", text: "Jennifer", icon: "uk" },
-  ];
 }
 </script>
 
