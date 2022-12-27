@@ -22,9 +22,11 @@
             <span class="header">Aktualni lokatorzy:</span>
           </div>
         </div>
-        <single-ad-expert />
-        <single-ad-expert />
-        <single-ad-expert />
+        <single-ad-expert
+          v-for="(advertisement, idx) in advertisements"
+          :key="idx"
+          :advertisement="advertisement"
+        />
         <div class="d-flex justify-content-end align-items-center py-4">
           <img
             src="../assets/img/icon_add_big_expert.png"
@@ -45,13 +47,35 @@ import SearchInput from "@/features/home/SearchInput.vue";
 @Options({
   components: { SingleAdExpert, SearchInput },
 })
-export default class AdvertisementsPanelExpert extends Vue {}
+export default class AdvertisementsPanelExpert extends Vue {
+  advertisements = [
+    {
+      street: "ul. Kokosowa",
+      city: "Warszawa",
+      occupied_beds: "2",
+      free_beds: "2",
+      locators: [
+        { content: "polski", key: "polish", text: "Grzegorz", icon: "pl" },
+        { content: "angielski", key: "englsh", text: "Jennifer", icon: "uk" },
+      ],
+    },
+    {
+      street: "ul. Kokosowa",
+      city: "Warszawa",
+      occupied_beds: "2",
+      free_beds: "2",
+      locators: [
+        { content: "polski", key: "polish", text: "Grzegorz", icon: "pl" },
+        { content: "angielski", key: "englsh", text: "Jennifer", icon: "uk" },
+      ],
+    },
+  ];
+}
 </script>
 
 <style lang="scss">
 @import "@/assets/_variables.scss";
 @import "@/assets/style.scss";
-
 
 .panel-expert-section {
   font-size: 0.9rem;
