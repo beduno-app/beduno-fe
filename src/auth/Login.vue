@@ -140,7 +140,7 @@
     <div
       class="d-flex justify-content-center align-items-center login-btn mt-5 p-2"
     >
-      <img src="../assets/img/icon_man.png" alt="login-buutton" /><span
+      <img src="../assets/img/icon_login_top_01.png" alt="login-buutton" /><span
         class="mx-2"
         >ZALOGUJ SIĘ</span
       >
@@ -154,7 +154,7 @@
     <div
       class="d-flex justify-content-center align-items-center register-btn mb-5 mt-3 p-2"
     >
-      <img src="../assets/img/icon_man.png" alt="login-buutton" /><span
+      <img src="../assets/img/icon_login_green.png" alt="login-button" /><span
         class="mx-2"
         >ZAŁÓŻ KONTO</span
       >
@@ -174,7 +174,6 @@ import EyeOffIcon from "vue-material-design-icons/EyeOff.vue";
 export default class Login extends Vue {
   showPassword = false;
   selectedCountry = 1;
- 
 }
 </script>
 
@@ -233,7 +232,7 @@ export default class Login extends Vue {
     background: $primary-color;
   }
   .register-btn {
-    background: $success-color;
+    background: rgb(140,190,45);
   }
   @media (max-width: 700px) {
     .login-inputs,
