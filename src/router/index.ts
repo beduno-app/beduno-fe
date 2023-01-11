@@ -32,6 +32,12 @@ const routes: Array<RouteRecordRaw> = [
     component: () =>
       import("../views/AdvertisementsPanelExpert.vue"),
   },
+  {
+    path: "/login",
+    name: "Login",
+    component: () =>
+      import("../auth/Login.vue"),
+  },
 ];
 
 const router = createRouter({
