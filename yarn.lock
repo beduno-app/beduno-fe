@@ -9001,6 +9001,11 @@ vue-loader@^17.0.0:
     hash-sum "^2.0.0"
     loader-utils "^2.0.0"
 
+vue-material-design-icons@^5.1.2:
+  version "5.1.2"
+  resolved "https://registry.yarnpkg.com/vue-material-design-icons/-/vue-material-design-icons-5.1.2.tgz#d0b9227786672fc17be239fb8c1d8e22e33feb45"
+  integrity sha512-nD1qFM2qAkMlVoe23EfNKIeMfYl6YjHZjSty9q0mwc2gXmPmvEhixywJQhM+VF5KVBI1zAkVTNLoUEERPY10pA==
+
 vue-media-upload@^1.1.4:
   version "1.1.4"
   resolved "https://registry.npmjs.org/vue-media-upload/-/vue-media-upload-1.1.4.tgz"
@@ -9030,6 +9035,11 @@ vue3-carousel@^0.1.40:
   version "0.1.40"
   resolved "https://registry.npmjs.org/vue3-carousel/-/vue3-carousel-0.1.40.tgz"
   integrity sha512-rPIfBxFhsY6W6qKNGsjgzPJdngt07ov06/Ql1lKsTr8gBx73gUxCIIQo/7M3QCx3KU94CDGBbLugF5YGdEPefg==
+
+vue3-material-design-icons@^5.0.2:
+  version "5.0.2"
+  resolved "https://registry.yarnpkg.com/vue3-material-design-icons/-/vue3-material-design-icons-5.0.2.tgz#418743a35f7d8a9497105c2825e6ab72ee519876"
+  integrity sha512-hrZCKLPhY6ZeKlqU3JlwUJaoC1BhQPE9OQ3a1/9f6Zr8ioaRQkj0YPPWZnlwt5Jpxw3TxCDeUGv+qG/v4IX1FQ==
 
 vue@^3.2.13:
   version "3.2.37"

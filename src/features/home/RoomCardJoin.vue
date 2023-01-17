@@ -36,7 +36,7 @@
       <div class="row">
         <div class="col-4 text-start">{{ $t("roomCard.tenants") }}</div>
         <div class="col-8">
-          <locator />
+          <tenant />
           <div class="row">
             <span class="col text-start">Julka, lat 34</span>
             <div class="col d-flex align-items-center">
