@@ -12,11 +12,11 @@
         icon="fa-regular fa-heart"
         class="mx-2 heart-icon"
         style="font-size: large"
-      />Dodaj do ulubionych
+      />{{ $t('advertisementDetailsView.subheader.markAsFavorite') }}
     </div>
     <div class="col-lg-2 col-md-6">
       <img class="mx-2" src="../../../assets/img/icon_share_orange.png" />
-      Udostępnij
+      {{ $t('advertisementDetailsView.subheader.share') }}
     </div>
   </div>
 </template>

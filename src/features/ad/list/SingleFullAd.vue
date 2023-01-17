@@ -19,13 +19,13 @@
             </div>
             <div class="col-lg-5">
               <div class="col-md-9 mb-2">
-                Powierzchnia pokoju: 24m<sup>2</sup>
+                {{ $t('advertisementDetailsView.roomArea') }} 24m<sup>2</sup>
               </div>
             </div>
           </div>
           <div class="row">
             <div class="col-md-12">
-              Część wspólna: lobby , kuchnia , łazienka
+              {{ $t('advertisementDetailsView.sharedArea') }}
             </div>
           </div>
           <div class="row mt-3">
@@ -33,16 +33,16 @@
               <div class="d-flex align-items-center">
                 <img
                   src="../../../assets/img/icon_exclamation_orange.png"
-                  alt="icon-exclamantion-orange"
+                  alt="icon-exclamation-orange"
                   class="pe-2"
                 />
 
                 <div class="col-lg-5 col-md-12 col shared-room">
-                  Pokój dzielony na łóżka
+                  {{ $t('advertisementDetailsView.roomSplitToBeds') }}
                 </div>
               </div>
 
-              <p class="room-desc">Współdzielony z innymi mieszkańcami</p>
+              <p class="room-desc">{{ $t('advertisementDetailsView.sharedRoom') }}</p>
             </div>
             <div class="col-md-6">
               <div class="d-flex">
@@ -54,17 +54,17 @@
                 />
 
                 <div class="col-lg-7 col-md-12 col">
-                  Ilość osób aktualnie zamieszkująych pokój: 2
+                  {{ $t('advertisementDetailsView.currentTenantsCount') }} 2
                 </div>
               </div>
             </div>
           </div>
           <div class="row mt-4">
-            <div class="col-sm-12 col-md-4">Aktualnie mieszka u nas:</div>
+            <div class="col-sm-12 col-md-4">{{ $t('advertisementDetailsView.currentTenants') }}</div>
             <div class="col-sm-12 col-md-8">
-              <locator />
-              <locator />
-              <locator />
+              <tenant />
+              <tenant />
+              <tenant />
             </div>
           </div>
         </div>
@@ -73,13 +73,13 @@
         </div>
       </div>
       <div class="row mt-4">
-        <div class="col-md-12 mb-2">Wyposażenie pokoju:</div>
+        <div class="col-md-12 mb-2">{{ $t('advertisementDetailsView.roomEquipment') }}</div>
         <equipments />
       </div>
     </div>
     <div class="single-section py-3">
       <div class="row">
-        <div class="col-md-12 mb-2">Wyposażenie częsci wspólnej:</div>
+        <div class="col-md-12 mb-2">{{ $t('advertisementDetailsView.sharedEquipment') }}</div>
         <shared-equipments />
       </div>
     </div>
@@ -88,25 +88,25 @@
     </div>
     <div class="single-section py-3">
       <div class="row">
-        <div class="col-md-12 mb-2">Formy platności:</div>
+        <div class="col-md-12 mb-2">{{ $t('advertisementDetailsView.paymentMethods') }}</div>
         <payments />
       </div>
     </div>
     <div class="single-section py-3">
       <div class="row">
-        <div class="col-md-12 mb-2">Zasady pobytu:</div>
+        <div class="col-md-12 mb-2">{{ $t('advertisementDetailsView.rulesOfStay') }}</div>
         <rules />
       </div>
     </div>
     <div class="py-3">
       <div class="row">
-        <div class="col-md-5 mb-3">Cena za łóżko 88zł (4 noce)</div>
+        <div class="col-md-5 mb-3">{{ $t('advertisementDetailsView.pricePerBed', { price: 88, currency: 'zł', duration: '4 noce'}) }}</div>
         <div class="col md-7" style="cursor: pointer">
           <img
             src="../../../assets/img/dot_green_big.png"
             alt="green-dot"
             class="me-2"
-          /><span>Zarezerwuj łóżko</span>
+          /><span>{{ $t('advertisementDetailsView.book') }}</span>
         </div>
       </div>
     </div>
@@ -124,7 +124,7 @@ import SharedEquipments from "../details/SharedEquipments.vue";
 import Rules from "../details/Rules.vue";
 import Payments from "../details/Payments.vue";
 import DescriptionWithMap from "../details/DescriptionWithMap.vue";
-import Locator from "../details/Locator.vue";
+import Tenant from "../details/Tenant.vue";
 
 @Options({
   components: {
@@ -137,7 +137,7 @@ import Locator from "../details/Locator.vue";
     Rules,
     Payments,
     DescriptionWithMap,
-    Locator,
+    Tenant,
   },
 })
 export default class SingleAd extends Vue {}

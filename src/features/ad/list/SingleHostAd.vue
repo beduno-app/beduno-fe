@@ -22,11 +22,11 @@
         <div class="col-sm-4 col-lg-3 col">
           <span>8 łóżek</span>
         </div>
-        <div class="col-sm-8 col-lg-9 mb-2 col text-green">Wolne: 3 łóżka</div>
+        <div class="col-sm-8 col-lg-9 mb-2 col text-green">{{ $t('hostAdvertisementsView.freeBeds') }} 3 łóżka</div>
       </div>
       <div class="row">
-        <div class="col-sm-4 col-lg-3 col">Wiadomości:</div>
-        <div class="col-sm-8 col-lg-9 col text-green">1 nowa wiadomość</div>
+        <div class="col-sm-4 col-lg-3 col">{{ $t('hostAdvertisementsView.messages') }}</div>
+        <div class="col-sm-8 col-lg-9 col text-green">{{ $t('hostAdvertisementsView.newMessagesCount', { count: 1 }) }}</div>
       </div>
     </div>
     <div class="col-lg-6 col-xl-3">
@@ -39,7 +39,7 @@
           />
         </div>
         <div class="col-sm-9 col-lg-10">
-          <h5>Edytuj ogłoszenie</h5>
+          <h5>{{ $t('hostAdvertisementsView.editAd') }}</h5>
         </div>
       </div>
       <div class="d-flex pt-3">
@@ -51,8 +51,8 @@
           />
         </div>
         <div class="col-sm-9 col-lg-10">
-          <h5>Stwórz nowe ogłoszenie na podstawie obecnego</h5>
-          <p>(zaoszczędzisz czas dodajac pokoje w tym samym budynku)</p>
+          <h5>{{ $t('hostAdvertisementsView.createFromCurrent') }}</h5>
+          <p>{{ $t('hostAdvertisementsView.createFromCurrentHint') }}</p>
         </div>
       </div>
     </div>
@@ -66,8 +66,8 @@
           />
         </div>
         <div class="col-sm-9 col-lg-10">
-          <h5>Zakończ ogłoszenie</h5>
-          <p>(ogłoszenie przejdzie do sekcji Nieaktywne)</p>
+          <h5>{{ $t('hostAdvertisementsView.deactivateAd') }}</h5>
+          <p>{{ $t('hostAdvertisementsView.deactivateAdHint') }}</p>
         </div>
       </div>
     </div>
@@ -82,11 +82,8 @@
           />
         </div>
         <div class="col-sm-9 col-lg-10">
-          <h5>Opublikuj ogłoszenie</h5>
-          <p>
-            (nadal będziesz miał możliwość wprowadzania zmian w dowolnym
-            momencie)
-          </p>
+          <h5>{{ $t('hostAdvertisementsView.publishAd') }}</h5>
+          <p>{{ $t('hostAdvertisementsView.publishAdHint') }}</p>
         </div>
       </div>
       <div class="d-flex pt-3">
@@ -98,8 +95,8 @@
           />
         </div>
         <div class="col-sm-9 col-lg-10">
-          <h5>Usuń ogłoszenie</h5>
-          <p>(ogłoszenie zostanie usunięte)</p>
+          <h5>{{ $t('hostAdvertisementsView.removeAd') }}</h5>
+          <p>{{ $t('hostAdvertisementsView.removeAdHint') }}</p>
         </div>
       </div>
     </div>
@@ -110,15 +107,15 @@
 import { Options, Vue } from "vue-class-component";
 import Equipments from "../details/Equipments.vue";
 import Host from "../details/Host.vue";
-import Locator from "../details/Locator.vue";
+import Tenant from "../details/Tenant.vue";
 
 @Options({
-  components: { Equipments, Host, Locator },
+  components: { Equipments, Host, Tenant },
   props: {
     isActive: Boolean,
   },
 })
-export default class SingleAd extends Vue {}
+export default class SingleHostAd extends Vue {}
 </script>
 
 <style lang="scss" scoped>

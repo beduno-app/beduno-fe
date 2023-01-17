@@ -23,7 +23,7 @@ import { Options, Vue } from "vue-class-component";
 @Options({
   components: {},
 })
-export default class Locator extends Vue {
+export default class Tenant extends Vue {
   languages = [
     { content: "polski", key: "polish", text: "Polski", icon: "pl" },
     { content: "angielski", key: "englsh", text: "Angielski", icon: "uk" },
