@@ -2,14 +2,14 @@
   <search-input />
 
   <div class="login container-fluid">
-    <h3>Zaloguj się</h3>
+    <h3>{{ $t('auth.login.login') }}</h3>
     <div
       class="login-tile p-3 d-flex align-items-center justify-content-center"
     >
       <div
         class="p-3 login-facebook d-flex align-items-center justify-content-center cursor-pointer"
       >
-        <h6 class="mt-2 mx-2">Zaloguj się przez facebook</h6>
+        <h6 class="mt-2 mx-2">{{ $t('auth.login.facebook') }}</h6>
         <img
           src="../assets/img/icon_fb.png"
           alt="login-by-facebook"
@@ -25,7 +25,7 @@
       <div
         class="p-3 login-google d-flex align-items-center justify-content-center cursor-pointer"
       >
-        <h6 class="mt-2 mx-2">Zaloguj się przez Google</h6>
+        <h6 class="mt-2 mx-2">{{ $t('auth.login.google') }}</h6>
         <img
           src="../assets/img/icon_google.png"
           alt="login-by-facebook"
@@ -40,7 +40,7 @@
           <FormKit
             ref="email"
             type="text"
-            placeholder="email"
+            :placeholder="$t('auth.login.email.placeholder')"
             :classes="{
               outer: 'foo-bar',
               inner: {
@@ -56,9 +56,9 @@
               <!-- other form elements -->
               <div class="input-wrap">
                 <FormKit
-                  ref="hasło"
+                  ref="password"
                   :type="showPassword ? 'text' : 'password'"
-                  placeholder="password"
+                  :placeholder="$t('auth.login.password.placeholder')"
                   :classes="{
                     outer: 'foo-bar',
                     inner: {
@@ -78,7 +78,7 @@
               </div>
             </form>
           </div>
-          <div class="pt-1 cursor-pointer">Zapomniałem hasła</div>
+          <div class="pt-1 cursor-pointer">{{ $t('auth.login.forgotPassword') }}</div>
         </div>
       </div>
     </div>
@@ -97,7 +97,7 @@
             <FormKit
               ref="phoneNumber"
               type="text"
-              placeholder="nr tel."
+              :placeholder="$t('auth.login.phoneNumber.placeholder')"
               :classes="{
                 outer: 'foo-bar',
                 inner: {
@@ -112,9 +112,9 @@
           <div class="login-password">
             <div class="input-wrap">
               <FormKit
-                ref="hasło"
+                ref="password"
                 :type="showPassword ? 'text' : 'password'"
-                placeholder="password"
+                :placeholder="$t('auth.login.password.placeholder')"
                 :classes="{
                   outer: 'foo-bar',
                   inner: {
@@ -133,31 +133,24 @@
               />
             </div>
           </div>
-          <div class="pt-1 cursor-pointer">Zapomniałem hasła</div>
+          <div class="pt-1 cursor-pointer">{{ $t('auth.login.forgotPassword') }}</div>
         </div>
       </div>
     </div>
     <div
       class="d-flex justify-content-center align-items-center login-btn mt-5 p-2"
     >
-      <img src="../assets/img/icon_login_top_01.png" alt="login-buutton" /><span
-        class="mx-2"
-        >ZALOGUJ SIĘ</span
-      >
+      <img src="../assets/img/icon_login_top_01.png" alt="login-buutton" />
+      <span class="mx-2">{{ $t('auth.login.action.login') }}</span>
     </div>
-    <p
-      class="text-center mt-3"
-      style="font-size: 1, 3rem; font-weight: 600; margin: auto"
-    >
-      Jeśli nie posiadasz u nas konta, możesz się w prosty sposób zarejestrować
+    <p class="text-center mt-3" style="font-size: 1, 3rem; font-weight: 600; margin: auto">
+      {{ $t('auth.login.action.hint') }}
     </p>
     <div
       class="d-flex justify-content-center align-items-center register-btn mb-5 mt-3 p-2"
     >
-      <img src="../assets/img/icon_login_green.png" alt="login-button" /><span
-        class="mx-2"
-        >ZAŁÓŻ KONTO</span
-      >
+      <img src="../assets/img/icon_login_green.png" alt="login-button" />
+      <span class="mx-2">{{ $t('auth.login.action.register') }}</span>
     </div>
   </div>
 </template>

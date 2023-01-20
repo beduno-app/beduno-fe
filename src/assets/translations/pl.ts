@@ -36,6 +36,28 @@ export default {
                 lastPart: 'bed!Ok. Wszelkie prawa autorskie zastrzeżone.'
         }
     },
+    auth: {
+        login: {
+            login: 'Zaloguj się',
+            facebook: 'Zaloguj się przez facebook',
+            google: 'Zaloguj się przez Google',
+            email: {
+                placeholder: 'Email'
+            },
+            password: {
+                placeholder: 'Hasło'
+            },
+            phoneNumber: {
+                placeholder: 'Nr tel.'
+            },
+            forgotPassword: 'Zapomniałem hasła',
+            action: {
+                login: 'ZALOGUJ SIĘ',
+                hint: 'Jeśli nie posiadasz u nas konta, możesz się w prosty sposób zarejestrować',
+                register: 'ZAŁÓŻ KONTO'
+            }
+        }
+    },
     homeView: {
         title: {
             firstLine: 'Potrzebne zakwaterowanie?',
@@ -216,6 +238,67 @@ export default {
                     tip: '(zaoszczędzisz czas dodając pokoje w tym samymy budynku)'
             }
         }
+    },
+    advertisementDetailsView: {
+        subheader: {
+            markAsFavorite: 'Dodaj do ulubionych',
+            share: 'Udostępnij'
+        },
+        descriptionWithMap: {
+            description: 'Opis:',
+            location: 'Lokalizacja'
+        },
+        host: {
+            meetTheHost: 'POZNAJ GOSPODARZA',
+            communicators: 'Używam:'
+        },
+        roomArea: 'Powierzchnia pokoju:',
+        currentTenants: 'Aktualnie u nas mieszka:',
+        currentTenantsCount: 'Liczba osób aktualnie zamieszkujących pokój:',
+        seeOtherEquipment: 'Zobacz pozostałe udogodnienia',
+        sharedArea: 'Część wspólna: lobby, kuchnia, łazienka',
+        roomSplitToBeds: 'Pokój dzielony na łóżka',
+        sharedRoom: 'Współdzielony z innymi mieszkańcami',
+        roomEquipment: 'Wyposażenie pokoju:',
+        sharedEquipment: 'Wyposażenie części wspólnej:',
+        paymentMethods: 'Metody płatności:',
+        rulesOfStay: 'Zasady pobytu:',
+        pricePerBed: 'Cena za łóżko {price} {currency} ({duration})',
+        book: 'Zarezerwuj łóżko'
+    },
+    hostAdvertisementsView: {
+        myAdvertisements: 'Moje ogłoszenia',
+        expertPanel: 'Panel EXPERT',
+        active: 'Aktywne',
+        inactive: 'Nieaktywne',
+        addNewAd: 'Dodaj nowe ogłoszenie',
+        freeBeds: 'Wolne:',
+        messages: 'Wiadomości:',
+        newMessagesCount: '{count} nieprzeczytanych',
+        editAd: 'Edytuj ogłoszenie',
+        createFromCurrent: 'Stwórz nowe ogłoszenie na podstawie obecnego',
+        createFromCurrentHint: '(zaoszczędzisz czas dodając pokoje w tym samym budynku)',
+        deactivateAd: 'Zakończ ogłoszenie',
+        deactivateAdHint: '(ogłoszenie przejdzie do sekcji Nieaktywne)',
+        publishAd: 'Opublikuj ogłoszenie',
+        publishAdHint: '(nadal będziesz miał/a możliwość wprowadzania zmian w dowolnym momencie)',
+        removeAd: 'Usuń ogłoszenie',
+        removeAdHint: '(ogłoszenie zostanie usunięte)'
+    },
+    expertPanelView: {
+        removeTenant: 'Usuń lokatora',
+        addTenant: 'Dodaj lokatora',
+        removeAllTenants: 'Usuń wszystkich lokatorów',
+        editAd: 'Edytuj ogłoszenie',
+        createAdFromCurrent: 'Stwórz nowe ogłoszenie na podstawie obecnego',
+        expertPanel: 'Panel EXPERT',
+        myAdvertisements: 'Moje ogłoszenia:',
+        address: 'Adres:',
+        room: 'Pokój:',
+        occupiedBeds: 'Zajęte łóżka:',
+        freeBeds: 'Wolne łóżka:',
+        currentTenants: 'Aktualni lokatorzy:',
+        createAd: 'Dodaj nowe ogłoszenie'
     },
     searchInput: {
         localization: {
