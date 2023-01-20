@@ -4,22 +4,22 @@
     <table class="table table-responsive">
       <div class="panel-expert-section container-fluid">
         <div class="d-flex align-items-center">
-          <h4 class="pe-5">Panel EXPERT</h4>
+          <h4 class="pe-5">{{ $t('expertPanelView.expertPanel') }}</h4>
           <b-form-checkbox switch size="lg"></b-form-checkbox>
         </div>
-        <h3 class="pb-5">Moje ogłoszenia</h3>
+        <h3 class="pb-5">{{ $t('expertPanelView.myAdvertisements') }}</h3>
         <div class="row">
-          <div class="col-2"><span class="px-2 header">Adres:</span></div>
+          <div class="col-2"><span class="px-2 header">{{ $t('expertPanelView.address') }}</span></div>
           <div class="col-1">
-            <span class="header">Pokój:</span>
+            <span class="header">{{ $t('expertPanelView.room') }}</span>
           </div>
           <div class="col-1">
-            <span class="header">Zajęte łóżka:</span>
+            <span class="header">{{ $t('expertPanelView.occupiedBeds') }}</span>
           </div>
-          <div class="col-1"><span class="header">Wolne łóżka:</span></div>
+          <div class="col-1"><span class="header">{{ $t('expertPanelView.freeBeds') }}</span></div>
 
           <div class="col-7">
-            <span class="header">Aktualni lokatorzy:</span>
+            <span class="header">{{ $t('expertPanelView.currentTenants') }}</span>
           </div>
         </div>
         <single-ad-expert
@@ -32,7 +32,7 @@
             src="../assets/img/icon_add_big_expert.png"
             class="cursor-pointer"
           />
-          <h5 class="cursor-pointer">Dodaj nowe ogłoszenie</h5>
+          <h5 class="cursor-pointer">{{ $t('expertPanelView.createAd') }}</h5>
         </div>
       </div>
     </table>
@@ -54,7 +54,7 @@ export default class AdvertisementsPanelExpert extends Vue {
       city: "Warszawa",
       occupied_beds: "2",
       free_beds: "2",
-      locators: [
+      tenants: [
         { content: "polski", key: "polish", text: "Grzegorz", icon: "pl" },
         { content: "angielski", key: "englsh", text: "Jennifer", icon: "uk" },
       ],
@@ -64,7 +64,7 @@ export default class AdvertisementsPanelExpert extends Vue {
       city: "Warszawa",
       occupied_beds: "2",
       free_beds: "2",
-      locators: [
+      tenants: [
         { content: "polski", key: "polish", text: "Grzegorz", icon: "pl" },
         { content: "angielski", key: "englsh", text: "Jennifer", icon: "uk" },
       ],

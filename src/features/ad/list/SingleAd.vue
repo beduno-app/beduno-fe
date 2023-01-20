@@ -36,11 +36,11 @@
             <li>1 pokój</li>
           </ul>
         </div>
-        <div class="col-md-9 mb-2">Powierzchnia pokoju: 24m<sup>2</sup></div>
+        <div class="col-md-9 mb-2">{{ $t('advertisementDetailsView.roomArea') }} 24m<sup>2</sup></div>
       </div>
-      <div class="row"><p class="locators">Aktualnie u nas mieszka: 1</p></div>
+      <div class="row"><p class="tenants">{{ $t('advertisementDetailsView.currentTenants') }} 1</p></div>
       <div class="row">
-        <locator />
+        <tenant />
       </div>
       <div class="row mt-4">
         <equipments />
@@ -51,7 +51,7 @@
           alt="nationality-icon"
           class="me-2"
         />
-        <div class="more-amenities">Zobacz pozostałe udogodnienia</div>
+        <div class="more-amenities">{{ $t('advertisementDetailsView.seeOtherEquipment') }}</div>
       </div>
     </div>
     <div class="col-md-3">
@@ -69,10 +69,10 @@
 import { Options, Vue } from "vue-class-component";
 import Equipments from "../details/Equipments.vue";
 import Host from "../details/Host.vue";
-import Locator from "../details/Locator.vue";
+import Tenant from "../details/Tenant.vue";
 
 @Options({
-  components: { Equipments, Host, Locator },
+  components: { Equipments, Host, Tenant },
   // todo: make required, migrate whole component to use only props
   props: { advertisementData: Object }
 })
@@ -93,7 +93,7 @@ export default class SingleAd extends Vue {}
     left: 0;
     color: $white-color;
   }
-  .locators {
+  .tenants {
     color: $primary-color;
   }
   .location-icon {

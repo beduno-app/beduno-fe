@@ -1,9 +1,9 @@
 <template>
   <div class="container-fluid host-advertisements">
     <div class="row">
-      <div class="col-sm-9"><h3 class="pb-3">Moje ogłoszenia</h3></div>
+      <div class="col-sm-9"><h3 class="pb-3">{{ $t('hostAdvertisementsView.myAdvertisements') }}</h3></div>
       <div class="col-sm-3">
-        <button class="panel-expert-btn">Panel EXPERT</button>
+        <button class="panel-expert-btn">{{ $t('hostAdvertisementsView.panelExpert') }}</button>
       </div>
     </div>
     <div class="active-ad pt-5">
@@ -13,7 +13,7 @@
           alt="green-dot"
           class="me-2"
         />
-        <h4>Aktywne</h4>
+        <h4>{{ $t('hostAdvertisementsView.active') }}</h4>
       </div>
       <single-host-ad :isActive="isActive" />
       <single-host-ad :isActive="isActive" />
@@ -23,7 +23,7 @@
           alt="add advertisement"
           class="me-3"
         />
-        <h5>Dodaj nowe ogłoszenie</h5>
+        <h5>{{ $t('hostAdvertisementsView.addNewAd') }}</h5>
       </div>
     </div>
     <div class="inactive-ad pt-5">
@@ -33,7 +33,7 @@
           alt="green-dot"
           class="me-2"
         />
-        <h4>Nieaktywne</h4>
+        <h4>{{ $t('hostAdvertisementsView.inactive') }}</h4>
       </div>
       <single-host-ad />
     </div>

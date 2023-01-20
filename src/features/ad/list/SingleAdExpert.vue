@@ -24,23 +24,23 @@
     <div class="column pt-2 col-4">
       <div class="row">
         <div class="col-7">
-          <div v-for="(locator, idx) in advertisement.locators" :key="idx" class="">
+          <div v-for="(tenant, idx) in advertisement.tenants" :key="idx" class="">
             <div class="row">
               <div class="col-5 d-flex align-items-center">
                 <img
-                  :src="require(`../../../assets/img/${locator.icon}.png`)"
-                  :alt="locator.icon"
+                  :src="require(`../../../assets/img/${tenant.icon}.png`)"
+                  :alt="tenant.icon"
                   class="mx-1"
                 />
-                <span>{{ locator.text }}</span>
+                <span>{{ tenant.text }}</span>
               </div>
               <div class="col-7 d-flex align-items-center">
                 <img
                   src="../../../assets/img/icon_del_small_expert.png"
-                  alt="remove-locator"
+                  alt="remove-tenant"
                   class="cursor-pointer"
                 />
-                <span class="cursor-pointer">Usuń lokatora</span>
+                <span class="cursor-pointer">{{ $t('expertPanelView.removeTenant') }}</span>
               </div>
             </div>
           </div>
@@ -48,9 +48,9 @@
             <img
               class="cursor-pointer"
               src="../../../assets/img/icon_add_small_expert.png"
-              alt="add-locator"
+              alt="add-tenant"
             />
-            <span class="cursor-pointer">Dodaj lokatora</span>
+            <span class="cursor-pointer">{{ $t('expertPanelView.addTenant') }}</span>
           </div>
         </div>
         <div class="col-5 d-flex align-items-center">
@@ -59,7 +59,7 @@
             src="../../../assets/img/icon_del_big_expert.png"
             alt="remove"
           />
-          <div class="cursor-pointer">Usuń wszystkich lokatorów</div>
+          <div class="cursor-pointer">{{ $t('expertPanelView.removeAllTenants') }}</div>
         </div>
       </div>
     </div>
@@ -73,7 +73,7 @@
           />
         </div>
         <div class="col-2 cursor-pointer">
-          <p>Edytuj ogłoszenie</p>
+          <p>{{ $t('expertPanelView.editAd') }}</p>
         </div>
       </div>
       <div class="d-flex pt-3">
@@ -86,7 +86,7 @@
         </div>
         <div class="col-8">
           <p class="cursor-pointer">
-            Stwórz nowe ogłoszenie na podstawie obecnego
+            {{ $t('expertPanelView.createAdFromCurrent') }}
           </p>
         </div>
       </div>
@@ -99,7 +99,7 @@ import { Options, Vue } from "vue-class-component";
 
 @Options({
   props: {
-   advertisement: Object, 
+   advertisement: Object,
   },
 })
 export default class SingleAdExpert extends Vue {
