@@ -6,7 +6,7 @@
     <div class="col-xxl-7 col-xl-12 col-lg-12">
       <div class="row mb-2">
         <div class="col-md-6 col">
-          <h3>Sara</h3>
+          <h3>{{ host.hostName }}</h3>
           <div
             v-for="(lang, idx) in languages"
             :key="idx"
@@ -49,7 +49,9 @@
 <script lang="ts" scoped>
 import { Options, Vue } from "vue-class-component";
 @Options({
-  components: {},
+  props: {
+    host: Object
+  }
 })
 export default class Host extends Vue {
   communicators = [

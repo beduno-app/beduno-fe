@@ -4,21 +4,26 @@ import HomeView from "../views/HomeView.vue";
 const routes: Array<RouteRecordRaw> = [
   {
     path: "/",
-    name: "home",
+    name: "Home",
     component: HomeView,
   },
   {
     path: "/advertisement",
-    name: "advertisement",
-
+    name: "Advertisement",
     component: () =>
       import("../views/AdvertisementView.vue"),
   },
   {
     path: "/advertisements",
-    name: "advertisements",
+    name: "Advertisements",
     component: () =>
       import("../views/AdvertisementsView.vue"),
+  },
+  {
+    path: "/advertisements/:id",
+    name: "AdvertisementDetails",
+    component: () =>
+        import("../views/AdvertisementsDetailsView.vue"),
   },
   {
     path: "/host-advertisements",

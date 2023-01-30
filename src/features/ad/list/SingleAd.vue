@@ -5,9 +5,9 @@
   >
     <div class="col-md-4 col-lg-3 col-xl-2 mb-4">
       <img
-        src="../../../assets/img/placeholder.png"
-        alt="host-image"
-        class="host-image"
+        :src="mainPhoto"
+        alt="ad-image"
+        class="ad-image"
       />
       <font-awesome-icon
         icon="fa-regular fa-heart"
@@ -26,21 +26,21 @@
           icon="fa-solid fa-location-dot"
           class="location-icon mx-2"
         />
-        <u>Mazowieckie </u>,<u> Warszawa </u>,<u>Bemowo</u>
+        <u>{{ advertisementData.district }}</u>
       </div>
-      <div class="row"><h4>Łóżko w spokojnej okolicy w Warszawie</h4></div>
+      <div class="row"><h4>{{ advertisementData.title }}</h4></div>
       <div class="row">
         <div class="col-xl-3 col-lg-5">
           <ul>
-            <li>2 łóżka</li>
-            <li>1 pokój</li>
+            <li>{{ $t('advertisementDetailsView.beds', { count: advertisementData.numBeds }) }}</li>
+            <li>{{ $t('advertisementDetailsView.rooms', { count: 1 }) }}</li>
           </ul>
         </div>
-        <div class="col-md-9 mb-2">{{ $t('advertisementDetailsView.roomArea') }} 24m<sup>2</sup></div>
+        <div class="col-md-9 mb-2">{{ $t('advertisementDetailsView.roomArea') }} {{ advertisementData.roomArea }}m<sup>2</sup></div>
       </div>
-      <div class="row"><p class="tenants">{{ $t('advertisementDetailsView.currentTenants') }} 1</p></div>
+      <div class="row"><p class="tenants">{{ $t('advertisementDetailsView.currentTenants') }} {{ advertisementData.guests.length }}</p></div>
       <div class="row">
-        <tenant />
+        <tenant v-for="guest in advertisementData.guests" :guest="guest" />
       </div>
       <div class="row mt-4">
         <equipments />
@@ -56,13 +56,10 @@
     </div>
     <div class="col-md-3">
       <div class="row">
-        <host />
+        <host :host="advertisementData.hostResponse" />
       </div>
     </div>
   </div>
-
-  <!--  todo: more data needed in the DTO in order to fill everything -->
-  {{ advertisementData }}
 </template>
 
 <script lang="ts">
@@ -74,7 +71,12 @@ import Tenant from "../details/Tenant.vue";
 @Options({
   components: { Equipments, Host, Tenant },
   // todo: make required, migrate whole component to use only props
-  props: { advertisementData: Object }
+  props: { advertisementData: Object },
+  computed: {
+    mainPhoto() {
+      return `data:image/png;base64,${this.advertisementData?.mainPhoto?.data.toString('base64')}`;
+    }
+  }
 })
 export default class SingleAd extends Vue {}
 </script>
@@ -119,6 +121,10 @@ export default class SingleAd extends Vue {}
       }
     }
   }
-
+  .ad-image {
+    border-radius: 15px;
+    height: 190px;
+    width: 180px;
+  }
 }
 </style>

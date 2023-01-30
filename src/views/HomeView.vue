@@ -5,7 +5,7 @@
     <h2 class="desktop-content text-center" style="margin-left: 175px">
       {{  $t('homeView.title.secondLine') }}
     </h2>
-    <cards-carousel />
+    <cards-carousel :advertisements="advertisements" />
     <div class="container-fluid desktop-content">
       <div class="d-flex justify-content-center m-5 buttons">
         <button class="mx-4 btn-looking-for d-flex align-items-center">
@@ -20,7 +20,7 @@
     </div>
     <div class="news p-5 container-fluid">
       <h2 class="join-to-room py-4 text-center">{{ $t('homeView.joinRoom') }}</h2>
-      <cards-carousel-join />
+      <cards-carousel-join :advertisements="advertisements" />
     </div>
 
     <div class="container-fluid">
@@ -121,7 +121,17 @@ import SearchInput from "@/features/home/SearchInput.vue";
     SearchInput,
   },
 })
-export default class HomeView extends Vue {}
+export default class HomeView extends Vue {
+  advertisements = [];
+
+  mounted() {
+    this.axios.get('http://localhost:8080/advertisement/list')
+        .then(resp => resp.data)
+        .then(advertisements => {
+          this.advertisements = advertisements;
+        });
+  }
+}
 </script>
 <style lang="scss" scoped>
 @import "@/assets/_variables.scss";

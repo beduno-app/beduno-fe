@@ -252,7 +252,7 @@ export default {
             meetTheHost: '[RU] POZNAJ GOSPODARZA',
             communicators: '[RU] Używam:'
         },
-        roomArea: '[RU] Powierzchnia pokoju:',
+        roomArea: '[RU] Powierzchnia pokoju: {area} m2',
         currentTenants: '[RU] Aktualnie u nas mieszka:',
         currentTenantsCount: '[RU] Liczba osób aktualnie zamieszkujących pokój:',
         seeOtherEquipment: '[RU] Zobacz pozostałe udogodnienia',
@@ -264,7 +264,9 @@ export default {
         paymentMethods: '[RU] Metody płatności:',
         rulesOfStay: '[RU] Zasady pobytu:',
         pricePerBed: '[RU] Cena za łóżko {price} {currency} ({duration})',
-        book: '[RU] Zarezerwuj łóżko'
+        book: '[RU] Zarezerwuj łóżko',
+        beds: '[RU] {count} łóżka',
+        rooms: '[RU] {count} pokoje'
     },
     hostAdvertisementsView: {
         myAdvertisements: '[RU] Moje ogłoszenia',
@@ -272,7 +274,7 @@ export default {
         active: '[RU] Aktywne',
         inactive: '[RU] Nieaktywne',
         addNewAd: '[RU] Dodaj nowe ogłoszenie',
-        freeBeds: '[RU] Wolne:',
+        freeBeds: '[RU] Wolne: {count} łóżka',
         messages: '[RU] Wiadomości:',
         newMessagesCount: '[RU] {count} nieprzeczytanych',
         editAd: '[RU] Edytuj ogłoszenie',
@@ -316,9 +318,11 @@ export default {
     roomCard: {
         district: '[RU] Dzielnica:',
         bedsInRoom: '[RU] {count} łóżka w pokoju',
-        dayPrice: '[RU] {price} / dzień',
-        bedDayPrice: '[RU] {price} / dzień / łóżko',
+        dayPrice: '[RU] {price} zł / dzień',
+        bedDayPrice: '[RU] {price} zł / dzień / łóżko',
         femaleRoom: '[RU] Pokój żenski',
+        maleRoom: '[RU] Pokój męski',
+        otherGenderRoom: '[RU] Pokój mieszany',
         tenants: '[RU] Lokatorzy:',
         join: '[RU] Dołącz do pokoju'
     },
