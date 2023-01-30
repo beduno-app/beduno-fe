@@ -1,8 +1,14 @@
 <template>
   <div class="container-fluid my-4">
     <carousel :items-to-show="3" :wrap-around="true" :breakpoints="breakpoints">
-      <slide v-for="slide in slides" :key="slide">
-        <room-card :city="slide.city" :district="slide.district" />
+      <slide v-for="ad in advertisementsData" :key="ad.id">
+        <room-card
+            :city="ad.city"
+            :district="ad.district"
+            :bed-count="ad.bedCount"
+            :bed-day-price="ad.bedDayPrice"
+            :main-photo="ad.mainPhoto"
+        />
       </slide>
 
       <template #addons>
@@ -28,23 +34,32 @@ import RoomCard from "./RoomCard.vue";
     Navigation,
     RoomCard,
   },
+  props: {
+    advertisements: {
+      type: Array
+    }
+  },
+  computed: {
+    advertisementsData() {
+      return this.advertisements.map((ad, id) => ({
+        id,
+        city: 'Warszawa', // todo: add city field to Ad DTO
+        district: ad.district,
+        bedCount: ad.numBeds,
+        bedDayPrice: ad.priceDTO[0].value,
+        mainPhoto: ad.mainPhoto.data || ''
+      }))
+    }
+  }
 })
 export default class CardsCarousel extends Vue {
-  slides = [
-    { id: "1", city: "Warszawa", district: "Bemowo" },
-    { id: "2", city: "Lódź", district: "Bałuty" },
-    { id: "3", city: "Wrocław", district: "Psie Pole" },
-    { id: "4", city: "Warszawa", district: "Bemowo" },
-    { id: "5", city: "Lódź", district: "Bałuty" },
-    { id: "6", city: "Wrocław", district: "Psie Pole" },
-  ];
   breakpoints = {
     // 100px and up
     100: {
       itemsToShow: 1,
       snapAlign: "center",
     },
-    // 1024 and up
+    // 1200 and up
     1200: {
       itemsToShow: 3,
       itemsToScroll: 1,

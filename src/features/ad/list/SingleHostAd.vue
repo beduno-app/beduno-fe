@@ -13,16 +13,16 @@
           icon="fa-solid fa-location-dot"
           class="location-icon mx-2"
         />
-        <u>Mazowieckie </u>,<u> Warszawa </u>,<u>Bemowo</u>
+        <u>{{ advertisementData.district }}</u>
       </div>
       <div class="row">
-        <p>Pokój prywatny w spokojnej okolicy w Warszawie</p>
+        <p>{{ advertisementData.title }}</p>
       </div>
       <div class="row">
         <div class="col-sm-4 col-lg-3 col">
           <span>8 łóżek</span>
         </div>
-        <div class="col-sm-8 col-lg-9 mb-2 col text-green">{{ $t('hostAdvertisementsView.freeBeds') }} 3 łóżka</div>
+        <div class="col-sm-8 col-lg-9 mb-2 col text-green">{{ $t('hostAdvertisementsView.freeBeds', { count: advertisementData.numBeds - advertisementData.usedBeds }) }}</div>
       </div>
       <div class="row">
         <div class="col-sm-4 col-lg-3 col">{{ $t('hostAdvertisementsView.messages') }}</div>
@@ -56,7 +56,7 @@
         </div>
       </div>
     </div>
-    <div v-if="isActive" class="col-lg-6 col-xl-3">
+    <div v-if="advertisementData.isActive" class="col-lg-6 col-xl-3">
       <div class="d-flex pt-3">
         <div class="col-sm-1 col-lg-2">
           <img
@@ -112,7 +112,7 @@ import Tenant from "../details/Tenant.vue";
 @Options({
   components: { Equipments, Host, Tenant },
   props: {
-    isActive: Boolean,
+    advertisementData: Object
   },
 })
 export default class SingleHostAd extends Vue {}

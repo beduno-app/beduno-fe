@@ -3,7 +3,7 @@
     <div class="col">
       <img
         class="img-card-big p-0 room-img"
-        src="../../../assets/img/placeholder.png"
+        :src="photo"
       />
     </div>
     <div class="col">
@@ -30,7 +30,14 @@
 <script lang="ts" scoped>
 import { Options, Vue } from "vue-class-component";
 @Options({
-  components: {},
+  props: {
+    mainPhoto: String
+  },
+  computed: {
+    photo() {
+      return `data:image/png;base64,${this.mainPhoto?.toString('base64')}`;
+    }
+  }
 })
 export default class Gallery extends Vue {}
 </script>
