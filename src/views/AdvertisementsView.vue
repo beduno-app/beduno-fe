@@ -1,10 +1,4 @@
 <template>
-  <!--  todo: remove placeholder -->
-  <div class="container-fluid">
-    <single-ad />
-    <single-ad />
-    <single-full-ad />
-  </div>
   <div class="container-fluid">
     <single-ad
         v-for="advertisementData in advertisements"
@@ -16,10 +10,9 @@
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 import SingleAd from "../features/ad/list/SingleAd.vue";
-import SingleFullAd from "../features/ad/list/SingleFullAd.vue";
 
 @Options({
-  components: { SingleFullAd, SingleAd },
+  components: { SingleAd },
 })
 export default class AdvertisementsView extends Vue {
   advertisements = [];

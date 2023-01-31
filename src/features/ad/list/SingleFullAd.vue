@@ -3,7 +3,7 @@
     <div class="single-section pb-4">
       <Header />
       <subheader />
-      <gallery />
+      <gallery :main-photo="mainPhoto" />
       <div class="row">
         <div class="col-md-8 mb-3">
           <div class="row">
@@ -19,7 +19,7 @@
             </div>
             <div class="col-lg-5">
               <div class="col-md-9 mb-2">
-                {{ $t('advertisementDetailsView.roomArea') }} 24m<sup>2</sup>
+                {{ $t('advertisementDetailsView.roomArea', { area: advertisementData.roomArea }) }}
               </div>
             </div>
           </div>
@@ -48,7 +48,7 @@
               <div class="d-flex">
                 <img
                   src="../../../assets/img/icon_exclamation_grey.png"
-                  alt="icon-exclamantion-grey"
+                  alt="icon-exclamation-grey"
                   class="pe-2"
                   width="34" height="27"
                 />
@@ -69,7 +69,7 @@
           </div>
         </div>
         <div class="col-md-4">
-          <host />
+          <host :host="advertisementData?.hostResponse" />
         </div>
       </div>
       <div class="row mt-4">
@@ -139,6 +139,14 @@ import Tenant from "../details/Tenant.vue";
     DescriptionWithMap,
     Tenant,
   },
+  props: {
+    advertisementData: Object
+  },
+  computed: {
+    mainPhoto() {
+      return `data:image/png;base64,${this.advertisementData?.mainPhoto?.data.toString('base64')}`;
+    }
+  }
 })
 export default class SingleAd extends Vue {}
 </script>

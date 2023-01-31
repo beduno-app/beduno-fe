@@ -16,23 +16,24 @@
       <span>Pokój nr 1</span>
     </div>
     <div class="column pt-2 col-1">
-      <span>{{advertisement.occupied_beds}}</span>
+      <span>{{advertisement.usedBeds}}</span>
     </div>
     <div class="column pt-2 col-1">
-      <span>{{advertisement.free_beds}}</span>
+      <span>{{advertisement.numBeds - advertisement.usedBeds}}</span>
     </div>
     <div class="column pt-2 col-4">
       <div class="row">
         <div class="col-7">
-          <div v-for="(tenant, idx) in advertisement.tenants" :key="idx" class="">
+          <div v-for="(tenant, idx) in advertisement.guests" :key="idx" class="">
             <div class="row">
               <div class="col-5 d-flex align-items-center">
-                <img
-                  :src="require(`../../../assets/img/${tenant.icon}.png`)"
-                  :alt="tenant.icon"
-                  class="mx-1"
-                />
-                <span>{{ tenant.text }}</span>
+<!--                 todo: adjust after aligning DTO -->
+<!--                <img-->
+<!--                  :src="require(`../../../assets/img/${tenant.icon}.png`)"-->
+<!--                  :alt="tenant.icon"-->
+<!--                  class="mx-1"-->
+<!--                />-->
+                <span>{{ tenant.text ?? tenant }}</span>
               </div>
               <div class="col-7 d-flex align-items-center">
                 <img
@@ -102,8 +103,7 @@ import { Options, Vue } from "vue-class-component";
    advertisement: Object,
   },
 })
-export default class SingleAdExpert extends Vue {
-}
+export default class SingleAdExpert extends Vue {}
 </script>
 
 <style lang="scss">

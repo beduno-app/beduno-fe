@@ -252,7 +252,7 @@ export default {
             meetTheHost: '[DE] POZNAJ GOSPODARZA',
             communicators: '[DE] Używam:'
         },
-        roomArea: '[DE] Powierzchnia pokoju:',
+        roomArea: '[DE] Powierzchnia pokoju: {area} m2',
         currentTenants: '[DE] Aktualnie u nas mieszka:',
         currentTenantsCount: '[DE] Liczba osób aktualnie zamieszkujących pokój:',
         seeOtherEquipment: '[DE] Zobacz pozostałe udogodnienia',
@@ -264,7 +264,9 @@ export default {
         paymentMethods: '[DE] Metody płatności:',
         rulesOfStay: '[DE] Zasady pobytu:',
         pricePerBed: '[DE] Cena za łóżko {price} {currency} ({duration})',
-        book: '[DE] Zarezerwuj łóżko'
+        book: '[DE] Zarezerwuj łóżko',
+        beds: '[DE] {count} łóżka',
+        rooms: '[DE] {count} pokoje'
     },
     hostAdvertisementsView: {
         myAdvertisements: '[DE] Moje ogłoszenia',
@@ -272,7 +274,7 @@ export default {
         active: '[DE] Aktywne',
         inactive: '[DE] Nieaktywne',
         addNewAd: '[DE] Dodaj nowe ogłoszenie',
-        freeBeds: '[DE] Wolne:',
+        freeBeds: '[DE] Wolne: {count} łóżka',
         messages: '[DE] Wiadomości:',
         newMessagesCount: '[DE] {count} nieprzeczytanych',
         editAd: '[DE] Edytuj ogłoszenie',
@@ -316,9 +318,11 @@ export default {
     roomCard: {
         district: '[DE] Dzielnica:',
         bedsInRoom: '[DE] {count} łóżka w pokoju',
-        dayPrice: '[DE] {price} / dzień',
-        bedDayPrice: '[DE] {price} / dzień / łóżko',
+        dayPrice: '[DE] {price} zł / dzień',
+        bedDayPrice: '[DE] {price} zł / dzień / łóżko',
         femaleRoom: '[DE] Pokój żenski',
+        maleRoom: '[DE] Pokój męski',
+        otherGenderRoom: '[DE] Pokój mieszany',
         tenants: '[DE] Lokatorzy:',
         join: '[DE] Dołącz do pokoju'
     },

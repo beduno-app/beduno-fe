@@ -52,9 +52,9 @@ export default class AdvertisementsPanelExpert extends Vue {
     {
       street: "ul. Kokosowa",
       city: "Warszawa",
-      occupied_beds: "2",
-      free_beds: "2",
-      tenants: [
+      usedBeds: "2",
+      numBeds: "2",
+      guests: [
         { content: "polski", key: "polish", text: "Grzegorz", icon: "pl" },
         { content: "angielski", key: "englsh", text: "Jennifer", icon: "uk" },
       ],
@@ -62,14 +62,23 @@ export default class AdvertisementsPanelExpert extends Vue {
     {
       street: "ul. Kokosowa",
       city: "Warszawa",
-      occupied_beds: "2",
-      free_beds: "2",
-      tenants: [
+      usedBeds: "2",
+      numBeds: "2",
+      guests: [
         { content: "polski", key: "polish", text: "Grzegorz", icon: "pl" },
         { content: "angielski", key: "englsh", text: "Jennifer", icon: "uk" },
       ],
     },
   ];
+
+  mounted() {
+    // todo: use url param
+    this.axios.get(`http://localhost:8080/advertisement/host?hostId=4fd1ab9b-770b-451c-be23-9b4761f9c92f`)
+        .then(resp => resp.data)
+        .then(advertisements => {
+          this.advertisements = advertisements;
+        });
+  }
 }
 </script>
 
