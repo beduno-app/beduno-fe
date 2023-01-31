@@ -4,32 +4,45 @@
       <div class="d-flex justify-content-between align-items-center">
         <div>
           <h5 class="card-title text-start">{{ city }}</h5>
-          <span class="px-1 district">{{ $t("roomCard.district") }}&nbsp;</span>
+          <span class="px-1 district">{{ $t("roomCard.district") }}</span>&nbsp;
           <span class="card-text district">{{ district }}</span>
         </div>
         <font-awesome-icon icon="fa-regular fa-heart fa-10x" />
       </div>
-      <gallery />
+      <gallery :main-photo="mainPhoto" />
     </div>
     <div class="card-body">
       <ul>
         <li class="text-start">
-          {{ $t("roomCard.bedsInRoom", { count: 3 }) }}
+          {{ $t("roomCard.bedsInRoom", { count: bedCount }) }}
         </li>
         <li class="text-start">700m - Biedronka</li>
       </ul>
       <div class="d-flex">
-        <div class="text-start">{{ $t("roomCard.femaleRoom") }}</div>
+        <div v-if="roomGender === 'FEMALE'" class="text-start">{{ $t("roomCard.femaleRoom") }}</div>
+        <div v-if="roomGender === 'MALE'" class="text-start">{{ $t("roomCard.maleRoom") }}</div>
+        <div v-if="roomGender === 'OTHER'" class="text-start">{{ $t("roomCard.otherGenderRoom") }}</div>
         <div class="d-flex mx-2">
           <img
-            class="img-person"
-            src="../../assets/img/icon_woman.png"
-            alt="icon"
+              v-for="id in [1,2]"
+              v-if="roomGender === 'FEMALE'"
+              class="img-person"
+              src="../../assets/img/icon_woman.png"
+              alt="icon"
           />
           <img
-            class="img-person"
-            src="../../assets/img/icon_woman.png"
-            alt="icon"
+              v-for="id in [1,2]"
+              v-if="roomGender === 'MALE'"
+              class="img-person"
+              src="../../assets/img/icon_man.png"
+              alt="icon"
+          />
+          <img
+              v-for="id in [1,2]"
+              v-if="roomGender === 'OTHER'"
+              class="img-person"
+              src="../../assets/img/icon_others.png"
+              alt="icon"
           />
         </div>
       </div>
@@ -59,7 +72,7 @@
       </div>
     </div>
     <div class="d-flex">
-      <h5 class="px-2">{{ $t("roomCard.dayPrice", { price: "15 zł" }) }}</h5>
+      <h5 class="px-2">{{ $t("roomCard.dayPrice", { price: bedDayPrice.toFixed(2) }) }}</h5>
     </div>
     <div class="card-footer">
       <div class="d-flex justify-content-between align-items-center btn-join">
@@ -80,11 +93,13 @@ import Gallery from "../ad/details/Gallery.vue";
   props: {
     district: String,
     city: String,
-  },
+    bedCount: Number,
+    bedDayPrice: Number,
+    roomGender: String,
+    mainPhoto: String
+  }
 })
-export default class RoomCard extends Vue {
-  msg!: string;
-}
+export default class RoomCard extends Vue {}
 </script>
 
 <style scoped lang="scss">

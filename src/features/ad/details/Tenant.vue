@@ -1,6 +1,6 @@
 <template>
   <div class="row">
-    <div class="col-md-4 col">Ania, lat 34</div>
+    <div class="col-md-4 col">{{ guest }}</div>
     <div class="col-md-8 col d-flex align-items-center">
       <div
         v-for="(lang, idx) in languages"
@@ -21,7 +21,9 @@
 <script lang="ts" scoped>
 import { Options, Vue } from "vue-class-component";
 @Options({
-  components: {},
+  props: {
+    guest: String // todo: object after adjusting API
+  }
 })
 export default class Tenant extends Vue {
   languages = [

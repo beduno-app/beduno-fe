@@ -125,7 +125,7 @@ export default class AdvertisementView extends Vue {
 
     // todo: hide host section when user is logged in; separate request for creating host if not logged in
     // change the value according to the ID in your DB
-    const hostId = '12af9758-f690-4098-9985-d9886bc62a8d';
+    const hostId = '198423fb-ac63-4562-8774-6a87041798ab';
 
     const advertisementData = {
       hostId,

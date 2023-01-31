@@ -252,7 +252,7 @@ export default {
             meetTheHost: '[UK] POZNAJ GOSPODARZA',
             communicators: '[UK] Używam:'
         },
-        roomArea: '[UK] Powierzchnia pokoju:',
+        roomArea: '[UK] Powierzchnia pokoju: {area} m2',
         currentTenants: '[UK] Aktualnie u nas mieszka:',
         currentTenantsCount: '[UK] Liczba osób aktualnie zamieszkujących pokój:',
         seeOtherEquipment: '[UK] Zobacz pozostałe udogodnienia',
@@ -264,7 +264,9 @@ export default {
         paymentMethods: '[UK] Metody płatności:',
         rulesOfStay: '[UK] Zasady pobytu:',
         pricePerBed: '[UK] Cena za łóżko {price} {currency} ({duration})',
-        book: '[UK] Zarezerwuj łóżko'
+        book: '[UK] Zarezerwuj łóżko',
+        beds: '[UK] {count} łóżka',
+        rooms: '[UK] {count} pokoje'
     },
     hostAdvertisementsView: {
         myAdvertisements: '[UK] Moje ogłoszenia',
@@ -272,7 +274,7 @@ export default {
         active: '[UK] Aktywne',
         inactive: '[UK] Nieaktywne',
         addNewAd: '[UK] Dodaj nowe ogłoszenie',
-        freeBeds: '[UK] Wolne:',
+        freeBeds: '[UK] Wolne: {count} łóżka',
         messages: '[UK] Wiadomości:',
         newMessagesCount: '[UK] {count} nieprzeczytanych',
         editAd: '[UK] Edytuj ogłoszenie',
@@ -316,9 +318,11 @@ export default {
     roomCard: {
         district: '[UK] Dzielnica:',
         bedsInRoom: '[UK] {count} łóżka w pokoju',
-        dayPrice: '[UK] {price} / dzień',
-        bedDayPrice: '[UK] {price} / dzień / łóżko',
+        dayPrice: '[UK] {price} zł / dzień',
+        bedDayPrice: '[UK] {price} zł / dzień / łóżko',
         femaleRoom: '[UK] Pokój żenski',
+        maleRoom: '[UK] Pokój męski',
+        otherGenderRoom: '[UK] Pokój mieszany',
         tenants: '[UK] Lokatorzy:',
         join: '[UK] Dołącz do pokoju'
     },
