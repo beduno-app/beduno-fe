@@ -195,10 +195,11 @@ export default {
                 label: '[RU] Ceny (zł):'
             },
             day: '[RU] doba',
-            month: '[RU] miesiąc',
-            shortRentRange: '[RU] Ilość dni (od 1 do 30 dni)',
-            longRentRange: '[RU] Ilość miesięcy (powyżej 1 miesiąca)',
-            addPriceRange: '[RU] Dodaj kolejny zakres cen'
+            discount1: '[RU] Próg zniżkowy 1',
+            discount2: '[RU] Próg zniżkowy 2',
+            discount3: '[RU] Próg zniżkowy 3',
+            discount4: '[RU] Próg zniżkowy 4',
+            discountMonth: '[RU] Próg zniżkowy powyżej miesiąca',
         },
         rulesSection: {
             termsOfStay: '[RU] Zasady pobytu:',
@@ -303,7 +304,7 @@ export default {
         createAd: '[RU] Dodaj nowe ogłoszenie'
     },
     searchInput: {
-        localization: {
+        location: {
             label: '[RU] Lokalizacja',
             placeholder: '[RU] Gdzie szukasz noclegu'
         },

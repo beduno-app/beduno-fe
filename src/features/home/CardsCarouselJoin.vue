@@ -2,12 +2,14 @@
     <carousel :items-to-show="3" :wrap-around="true" :breakpoints="breakpoints">
       <slide v-for="ad in advertisementsData" :key="ad.id">
         <room-card-join
+            :id="ad.id"
             :city="ad.city"
             :district="ad.district"
             :bed-count="ad.bedCount"
             :bed-day-price="ad.bedDayPrice"
             :room-gender="ad.roomGender"
             :main-photo="ad.mainPhoto"
+            :other-photos="ad.otherPhotos"
         />
       </slide>
       <template #addons>
@@ -23,9 +25,11 @@ import { Carousel, Slide, Pagination, Navigation } from "vue3-carousel";
 
 import "vue3-carousel/dist/carousel.css";
 import RoomCardJoin from "./RoomCardJoin.vue";
+import RoomCard from '@/features/home/RoomCard.vue';
 
 @Options({
   components: {
+      RoomCard,
     Carousel,
     Slide,
     Pagination,
@@ -41,12 +45,12 @@ import RoomCardJoin from "./RoomCardJoin.vue";
     advertisementsData() {
       return this.advertisements.map((ad, id) => ({
         id,
-        city: 'Warszawa', // todo: add city field to Ad DTO
+        city: ad.city,
         district: ad.district,
         bedCount: ad.numBeds,
-        bedDayPrice: ad.priceDTO[0].value,
-        roomGender: ad.gennderRoom,
-        mainPhoto: ad.mainPhoto.data || ''
+        bedDayPrice: ad.price,
+        mainPhoto: ad.mainPhoto[0].data || '',
+        otherPhotos: ad.mainPhoto.slice(1, 5).map(img => img.data)
       }))
     }
   }
