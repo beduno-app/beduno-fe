@@ -3,13 +3,13 @@
     <div class="card-body">
       <div class="d-flex justify-content-between align-items-center">
         <div>
-          <h5 class="card-title text-start">{{ city }}</h5>
+          <h5 class="card-title text-start details-link" @click="navigateToDetails(id)">{{ city }}</h5>
           <span class="px-1 district">{{ $t("roomCard.district") }}</span>&nbsp;
           <span class="card-text district">{{ district }}</span>
         </div>
         <font-awesome-icon icon="fa-regular fa-heart fa-10x" />
       </div>
-      <gallery :main-photo="mainPhoto" />
+      <gallery :main-photo="mainPhoto" :other-photos="otherPhotos" />
     </div>
     <div class="card-body">
       <ul>
@@ -75,7 +75,7 @@
       <h5 class="px-2">{{ $t("roomCard.dayPrice", { price: bedDayPrice.toFixed(2) }) }}</h5>
     </div>
     <div class="card-footer">
-      <div class="d-flex justify-content-between align-items-center btn-join">
+      <div class="d-flex justify-content-between align-items-center btn-join" @click="navigateToDetails(id)">
         <span>{{ $t("roomCard.join") }}</span>
         <img class="img-join" src="../../assets/img/join_ppl.png" />
       </div>
@@ -91,15 +91,25 @@ import Gallery from "../ad/details/Gallery.vue";
     Gallery,
   },
   props: {
+    id: String,
     district: String,
     city: String,
     bedCount: Number,
     bedDayPrice: Number,
     roomGender: String,
-    mainPhoto: String
+    mainPhoto: String,
+    otherPhotos: Array
   }
 })
-export default class RoomCard extends Vue {}
+export default class RoomCard extends Vue {
+  navigateToDetails(id) {
+    // todo: check after BE provides ad uuid
+    this.$router.push({
+      name: 'AdvertisementDetails',
+      params: { id }
+    });
+  }
+}
 </script>
 
 <style scoped lang="scss">
@@ -145,6 +155,10 @@ export default class RoomCard extends Vue {}
     .img-join {
       width: 50px;
     }
+  }
+  .details-link {
+    text-decoration: underline;
+    cursor: pointer;
   }
 }
 </style>

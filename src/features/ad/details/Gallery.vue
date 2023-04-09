@@ -9,18 +9,18 @@
     <div class="col">
       <div class="row row-images">
         <div class="col">
-          <img class="room-img" src="../../../assets/img/placeholder.png" />
+          <img class="room-img" :src="photos[0]" />
         </div>
         <div class="col">
-          <img class="room-img" src="../../../assets/img/placeholder.png" />
+          <img class="room-img" :src="photos[1]" />
         </div>
       </div>
       <div class="row row-images">
         <div class="col">
-          <img class="room-img" src="../../../assets/img/placeholder.png" />
+          <img class="room-img" :src="photos[2]" />
         </div>
         <div class="col">
-          <img class="room-img" src="../../../assets/img/placeholder.png" />
+          <img class="room-img" :src="photos[3]" />
         </div>
       </div>
     </div>
@@ -31,11 +31,18 @@
 import { Options, Vue } from "vue-class-component";
 @Options({
   props: {
-    mainPhoto: String
+    mainPhoto: String,
+    otherPhotos: Array
   },
   computed: {
     photo() {
       return `data:image/png;base64,${this.mainPhoto?.toString('base64')}`;
+    },
+    photos() {
+      return [0, 1, 2, 3].map(id => {
+          const img = this.otherPhotos[id];
+          return img ? `data:image/png;base64,${img.toString('base64')}` : require('../../../assets/img/placeholder.png');
+      })
     }
   }
 })

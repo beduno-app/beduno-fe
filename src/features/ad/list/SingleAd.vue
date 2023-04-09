@@ -56,7 +56,7 @@
     </div>
     <div class="col-md-3">
       <div class="row">
-        <host :host="advertisementData.hostResponse" />
+        <host :host="advertisementData.userResponse" />
       </div>
     </div>
   </div>
@@ -74,7 +74,7 @@ import Tenant from "../details/Tenant.vue";
   props: { advertisementData: Object },
   computed: {
     mainPhoto() {
-      return `data:image/png;base64,${this.advertisementData?.mainPhoto?.data.toString('base64')}`;
+      return `data:image/png;base64,${this.advertisementData?.mainPhoto[0]?.data.toString('base64')}`;
     }
   }
 })

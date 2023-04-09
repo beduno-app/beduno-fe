@@ -3,11 +3,13 @@
     <carousel :items-to-show="3" :wrap-around="true" :breakpoints="breakpoints">
       <slide v-for="ad in advertisementsData" :key="ad.id">
         <room-card
+            :id="ad.id"
             :city="ad.city"
             :district="ad.district"
             :bed-count="ad.bedCount"
             :bed-day-price="ad.bedDayPrice"
             :main-photo="ad.mainPhoto"
+            :other-photos="ad.otherPhotos"
         />
       </slide>
 
@@ -43,11 +45,12 @@ import RoomCard from "./RoomCard.vue";
     advertisementsData() {
       return this.advertisements.map((ad, id) => ({
         id,
-        city: 'Warszawa', // todo: add city field to Ad DTO
+        city: ad.city,
         district: ad.district,
         bedCount: ad.numBeds,
-        bedDayPrice: ad.priceDTO[0].value,
-        mainPhoto: ad.mainPhoto.data || ''
+        bedDayPrice: ad.price,
+        mainPhoto: ad.mainPhoto[0].data || '',
+        otherPhotos: ad.mainPhoto.slice(1, 5).map(img => img.data)
       }))
     }
   }
