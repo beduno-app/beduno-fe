@@ -1,5 +1,5 @@
 <template>
-  <div class="payment-secrion p-3">
+  <div class="payment-section p-3">
     <div formGroupName="paymentForms">
       <span class="label">{{ $t('advertisementView.paymentSection.paymentMethod.label') }}</span>
       <div class="row mb-4 mt-4">
@@ -24,17 +24,12 @@
         </div>
       </div>
       <span class="label">{{ $t('advertisementView.paymentSection.pricing.label') }}</span>
-      <div class="row mt-5">
+      <div class="row mt-5 mx-3">
         <div class="col-md-4">
           <div class="row pb-3 align-items-center">
-            <Slider
-              class="col-7 slider-red"
-              v-model="value1"
-              :min="minDay"
-              :max="maxDay"
-            /><input
+            <input
               type="number"
-              v-model="price1"
+              v-model="price"
               class="col"
               style="
                 max-width: 90px;
@@ -43,68 +38,80 @@
               "
             />
             <span class="col" style="font-size: 10px">{{ $t('advertisementView.paymentSection.day') }}</span>
-            <span class="text-left">{{ $t('advertisementView.paymentSection.shortRentRange') }}</span>
           </div>
           <div class="row pb-3 pt-4 align-items-center">
-            <Slider
-              class="col-7"
-              v-model="value2"
-              :min="minDay"
-              :max="maxDay"
-            /><input
+            <input
               type="number"
               class="col"
-              v-model="price2"
+              v-model="discount1"
               style="
                 max-width: 90px;
                 border-radius: 10px;
                 border: 1px solid grey;
               "
             />
-            <span class="col" style="font-size: 10px">{{ $t('advertisementView.paymentSection.day') }}</span>
-            <span class="text-left">{{ $t('advertisementView.paymentSection.shortRentRange') }}</span>
-          </div>
-          <div class="d-flex pb-5">
-            <img
-              src="../../../assets/img/icon_minus.png"
-              alt="add_price"
-              class="px-2"
-              style="cursor: pointer"
-            />
-            <span>{{ $t('advertisementView.paymentSection.addPriceRange') }}</span>
+            <span class="col" style="font-size: 10px">{{ $t('advertisementView.paymentSection.discount1') }}</span>
           </div>
         </div>
 
-        <div class="col-md-5">
+        <div class="col-md-4">
           <div class="row pb-3 align-items-center">
-            <Slider
-              class="col-7"
-              v-model="value3"
-              :min="minMonth"
-              :max="maxMonth"
-            /><input
+           <input
               type="number"
               class="col"
-              v-model="price3"
+              v-model="discount2"
               style="
                 max-width: 90px;
                 border-radius: 10px;
                 border: 1px solid grey;
               "
             />
-            <span class="col" style="font-size: 10px">{{ $t('advertisementView.paymentSection.month') }}</span>
-            <span class="text-left">{{ $t('advertisementView.paymentSection.longRentRange') }}</span>
+            <span class="col" style="font-size: 10px">{{ $t('advertisementView.paymentSection.discount2') }}</span>
           </div>
-          <div class="d-flex">
-            <img
-              src="../../../assets/img/icon_minus.png"
-              alt="add_price"
-              class="px-2"
-              style="cursor: pointer"
+          <div class="row pb-3 pt-4 align-items-center">
+            <input
+              type="number"
+              class="col"
+              v-model="discount3"
+              style="
+            max-width: 90px;
+            border-radius: 10px;
+            border: 1px solid grey;
+          "
             />
-            <span>{{ $t('advertisementView.paymentSection.addPriceRange') }}</span>
+            <span class="col" style="font-size: 10px">{{ $t('advertisementView.paymentSection.discount3') }}</span>
           </div>
         </div>
+
+        <div class="col-md-4">
+          <div class="row pb-3 align-items-center">
+            <input
+              type="number"
+              class="col"
+              v-model="discount4"
+              style="
+                max-width: 90px;
+                border-radius: 10px;
+                border: 1px solid grey;
+              "
+            />
+            <span class="col" style="font-size: 10px">{{ $t('advertisementView.paymentSection.discount4') }}</span>
+          </div>
+          <div class="row pb-3 pt-4 align-items-center">
+            <input
+              type="number"
+              class="col"
+              v-model="discountMonth"
+              style="
+                max-width: 90px;
+                border-radius: 10px;
+                border: 1px solid grey;
+              "
+            />
+            <span class="col" style="font-size: 10px">{{ $t('advertisementView.paymentSection.discountMonth') }}</span>
+          </div>
+        </div>
+
       </div>
     </div>
   </div>
@@ -115,16 +122,12 @@ import Slider from "@vueform/slider";
 
 @Options({ components: { Slider } })
 export default class HostSection extends Vue {
-  value1 = [1, 10];
-  value2 = [11, 15];
-  value3 = [2, 5];
-  price1 = 25;
-  price2 = 20;
-  price3 = 500;
-  minDay = 1;
-  maxDay = 30;
-  minMonth = 1;
-  maxMonth = 12;
+  price = 0;
+  discount1 = 0;
+  discount2 = 0;
+  discount3 = 0;
+  discount4 = 0;
+  discountMonth = 0;
   selectedPaymentForms = <string[]>[];
   paymentForms = [
     { label: "gotówka", key: "cash", icon: "icon_cash" },
@@ -153,11 +156,12 @@ export default class HostSection extends Vue {
   getData() {
     return {
       paymentForms: this.selectedPaymentForms,
-      priceList: [
-          { rangeFrom: this.value1[0], rangeTo: this.value1[1], value: this.price1 },
-          { rangeFrom: this.value2[0], rangeTo: this.value2[1], value: this.price2 },
-          { rangeFrom: this.value3[0] * 30, rangeTo: this.value3[1] * 30, value: this.price3 },
-      ]
+      price: this.price,
+      discount1: this.discount1,
+      discount2: this.discount2,
+      discount3: this.discount3,
+      discount4: this.discount4,
+      discountMonth: this.discountMonth,
     }
   }
 }
