@@ -6,7 +6,7 @@
     <div class="col-xxl-7 col-xl-12 col-lg-12">
       <div class="row mb-2">
         <div class="col-md-6 col">
-          <h3>{{ host.hostName }}</h3>
+          <h3>{{ host.name }}</h3>
           <div
             v-for="(lang, idx) in languages"
             :key="idx"

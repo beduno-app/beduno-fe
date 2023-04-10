@@ -125,22 +125,31 @@ export default class AdvertisementView extends Vue {
 
     // todo: hide host section when user is logged in; separate request for creating host if not logged in
     // change the value according to the ID in your DB
-    const hostId = '198423fb-ac63-4562-8774-6a87041798ab';
+    const hostId = '59e45463-0384-480e-8957-cae2d89717d4';
 
     const advertisementData = {
       hostId,
+      title: mainData.title,
+      district: 1, // todo: where do we get that from? should be text instead of enum
+      city: mainData.city,
       postCode: mainData.zipCode,
-      hostStreet: mainData.street,
+      streetName: mainData.street,
       roomDescription: descriptionData.descriptionOwn, // todo: handle descriptions from templates
       roomArea: descriptionData.roomSize,
+      roomGender: descriptionData.roomType,
       numBeds: descriptionData.bedsCount,
       usedBeds: descriptionData.bedsCount - descriptionData.freeBeds,
-      priceList: paymentData.priceList,
+      price: paymentData.price,
+      firstStageDiscount: paymentData.discount1,
+      secondStageDiscount: paymentData.discount2,
+      thirdStageDiscount: paymentData.discount3,
+      fourthStageDiscount: paymentData.discount4,
+      discountMonth: paymentData.discountMonth,
+      paymentType: paymentData.paymentForms,
       sharedBeds: descriptionData.sharedBeds,
       language: 'pl', // todo: where do we get that from?
       roomEquipment: equipmentData.roomEquipment,
       sharedEquipment: equipmentData.commonEquipment,
-      paymentType: paymentData.paymentForms,
       rentalRules: Object.keys(rulesData).filter(key => !!rulesData[key])
     };
 

@@ -195,10 +195,11 @@ export default {
                 label: '[UK] Ceny (zł):'
             },
             day: '[UK] doba',
-            month: '[UK] miesiąc',
-            shortRentRange: '[UK] Ilość dni (od 1 do 30 dni)',
-            longRentRange: '[UK] Ilość miesięcy (powyżej 1 miesiąca)',
-            addPriceRange: '[UK] Dodaj kolejny zakres cen'
+            discount1: '[UK] Próg zniżkowy 1',
+            discount2: '[UK] Próg zniżkowy 2',
+            discount3: '[UK] Próg zniżkowy 3',
+            discount4: '[UK] Próg zniżkowy 4',
+            discountMonth: '[UK] Próg zniżkowy powyżej miesiąca',
         },
         rulesSection: {
             termsOfStay: '[UK] Zasady pobytu:',
@@ -303,7 +304,7 @@ export default {
         createAd: '[UK] Dodaj nowe ogłoszenie'
     },
     searchInput: {
-        localization: {
+        location: {
             label: '[UK] Lokalizacja',
             placeholder: '[UK] Gdzie szukasz noclegu'
         },

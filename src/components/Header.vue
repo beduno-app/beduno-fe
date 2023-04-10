@@ -4,7 +4,7 @@
       class="container-fluid d-flex align-items-center justify-content-between p-5"
     >
       <div class="d-flex align-items-center">
-        <div class="logo-bedOK">
+        <div class="logo-bedOK" @click="navigateToHome()">
           <img
             class="img-BedOk"
             alt="Bed!Ok logo"
@@ -136,6 +136,10 @@ export default class Header extends Vue {
     this.$i18n.locale = selectedLocale.languageCode;
     this.selectedLocale = selectedLocale;
   }
+
+  navigateToHome() {
+      this.$router.push({ path: '/' });
+  }
 }
 </script>
 
@@ -143,6 +147,7 @@ export default class Header extends Vue {
 @import "@/assets/_variables.scss";
 .header {
   .logo-bedOK {
+    cursor: pointer;
     margin-right: 100px;
     .img-BedOk {
       width: 11rem;

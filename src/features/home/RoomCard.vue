@@ -3,13 +3,13 @@
     <div class="card-body">
       <div class="d-flex justify-content-between align-items-center">
         <div>
-          <h5 class="card-title text-start">{{ city }}</h5>
+          <h5 class="card-title text-start details-link" @click="navigateToDetails(id)">{{ city }}</h5>
           <span class="px-1">{{ $t("roomCard.district") }}</span>&nbsp;
           <span class="card-text"> {{ district }}</span>
         </div>
         <font-awesome-icon icon="fa-regular fa-heart fa-10x" />
       </div>
-      <gallery :main-photo="mainPhoto" />
+      <gallery :main-photo="mainPhoto" :other-photos="otherPhotos" />
     </div>
     <div class="card-body">
       <ul>
@@ -33,14 +33,24 @@ import Gallery from "../ad/details/Gallery.vue";
     Gallery,
   },
   props: {
+    id: String,
     district: String,
     city: String,
     bedCount: Number,
     bedDayPrice: Number,
-    mainPhoto: String
+    mainPhoto: String,
+    otherPhotos: Array
   },
 })
-export default class RoomCard extends Vue {}
+export default class RoomCard extends Vue {
+  navigateToDetails(id) {
+    // todo: check after BE provides ad uuid
+    this.$router.push({
+      name: 'AdvertisementDetails',
+      params: { id }
+    });
+  }
+}
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
@@ -63,5 +73,9 @@ img {
 }
 span {
   text-decoration: underline;
+}
+.details-link {
+  text-decoration: underline;
+  cursor: pointer;
 }
 </style>
