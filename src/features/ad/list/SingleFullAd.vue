@@ -1,25 +1,27 @@
 <template>
   <div class="row justify-content-center advertisement-section py-5">
     <div class="single-section pb-4">
-      <Header />
+      <Header :title="advertisementData.title" />
+      <!-- todo: pass real data to the subheader -->
       <subheader />
-      <gallery :main-photo="mainPhoto" />
+      <gallery :main-photo="mainPhoto" :other-photos="otherPhotos" />
       <div class="row">
         <div class="col-md-8 mb-3">
           <div class="row">
             <div class="col-lg-3 col-md-6 col-sm-6 col-xs-3">
               <ul>
-                <li>2 łóżka</li>
-                <li>1 pokój</li>
+                <li>{{ $t('advertisementDetailsView.beds', { count: advertisementData.numBeds }) }}</li>
+                <!-- todo: change to data from BE -->
+                <li>{{ $t('advertisementDetailsView.rooms', { count: 1 }) }}</li>
               </ul>
             </div>
             <div class="col-lg-4 col-md-6 col-sm-6 col-xs-9 mb-2">
-              <span class="me-1">Pokój męski</span>
-              <img src="../../../assets/img/icon_man.png" alt="icon-man" />
+              <span class="me-1">{{ $t(roomGenderText) }}</span>
+              <img :src="roomGenderIcon.src" :alt="roomGenderIcon.alt" />
             </div>
             <div class="col-lg-5">
               <div class="col-md-9 mb-2">
-                {{ $t('advertisementDetailsView.roomArea', { area: advertisementData.roomArea }) }}
+                {{ $t('advertisementDetailsView.roomArea', { area: advertisementData?.roomArea }) }}
               </div>
             </div>
           </div>
@@ -62,14 +64,18 @@
           <div class="row mt-4">
             <div class="col-sm-12 col-md-4">{{ $t('advertisementDetailsView.currentTenants') }}</div>
             <div class="col-sm-12 col-md-8">
-              <tenant />
-              <tenant />
-              <tenant />
+                <tenant
+                  v-for="(guest, idx) in advertisementData.guestsList"
+                  :key="idx"
+                  :name="guest.name"
+                  :age="guest.age"
+                  :languages="guest.languages"
+                />
             </div>
           </div>
         </div>
         <div class="col-md-4">
-          <host :host="advertisementData?.hostResponse" />
+          <host :host="advertisementData.host" />
         </div>
       </div>
       <div class="row mt-4">
@@ -80,27 +86,30 @@
     <div class="single-section py-3">
       <div class="row">
         <div class="col-md-12 mb-2">{{ $t('advertisementDetailsView.sharedEquipment') }}</div>
+          <!-- todo: pass real data  -->
         <shared-equipments />
       </div>
     </div>
     <div class="single-section py-3">
-      <description-with-map />
+      <description-with-map :description="advertisementData.roomDescription" />
     </div>
     <div class="single-section py-3">
       <div class="row">
         <div class="col-md-12 mb-2">{{ $t('advertisementDetailsView.paymentMethods') }}</div>
+          <!-- todo: pass real data  -->
         <payments />
       </div>
     </div>
     <div class="single-section py-3">
       <div class="row">
         <div class="col-md-12 mb-2">{{ $t('advertisementDetailsView.rulesOfStay') }}</div>
+          <!-- todo: pass real data  -->
         <rules />
       </div>
     </div>
     <div class="py-3">
       <div class="row">
-        <div class="col-md-5 mb-3">{{ $t('advertisementDetailsView.pricePerBed', { price: 88, currency: 'zł', duration: '4 noce'}) }}</div>
+        <div class="col-md-5 mb-3">{{ $t('advertisementDetailsView.pricePerBed', { price: advertisementData.price, currency: 'zł', duration: '1 noc'}) }}</div>
         <div class="col md-7" style="cursor: pointer">
           <img
             src="../../../assets/img/dot_green_big.png"
@@ -144,7 +153,25 @@ import Tenant from "../details/Tenant.vue";
   },
   computed: {
     mainPhoto() {
-      return `data:image/png;base64,${this.advertisementData?.mainPhoto?.data.toString('base64')}`;
+      return this.advertisementData.roomPhotos[0]?.data || '';
+    },
+    otherPhotos() {
+      return this.advertisementData.roomPhotos.slice(1,5).map(img => img.data);
+    },
+    roomGenderText() {
+      return this.advertisementData.roomGender === 'FEMALE'
+        ? 'roomCard.femaleRoom'
+        : this.advertisementData.roomGender === 'MALE' ? 'roomCard.maleRoom' : 'roomCard.otherGenderRoom';
+    },
+    roomGenderIcon() {
+      const icon = this.advertisementData.roomGender === 'FEMALE'
+        ? 'icon_woman'
+        : this.advertisementData.roomGender === 'MALE' ? 'icon_man' : 'icon_people';
+
+      return {
+        alt: icon,
+        src: require(`../../../assets/img/${icon}.png`)
+      }
     }
   }
 })

@@ -325,6 +325,7 @@ export default {
         maleRoom: '[RU] Pokój męski',
         otherGenderRoom: '[RU] Pokój mieszany',
         tenants: '[RU] Lokatorzy:',
+        tenantInfo: '[RU] {name}, lat {age}',
         join: '[RU] Dołącz do pokoju'
     },
 };

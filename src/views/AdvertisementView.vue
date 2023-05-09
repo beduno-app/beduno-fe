@@ -5,9 +5,6 @@
       <main-section ref="main" />
     </base-form>
     <base-form>
-      <host-section ref="host" />
-    </base-form>
-    <base-form>
       <description-section ref="description" />
     </base-form>
     <base-form>
@@ -90,7 +87,6 @@ import { Options, Vue } from "vue-class-component";
 
 import BaseForm from "@/features/ad/creation/BaseForm.vue";
 import MainSection from "@/features/ad/creation/MainSection.vue";
-import HostSection from "@/features/ad/creation/HostSection.vue";
 import DescriptionSection from "@/features/ad/creation/DescriptionSection.vue";
 import EquipmentSection from "@/features/ad/creation/EquipmentSection.vue";
 import CurrentGuestsSection from "@/features/ad/creation/CurrentGuestsSection.vue";
@@ -107,7 +103,6 @@ import PaymentSection from "@/features/ad/creation/PaymentSection.vue";
     PaymentSection,
     RulesSection,
     MainSection,
-    HostSection,
     BaseForm,
     Header,
     Footer,
@@ -116,21 +111,19 @@ import PaymentSection from "@/features/ad/creation/PaymentSection.vue";
 export default class AdvertisementView extends Vue {
   publishAdvertisement() {
     const mainData = (this.$refs.main as any).getData();
-    const hostData = (this.$refs.host as any).getData();
     const descriptionData = (this.$refs.description as any).getData();
     const guestsData = (this.$refs.guests as any).getData();
     const equipmentData = (this.$refs.equipment as any).getData();
     const paymentData = (this.$refs.payment as any).getData();
     const rulesData = (this.$refs.rules as any).getData();
 
-    // todo: hide host section when user is logged in; separate request for creating host if not logged in
     // change the value according to the ID in your DB
-    const hostId = '59e45463-0384-480e-8957-cae2d89717d4';
+    const hostId = 'e42ff35f-c12a-43d1-a472-eb1a06d9a54e';
 
     const advertisementData = {
       hostId,
       title: mainData.title,
-      district: 1, // todo: where do we get that from? should be text instead of enum
+      district: 'Krzyki', // todo: where do we get that from? should be text instead of enum
       city: mainData.city,
       postCode: mainData.zipCode,
       streetName: mainData.street,
