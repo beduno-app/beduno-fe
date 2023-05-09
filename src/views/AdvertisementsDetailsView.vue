@@ -1,5 +1,5 @@
 <template>
-  <div class="container-fluid">
+  <div v-if="advertisement !== null" class="container-fluid">
     <single-full-ad :advertisement-data="advertisement" />
   </div>
 </template>
@@ -12,14 +12,22 @@ import SingleFullAd from "../features/ad/list/SingleFullAd.vue";
   components: { SingleFullAd },
 })
 export default class AdvertisementsDetailsView extends Vue {
-  advertisement;
+  advertisement = null;
 
   mounted() {
-    // todo: take ID from the params
-    this.axios.get('http://localhost:8080/advertisement/details/c3957b5f-8bda-4454-8b3d-8cb5212ce902')
+    const { id } = this.$route.params;
+    this.axios.get(`http://localhost:8080/advertisement/details?advertisementId=${id}`)
         .then(resp => resp.data)
         .then(advertisement => {
-          this.advertisement = advertisement;
+          console.log(advertisement);
+          // todo: remove mock data after handling reservations
+          this.advertisement = {
+              ...advertisement,
+              guestsList: [
+                  { name: 'Dawid', age: 30, languages: 'pl,en,de'},
+                  { name: 'Anita', age: 34, languages: 'pl,en'},
+              ]
+          };
         });
   }
 }

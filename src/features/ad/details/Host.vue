@@ -7,18 +7,6 @@
       <div class="row mb-2">
         <div class="col-md-6 col">
           <h3>{{ host.name }}</h3>
-          <div
-            v-for="(lang, idx) in languages"
-            :key="idx"
-            class="d-flex align-items-center"
-          >
-            <img
-              :src="require(`../../../assets/img/${lang.icon}.png`)"
-              :alt="lang.icon"
-              class="mx-1"
-            />
-            <span>{{ lang.text }}</span>
-          </div>
         </div>
         <div class="col-md-6 col">
           <img

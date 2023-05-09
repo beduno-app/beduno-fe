@@ -25,8 +25,7 @@ export default class AdvertisementsView extends Vue {
         ...(queryParams.to ? { to: queryParams.to } : {}),
         ...(queryParams.guestsCount ? { guestsCount: queryParams.guestsCount } : {}),
     };
-    // todo: change to /criteria and use params above after BE aligns
-    this.axios('http://localhost:8080/advertisement/list')
+    this.axios('http://localhost:8080/advertisement/criteria', { method: 'POST', data })
         .then(resp => resp.data)
         .then(advertisements => {
           this.advertisements = advertisements;
