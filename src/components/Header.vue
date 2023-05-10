@@ -138,7 +138,7 @@ export default class Header extends Vue {
   }
 
   navigateToHome() {
-      this.$router.push({ path: '/' });
+      this.$router.push({ path: '/', force: true });
   }
 }
 </script>

@@ -1,41 +1,43 @@
 <template>
-  <search-input />
-  <div class="scroll">
-    <table class="table table-responsive">
-      <div class="panel-expert-section container-fluid">
-        <div class="d-flex align-items-center">
-          <h4 class="pe-5">{{ $t('expertPanelView.expertPanel') }}</h4>
-          <b-form-checkbox switch size="lg"></b-form-checkbox>
-        </div>
-        <h3 class="pb-5">{{ $t('expertPanelView.myAdvertisements') }}</h3>
-        <div class="row">
-          <div class="col-2"><span class="px-2 header">{{ $t('expertPanelView.address') }}</span></div>
-          <div class="col-1">
-            <span class="header">{{ $t('expertPanelView.room') }}</span>
+  <div>
+    <search-input />
+    <div class="scroll">
+      <table class="table table-responsive">
+        <div class="panel-expert-section container-fluid">
+          <div class="d-flex align-items-center">
+            <h4 class="pe-5">{{ $t('expertPanelView.expertPanel') }}</h4>
+            <b-form-checkbox switch size="lg"></b-form-checkbox>
           </div>
-          <div class="col-1">
-            <span class="header">{{ $t('expertPanelView.occupiedBeds') }}</span>
-          </div>
-          <div class="col-1"><span class="header">{{ $t('expertPanelView.freeBeds') }}</span></div>
+          <h3 class="pb-5">{{ $t('expertPanelView.myAdvertisements') }}</h3>
+          <div class="row">
+            <div class="col-2"><span class="px-2 header">{{ $t('expertPanelView.address') }}</span></div>
+            <div class="col-1">
+              <span class="header">{{ $t('expertPanelView.room') }}</span>
+            </div>
+            <div class="col-1">
+              <span class="header">{{ $t('expertPanelView.occupiedBeds') }}</span>
+            </div>
+            <div class="col-1"><span class="header">{{ $t('expertPanelView.freeBeds') }}</span></div>
 
-          <div class="col-7">
-            <span class="header">{{ $t('expertPanelView.currentTenants') }}</span>
+            <div class="col-7">
+              <span class="header">{{ $t('expertPanelView.currentTenants') }}</span>
+            </div>
+          </div>
+          <single-ad-expert
+            v-for="(advertisement, idx) in advertisements"
+            :key="idx"
+            :advertisement="advertisement"
+          />
+          <div class="d-flex justify-content-end align-items-center py-4">
+            <img
+              src="../assets/img/icon_add_big_expert.png"
+              class="cursor-pointer"
+            />
+            <h5 class="cursor-pointer">{{ $t('expertPanelView.createAd') }}</h5>
           </div>
         </div>
-        <single-ad-expert
-          v-for="(advertisement, idx) in advertisements"
-          :key="idx"
-          :advertisement="advertisement"
-        />
-        <div class="d-flex justify-content-end align-items-center py-4">
-          <img
-            src="../assets/img/icon_add_big_expert.png"
-            class="cursor-pointer"
-          />
-          <h5 class="cursor-pointer">{{ $t('expertPanelView.createAd') }}</h5>
-        </div>
-      </div>
-    </table>
+      </table>
+    </div>
   </div>
 </template>
 

@@ -47,27 +47,15 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-4 text-start">{{ $t("roomCard.tenants") }}</div>
+        <div class="col-3 text-start">{{ $t("roomCard.tenants") }}</div>
         <div class="col-8">
-          <tenant />
-          <div class="row">
-            <span class="col text-start">Julka, lat 34</span>
-            <div class="col d-flex align-items-center">
-              <img class="img-flag" src="../../assets/img/pl.png" />
-              <span class="px-2">Polski</span>
-              <img class="img-flag" src="../../assets/img/uk.png" />
-              <span class="px-2">Angielski</span>
-            </div>
-          </div>
-          <div class="row">
-            <span class="col text-start">Patrycja, lat 34</span>
-            <div class="col d-flex align-items-center">
-              <img class="img-flag" src="../../assets/img/pl.png" />
-              <span class="px-2">Polski</span>
-              <img class="img-flag" src="../../assets/img/uk.png" />
-              <span class="px-2">Angielski</span>
-            </div>
-          </div>
+          <tenant
+            v-for="(guest, idx) in guests"
+            :key="idx"
+            :name="guest.name"
+            :age="guest.age"
+            :languages="guest.languages"
+          />
         </div>
       </div>
     </div>
@@ -85,10 +73,12 @@
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 import Gallery from "../ad/details/Gallery.vue";
+import Tenant from "../ad/details/Tenant.vue";
 
 @Options({
   components: {
     Gallery,
+    Tenant
   },
   props: {
     id: String,
@@ -98,10 +88,11 @@ import Gallery from "../ad/details/Gallery.vue";
     bedDayPrice: Number,
     roomGender: String,
     mainPhoto: String,
-    otherPhotos: Array
+    otherPhotos: Array,
+    guests: Array,
   }
 })
-export default class RoomCard extends Vue {
+export default class RoomCardJoin extends Vue {
   navigateToDetails(id) {
     // todo: check after BE provides ad uuid
     this.$router.push({

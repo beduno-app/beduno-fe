@@ -1,15 +1,17 @@
 <template>
-  <div
-    v-for="(equipment, idx) in sharedEquipments"
-    :key="idx"
-    class="col-xl-2 col-lg-3 col-md-6 col-sm-6 col-xs-12 p-1 d-flex align-items-center"
-  >
-    <img
-      :src="require(`../../../assets/img/${equipment.icon}.png`)"
-      :alt="equipment.icon"
-      class="mx-1"
-    />
-    <span>{{ equipment.content }}</span>
+  <div>
+    <div
+      v-for="(equipment, idx) in sharedEquipments"
+      :key="idx"
+      class="col-xl-2 col-lg-3 col-md-6 col-sm-6 col-xs-12 p-1 d-flex align-items-center"
+    >
+      <img
+        :src="require(`../../../assets/img/${equipment.icon}.png`)"
+        :alt="equipment.icon"
+        class="mx-1"
+      />
+      <span>{{ equipment.content }}</span>
+    </div>
   </div>
 </template>
 

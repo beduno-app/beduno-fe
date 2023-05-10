@@ -1,16 +1,18 @@
 <template>
-  <div
-    v-for="(rule, idx) in rules"
-    :key="idx"
-    class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-xs-12"
-  >
-        <img
-          :src="require(`../../../assets/img/${rule.icon}.png`)"
-          class="pe-1"
-        />
-        {{ rule.content }}
-        <span class="form-check-sign"></span>
-        {{ rule.label }}: {{ rule.checked }}
+  <div>
+    <div
+      v-for="(rule, idx) in rules"
+      :key="idx"
+      class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-xs-12"
+    >
+          <img
+            :src="require(`../../../assets/img/${rule.icon}.png`)"
+            class="pe-1"
+          />
+          {{ rule.content }}
+          <span class="form-check-sign"></span>
+          {{ rule.label }}: {{ rule.checked }}
+    </div>
   </div>
 </template>
 
