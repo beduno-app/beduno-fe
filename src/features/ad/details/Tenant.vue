@@ -1,9 +1,9 @@
 <template>
   <div class="row">
-    <div class="col-md-4 col">{{ guest }}</div>
+    <div class="col-md-4 col">{{ $t('roomCard.tenantInfo', { name, age }) }}</div>
     <div class="col-md-8 col d-flex align-items-center">
       <div
-        v-for="(lang, idx) in languages"
+        v-for="(lang, idx) in splitLanguages"
         :key="idx"
         class="d-flex align-items-center"
       >
@@ -12,7 +12,7 @@
           :alt="lang.icon"
           class="mx-1"
         />
-        <span>{{ lang.text }}</span>
+        <div>{{ lang.text }}</div>
       </div>
     </div>
   </div>
@@ -20,17 +20,21 @@
 
 <script lang="ts" scoped>
 import { Options, Vue } from "vue-class-component";
+import { mapLanguageCodeToLanguageData } from '@/util';
+
 @Options({
   props: {
-    guest: String // todo: object after adjusting API
+    name: String,
+    age: Number,
+    languages: Array,
+  },
+  computed: {
+    splitLanguages() {
+      return this.languages.split(',').filter(Boolean).map(mapLanguageCodeToLanguageData);
+    }
   }
 })
-export default class Tenant extends Vue {
-  languages = [
-    { content: "polski", key: "polish", text: "Polski", icon: "pl" },
-    { content: "angielski", key: "englsh", text: "Angielski", icon: "uk" },
-  ];
-}
+export default class Tenant extends Vue {}
 </script>
 
 <style lang="scss"></style>

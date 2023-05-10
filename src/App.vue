@@ -1,7 +1,9 @@
 <template>
-  <Header/>
-  <Content/>
-  <Footer/>
+  <div>
+    <Header/>
+    <Content/>
+    <Footer/>
+  </div>
 </template>
 
 <script>

@@ -134,6 +134,7 @@ import { computed } from "@vue/runtime-core";
 import { Options, Vue } from "vue-class-component";
 import { UploadMedia, UpdateMedia } from "vue-media-upload";
 
+// todo: component to be removed, we should always base host data on the currently logged in user
 @Options({ components: { UploadMedia, UpdateMedia } })
 export default class HostSection extends Vue {
   imageData = <string | ArrayBuffer | null | undefined>null;
@@ -141,9 +142,9 @@ export default class HostSection extends Vue {
   selectedCommunicators = <string[]>[];
   languages = [
     { content: "polski", key: "polish", icon: "pl" },
-    { content: "ukraiński", key: "ukrainian", icon: "ua" },
+    { content: "ukraiński", key: "ukrainian", icon: "uk" },
     { content: "rosyjski", key: "russian", icon: "ru" },
-    { content: "angielski", key: "englsh", icon: "uk" },
+    { content: "angielski", key: "english", icon: "en" },
     { content: "niemiecki", key: "german", icon: "de" },
     { content: "czeski", key: "czech", icon: "cz" },
     { content: "słowacki", key: "slovak", icon: "sk" },

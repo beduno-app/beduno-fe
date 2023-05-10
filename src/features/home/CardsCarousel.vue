@@ -43,14 +43,14 @@ import RoomCard from "./RoomCard.vue";
   },
   computed: {
     advertisementsData() {
-      return this.advertisements.map((ad, id) => ({
-        id,
+      return this.advertisements.map(ad => ({
+        id: ad.advertisementId,
         city: ad.city,
         district: ad.district,
         bedCount: ad.numBeds,
         bedDayPrice: ad.price,
-        mainPhoto: ad.mainPhoto[0].data || '',
-        otherPhotos: ad.mainPhoto.slice(1, 5).map(img => img.data)
+        mainPhoto: ad.mainPhotos[0]?.data || '',
+        otherPhotos: ad.mainPhotos.slice(1, 5).map(img => img.data)
       }))
     }
   }

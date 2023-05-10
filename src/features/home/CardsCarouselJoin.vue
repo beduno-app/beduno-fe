@@ -1,4 +1,5 @@
 <template>
+  <div>
     <carousel :items-to-show="3" :wrap-around="true" :breakpoints="breakpoints">
       <slide v-for="ad in advertisementsData" :key="ad.id">
         <room-card-join
@@ -10,12 +11,14 @@
             :room-gender="ad.roomGender"
             :main-photo="ad.mainPhoto"
             :other-photos="ad.otherPhotos"
+            :guests="ad.guests"
         />
       </slide>
       <template #addons>
         <navigation />
       </template>
     </carousel>
+  </div>
 </template>
 
 <script lang="ts">
@@ -43,14 +46,19 @@ import RoomCard from '@/features/home/RoomCard.vue';
   },
   computed: {
     advertisementsData() {
-      return this.advertisements.map((ad, id) => ({
-        id,
+      return this.advertisements.map(ad => ({
+        id: ad.advertisementId,
         city: ad.city,
         district: ad.district,
         bedCount: ad.numBeds,
         bedDayPrice: ad.price,
-        mainPhoto: ad.mainPhoto[0].data || '',
-        otherPhotos: ad.mainPhoto.slice(1, 5).map(img => img.data)
+        mainPhoto: ad.mainPhotos[0]?.data || '',
+        otherPhotos: ad.mainPhotos.slice(1, 5).map(img => img.data),
+        // todo: remove mock data after handling reservations
+        guests: [
+            { name: 'Dawid', age: 30, languages: 'pl,en,de'},
+            { name: 'Anita', age: 34, languages: 'pl,en'},
+        ]
       }))
     }
   }
