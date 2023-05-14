@@ -6,7 +6,9 @@
           <FormKit
             type="text"
             ref="name"
-            :placeholder="$t('advertisementView.currentGuestsSection.name.placeholder')"
+            :placeholder="
+              $t('advertisementView.currentGuestsSection.name.placeholder')
+            "
             :classes="{
               outer: 'foo-bar',
               inner: {
@@ -16,8 +18,13 @@
           />
         </div>
         <div class="col-md-6">
-          <span class="small-label">{{ $t('advertisementView.currentGuestsSection.birthYear.label') }}</span>
-          <select class="mb-2" v-on:change="selectedYear = Number($event.target.value)">
+          <span class="small-label">{{
+            $t("advertisementView.currentGuestsSection.birthYear.label")
+          }}</span>
+          <select
+            class="mb-2"
+            v-on:change="selectedYear = Number($event.target.value)"
+          >
             <option v-for="(year, idx) in years" :value="year" :key="idx">
               {{ year }}
             </option>
@@ -41,7 +48,7 @@
               src="../../../assets/img/icon_plus.png"
               alt="icon_add"
               v-if="index + 1 === lines.length && lines.length < 5"
-              class="pt-3"
+              class="pt-3 cursor-pointer"
               @click="addLine"
             />
           </div>
@@ -50,6 +57,7 @@
           <img
             src="../../../assets/img/icon_minus.png"
             alt="icon_remove"
+            class="cursor-pointer"
             @click="removeLine(index)"
             v-if="index > 0"
           />
@@ -96,7 +104,7 @@ export default class GuestSection extends Vue {
     },
   ];
   years = computed(() => {
-    const year = new Date().getFullYear() -18;
+    const year = new Date().getFullYear() - 18;
     return Array.from({ length: year - 1900 }, (_value, index) => 1901 + index);
   });
   blockRemoval = computed(() => this.lines.length <= 1);
@@ -106,7 +114,7 @@ export default class GuestSection extends Vue {
       name: (this.$refs.name as any).node.value,
       birthYear: this.selectedYear,
       languages: this.lines,
-    }
+    };
   }
 
   changeValue(event, index) {
@@ -114,7 +122,7 @@ export default class GuestSection extends Vue {
   }
 
   addLine = () => {
-    this.lines.push('Polski');
+    this.lines.push("Polski");
   };
 
   removeLine(lineId) {

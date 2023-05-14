@@ -55,6 +55,69 @@ export default {
                 login: 'ZALOGUJ SIĘ',
                 hint: 'Jeśli nie posiadasz u nas konta, możesz się w prosty sposób zarejestrować',
                 register: 'ZAŁÓŻ KONTO'
+            },
+        },
+        register: {
+            register: 'Załóż konto w prosty sposób',
+            name: {
+                placeholder: 'Imię*',
+                validationMessages: {
+                    required: 'To pole jest wymagane.'
+                }
+            },
+            phoneNumber: {
+                placeholder: 'Nr tel.*',
+                validationMessages: {
+                    required: 'To pole jest wymagane.'
+                }
+            },
+            email: {
+                placeholder: 'Email*',
+                validationMessages: {
+                    required: 'To pole jest wymagane.'
+                }
+            },
+            password: {
+                placeholder: 'Hasło*',
+                validationMessages: {
+                    required: 'To pole jest wymagane.'
+                }
+            },
+            repeatPassword: {
+                placeholder: 'Powtórz hasło*',
+                validationMessages: {
+                    required: 'To pole jest wymagane.'
+                }
+            },
+            birthYear: {
+                label:  'Rok urodzenia*',
+                validationMessages: {
+                    required: 'To pole jest wymagane.'
+                }
+            },
+            gender: {
+                label: 'Płeć*',
+                validationMessages: {
+                    required: 'To pole jest wymagane.'
+                },
+                options: {
+                    woman: "Kobieta",
+                    man: "Mężczyzna"
+                },
+            },
+            languages: {
+                label: 'Języki w któryh się komunikujesz*',
+                validationMessages: {
+                    required: 'To pole jest wymagane.'
+                }
+            },
+            action: {
+                hint: 'Jeśli już posiadasz u nas konto, po prostu się zaloguj'
+            },
+            generatePassword:'Wygeneruj hasło',
+            acceptRegulation: {
+                label: 'Akceptuję regulamin',
+                link: 'kliknij tutaj, aby się z nim zapoznać'
             }
         }
     },
