@@ -55,6 +55,69 @@ export default {
                 login: '[EN] ZALOGUJ SIĘ',
                 hint: '[EN] Jeśli nie posiadasz u nas konta, możesz się w prosty sposób zarejestrować',
                 register: '[EN] ZAŁÓŻ KONTO'
+            },
+        },
+        register: {
+            register: '[EN] Załóż konto w prosty sposób',
+            name: {
+                placeholder: '[EN] Imię*',
+                validationMessages: {
+                    required: '[EN] To pole jest wymagane.'
+                }
+            },
+            phoneNumber: {
+                placeholder: '[EN] Nr tel.*',
+                validationMessages: {
+                    required: '[EN] To pole jest wymagane.'
+                }
+            },
+            email: {
+                placeholder: '[EN] Email*',
+                validationMessages: {
+                    required: '[EN] To pole jest wymagane.'
+                }
+            },
+            password: {
+                placeholder: '[EN] Hasło*',
+                validationMessages: {
+                    required: '[EN] To pole jest wymagane.'
+                }
+            },
+            repeatPassword: {
+                placeholder: '[EN] Powtórz hasło*',
+                validationMessages: {
+                    required: '[EN] To pole jest wymagane.'
+                }
+            },
+            birthYear: {
+                label: '[EN] Rok urodzenia*',
+                validationMessages: {
+                    required: '[EN] To pole jest wymagane.'
+                }
+            },
+            gender: {
+                label: '[EN] Płeć*',
+                validationMessages: {
+                    required: '[EN] To pole jest wymagane.'
+                },     
+                options: {
+                    woman: "[EN] Kobieta",
+                    man: "[EN] Mężczyzna"
+                }
+            },
+            languages: {
+                label: '[EN] Języki w któryh się komunikujesz*',
+                validationMessages: {
+                    required: '[EN] To pole jest wymagane.'
+                }
+            },
+            action: {
+                hint: '[EN] Jeśli już posiadasz u nas konto, po prostu się zaloguj'
+            },
+            generatePassword:'[EN] Wygeneruj hasło',
+            acceptRegulation: {
+                label: '[EN] Akceptuję regulamin',
+                link: '[EN] kliknij tutaj, aby się z nim zapoznać'
             }
         }
     },
