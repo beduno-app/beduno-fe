@@ -56,6 +56,69 @@ export default {
                 hint: '[UK] Jeśli nie posiadasz u nas konta, możesz się w prosty sposób zarejestrować',
                 register: '[UK] ZAŁÓŻ KONTO'
             }
+        },
+        register: {
+            register: '[UK] Załóż konto w prosty sposób',
+            name: {
+                placeholder: '[UK] Imię*',
+                validationMessages: {
+                    required: '[UK] To pole jest wymagane.'
+                }
+            },
+            phoneNumber: {
+                placeholder: '[UK] Nr tel.*',
+                validationMessages: {
+                    required: '[UK] To pole jest wymagane.'
+                }
+            },
+            email: {
+                placeholder: '[UK] Email*',
+                validationMessages: {
+                    required: '[UK] To pole jest wymagane.'
+                }
+            },
+            password: {
+                placeholder: '[UK] Hasło*',
+                validationMessages: {
+                    required: '[UK] To pole jest wymagane.'
+                }
+            },
+            repeatPassword: {
+                placeholder: '[UK] Powtórz hasło*',
+                validationMessages: {
+                    required: '[UK] To pole jest wymagane.'
+                }
+            },
+            birthYear: {
+                label: '[UK] Rok urodzenia*',
+                validationMessages: {
+                    required: '[UK] To pole jest wymagane.'
+                }
+            },
+            gender: {
+                label: '[UK] Płeć*',
+                validationMessages: {
+                    required: '[UK] To pole jest wymagane.'
+                },
+                options: {
+                    woman: "[UK] Kobieta",
+                    man: "[UK] Mężczyzna"
+                },
+            },
+            languages: {
+                label: '[UK] Języki w któryh się komunikujesz*',
+                validationMessages: {
+                    required: '[UK] To pole jest wymagane.'
+                }
+            },
+            action: {
+                hint: '[UK] Jeśli już posiadasz u nas konto, po prostu się zaloguj'
+            },
+            generatePassword:'[UK] Wygeneruj hasło',
+            acceptRegulation: {
+                label: '[UK] Akceptuję regulamin',
+                link: '[UK] kliknij tutaj, aby się z nim zapoznać'
+            }
         }
     },
     homeView: {

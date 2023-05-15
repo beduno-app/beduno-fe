@@ -3,14 +3,14 @@
     <search-input />
 
     <div class="login container-fluid">
-      <h3>{{ $t('auth.login.login') }}</h3>
+      <h3>{{ $t("auth.login.login") }}</h3>
       <div
         class="login-tile p-3 d-flex align-items-center justify-content-center"
       >
         <div
           class="p-3 login-facebook d-flex align-items-center justify-content-center cursor-pointer"
         >
-          <h6 class="mt-2 mx-2">{{ $t('auth.login.facebook') }}</h6>
+          <h6 class="mt-2 mx-2">{{ $t("auth.login.facebook") }}</h6>
           <img
             src="../assets/img/icon_fb.png"
             alt="login-by-facebook"
@@ -26,7 +26,7 @@
         <div
           class="p-3 login-google d-flex align-items-center justify-content-center cursor-pointer"
         >
-          <h6 class="mt-2 mx-2">{{ $t('auth.login.google') }}</h6>
+          <h6 class="mt-2 mx-2">{{ $t("auth.login.google") }}</h6>
           <img
             src="../assets/img/icon_google.png"
             alt="login-by-facebook"
@@ -79,7 +79,9 @@
                 </div>
               </form>
             </div>
-            <div class="pt-1 cursor-pointer">{{ $t('auth.login.forgotPassword') }}</div>
+            <div class="pt-1 cursor-pointer">
+              {{ $t("auth.login.forgotPassword") }}
+            </div>
           </div>
         </div>
       </div>
@@ -134,7 +136,9 @@
                 />
               </div>
             </div>
-            <div class="pt-1 cursor-pointer">{{ $t('auth.login.forgotPassword') }}</div>
+            <div class="pt-1 cursor-pointer">
+              {{ $t("auth.login.forgotPassword") }}
+            </div>
           </div>
         </div>
       </div>
@@ -142,16 +146,19 @@
         class="d-flex justify-content-center align-items-center login-btn mt-5 p-2"
       >
         <img src="../assets/img/icon_login_top_01.png" alt="login-buutton" />
-        <span class="mx-2">{{ $t('auth.login.action.login') }}</span>
+        <span class="mx-2">{{ $t("auth.login.action.login") }}</span>
       </div>
-      <p class="text-center mt-3" style="font-size: 1, 3rem; font-weight: 600; margin: auto">
-        {{ $t('auth.login.action.hint') }}
+      <p
+        class="text-center mt-3"
+        style="font-size: 1, 3rem; font-weight: 600; margin: auto"
+      >
+        {{ $t("auth.login.action.hint") }}
       </p>
       <div
         class="d-flex justify-content-center align-items-center register-btn mb-5 mt-3 p-2"
       >
         <img src="../assets/img/icon_login_green.png" alt="login-button" />
-        <span class="mx-2">{{ $t('auth.login.action.register') }}</span>
+        <span class="mx-2">{{ $t("auth.login.action.register") }}</span>
       </div>
     </div>
   </div>
@@ -227,7 +234,7 @@ export default class Login extends Vue {
     background: $primary-color;
   }
   .register-btn {
-    background: rgb(140,190,45);
+    background: rgb(140, 190, 45);
   }
   @media (max-width: 700px) {
     .login-inputs,

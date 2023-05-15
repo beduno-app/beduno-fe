@@ -56,6 +56,69 @@ export default {
                 hint: '[RU] Jeśli nie posiadasz u nas konta, możesz się w prosty sposób zarejestrować',
                 register: '[RU] ZAŁÓŻ KONTO'
             }
+        },
+        register: {
+            register: '[RU] Załóż konto w prosty sposób',
+            name: {
+                placeholder: '[RU] Imię*',
+                validationMessages: {
+                    required: '[RU] To pole jest wymagane.'
+                }
+            },
+            phoneNumber: {
+                placeholder: '[RU] Nr tel.*',
+                validationMessages: {
+                    required: '[RU] To pole jest wymagane.'
+                }
+            },
+            email: {
+                placeholder: '[RU] Emai*l',
+                validationMessages: {
+                    required: '[RU] To pole jest wymagane.'
+                }
+            },
+            password: {
+                placeholder: '[RU] Hasło*',
+                validationMessages: {
+                    required: '[RU] To pole jest wymagane.'
+                }
+            },
+            repeatPassword: {
+                placeholder: '[RU] Powtórz hasło*',
+                validationMessages: {
+                    required: '[RU] To pole jest wymagane.'
+                }
+            },
+            birthYear: {
+                label: '[RU] Rok urodzenia*',
+                validationMessages: {
+                    required: '[RU] To pole jest wymagane.'
+                }
+            },
+            gender: {
+                label: '[RU] Płeć*',
+                validationMessages: {
+                    required: '[RU] To pole jest wymagane.'
+                },
+                options: {
+                    woman: "[RU] Kobieta",
+                    man: "[RU] Mężczyzna"
+                }
+            },
+            languages: {
+                label: '[RU] Języki w któryh się komunikujesz*',
+                validationMessages: {
+                    required: '[RU] To pole jest wymagane.'
+                }
+            },
+            action: {
+                hint: '[RU] Jeśli już posiadasz u nas konto, po prostu się zaloguj'
+            },
+            generatePassword:'[RU] Wygeneruj hasło',
+            acceptRegulation: {
+                label: '[RU] Akceptuję regulamin',
+                link: '[RU] kliknij tutaj, aby się z nim zapoznać'
+            }
         }
     },
     homeView: {
