@@ -32,7 +32,10 @@ import { mapLanguageCodeToLanguageData } from "@/util";
   },
   computed: {
     splitLanguages() {
-      return this.languages.filter(Boolean).map(mapLanguageCodeToLanguageData);
+      return this.languages
+        .split(",")
+        .filter(Boolean)
+        .map(mapLanguageCodeToLanguageData);
     },
   },
 })
