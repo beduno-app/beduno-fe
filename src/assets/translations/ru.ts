@@ -366,6 +366,18 @@ export default {
         currentTenants: '[RU] Aktualni lokatorzy:',
         createAd: '[RU] Dodaj nowe ogłoszenie'
     },
+    becomeHostView: {
+        list: {
+            item1 : '[RU] Zostań Wynajmującym bez opłat',
+            item2 : '[RU] Korzystaj z wygodnej formy zarządzania swoją nieruchomością',
+            item3: '[RU] Bezpieczniej wynajmuj łóżka z gwarancja do 2000 PLN',
+            item4: '[RU] Uzyskaj bezpłatną pomoc prawną'
+        },
+        action : {
+            add: '[RU] Dodaj ogłoszenie',
+            hint: '[RU] I ciesz się bezpiecznym wynajmem'
+        }
+    },
     searchInput: {
         location: {
             label: '[RU] Lokalizacja',
