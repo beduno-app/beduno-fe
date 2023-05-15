@@ -1,6 +1,8 @@
 <template>
   <div class="row">
-    <div class="col-md-4 col">{{ $t('roomCard.tenantInfo', { name, age }) }}</div>
+    <div class="col-md-4 col">
+      {{ $t("roomCard.tenantInfo", { name, age }) }}
+    </div>
     <div class="col-md-8 col d-flex align-items-center">
       <div
         v-for="(lang, idx) in splitLanguages"
@@ -10,7 +12,7 @@
         <img
           :src="require(`../../../assets/img/${lang.icon}.png`)"
           :alt="lang.icon"
-          class="mx-1"
+          class="mx-2"
         />
         <div>{{ lang.text }}</div>
       </div>
@@ -20,7 +22,7 @@
 
 <script lang="ts" scoped>
 import { Options, Vue } from "vue-class-component";
-import { mapLanguageCodeToLanguageData } from '@/util';
+import { mapLanguageCodeToLanguageData } from "@/util";
 
 @Options({
   props: {
@@ -30,9 +32,12 @@ import { mapLanguageCodeToLanguageData } from '@/util';
   },
   computed: {
     splitLanguages() {
-      return this.languages.split(',').filter(Boolean).map(mapLanguageCodeToLanguageData);
-    }
-  }
+      return this.languages
+        .split(",")
+        .filter(Boolean)
+        .map(mapLanguageCodeToLanguageData);
+    },
+  },
 })
 export default class Tenant extends Vue {}
 </script>

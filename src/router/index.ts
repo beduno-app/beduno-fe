@@ -50,6 +50,12 @@ const routes: Array<RouteRecordRaw> = [
       import("../auth/Register.vue"),
   },
   {
+    path: "/order",
+    name: "OrderSummaryView",
+    component: () =>
+      import("../views/OrderSummaryView.vue"),
+  },
+  {
     path: "/become-host",
     name: "BecomeHost",
     component: () =>
