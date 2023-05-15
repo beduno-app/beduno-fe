@@ -55,6 +55,12 @@ const routes: Array<RouteRecordRaw> = [
     component: () =>
       import("../views/OrderSummaryView.vue"),
   },
+  {
+    path: "/become-host",
+    name: "BecomeHost",
+    component: () =>
+      import("../views/BecomeHostView.vue"),
+  },
 ];
 
 const router = createRouter({
