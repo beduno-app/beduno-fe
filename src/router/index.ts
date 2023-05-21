@@ -61,6 +61,42 @@ const routes: Array<RouteRecordRaw> = [
     component: () =>
       import("../views/BecomeHostView.vue"),
   },
+  {
+    path: "/about-us",
+    name: "AboutUs",
+    component: () =>
+      import("../views/AboutUsView.vue"),
+  },
+  {
+    path: "/media",
+    name: "Media",
+    component: () =>
+      import("../views/MediaView.vue"),
+  },
+  {
+    path: "/career",
+    name: "Carrer",
+    component: () =>
+      import("../views/CareerView.vue"),
+  },
+  {
+    path: "/contact",
+    name: "Contact",
+    component: () =>
+      import("../views/ContactView.vue"),
+  },
+  {
+    path: "/help",
+    name: "Help",
+    component: () =>
+      import("../views/HelpView.vue"),
+  },
+  {
+    path: "/blogs",
+    name: "Blogs",
+    component: () =>
+      import("../views/BlogsView.vue"),
+  },
 ];
 
 const router = createRouter({
