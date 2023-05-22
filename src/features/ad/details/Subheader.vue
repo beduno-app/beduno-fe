@@ -5,6 +5,7 @@
         icon="fa-solid fa-location-dot"
         class="location-icon mx-2"
       />
+      <!-- todo: fill with real data after DTO contains voivodenship, city and district -->
       <u>Mazowieckie </u>,<u> Warszawa </u>,<u>Bemowo</u>
     </div>
     <div class="col-lg-3 col-md-6">
@@ -24,7 +25,10 @@
 <script lang="ts" scoped>
 import { Options, Vue } from "vue-class-component";
 @Options({
-  components: {},
+  props: {
+    district: String,
+    city: String
+  }
 })
 export default class Subheader extends Vue {}
 </script>

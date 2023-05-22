@@ -75,7 +75,7 @@ const routes: Array<RouteRecordRaw> = [
   },
   {
     path: "/career",
-    name: "Carrer",
+    name: "Career",
     component: () =>
       import("../views/CareerView.vue"),
   },

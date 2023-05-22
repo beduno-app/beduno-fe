@@ -55,7 +55,7 @@ export default {
                 login: '[RU] ZALOGUJ SIĘ',
                 hint: '[RU] Jeśli nie posiadasz u nas konta, możesz się w prosty sposób zarejestrować',
                 register: '[RU] ZAŁÓŻ KONTO'
-            }
+            },
         },
         register: {
             register: '[RU] Załóż konto w prosty sposób',
@@ -72,7 +72,7 @@ export default {
                 }
             },
             email: {
-                placeholder: '[RU] Emai*l',
+                placeholder: '[RU] Email*',
                 validationMessages: {
                     required: '[RU] To pole jest wymagane.'
                 }
@@ -90,7 +90,7 @@ export default {
                 }
             },
             birthYear: {
-                label: '[RU] Rok urodzenia*',
+                label:  'Rok urodzenia*',
                 validationMessages: {
                     required: '[RU] To pole jest wymagane.'
                 }
@@ -101,9 +101,9 @@ export default {
                     required: '[RU] To pole jest wymagane.'
                 },
                 options: {
-                    woman: "[RU] Kobieta",
-                    man: "[RU] Mężczyzna"
-                }
+                    woman: "Kobieta",
+                    man: "Mężczyzna"
+                },
             },
             languages: {
                 label: '[RU] Języki w któryh się komunikujesz*',
@@ -114,7 +114,7 @@ export default {
             action: {
                 hint: '[RU] Jeśli już posiadasz u nas konto, po prostu się zaloguj'
             },
-            generatePassword:'[RU] Wygeneruj hasło',
+            generatePassword:'Wygeneruj hasło',
             acceptRegulation: {
                 label: '[RU] Akceptuję regulamin',
                 link: '[RU] kliknij tutaj, aby się z nim zapoznać'
@@ -403,4 +403,142 @@ export default {
         tenantInfo: '[RU] {name}, lat {age}',
         join: '[RU] Dołącz do pokoju'
     },
+    order: {
+        header: '[RU] Podsumowanie zamówienia:',
+        currentGuests: '[RU] Aktualnie zamieszkany przez:',
+        totalAmount: '[RU] Całkowita kwota do zapłaty: {price}{currency} ({duration} noce)',
+        host: '[RU] Gospodarz:',
+        hint: '[RU] Dokładny adres i wskazówki dojazdu do miejsca zamieszkania zostaną\nudostępnione po dokonaniu płatności.',
+        proceedToPayment: '[RU] Przejdź do płatności'
+    },
+    blog: {
+        header: '[RU] Blog i aktualności',
+        published: '[RU] Opublikowano: {date}',
+        readMore: '[RU] ...czytaj dalej',
+        feed: {
+            firstLine: '[RU] Zapraszmy do zapoznania się z najnowszymi wiadomościami o',
+            secondLine: '[RU] Zachęcamy do śledzenia tej strony, ponieważ pojawiają się tutaj ważne\nkomunikaty o funkcjonowaniu serwisu, zmianach oraz planowanych pracach\nrozwojowych. Zamieszczamy też również nasze oficjalne informacje prasowe.',
+            thirdLine: '[RU] Ponadto w niniejszym dziale regularnie publikujemy naszym klientom\n(wynajmującym i najemcom) zdobyć praktyczne informacje na temat rynku\nnieruchomości. Prosimy jednak pamiętać, że blok ma charakter nie tylko\nedukacyjny, ale także rozrywkowy. Niemniej jednak na pewno każdy\nzainteresowany tematem mieszkalnictwa znajdzie na nim coś dla siebie.',
+            title: '[RU] Co u nas słychać',
+            subtitle: '[RU] Blog i aktualności',
+            loadMore: '[RU] Wczytaj starsze wiadomości...'
+        }
+    },
+    about: {
+        header: '[RU] O nas',
+        firstLine: '[RU] to\ninnowacyjny i szybko rozwijający się serwis internetowy, niezwołocznie\nadoptujący i wykorzystujący najnowsze technologie (m.in.AI) do\nopytmalizacji świadczonych przez siebie usług. Łączymy poszukujących\nzakwaterownaia (gości) z osobami oferującymi noclegi (gospodarzami).\nZamiast tradycyjnej formuły oferowania pokojów, my stawiamy na pojedyncze\nłóżka - najbardziej opłacalne z możliwych rozwiązań z punktu widzenia\nzarówno wynajmnującego, jak i najemcy.',
+        secondLine: {
+            firstPart: '[RU] Dzięki',
+            secondPart: '[RU] szybko znajdziesz tani nocleg.'
+        },
+        thirdLine: '[RU] Potrzebujesz łóżka od zaraz, w niskiej cenie, w dobrej lokalizacji, u\nwiarygodnego wynajmnującego? Dobrze trafiłeś!',
+        fourthLine: '[RU] Nieważne czy chcesz spędzić jedną noc, czy szukasz czegoś na cały rok lub\ndłużej, u nas od razu znajdziesz takie miejsce.'
+    },
+    career: {
+        header: '[RU] Kariera',
+        firstLine: {
+            firstPart: '[RU] W',
+            secondPart: '[RU] stawiamy na ludzi. Wierzymy w ich ambicję, motywację do rozwoju oraz chęć\nposzukiwania własniej drogi zawodowej. Zapraszmy do aplikowania osoby -\npoczątkujących oraz specjalistów - które podzielają nasze wartości:\nzaangażownanie, systematyczność, stosunek do drugiej osoby.',
+        },
+        secondLine: {
+            firstPart: '[RU] Poniżej znadują się aktualne oferty pracy i opisy stanowisk, na które\nszukamy kandydatów. Nawet jeśli w danej chwili nie prowadzimy żadnej\nrekrutacji, zachęcamy do aplikowania. Jeśli czujesz, że pasujesz do\nklimatu startupowego',
+            secondPart: '[RU] , wypełnij poniższy formularz i powiedz nam coś więcej na swój temat -\nmoże okazać się, że jest nam naprawdę po drodze.'
+        },
+        thirdLine: {
+            firstPart: '[RU] Uwaga studenci i pełnoletni uczniowe szkół ponadpodstawowych. Jeśli\nposzukujecie wartościowych praktyk zawodowych, podczas których możecie\nzdobyć konkretną wiedzę, doświadczenie i nauczyć się czegoś rzeczywiście\ndobrze, zapraszamy do',
+            secondPart: '[RU] Program staży i praktyk zawodowych w naszym sartupie to doskonały\npoczątek Waszej przyszłej kariery profesjonalnej.'
+        },
+        roles: {
+            juniorDev: '[RU] Junior developer',
+            keyAccountManager: '[RU] Key account manager',
+            photo: '[RU] Fotograf'
+        }
+    },
+    contact: {
+        header: '[RU] Kontakt',
+        firstLine: '[RU] Zachęcamy do kontaktu z nami. Na większość zapytań odpowiadamy na bieżąco.\nBardziej złożone kwestie obsługujemy w ciągu maksymalnie 2 dni roboczych.',
+        secondLine: '[RU] Najszybszym sposobem dotarcia do naszego Biura Obsługi jest skorzystanie z\nponiższego formularza. W sprawie współpracy, propozycji biznesowych i\nzapytań, które bezpośrednio nie dotyczą funkcjonowaniu serwisu, uprzejmie\nprosimy o przesłanie wiadomości na adres:',
+        thirdLine: {
+            firstPart: '[RU] Dziennikarzy i przedstawicieli mediów zapraszamy do kontaktu z naszym\nbiurem prasowym: współpracy, propozycji biznesowych i zapytań, które\nbezpośrednio nie dotyczą funkcjonowaniu serwisu, uprzejmie prosimy o\nprzesłanie wiadomości na adres:',
+            secondPart: '[RU] Po wiecej informacji zapraszamy do sekcji Media.'
+        },
+        form: {
+            name: {
+                label: '[RU] Wpisz swoje imię:*',
+                placeholder: '[RU] Imię',
+                validationMessages: {
+                    required: '[RU] Imię jest wymagane.'
+                }
+            },
+            phone: {
+                label: '[RU] Nr telefonu:*',
+                placeholder: '[RU] np.: +48 000 000 000',
+                validationMessages: {
+                    required: '[RU] Numer telefonu jest wymagany.'
+                }
+            },
+            email: {
+                label: '[RU] Email:*',
+                placeholder: '[RU] np. jan{at}kowalski.com',
+                validationMessages: {
+                    required: '[RU] Email jest wymagany.',
+                    email: '[RU] Niepoprawny format adresu email.'
+                }
+            },
+            message: {
+                label: '[RU] Napisz do nas wiadomość:*',
+                placeholder: '[RU] Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.',
+                validationMessages: {
+                    required: '[RU] Wiadomość jest wymagana.'
+                }
+            },
+            hint: '[RU] Wpisanie tych informacji jest obowiązkowe*',
+            send: '[RU] Wyślij wiadomość'
+        }
+    },
+    help: {
+        header: '[RU] Pomoc (FAQ)',
+        firstLine: {
+            firstPart: '[RU] Prezentujemy tu listę najczęstszych pytań jakie zadają użytkownicy naszego\nserwisu oraz odpowiedzi, które mają im pomóc rozwiązać dany problem.\nUprzejmie prosimy o zapoznanie się z nimi zanim zwrócą sie Państwa do nas\no pomoc. Z doświadczenia wiemy, że ponad 95% problemów, które zgłaszają\nużytkownicy',
+            secondPart: '[RU] jest prosta do samodzielnego rozwiązania właśnie dzięki poniższym\nwyjaśnieniom oraz wskazówkom.'
+        },
+        howTo: '[RU] Jak to działa',
+        qna: '[RU] Pytania i odpowiedzi,',
+        questions: {
+            howToGetAccount: {
+                q: '[RU] Jak założyć konto w serwisie',
+                a: '[RU] Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book'
+            },
+            dataNeededToRegister: {
+                q: '[RU] Jakie dane muszę muszę podać przy rejestracji?',
+                a: '[RU] Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book'
+            },
+            howDoPaymentsWork: {
+                q: '[RU] Jak dokonywane są płatności na rzecz gospodarza?',
+                a: '[RU] Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book'
+            },
+            howToBeSafe: {
+                q: '[RU] W jaki sposób dbać o swoje bezpieczeństwo szukając noclegu?',
+                a: '[RU] Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book'
+            }
+        }
+    },
+    media: {
+        header: '[RU] Media',
+        firstLine: '[RU] Wszelkie zapytania od dziennikarzy, w tym chęć uzyskania wypowiedzi\neksperckiej czy przeprowadzenia wywiadu, mają dla nas charakter\npriorytetowy. Jesteśmy do Państwa dyspozycji pod adresem:',
+        secondLine: '[RU] Informujemy, że wszystkie materiały w serwisie bedOk chronione są prawami\nautorskimi i majątkowymi. W celu ich wykorzystania w publikacji prosimy o\nwcześniejszy kontakt pisemny (mailowy) i uzgodnienie szczegółów. W\nszczególności dotyczy to użycia logotypów, wykorzystania zdjęć i\nmateriałów video oraz zamieszczonych tekstów. Każde wykorzystanie tych\nmateriałów wymaga wcześniejszej autoryzacji.',
+        thirdLine: '[RU] W przypadku propozycji objęcia patronatem danego wydarzenia czy projektu,\nzakupi treści sponsorowanych (w tym reklam) oraz jakichkolwiek innych\nofert komercyjnych, prosimy o szczegółowe informacje, m.in.:',
+        details: {
+            title: '[RU] tytuł i wydawca - podmot odpowedzialny',
+            reach: '[RU] weryfikowalny zasięg',
+            contact: '[RU] dane kontaktowe (e-mail, telefon) oferenta',
+            duration: '[RU] format i czas trwania oferty',
+            benefit: '[RU] konkretyzacja świadczeń'
+        },
+        fourthLine: {
+            firstPart: '[RU] Komunikaty publikujemy w części',
+            secondPart: '[RU]  "Blog i aktualności"',
+            thirdPart: '[RU] - strona jest również oficjalnym źródłem naszych informacji prasowych.'
+        }
+    }
 };

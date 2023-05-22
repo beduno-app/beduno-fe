@@ -1,6 +1,6 @@
 <template>
   <div class="container-fluid order-summary p-4" style="max-width: 1300px">
-    <h3 class="order-summary-title pb-3">Podsumowanie zamówienia:</h3>
+    <h3 class="order-summary-title pb-3">{{ $t('order.header') }}</h3>
     <div class="row m-auto5">
       <div class="col-lg-9 col-md-12">
         <p>Łóżko w spokojnej okolicy w Warszawie</p>
@@ -18,7 +18,7 @@
           <span class="mx-2">Pokój męski,</span> <span>1 łóżko</span>
         </div>
         <div>
-          Aktualnie zamieszkany przez:
+          {{ $t('order.currentGuests') }}
           <tenant
             v-for="(guest, idx) in guests"
             :key="idx"
@@ -29,11 +29,11 @@
         </div>
 
         <div class="row my-4">
-          <h4>Całkowita kwota do zapłaty: 88zł (4 noce)</h4>
+          <h4>{{ $t('order.totalAmount', { price: '88', currency: 'zł', duration: '4' }) }}</h4>
         </div>
       </div>
       <div class="col-lg-1 col-md-12 d-none d-lg-block">
-        <div>Gospodarz:</div>
+        <div>{{ $t('order.host') }}</div>
 
         <h5 class="text-end">Sara</h5>
         <div>
@@ -41,20 +41,17 @@
             src="../assets/img/fot_waw_desktop_01.jpg"
             alt="host-image"
             style="border-radius: 50%"
-            width="100"
+            :width="100"
           />
         </div>
       </div>
     </div>
     <div class="row">
       <div class="col-lg-9 col-md-12">
-        <p class="details">
-          Dokładny adres i wskazówki dojazdu do miejsca zamieszkania zostaną
-          udostępnione po dokonaniu płatności.
-        </p>
+        <p class="details">{{ $t('order.hint') }}</p>
       </div>
       <div class="col-lg-3 col-md-12">
-        <button class="cursor-pointer">Przejdź do płatności</button>
+        <button class="cursor-pointer">{{ $t('order.proceedToPayment') }}</button>
       </div>
     </div>
   </div>
@@ -62,6 +59,8 @@
 <script lang="ts" scoped>
 import { Options, Vue } from "vue-class-component";
 import Tenant from "../features/ad/details/Tenant.vue";
+
+// todo: fill order data with real advertisement data
 @Options({
   components: {
     Tenant,
@@ -72,7 +71,7 @@ export default class OrderSummaryView extends Vue {
     {
       age: 23,
       name: "Sasza",
-      languages: ["pl", "uk"],
+      languages: "pl,uk",
     },
   ];
 }

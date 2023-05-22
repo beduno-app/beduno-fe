@@ -14,8 +14,8 @@
           <img
             src="../assets/img/icon_fb.png"
             alt="login-by-facebook"
-            width="30"
-            height="30"
+            :width="30"
+            :height="30"
           />
         </div>
       </div>
@@ -30,8 +30,8 @@
           <img
             src="../assets/img/icon_google.png"
             alt="login-by-facebook"
-            width="30"
-            height="30"
+            :width="30"
+            :height="30"
           />
         </div>
       </div>
@@ -150,7 +150,7 @@
       </div>
       <p
         class="text-center mt-3"
-        style="font-size: 1, 3rem; font-weight: 600; margin: auto"
+        style="font-size: 1rem; font-weight: 600; margin: auto"
       >
         {{ $t("auth.login.action.hint") }}
       </p>
