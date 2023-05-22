@@ -55,18 +55,18 @@ export default {
                 login: '[DE] ZALOGUJ SIĘ',
                 hint: '[DE] Jeśli nie posiadasz u nas konta, możesz się w prosty sposób zarejestrować',
                 register: '[DE] ZAŁÓŻ KONTO'
-            }
+            },
         },
         register: {
             register: '[DE] Załóż konto w prosty sposób',
             name: {
-                placeholder: '[DE] Imię',
+                placeholder: '[DE] Imię*',
                 validationMessages: {
                     required: '[DE] To pole jest wymagane.'
                 }
             },
             phoneNumber: {
-                placeholder: '[DE] Nr tel.',
+                placeholder: '[DE] Nr tel.*',
                 validationMessages: {
                     required: '[DE] To pole jest wymagane.'
                 }
@@ -90,7 +90,7 @@ export default {
                 }
             },
             birthYear: {
-                label: '[DE] Rok urodzenia*',
+                label:  'Rok urodzenia*',
                 validationMessages: {
                     required: '[DE] To pole jest wymagane.'
                 }
@@ -101,8 +101,8 @@ export default {
                     required: '[DE] To pole jest wymagane.'
                 },
                 options: {
-                    woman: "[DE]Kobieta",
-                    man: "[DE]Mężczyzna"
+                    woman: "Kobieta",
+                    man: "Mężczyzna"
                 },
             },
             languages: {
@@ -112,15 +112,14 @@ export default {
                 }
             },
             action: {
-                hint:  '[DE] Jeśli już posiadasz u nas konto, po prostu się zaloguj'
+                hint: '[DE] Jeśli już posiadasz u nas konto, po prostu się zaloguj'
             },
-            generatePassword:'[DE] Wygeneruj hasło',
+            generatePassword:'Wygeneruj hasło',
             acceptRegulation: {
                 label: '[DE] Akceptuję regulamin',
                 link: '[DE] kliknij tutaj, aby się z nim zapoznać'
             }
-        },
-        
+        }
     },
     homeView: {
         title: {
@@ -404,4 +403,142 @@ export default {
         tenantInfo: '[DE] {name}, lat {age}',
         join: '[DE] Dołącz do pokoju'
     },
+    order: {
+        header: '[DE] Podsumowanie zamówienia:',
+        currentGuests: '[DE] Aktualnie zamieszkany przez:',
+        totalAmount: '[DE] Całkowita kwota do zapłaty: {price}{currency} ({duration} noce)',
+        host: '[DE] Gospodarz:',
+        hint: '[DE] Dokładny adres i wskazówki dojazdu do miejsca zamieszkania zostaną\nudostępnione po dokonaniu płatności.',
+        proceedToPayment: '[DE] Przejdź do płatności'
+    },
+    blog: {
+        header: '[DE] Blog i aktualności',
+        published: '[DE] Opublikowano: {date}',
+        readMore: '[DE] ...czytaj dalej',
+        feed: {
+            firstLine: '[DE] Zapraszmy do zapoznania się z najnowszymi wiadomościami o',
+            secondLine: '[DE] Zachęcamy do śledzenia tej strony, ponieważ pojawiają się tutaj ważne\nkomunikaty o funkcjonowaniu serwisu, zmianach oraz planowanych pracach\nrozwojowych. Zamieszczamy też również nasze oficjalne informacje prasowe.',
+            thirdLine: '[DE] Ponadto w niniejszym dziale regularnie publikujemy naszym klientom\n(wynajmującym i najemcom) zdobyć praktyczne informacje na temat rynku\nnieruchomości. Prosimy jednak pamiętać, że blok ma charakter nie tylko\nedukacyjny, ale także rozrywkowy. Niemniej jednak na pewno każdy\nzainteresowany tematem mieszkalnictwa znajdzie na nim coś dla siebie.',
+            title: '[DE] Co u nas słychać',
+            subtitle: '[DE] Blog i aktualności',
+            loadMore: '[DE] Wczytaj starsze wiadomości...'
+        }
+    },
+    about: {
+        header: '[DE] O nas',
+        firstLine: '[DE] to\ninnowacyjny i szybko rozwijający się serwis internetowy, niezwołocznie\nadoptujący i wykorzystujący najnowsze technologie (m.in.AI) do\nopytmalizacji świadczonych przez siebie usług. Łączymy poszukujących\nzakwaterownaia (gości) z osobami oferującymi noclegi (gospodarzami).\nZamiast tradycyjnej formuły oferowania pokojów, my stawiamy na pojedyncze\nłóżka - najbardziej opłacalne z możliwych rozwiązań z punktu widzenia\nzarówno wynajmnującego, jak i najemcy.',
+        secondLine: {
+            firstPart: '[DE] Dzięki',
+            secondPart: '[DE] szybko znajdziesz tani nocleg.'
+        },
+        thirdLine: '[DE] Potrzebujesz łóżka od zaraz, w niskiej cenie, w dobrej lokalizacji, u\nwiarygodnego wynajmnującego? Dobrze trafiłeś!',
+        fourthLine: '[DE] Nieważne czy chcesz spędzić jedną noc, czy szukasz czegoś na cały rok lub\ndłużej, u nas od razu znajdziesz takie miejsce.'
+    },
+    career: {
+        header: '[DE] Kariera',
+        firstLine: {
+            firstPart: '[DE] W',
+            secondPart: '[DE] stawiamy na ludzi. Wierzymy w ich ambicję, motywację do rozwoju oraz chęć\nposzukiwania własniej drogi zawodowej. Zapraszmy do aplikowania osoby -\npoczątkujących oraz specjalistów - które podzielają nasze wartości:\nzaangażownanie, systematyczność, stosunek do drugiej osoby.',
+        },
+        secondLine: {
+            firstPart: '[DE] Poniżej znadują się aktualne oferty pracy i opisy stanowisk, na które\nszukamy kandydatów. Nawet jeśli w danej chwili nie prowadzimy żadnej\nrekrutacji, zachęcamy do aplikowania. Jeśli czujesz, że pasujesz do\nklimatu startupowego',
+            secondPart: '[DE] , wypełnij poniższy formularz i powiedz nam coś więcej na swój temat -\nmoże okazać się, że jest nam naprawdę po drodze.'
+        },
+        thirdLine: {
+            firstPart: '[DE] Uwaga studenci i pełnoletni uczniowe szkół ponadpodstawowych. Jeśli\nposzukujecie wartościowych praktyk zawodowych, podczas których możecie\nzdobyć konkretną wiedzę, doświadczenie i nauczyć się czegoś rzeczywiście\ndobrze, zapraszamy do',
+            secondPart: '[DE] Program staży i praktyk zawodowych w naszym sartupie to doskonały\npoczątek Waszej przyszłej kariery profesjonalnej.'
+        },
+        roles: {
+            juniorDev: '[DE] Junior developer',
+            keyAccountManager: '[DE] Key account manager',
+            photo: '[DE] Fotograf'
+        }
+    },
+    contact: {
+        header: '[DE] Kontakt',
+        firstLine: '[DE] Zachęcamy do kontaktu z nami. Na większość zapytań odpowiadamy na bieżąco.\nBardziej złożone kwestie obsługujemy w ciągu maksymalnie 2 dni roboczych.',
+        secondLine: '[DE] Najszybszym sposobem dotarcia do naszego Biura Obsługi jest skorzystanie z\nponiższego formularza. W sprawie współpracy, propozycji biznesowych i\nzapytań, które bezpośrednio nie dotyczą funkcjonowaniu serwisu, uprzejmie\nprosimy o przesłanie wiadomości na adres:',
+        thirdLine: {
+            firstPart: '[DE] Dziennikarzy i przedstawicieli mediów zapraszamy do kontaktu z naszym\nbiurem prasowym: współpracy, propozycji biznesowych i zapytań, które\nbezpośrednio nie dotyczą funkcjonowaniu serwisu, uprzejmie prosimy o\nprzesłanie wiadomości na adres:',
+            secondPart: '[DE] Po wiecej informacji zapraszamy do sekcji Media.'
+        },
+        form: {
+            name: {
+                label: '[DE] Wpisz swoje imię:*',
+                placeholder: '[DE] Imię',
+                validationMessages: {
+                    required: '[DE] Imię jest wymagane.'
+                }
+            },
+            phone: {
+                label: '[DE] Nr telefonu:*',
+                placeholder: '[DE] np.: +48 000 000 000',
+                validationMessages: {
+                    required: '[DE] Numer telefonu jest wymagany.'
+                }
+            },
+            email: {
+                label: '[DE] Email:*',
+                placeholder: '[DE] np. jan{at}kowalski.com',
+                validationMessages: {
+                    required: '[DE] Email jest wymagany.',
+                    email: '[DE] Niepoprawny format adresu email.'
+                }
+            },
+            message: {
+                label: '[DE] Napisz do nas wiadomość:*',
+                placeholder: '[DE] Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.',
+                validationMessages: {
+                    required: '[DE] Wiadomość jest wymagana.'
+                }
+            },
+            hint: '[DE] Wpisanie tych informacji jest obowiązkowe*',
+            send: '[DE] Wyślij wiadomość'
+        }
+    },
+    help: {
+        header: '[DE] Pomoc (FAQ)',
+        firstLine: {
+            firstPart: '[DE] Prezentujemy tu listę najczęstszych pytań jakie zadają użytkownicy naszego\nserwisu oraz odpowiedzi, które mają im pomóc rozwiązać dany problem.\nUprzejmie prosimy o zapoznanie się z nimi zanim zwrócą sie Państwa do nas\no pomoc. Z doświadczenia wiemy, że ponad 95% problemów, które zgłaszają\nużytkownicy',
+            secondPart: '[DE] jest prosta do samodzielnego rozwiązania właśnie dzięki poniższym\nwyjaśnieniom oraz wskazówkom.'
+        },
+        howTo: '[DE] Jak to działa',
+        qna: '[DE] Pytania i odpowiedzi,',
+        questions: {
+            howToGetAccount: {
+                q: '[DE] Jak założyć konto w serwisie',
+                a: '[DE] Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book'
+            },
+            dataNeededToRegister: {
+                q: '[DE] Jakie dane muszę muszę podać przy rejestracji?',
+                a: '[DE] Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book'
+            },
+            howDoPaymentsWork: {
+                q: '[DE] Jak dokonywane są płatności na rzecz gospodarza?',
+                a: '[DE] Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book'
+            },
+            howToBeSafe: {
+                q: '[DE] W jaki sposób dbać o swoje bezpieczeństwo szukając noclegu?',
+                a: '[DE] Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book'
+            }
+        }
+    },
+    media: {
+        header: '[DE] Media',
+        firstLine: '[DE] Wszelkie zapytania od dziennikarzy, w tym chęć uzyskania wypowiedzi\neksperckiej czy przeprowadzenia wywiadu, mają dla nas charakter\npriorytetowy. Jesteśmy do Państwa dyspozycji pod adresem:',
+        secondLine: '[DE] Informujemy, że wszystkie materiały w serwisie bedOk chronione są prawami\nautorskimi i majątkowymi. W celu ich wykorzystania w publikacji prosimy o\nwcześniejszy kontakt pisemny (mailowy) i uzgodnienie szczegółów. W\nszczególności dotyczy to użycia logotypów, wykorzystania zdjęć i\nmateriałów video oraz zamieszczonych tekstów. Każde wykorzystanie tych\nmateriałów wymaga wcześniejszej autoryzacji.',
+        thirdLine: '[DE] W przypadku propozycji objęcia patronatem danego wydarzenia czy projektu,\nzakupi treści sponsorowanych (w tym reklam) oraz jakichkolwiek innych\nofert komercyjnych, prosimy o szczegółowe informacje, m.in.:',
+        details: {
+            title: '[DE] tytuł i wydawca - podmot odpowedzialny',
+            reach: '[DE] weryfikowalny zasięg',
+            contact: '[DE] dane kontaktowe (e-mail, telefon) oferenta',
+            duration: '[DE] format i czas trwania oferty',
+            benefit: '[DE] konkretyzacja świadczeń'
+        },
+        fourthLine: {
+            firstPart: '[DE] Komunikaty publikujemy w części',
+            secondPart: '[DE]  "Blog i aktualności"',
+            thirdPart: '[DE] - strona jest również oficjalnym źródłem naszych informacji prasowych.'
+        }
+    }
 };

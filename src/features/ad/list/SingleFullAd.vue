@@ -52,7 +52,8 @@
                   src="../../../assets/img/icon_exclamation_grey.png"
                   alt="icon-exclamation-grey"
                   class="pe-2"
-                  width="34" height="27"
+                  :width="34"
+                  :height="27"
                 />
 
                 <div class="col-lg-7 col-md-12 col">

@@ -1,27 +1,18 @@
 <template>
   <div style="max-width: 1200px" class="m-auto py-5 container-fluid">
-    <h2 class="pb-3">Blog i aktualności</h2>
+    <h2 class="pb-3">{{ $t('blog.header') }}</h2>
     <div v-if="!selectedBlog">
       <p>
-        Zapraszamy do zapoznania się z najnowszymi wiadomościami o
+        {{ $t('blog.feed.firstLine') }}
         <img
           src="../assets/img/logo_top.png"
-          height="24"
+          :height="24"
           alt="logo_bedok"
           class="px-2 pb-1"
-        />. Zachęcamy do śledzenia tej strony, ponieważ pojawiają się tutaj
-        ważne komunikaty o funkcjonowaniu serwisu, zmianach oraz planowanych
-        pracach rozwojowych. Zamieszczamy też również nasze oficjalne informacje
-        prasowe.
+        />. {{ $t('blog.feed.secondLine') }}
       </p>
-      <p>
-        Ponadto w niniejszym dziale regularnie publikujemy naszym klientom
-        (wynajmującym i najemcom) zdobyć praktyczne informacje na temat rynku
-        nieruchomości. Prosimy jednak pamiętać, że blok ma charakter nie tylko
-        edukacyjny, ale także rozrywkowy. Niemniej jednak na pewno każdy
-        zainteresowany tematem mieszkalnictwa znajdzie na nim coś dla siebie.
-      </p>
-      <h1 class="py-4 text-green">Co u nas słychać</h1>
+      <p>{{ $t('blog.feed.thirdLine') }}</p>
+      <h1 class="py-4 text-green">{{ $t('blog.feed.title') }}</h1>
     </div>
     <div class="row">
       <div
@@ -40,9 +31,9 @@
       v-if="!selectedBlog"
       class="text-center py-4"
       style="cursor: pointer; font-size: 1.3rem"
-      @click="loadMoreBlogs"
+      @click="loadMorePosts"
     >
-      Wczytaj starsze wiadomości...
+      {{ $t('blog.feed.loadMore') }}
     </div>
   </div>
 </template>
@@ -114,6 +105,10 @@ export default class BlogView extends Vue {
       date: "2023-05-30",
     },
   ];
+  
+  loadMorePosts() {
+    console.log('loadMorePosts');
+  }
 }
 </script>
 <style lang="scss" scoped>

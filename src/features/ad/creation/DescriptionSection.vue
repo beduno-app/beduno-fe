@@ -107,9 +107,7 @@ Każdy gość jest mile widziany, zapraszmy.</textarea
               :style="room.key === 'family' ? 'width: 45px' : 'width: 30px'"
             />
 
-            <label class="form-check-label" for="room.for"
-              >{{ room.content }}
-            </label>
+            <label class="form-check-label" for="room.for">{{ room.content }}</label>
           </div>
         </div>
       </div>

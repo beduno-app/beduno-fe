@@ -28,7 +28,7 @@ import { mapLanguageCodeToLanguageData } from "@/util";
   props: {
     name: String,
     age: Number,
-    languages: Array,
+    languages: String,
   },
   computed: {
     splitLanguages() {

@@ -180,7 +180,7 @@
                         style="font-size: 14px; width: 150px"
                       >
                         <option
-                          :value="languageOptions.option"
+                          :value="option"
                           v-for="(option, idx) in languageOptions"
                           :key="idx"
                         >
@@ -217,7 +217,6 @@
               class="form-check-input"
               id="exampleRadios1"
               type="checkbox"
-              checked
             />
             <span class="form-check-sign"></span>
             {{ $t("auth.register.acceptRegulation.label") }}
@@ -237,7 +236,7 @@
     </div>
     <p
       class="text-center mt-3"
-      style="font-size: 1, 3rem; font-weight: 600; margin: auto"
+      style="font-size: 1rem; font-weight: 600; margin: auto"
     >
       {{ $t("auth.register.action.hint") }}
     </p>
@@ -299,6 +298,11 @@ export default class Login extends Vue {
     return Array.from({ length: year - 1900 }, (_value, index) => 1901 + index);
   });
   blockRemoval = computed(() => this.lines.length <= 1);
+
+  submitForm() {
+    console.log('submit');
+  }
+
   changeValue(event, index) {
     this.lines[index] = event.target.value;
   }
@@ -334,7 +338,6 @@ export default class Login extends Vue {
   select {
     border-radius: 10px;
     border: 1px solid $dark-gray;
-    width: 80px;
     height: 60px;
     width: 100%;
     font-size: 0.8rem;
