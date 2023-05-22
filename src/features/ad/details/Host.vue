@@ -11,9 +11,9 @@
         <div class="col-md-6 col">
           <img
             src="../../../assets/img/fot_lodz_desktop_01.jpg"
-            alt=""
-            width="80"
-            height="80"
+            alt="host photo"
+            :width="80"
+            :height="80"
             style="border-radius: 100%"
           />
         </div>

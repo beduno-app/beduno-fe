@@ -4,15 +4,15 @@
       <div class="container">
         <button class="btn-landlord">
           <span class="mx-4">{{ $t('footer.callToAction') }}</span>
-          <img width="30" src="../assets/img/dot_orange_big.png" />
+          <img :width="30" src="../assets/img/dot_orange_big.png" alt="big orange dot" />
         </button>
         <b-row>
           <b-col class="col-sm-4 col">
             <div class="d-flex">
               <img
                 class="dot-big"
-                width="20"
-                height="20"
+                :width="20"
+                :height="20"
                 src="../assets/img/dot_green.png"
                 alt="img-square"
               />
@@ -45,8 +45,8 @@
             <div class="d-flex">
               <img
                 class="dot-big"
-                width="20"
-                height="20"
+                :width="20"
+                :height="20"
                 src="../assets/img/dot_orange.png"
                 alt="img-square"
               />

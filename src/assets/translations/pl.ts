@@ -403,4 +403,142 @@ export default {
         tenantInfo: '{name}, lat {age}',
         join: 'Dołącz do pokoju'
     },
+    order: {
+        header: 'Podsumowanie zamówienia:',
+        currentGuests: 'Aktualnie zamieszkany przez:',
+        totalAmount: 'Całkowita kwota do zapłaty: {price}{currency} ({duration} noce)',
+        host: 'Gospodarz:',
+        hint: 'Dokładny adres i wskazówki dojazdu do miejsca zamieszkania zostaną\nudostępnione po dokonaniu płatności.',
+        proceedToPayment: 'Przejdź do płatności'
+    },
+    blog: {
+        header: 'Blog i aktualności',
+        published: 'Opublikowano: {date}',
+        readMore: '...czytaj dalej',
+        feed: {
+            firstLine: 'Zapraszmy do zapoznania się z najnowszymi wiadomościami o',
+            secondLine: 'Zachęcamy do śledzenia tej strony, ponieważ pojawiają się tutaj ważne\nkomunikaty o funkcjonowaniu serwisu, zmianach oraz planowanych pracach\nrozwojowych. Zamieszczamy też również nasze oficjalne informacje prasowe.',
+            thirdLine: 'Ponadto w niniejszym dziale regularnie publikujemy naszym klientom\n(wynajmującym i najemcom) zdobyć praktyczne informacje na temat rynku\nnieruchomości. Prosimy jednak pamiętać, że blok ma charakter nie tylko\nedukacyjny, ale także rozrywkowy. Niemniej jednak na pewno każdy\nzainteresowany tematem mieszkalnictwa znajdzie na nim coś dla siebie.',
+            title: 'Co u nas słychać',
+            subtitle: 'Blog i aktualności',
+            loadMore: 'Wczytaj starsze wiadomości...'
+        }
+    },
+    about: {
+        header: 'O nas',
+        firstLine: 'to\ninnowacyjny i szybko rozwijający się serwis internetowy, niezwołocznie\nadoptujący i wykorzystujący najnowsze technologie (m.in.AI) do\nopytmalizacji świadczonych przez siebie usług. Łączymy poszukujących\nzakwaterownaia (gości) z osobami oferującymi noclegi (gospodarzami).\nZamiast tradycyjnej formuły oferowania pokojów, my stawiamy na pojedyncze\nłóżka - najbardziej opłacalne z możliwych rozwiązań z punktu widzenia\nzarówno wynajmnującego, jak i najemcy.',
+        secondLine: {
+            firstPart: 'Dzięki',
+            secondPart: 'szybko znajdziesz tani nocleg.'
+        },
+        thirdLine: 'Potrzebujesz łóżka od zaraz, w niskiej cenie, w dobrej lokalizacji, u\nwiarygodnego wynajmnującego? Dobrze trafiłeś!',
+        fourthLine: 'Nieważne czy chcesz spędzić jedną noc, czy szukasz czegoś na cały rok lub\ndłużej, u nas od razu znajdziesz takie miejsce.'
+    },
+    career: {
+        header: 'Kariera',
+        firstLine: {
+            firstPart: 'W',
+            secondPart: 'stawiamy na ludzi. Wierzymy w ich ambicję, motywację do rozwoju oraz chęć\nposzukiwania własniej drogi zawodowej. Zapraszmy do aplikowania osoby -\npoczątkujących oraz specjalistów - które podzielają nasze wartości:\nzaangażownanie, systematyczność, stosunek do drugiej osoby.',
+        },
+        secondLine: {
+            firstPart: 'Poniżej znadują się aktualne oferty pracy i opisy stanowisk, na które\nszukamy kandydatów. Nawet jeśli w danej chwili nie prowadzimy żadnej\nrekrutacji, zachęcamy do aplikowania. Jeśli czujesz, że pasujesz do\nklimatu startupowego',
+            secondPart: ', wypełnij poniższy formularz i powiedz nam coś więcej na swój temat -\nmoże okazać się, że jest nam naprawdę po drodze.'
+        },
+        thirdLine: {
+            firstPart: 'Uwaga studenci i pełnoletni uczniowe szkół ponadpodstawowych. Jeśli\nposzukujecie wartościowych praktyk zawodowych, podczas których możecie\nzdobyć konkretną wiedzę, doświadczenie i nauczyć się czegoś rzeczywiście\ndobrze, zapraszamy do',
+            secondPart: 'Program staży i praktyk zawodowych w naszym sartupie to doskonały\npoczątek Waszej przyszłej kariery profesjonalnej.'
+        },
+        roles: {
+            juniorDev: 'Junior developer',
+            keyAccountManager: 'Key account manager',
+            photo: 'Fotograf'
+        }
+    },
+    contact: {
+        header: 'Kontakt',
+        firstLine: 'Zachęcamy do kontaktu z nami. Na większość zapytań odpowiadamy na bieżąco.\nBardziej złożone kwestie obsługujemy w ciągu maksymalnie 2 dni roboczych.',
+        secondLine: 'Najszybszym sposobem dotarcia do naszego Biura Obsługi jest skorzystanie z\nponiższego formularza. W sprawie współpracy, propozycji biznesowych i\nzapytań, które bezpośrednio nie dotyczą funkcjonowaniu serwisu, uprzejmie\nprosimy o przesłanie wiadomości na adres:',
+        thirdLine: {
+            firstPart: 'Dziennikarzy i przedstawicieli mediów zapraszamy do kontaktu z naszym\nbiurem prasowym: współpracy, propozycji biznesowych i zapytań, które\nbezpośrednio nie dotyczą funkcjonowaniu serwisu, uprzejmie prosimy o\nprzesłanie wiadomości na adres:',
+            secondPart: 'Po wiecej informacji zapraszamy do sekcji Media.'
+        },
+        form: {
+            name: {
+                label: 'Wpisz swoje imię:*',
+                placeholder: 'Imię',
+                validationMessages: {
+                    required: 'Imię jest wymagane.'
+                }
+            },
+            phone: {
+                label: 'Nr telefonu:*',
+                placeholder: 'np.: +48 000 000 000',
+                validationMessages: {
+                    required: 'Numer telefonu jest wymagany.'
+                }
+            },
+            email: {
+                label: 'Email:*',
+                placeholder: 'np. jan{at}kowalski.com',
+                validationMessages: {
+                    required: 'Email jest wymagany.',
+                    email: 'Niepoprawny format adresu email.'
+                }
+            },
+            message: {
+                label: 'Napisz do nas wiadomość:*',
+                placeholder: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.',
+                validationMessages: {
+                    required: 'Wiadomość jest wymagana.'
+                }
+            },
+            hint: 'Wpisanie tych informacji jest obowiązkowe*',
+            send: 'Wyślij wiadomość'
+        }
+    },
+    help: {
+        header: 'Pomoc (FAQ)',
+        firstLine: {
+            firstPart: 'Prezentujemy tu listę najczęstszych pytań jakie zadają użytkownicy naszego\nserwisu oraz odpowiedzi, które mają im pomóc rozwiązać dany problem.\nUprzejmie prosimy o zapoznanie się z nimi zanim zwrócą sie Państwa do nas\no pomoc. Z doświadczenia wiemy, że ponad 95% problemów, które zgłaszają\nużytkownicy',
+            secondPart: 'jest prosta do samodzielnego rozwiązania właśnie dzięki poniższym\nwyjaśnieniom oraz wskazówkom.'
+        },
+        howTo: 'Jak to działa',
+        qna: 'Pytania i odpowiedzi,',
+        questions: {
+            howToGetAccount: {
+                q: 'Jak założyć konto w serwisie',
+                a: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book'
+            },
+            dataNeededToRegister: {
+                q: 'Jakie dane muszę muszę podać przy rejestracji?',
+                a: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book'
+            },
+            howDoPaymentsWork: {
+                q: 'Jak dokonywane są płatności na rzecz gospodarza?',
+                a: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book'
+            },
+            howToBeSafe: {
+                q: 'W jaki sposób dbać o swoje bezpieczeństwo szukając noclegu?',
+                a: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book'
+            }
+        }
+    },
+    media: {
+        header: 'Media',
+        firstLine: 'Wszelkie zapytania od dziennikarzy, w tym chęć uzyskania wypowiedzi\neksperckiej czy przeprowadzenia wywiadu, mają dla nas charakter\npriorytetowy. Jesteśmy do Państwa dyspozycji pod adresem:',
+        secondLine: 'Informujemy, że wszystkie materiały w serwisie bedOk chronione są prawami\nautorskimi i majątkowymi. W celu ich wykorzystania w publikacji prosimy o\nwcześniejszy kontakt pisemny (mailowy) i uzgodnienie szczegółów. W\nszczególności dotyczy to użycia logotypów, wykorzystania zdjęć i\nmateriałów video oraz zamieszczonych tekstów. Każde wykorzystanie tych\nmateriałów wymaga wcześniejszej autoryzacji.',
+        thirdLine: 'W przypadku propozycji objęcia patronatem danego wydarzenia czy projektu,\nzakupi treści sponsorowanych (w tym reklam) oraz jakichkolwiek innych\nofert komercyjnych, prosimy o szczegółowe informacje, m.in.:',
+        details: {
+            title: 'tytuł i wydawca - podmot odpowedzialny',
+            reach: 'weryfikowalny zasięg',
+            contact: 'dane kontaktowe (e-mail, telefon) oferenta',
+            duration: 'format i czas trwania oferty',
+            benefit: 'konkretyzacja świadczeń'
+        },
+        fourthLine: {
+            firstPart: 'Komunikaty publikujemy w części',
+            secondPart: ' "Blog i aktualności"',
+            thirdPart: '- strona jest również oficjalnym źródłem naszych informacji prasowych.'
+        }
+    }
 };

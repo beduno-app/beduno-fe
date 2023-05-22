@@ -1,6 +1,6 @@
 <template>
   <h5>{{ blog.title }}</h5>
-  <p class="text-grey">Opublikowano: {{ blog.date }}</p>
+  <p class="text-grey">{{ $t("blog.published", { date: blog.date }) }}</p>
   <div>
     <img
       class="blog-img"
@@ -17,7 +17,7 @@
         style="font-weight: 600; cursor: pointer"
         @click="openBlog"
       >
-        {{ showFullDescription ? "" : "...czytaj dalej" }}
+        {{ showFullDescription ? "" : $t("blog.readMore") }}
       </span>
     </div>
   </div>

@@ -14,26 +14,26 @@
         </div>
         <div class="display-flexalign-items-center btn-text-orange p-2">
           <div class="px-2">{{ $t('header.callToAction') }}</div>
-          <img height="20" src="../assets/img/icon_money_bag.png" />
+          <img :height="20" src="../assets/img/icon_money_bag.png" alt="money bag icon" />
         </div>
       </div>
       <div class="align-items-center justify-content-sm-around desktop-content">
         <div class="download-app mx-4 align-items-center">
           <div class="text-end px-2">
             {{ $t('header.download.firstLine.beforeLogo') }}
-            <img width="50" src="../assets/img/logo_bedOK_01_OK.png" />&nbsp;{{ $t('header.download.firstLine.afterLogo') }}
+            <img :width="50" src="../assets/img/logo_bedOK_01_OK.png" alt="bedok logo" />&nbsp;{{ $t('header.download.firstLine.afterLogo') }}
             {{ $t('header.download.secondLine') }}
           </div>
           <img
             class="img-download"
-            height="40"
+            :height="40"
             src="../assets/img/download.png"
+            alt="download icon"
           />
         </div>
 
         <b-dropdown :text="selectedLocale ? selectedLocale.text : 'Polski'" class="mx-4">
           <b-dropdown-item
-            :disabled="option.disabled"
             @click="handleLanguageChange(option)"
             v-for="option in languageOptions"
             :key="option.value"
@@ -41,8 +41,9 @@
             <div>
               {{ option.text }}
               <img
-                width="15"
+                :width="15"
                 :src="require(`../assets/img/${option.src}.png`)"
+                :alt="'flag of ' + option.text"
               />
             </div>
           </b-dropdown-item>
@@ -50,8 +51,7 @@
 
         <b-dropdown :text="selected ? selected.text : 'PLN'" class="mx-4">
           <b-dropdown-item
-            :disabled="option.disabled"
-            @click="select(option)"
+            @click="handleCurrencyChange(option)"
             v-for="option in currencyOptions"
             :key="option.value"
           >
@@ -70,7 +70,7 @@
         </button>
       </div>
       <div class="flex-column align-items-center icon-login">
-        <img src="../assets/img/icon_login_top_01.png" />
+        <img src="../assets/img/icon_login_top_01.png" alt="login icon" />
         <span>{{ $t('header.login') }}</span>
       </div>
     </div>
@@ -135,6 +135,10 @@ export default class Header extends Vue {
   handleLanguageChange(selectedLocale) {
     this.$i18n.locale = selectedLocale.languageCode;
     this.selectedLocale = selectedLocale;
+  }
+
+  handleCurrencyChange(selectedCurrency) {
+    console.log(selectedCurrency);
   }
 
   navigateToHome() {
