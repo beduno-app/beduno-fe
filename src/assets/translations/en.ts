@@ -90,7 +90,7 @@ export default {
                 }
             },
             birthYear: {
-                label: '[EN] Rok urodzenia*',
+                label:  'Rok urodzenia*',
                 validationMessages: {
                     required: '[EN] To pole jest wymagane.'
                 }
@@ -99,11 +99,11 @@ export default {
                 label: '[EN] Płeć*',
                 validationMessages: {
                     required: '[EN] To pole jest wymagane.'
-                },     
+                },
                 options: {
-                    woman: "[EN] Kobieta",
-                    man: "[EN] Mężczyzna"
-                }
+                    woman: "Kobieta",
+                    man: "Mężczyzna"
+                },
             },
             languages: {
                 label: '[EN] Języki w któryh się komunikujesz*',
@@ -114,7 +114,7 @@ export default {
             action: {
                 hint: '[EN] Jeśli już posiadasz u nas konto, po prostu się zaloguj'
             },
-            generatePassword:'[EN] Wygeneruj hasło',
+            generatePassword:'Wygeneruj hasło',
             acceptRegulation: {
                 label: '[EN] Akceptuję regulamin',
                 link: '[EN] kliknij tutaj, aby się z nim zapoznać'
@@ -403,4 +403,142 @@ export default {
         tenantInfo: '[EN] {name}, lat {age}',
         join: '[EN] Dołącz do pokoju'
     },
+    order: {
+        header: '[EN] Podsumowanie zamówienia:',
+        currentGuests: '[EN] Aktualnie zamieszkany przez:',
+        totalAmount: '[EN] Całkowita kwota do zapłaty: {price}{currency} ({duration} noce)',
+        host: '[EN] Gospodarz:',
+        hint: '[EN] Dokładny adres i wskazówki dojazdu do miejsca zamieszkania zostaną\nudostępnione po dokonaniu płatności.',
+        proceedToPayment: '[EN] Przejdź do płatności'
+    },
+    blog: {
+        header: '[EN] Blog i aktualności',
+        published: '[EN] Opublikowano: {date}',
+        readMore: '[EN] ...czytaj dalej',
+        feed: {
+            firstLine: '[EN] Zapraszmy do zapoznania się z najnowszymi wiadomościami o',
+            secondLine: '[EN] Zachęcamy do śledzenia tej strony, ponieważ pojawiają się tutaj ważne\nkomunikaty o funkcjonowaniu serwisu, zmianach oraz planowanych pracach\nrozwojowych. Zamieszczamy też również nasze oficjalne informacje prasowe.',
+            thirdLine: '[EN] Ponadto w niniejszym dziale regularnie publikujemy naszym klientom\n(wynajmującym i najemcom) zdobyć praktyczne informacje na temat rynku\nnieruchomości. Prosimy jednak pamiętać, że blok ma charakter nie tylko\nedukacyjny, ale także rozrywkowy. Niemniej jednak na pewno każdy\nzainteresowany tematem mieszkalnictwa znajdzie na nim coś dla siebie.',
+            title: '[EN] Co u nas słychać',
+            subtitle: '[EN] Blog i aktualności',
+            loadMore: '[EN] Wczytaj starsze wiadomości...'
+        }
+    },
+    about: {
+        header: '[EN] O nas',
+        firstLine: '[EN] to\ninnowacyjny i szybko rozwijający się serwis internetowy, niezwołocznie\nadoptujący i wykorzystujący najnowsze technologie (m.in.AI) do\nopytmalizacji świadczonych przez siebie usług. Łączymy poszukujących\nzakwaterownaia (gości) z osobami oferującymi noclegi (gospodarzami).\nZamiast tradycyjnej formuły oferowania pokojów, my stawiamy na pojedyncze\nłóżka - najbardziej opłacalne z możliwych rozwiązań z punktu widzenia\nzarówno wynajmnującego, jak i najemcy.',
+        secondLine: {
+            firstPart: '[EN] Dzięki',
+            secondPart: '[EN] szybko znajdziesz tani nocleg.'
+        },
+        thirdLine: '[EN] Potrzebujesz łóżka od zaraz, w niskiej cenie, w dobrej lokalizacji, u\nwiarygodnego wynajmnującego? Dobrze trafiłeś!',
+        fourthLine: '[EN] Nieważne czy chcesz spędzić jedną noc, czy szukasz czegoś na cały rok lub\ndłużej, u nas od razu znajdziesz takie miejsce.'
+    },
+    career: {
+        header: '[EN] Kariera',
+        firstLine: {
+            firstPart: '[EN] W',
+            secondPart: '[EN] stawiamy na ludzi. Wierzymy w ich ambicję, motywację do rozwoju oraz chęć\nposzukiwania własniej drogi zawodowej. Zapraszmy do aplikowania osoby -\npoczątkujących oraz specjalistów - które podzielają nasze wartości:\nzaangażownanie, systematyczność, stosunek do drugiej osoby.',
+        },
+        secondLine: {
+            firstPart: '[EN] Poniżej znadują się aktualne oferty pracy i opisy stanowisk, na które\nszukamy kandydatów. Nawet jeśli w danej chwili nie prowadzimy żadnej\nrekrutacji, zachęcamy do aplikowania. Jeśli czujesz, że pasujesz do\nklimatu startupowego',
+            secondPart: '[EN] , wypełnij poniższy formularz i powiedz nam coś więcej na swój temat -\nmoże okazać się, że jest nam naprawdę po drodze.'
+        },
+        thirdLine: {
+            firstPart: '[EN] Uwaga studenci i pełnoletni uczniowe szkół ponadpodstawowych. Jeśli\nposzukujecie wartościowych praktyk zawodowych, podczas których możecie\nzdobyć konkretną wiedzę, doświadczenie i nauczyć się czegoś rzeczywiście\ndobrze, zapraszamy do',
+            secondPart: '[EN] Program staży i praktyk zawodowych w naszym sartupie to doskonały\npoczątek Waszej przyszłej kariery profesjonalnej.'
+        },
+        roles: {
+            juniorDev: '[EN] Junior developer',
+            keyAccountManager: '[EN] Key account manager',
+            photo: '[EN] Fotograf'
+        }
+    },
+    contact: {
+        header: '[EN] Kontakt',
+        firstLine: '[EN] Zachęcamy do kontaktu z nami. Na większość zapytań odpowiadamy na bieżąco.\nBardziej złożone kwestie obsługujemy w ciągu maksymalnie 2 dni roboczych.',
+        secondLine: '[EN] Najszybszym sposobem dotarcia do naszego Biura Obsługi jest skorzystanie z\nponiższego formularza. W sprawie współpracy, propozycji biznesowych i\nzapytań, które bezpośrednio nie dotyczą funkcjonowaniu serwisu, uprzejmie\nprosimy o przesłanie wiadomości na adres:',
+        thirdLine: {
+            firstPart: '[EN] Dziennikarzy i przedstawicieli mediów zapraszamy do kontaktu z naszym\nbiurem prasowym: współpracy, propozycji biznesowych i zapytań, które\nbezpośrednio nie dotyczą funkcjonowaniu serwisu, uprzejmie prosimy o\nprzesłanie wiadomości na adres:',
+            secondPart: '[EN] Po wiecej informacji zapraszamy do sekcji Media.'
+        },
+        form: {
+            name: {
+                label: '[EN] Wpisz swoje imię:*',
+                placeholder: '[EN] Imię',
+                validationMessages: {
+                    required: '[EN] Imię jest wymagane.'
+                }
+            },
+            phone: {
+                label: '[EN] Nr telefonu:*',
+                placeholder: '[EN] np.: +48 000 000 000',
+                validationMessages: {
+                    required: '[EN] Numer telefonu jest wymagany.'
+                }
+            },
+            email: {
+                label: '[EN] Email:*',
+                placeholder: '[EN] np. jan{at}kowalski.com',
+                validationMessages: {
+                    required: '[EN] Email jest wymagany.',
+                    email: '[EN] Niepoprawny format adresu email.'
+                }
+            },
+            message: {
+                label: '[EN] Napisz do nas wiadomość:*',
+                placeholder: '[EN] Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.',
+                validationMessages: {
+                    required: '[EN] Wiadomość jest wymagana.'
+                }
+            },
+            hint: '[EN] Wpisanie tych informacji jest obowiązkowe*',
+            send: '[EN] Wyślij wiadomość'
+        }
+    },
+    help: {
+        header: '[EN] Pomoc (FAQ)',
+        firstLine: {
+            firstPart: '[EN] Prezentujemy tu listę najczęstszych pytań jakie zadają użytkownicy naszego\nserwisu oraz odpowiedzi, które mają im pomóc rozwiązać dany problem.\nUprzejmie prosimy o zapoznanie się z nimi zanim zwrócą sie Państwa do nas\no pomoc. Z doświadczenia wiemy, że ponad 95% problemów, które zgłaszają\nużytkownicy',
+            secondPart: '[EN] jest prosta do samodzielnego rozwiązania właśnie dzięki poniższym\nwyjaśnieniom oraz wskazówkom.'
+        },
+        howTo: '[EN] Jak to działa',
+        qna: '[EN] Pytania i odpowiedzi,',
+        questions: {
+            howToGetAccount: {
+                q: '[EN] Jak założyć konto w serwisie',
+                a: '[EN] Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book'
+            },
+            dataNeededToRegister: {
+                q: '[EN] Jakie dane muszę muszę podać przy rejestracji?',
+                a: '[EN] Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book'
+            },
+            howDoPaymentsWork: {
+                q: '[EN] Jak dokonywane są płatności na rzecz gospodarza?',
+                a: '[EN] Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book'
+            },
+            howToBeSafe: {
+                q: '[EN] W jaki sposób dbać o swoje bezpieczeństwo szukając noclegu?',
+                a: '[EN] Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book'
+            }
+        }
+    },
+    media: {
+        header: '[EN] Media',
+        firstLine: '[EN] Wszelkie zapytania od dziennikarzy, w tym chęć uzyskania wypowiedzi\neksperckiej czy przeprowadzenia wywiadu, mają dla nas charakter\npriorytetowy. Jesteśmy do Państwa dyspozycji pod adresem:',
+        secondLine: '[EN] Informujemy, że wszystkie materiały w serwisie bedOk chronione są prawami\nautorskimi i majątkowymi. W celu ich wykorzystania w publikacji prosimy o\nwcześniejszy kontakt pisemny (mailowy) i uzgodnienie szczegółów. W\nszczególności dotyczy to użycia logotypów, wykorzystania zdjęć i\nmateriałów video oraz zamieszczonych tekstów. Każde wykorzystanie tych\nmateriałów wymaga wcześniejszej autoryzacji.',
+        thirdLine: '[EN] W przypadku propozycji objęcia patronatem danego wydarzenia czy projektu,\nzakupi treści sponsorowanych (w tym reklam) oraz jakichkolwiek innych\nofert komercyjnych, prosimy o szczegółowe informacje, m.in.:',
+        details: {
+            title: '[EN] tytuł i wydawca - podmot odpowedzialny',
+            reach: '[EN] weryfikowalny zasięg',
+            contact: '[EN] dane kontaktowe (e-mail, telefon) oferenta',
+            duration: '[EN] format i czas trwania oferty',
+            benefit: '[EN] konkretyzacja świadczeń'
+        },
+        fourthLine: {
+            firstPart: '[EN] Komunikaty publikujemy w części',
+            secondPart: '[EN]  "Blog i aktualności"',
+            thirdPart: '[EN] - strona jest również oficjalnym źródłem naszych informacji prasowych.'
+        }
+    }
 };

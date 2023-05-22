@@ -27,7 +27,7 @@
       <div class="d-flex justify-content-center">
         <img
           class="mt-3"
-          width="300"
+          :width="300"
           src="../assets/img/logo_bedOK_01_OK.png"
         />
       </div>
@@ -87,7 +87,7 @@
           {{ $t('homeView.freeAppLink') }}
           <img
             class="mb-1"
-            width="60"
+            :width="60"
             src="../assets/img/logo_bedOK_01_OK.png"
             alt="app-download"
           />

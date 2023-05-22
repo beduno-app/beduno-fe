@@ -145,7 +145,6 @@ export default class GuestSection extends Vue {
   select {
     border-radius: 10px;
     border: 1px solid $dark-gray;
-    width: 80px;
     height: 35px;
     width: 100%;
     font-size: 0.8rem;
