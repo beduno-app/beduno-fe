@@ -1,544 +1,544 @@
 export default {
     header: {
-        logoSubtitle: '[UK] i masz spanie!',
-        callToAction: '[UK] Wynajmij i zarabiaj bez opłat',
+        logoSubtitle: 'і маєш місце на нічліг!',
+        callToAction: 'Орендуй і заробляй безкоштовно',
         download: {
             firstLine: {
-                beforeLogo: '[UK] Pobierz naszą aplikację',
-                afterLogo: '[UK] na'
+                beforeLogo: 'Завантаж наш додаток',
+                afterLogo: 'на'
             },
-            secondLine: '[UK] system Android i IOS'
+            secondLine: 'систему Android та IOS'
         },
-        login: '[UK] Zaloguj się'
+        login: 'Увійти'
     },
     footer: {
-        callToAction: '[UK] Zostań wynajmującym bez opłat',
-        informationSection: '[UK] Informacje',
-        prices: '[UK] Ceny',
-        cityList: '[UK] Lista miast',
-        partnerProgram: '[UK] Program partnerski',
-        faq: '[UK] Pytania i odpowiedzi Q&A',
-        help: '[UK] Centrum pomocy',
-        contact: '[UK] Kontakt',
-        about: '[UK] O bed!OK',
-        careers: '[UK] Kariera',
-        information: '[UK] Informacje',
-        termsOfCooperation: '[UK] Zasady współpracy',
-        privacyPolicy: '[UK] Oświadczenie o ochronie prywatności i plikach cookies',
-        cookies: '[UK] Zarządzaj ustawieniami dotyczącymi plików cookies',
-        clientSection: '[UK] klient',
-        login: '[UK] Logowanie',
-        registration: '[UK] Rejestracja',
-        specialOffers: '[UK] Oferty specjalne',
+        callToAction: 'Стань орендодавцем безкоштовно',
+        informationSection: 'Інформація',
+        prices: 'Ціни',
+        cityList: 'Список міст',
+        partnerProgram: 'Партнерська програма',
+        faq: 'Питання та відповіді Q&A',
+        help: 'Центр допомоги',
+        contact: 'Контактна інформація',
+        about: 'O bed!OK',
+        careers: 'Кар\'єра',
+        information: 'Інформація',
+        termsOfCooperation: 'Правила співпраці',
+        privacyPolicy: 'Заява про конфіденційність і файли cookies',
+        cookies: 'Керування налаштуваннями файлів cookies',
+        clientSection: 'клієнт',
+        login: 'Вхід в систему',
+        registration: 'Реєстрація',
+        specialOffers: 'Спеціальні пропозиції',
         copyrightsNote: {
-            firstPart: '[UK] Prawa autorskie',
-            year: '[UK] 2022',
-            lastPart: '[UK] bed!Ok. Wszelkie prawa autorskie zastrzeżone.'
+            firstPart: 'Авторські права',
+            year: '2022',
+            lastPart: 'bed!Ok. Всі авторські права захищені.'
         }
     },
     auth: {
         login: {
-            login: '[UK] Zaloguj się',
-            facebook: '[UK] Zaloguj się przez facebook',
-            google: '[UK] Zaloguj się przez Google',
+            login: 'Увійти',
+            facebook: 'Увійти через facebook',
+            google: 'Увійти через Google',
             email: {
-                placeholder: '[UK] Email'
+                placeholder: 'Email'
             },
             password: {
-                placeholder: '[UK] Hasło'
+                placeholder: 'Пароль'
             },
             phoneNumber: {
-                placeholder: '[UK] Nr tel.'
+                placeholder: 'Номер телефону.'
             },
-            forgotPassword: '[UK] Zapomniałem hasła',
+            forgotPassword: 'Не пам\'ятаю пароль',
             action: {
-                login: '[UK] ZALOGUJ SIĘ',
-                hint: '[UK] Jeśli nie posiadasz u nas konta, możesz się w prosty sposób zarejestrować',
-                register: '[UK] ZAŁÓŻ KONTO'
+                login: 'УВІЙТИ',
+                hint: 'Якщо у вас немає облікового запису, ви можете легко зареєструватися',
+                register: 'СТВОРИТИ ОБЛІКОВИЙ ЗАПИС'
             },
         },
         register: {
-            register: '[UK] Załóż konto w prosty sposób',
+            register: 'Створити обліковий запис простим способом',
             name: {
-                placeholder: '[UK] Imię*',
+                placeholder: 'Ім\'я*',
                 validationMessages: {
-                    required: '[UK] To pole jest wymagane.'
+                    required: 'Це поле обов\'язкове.'
                 }
             },
             phoneNumber: {
-                placeholder: '[UK] Nr tel.*',
+                placeholder: 'Номер телефону*',
                 validationMessages: {
-                    required: '[UK] To pole jest wymagane.'
+                    required: 'Це поле обов\'язкове.'
                 }
             },
             email: {
-                placeholder: '[UK] Email*',
+                placeholder: 'Email*',
                 validationMessages: {
-                    required: '[UK] To pole jest wymagane.'
+                    required: 'Це поле обов\'язкове.'
                 }
             },
             password: {
-                placeholder: '[UK] Hasło*',
+                placeholder: 'Пароль*',
                 validationMessages: {
-                    required: '[UK] To pole jest wymagane.'
+                    required: 'Це поле обов\'язкове.'
                 }
             },
             repeatPassword: {
-                placeholder: '[UK] Powtórz hasło*',
+                placeholder: 'Повторіть пароль*',
                 validationMessages: {
-                    required: '[UK] To pole jest wymagane.'
+                    required: 'Це поле обов\'язкове.'
                 }
             },
             birthYear: {
-                label:  'Rok urodzenia*',
+                label:  'Рік народження*',
                 validationMessages: {
-                    required: '[UK] To pole jest wymagane.'
+                    required: 'Це поле обов\'язкове.'
                 }
             },
             gender: {
-                label: '[UK] Płeć*',
+                label: 'Стать*',
                 validationMessages: {
-                    required: '[UK] To pole jest wymagane.'
+                    required: 'Це поле обов\'язкове.'
                 },
                 options: {
-                    woman: "Kobieta",
-                    man: "Mężczyzna"
+                    woman: "Жінка",
+                    man: "Чоловік"
                 },
             },
             languages: {
-                label: '[UK] Języki w któryh się komunikujesz*',
+                label: 'Мови, якими ви спілкуєтесь*',
                 validationMessages: {
-                    required: '[UK] To pole jest wymagane.'
+                    required: 'Це поле обов\'язкове.'
                 }
             },
             action: {
-                hint: '[UK] Jeśli już posiadasz u nas konto, po prostu się zaloguj'
+                hint: 'Якщо у Вас вже є обліковий запис, просто увійдіть'
             },
-            generatePassword:'Wygeneruj hasło',
+            generatePassword:'Створити пароль',
             acceptRegulation: {
-                label: '[UK] Akceptuję regulamin',
-                link: '[UK] kliknij tutaj, aby się z nim zapoznać'
+                label: 'Я приймаю правила',
+                link: 'натисніть тут, щоб ознайомитися з ними'
             }
         }
     },
     homeView: {
         title: {
-            firstLine: '[UK] Potrzebne zakwaterowanie?',
-            secondLine: '[UK] Wejdź na BedOK i masz spanie!',
+            firstLine: 'Потрібне житло?',
+            secondLine: 'Заходь на BedOK і вже маєш нічліг!',
         },
-        looking: '[UK] szukam',
-        offering: '[UK] oferuję',
-        joinRoom: '[UK] NOWOŚĆ! Dołącz do pokoju',
-        citiesTitle: '[UK] W którym mieście chcesz znaleźć nocleg?',
-        howItWorks: '[UK] Jak to działa?',
-        subscribe: '[UK] Zapisz się aby otrzymywać najświeższe informacje i promocje',
-        freeAppLink: '[UK] Chcę otrzymać link do bezpłatnej aplikacji'
+        looking: 'шукаю',
+        offering: 'пропоную',
+        joinRoom: 'Новинка! Приєднуйтесь до кімнати',
+        citiesTitle: 'В якому місті ви хочете знайти нічліг?',
+        howItWorks: 'Як це працює?',
+        subscribe: 'Підпишіться, щоб отримувати останні новини та акції',
+        freeAppLink: 'Я хочу отримати посилання на безкоштовний додаток'
     },
     advertisementView: {
-        header: '[UK] Dodaj ogłoszenie',
+        header: 'Додати оголошення',
         mainSection: {
             title: {
-                label: '[UK] Tytuł ogłoszenia*',
-                tip: '[UK] od 7 do 70 znaków',
-                placeholder: '[UK] Np. Pokój dwuosobowy w cichej okolicy',
+                label: 'Назва оголошення*',
+                tip: 'від 7 до 70 символів',
+                placeholder: 'Наприклад, двомісний номер в тихому районі',
                 validationMessages: {
-                    length: '[UK] Tytuł musi mieć min. 7 znaków, max. 70 znaków.',
-                    required: '[UK] To pole jest wymagane.'
+                    length: 'Назва повинна бути мін. 7 символів, макс. 70 символів.',
+                    required: 'Це поле обов\'язкове.'
                 }
             },
             address: {
-                label: '[UK] Adres*',
-                cityPlaceholder: '[UK] Miasto',
-                zipCodePlaceholder: '[UK] Kod pocztowy',
-                streetPlaceholder: '[UK] Ulica',
-                streetNumberPlaceholder: '[UK] Nr domu',
-                flatNumberPlaceholder: '[UK] Nr lokalu',
+                label: 'Адреса*',
+                cityPlaceholder: 'Місто',
+                zipCodePlaceholder: 'Поштовий індекс',
+                streetPlaceholder: 'Вулиця',
+                streetNumberPlaceholder: 'Номер будинку',
+                flatNumberPlaceholder: 'Номер квартири',
                 validationMessages: {
-                    required: '[UK] To pole jest wymagane.'
+                    required: 'Це поле обов\'язкове.'
                 }
             },
             photos: {
-                label: '[UK] Zdjęcia*',
-                tip: '[UK] min. 1 szt. , max 8 szt.'
+                label: 'Фотографії*',
+                tip: 'мін. 1 фото. , макс.8 фото.'
             }
         },
         hostSection: {
             hostName: {
-                label: '[UK] Nazwa gospodarza*',
-                placeholder: '[UK] Imię',
+                label: 'Назва орендодавця*',
+                placeholder: 'Ім\'я',
                 validationMessages: {
-                    required: '[UK] To pole jest wymagane.'
+                    required: 'Це поле обов\'язкове.'
                 }
             },
             phoneNumber: {
-                label: '[UK] Nr telefonu*',
-                placeholder: '[UK] Np. +48 000 000 000',
+                label: 'Номер телефону*',
+                placeholder: 'Наприклад +48 000 000 000',
                 validationMessages: {
-                    required: '[UK] To pole jest wymagane.'
+                    required: 'Це поле обов\'язкове.'
                 }
             },
             email: {
-                label: '[UK] E-mail*',
-                placeholder: "Np. jan_kowalski{'@'}o2.pl",
+                label: 'E-mail*',
+                placeholder: "Наприклад jan_kowalski{'@'}o2.pl",
                 validationMessages: {
-                    required: '[UK] To pole jest wymagane.',
-                    email: '[UK] Nieprawdiłowy email'
+                    required: 'Це поле обов\'язкове.',
+                    email: 'Неправильний E-mail'
                 }
             },
             photo: {
-                label: '[UK] Zdjęcie gospodarza'
+                label: 'Фото орендодавця'
             },
             languages: {
-                label: '[UK] Języki, którymi posługuje się gospodarz*',
+                label: 'Мови, на яких говорить орендодавець*',
                 validationMessages: {
-                    required: '[UK] To pole jest wymagane.'
+                    required: 'Це поле обов\'язкове.'
                 }
             },
             communicators: {
-                label: '[UK] Komunikatory, których używa gospodarz*',
-                tip: '[UK] Aplikacje do komnikacji przez internet',
+                label: 'Соціальні мережі, які використовує орендодавець *',
+                tip: 'Додатки для спілкування через Інтернет',
                 validationMessages: {
-                    required: '[UK] To pole jest wymagane.'
+                    required: 'Це поле обов\'язкове.'
                 }
             }
         },
         descriptionSection: {
             description: {
-                label: '[UK] Opis*',
-                tip: '[UK] maksimum 5000 znaków',
+                label: 'Опис*',
+                tip: 'максимум 5000 символів',
                 tabs: {
-                    own: '[UK] Własny',
-                    preset1: '[UK] Szablon 1',
-                    preset2: '[UK] Szablon 2'
+                    own: 'Власний',
+                    preset1: 'Шаблон 1',
+                    preset2: 'Шаблон 2'
                 },
-                charactersCounter: '[UK] Pozostało {count} znaków'
+                charactersCounter: 'Залишилося {count} символів'
             },
             roomSize: {
-                label: '[UK] Powierzchnia pokoju (m2)*',
-                placeholder: '[UK] np. 4.86',
+                label: 'Площа мешкання (m2)*',
+                placeholder: 'наприклад 4.86',
                 validationMessages: {
-                    required: '[UK] To pole jest wymagane.'
+                    required: 'Це поле обов\'язкове.'
                 }
             },
             splitIntoBeds: {
-                label: '[UK] Pokój dzielony na łóżka',
-                value: '[UK] Podziel'
+                label: 'Кімната, розділена на ліжка',
+                value: 'Розділити'
             },
             bedsCount: {
-                label: '[UK] Liczba łóżek w pokoju*',
-                placeholder: '[UK] np. 6',
+                label: 'Кількість ліжок в номері*',
+                placeholder: 'наприклад 6',
                 validationMessages: {
-                    required: '[UK] To pole jest wymagane.'
+                    required: 'Це поле обов\'язкове.'
                 }
             },
             roomType: {
-                label: '[UK] Typ pokoju'
+                label: 'Тип кімнати'
             },
             freeBedsCount: {
-                label: '[UK] Liczba wolnych łóżek w pokoj*',
+                label: 'Кількість вільних ліжок в кімнаті*',
                 validationMessages: {
-                    required: '[UK] To pole jest wymagane.'
+                    required: 'Це поле обов\'язкове.'
                 }
             }
         },
         currentGuestsSection: {
-            title: '[UK] Podaj informację o aktualnych lokatorach, tj. imię, wiek, języki, którymi się posługują',
+            title: 'Надайте інформацію про поточних орендарів (проживаючих в кімнаті), тобто ім\'я, вік, мови, якими вони розмовляють',
             name: {
-                placeholder: '[UK] Imię'
+                placeholder: 'Ім\'я'
             },
             birthYear: {
-                label: '[UK] Rok urodzenia*'
+                label: 'Рік народження*'
             }
         },
         paymentSection: {
             paymentMethod: {
-                label: '[UK] Formy płatności:'
+                label: 'Способи оплати:'
             },
             pricing: {
-                label: '[UK] Ceny (zł):'
+                label: 'Ціна (zł):'
             },
-            day: '[UK] doba',
-            discount1: '[UK] Próg zniżkowy 1',
-            discount2: '[UK] Próg zniżkowy 2',
-            discount3: '[UK] Próg zniżkowy 3',
-            discount4: '[UK] Próg zniżkowy 4',
-            discountMonth: '[UK] Próg zniżkowy powyżej miesiąca',
+            day: 'доба',
+            discount1: 'Поріг знижки 1',
+            discount2: 'Поріг знижки 2',
+            discount3: 'Поріг знижки 3',
+            discount4: 'Поріг знижки 4',
+            discountMonth: 'Поріг знижки за проживання більше місяця',
         },
         rulesSection: {
-            termsOfStay: '[UK] Zasady pobytu:',
-            animals: '[UK] Akceptujemy zwierzęta:',
-            curfew: '[UK] Cisza nocna (22:00 - 6:00):',
-            smoking: '[UK] Palenie w budynku dozwolone:',
+            termsOfStay: 'Правила проживання:',
+            animals: 'Приймаємо з домашніми тваринами:',
+            curfew: 'Тиха година (22:00 - 6:00):',
+            smoking: 'Куріння в будівлі дозволено:',
             others: {
-                label: '[UK] Inne:',
-                placeholder: '[UK] np. brak parkingu, grill w ogrodzie'
+                label: 'Інше:',
+                placeholder: 'наприклад, немає парковки, барбекю в саду'
             }
         },
         equipmentSection: {
             roomEquipment: {
-                label: '[UK] Wyposażenie pokoju',
-                placeholder: '[UK] np. lampka, dywan'
+                label: 'Обладнання кімнати',
+                placeholder: 'наприклад, лампа, килим'
             },
             sharedEquipment: {
-                label: '[UK] Wyposażenie strefy wspólnej',
-                placeholder: '[UK] np. lampka, dywan'
+                label: 'Обладнання загальної зони',
+                placeholder: 'наприклад, лампа, килим'
             }
         },
         actions: {
             preview: {
-                label: '[UK] Zobacz podgląd ogłoszenia',
-                tip: '[UK] (zobaczysz jak podgląd ogłoszenie przed jego publikacją)'
+                label: 'Переглянути попередній вигляд оголошення',
+                tip: '(ви побачите, як виглядає оголошення перед його публікацією)'
             },
             save: {
-                label: '[UK] Zapisz ogłoszenie',
-                tip: '[UK] (nadal będziesz mieć możliwość wprowadzenia zmian w dowolnym momencie)'
+                label: 'Зберегти оголошення',
+                tip: '(ви все одно матимете можливість вносити зміни в будь-який час)'
             },
             publish: {
-                label: '[UK] Opublikuj ogłoszenie',
-                tip: '[UK] (nadal będziesz mieć możliwość wprowadzenia zmian w dowolnym momencie)'
+                label: 'Опублікувати оголошення',
+                tip: '(ви все одно матимете можливість вносити зміни в будь-який час)'
             },
             duplicate: {
-                label: '[UK] Zduplikuj ogłoszenie z wypełnionymi danymi',
-                tip: '[UK] (zaoszczędzisz czas dodając pokoje w tym samymy budynku)'
+                label: 'Продублюйте оголошення із заповненими даними',
+                tip: '(ви заощадите час, додавши кімнати в одній будівлі)'
             }
         }
     },
     advertisementDetailsView: {
         subheader: {
-            markAsFavorite: '[UK] Dodaj do ulubionych',
-            share: '[UK] Udostępnij'
+            markAsFavorite: 'Додати в обране',
+            share: 'Поділитися'
         },
         descriptionWithMap: {
-            description: '[UK] Opis:',
-            location: '[UK] Lokalizacja'
+            description: 'Опис:',
+            location: 'Локалізація'
         },
         host: {
-            meetTheHost: '[UK] POZNAJ GOSPODARZA',
-            communicators: '[UK] Używam:'
+            meetTheHost: 'ПОЗНАЙОМТЕСЯ З ГОСПОДАРЕМ (орендодавцем)',
+            communicators: 'Я використовую такі додатки для зв\'язку:'
         },
-        roomArea: '[UK] Powierzchnia pokoju: {area} m2',
-        currentTenants: '[UK] Aktualnie u nas mieszka:',
-        currentTenantsCount: '[UK] Liczba osób aktualnie zamieszkujących pokój:',
-        seeOtherEquipment: '[UK] Zobacz pozostałe udogodnienia',
-        sharedArea: '[UK] Część wspólna: lobby, kuchnia, łazienka',
-        roomSplitToBeds: '[UK] Pokój dzielony na łóżka',
-        sharedRoom: '[UK] Współdzielony z innymi mieszkańcami',
-        roomEquipment: '[UK] Wyposażenie pokoju:',
-        sharedEquipment: '[UK] Wyposażenie części wspólnej:',
-        paymentMethods: '[UK] Metody płatności:',
-        rulesOfStay: '[UK] Zasady pobytu:',
-        pricePerBed: '[UK] Cena za łóżko {price} {currency} ({duration})',
-        book: '[UK] Zarezerwuj łóżko',
-        beds: '[UK] {count} łóżka',
-        rooms: '[UK] {count} pokoje'
+        roomArea: 'Площа номера: {area} m2',
+        currentTenants: 'В даний час у нас проживає:',
+        currentTenantsCount: 'Кількість людей, які проживають в даний момент в кімнаті:',
+        seeOtherEquipment: 'Переглянути інші зручності',
+        sharedArea: 'Загальна зона: лобі, кухня, ванна кімната',
+        roomSplitToBeds: 'Кімната, розділена на ліжка',
+        sharedRoom: 'Спільно з іншими мешканцями',
+        roomEquipment: 'Обладнання кімнати:',
+        sharedEquipment: 'Обладнання спільної частини:',
+        paymentMethods: 'Способи оплати:',
+        rulesOfStay: 'Правила проживання:',
+        pricePerBed: 'Ціна за ліжко {price} {currency} ({duration})',
+        book: 'Забронювати ліжко',
+        beds: '{count} ліжок',
+        rooms: '{count} кімнат'
     },
     hostAdvertisementsView: {
-        myAdvertisements: '[UK] Moje ogłoszenia',
-        expertPanel: '[UK] Panel EXPERT',
-        active: '[UK] Aktywne',
-        inactive: '[UK] Nieaktywne',
-        addNewAd: '[UK] Dodaj nowe ogłoszenie',
-        freeBeds: '[UK] Wolne: {count} łóżka',
-        messages: '[UK] Wiadomości:',
-        newMessagesCount: '[UK] {count} nieprzeczytanych',
-        editAd: '[UK] Edytuj ogłoszenie',
-        createFromCurrent: '[UK] Stwórz nowe ogłoszenie na podstawie obecnego',
-        createFromCurrentHint: '[UK] (zaoszczędzisz czas dodając pokoje w tym samym budynku)',
-        deactivateAd: '[UK] Zakończ ogłoszenie',
-        deactivateAdHint: '[UK] (ogłoszenie przejdzie do sekcji Nieaktywne)',
-        publishAd: '[UK] Opublikuj ogłoszenie',
-        publishAdHint: '[UK] (nadal będziesz miał/a możliwość wprowadzania zmian w dowolnym momencie)',
-        removeAd: '[UK] Usuń ogłoszenie',
-        removeAdHint: '[UK] (ogłoszenie zostanie usunięte)'
+        myAdvertisements: 'Мої оголошення',
+        expertPanel: 'Панель EXPERT',
+        active: 'Активне',
+        inactive: 'Неактивне',
+        addNewAd: 'Додати нове оголошення',
+        freeBeds: 'Вільно: {count} ліжок',
+        messages: 'Повідомлення:',
+        newMessagesCount: '{count} непрочитані',
+        editAd: 'Редагувати оголошення',
+        createFromCurrent: 'Створіть нове оголошення на основі поточного',
+        createFromCurrentHint: '(ви заощадите час, додавши кімнати в тій же будівлі)',
+        deactivateAd: 'Деактивувати оголошення',
+        deactivateAdHint: '(оголошення перейде в розділ Неактивні )',
+        publishAd: 'Опублікувати оголошення',
+        publishAdHint: '(ви як і раніше будете мати можливість вносити зміни в будь-який час)',
+        removeAd: 'Видалити оголошення',
+        removeAdHint: '(оголошення буде видалено)'
     },
     expertPanelView: {
-        removeTenant: '[UK] Usuń lokatora',
-        addTenant: '[UK] Dodaj lokatora',
-        removeAllTenants: '[UK] Usuń wszystkich lokatorów',
-        editAd: '[UK] Edytuj ogłoszenie',
-        createAdFromCurrent: '[UK] Stwórz nowe ogłoszenie na podstawie obecnego',
-        expertPanel: '[UK] Panel EXPERT',
-        myAdvertisements: '[UK] Moje ogłoszenia:',
-        address: '[UK] Adres:',
-        room: '[UK] Pokój:',
-        occupiedBeds: '[UK] Zajęte łóżka:',
-        freeBeds: '[UK] Wolne łóżka:',
-        currentTenants: '[UK] Aktualni lokatorzy:',
-        createAd: '[UK] Dodaj nowe ogłoszenie'
+        removeTenant: 'Видалити мешканця',
+        addTenant: 'Додай мешканця',
+        removeAllTenants: 'Видали усіх мешканців',
+        editAd: 'Редагувати оголошення',
+        createAdFromCurrent: 'Створіть нове оголошення на основі поточного',
+        expertPanel: 'Панель EXPERT',
+        myAdvertisements: 'Мої оголошення:',
+        address: 'Адреса:',
+        room: 'Кімната:',
+        occupiedBeds: 'Зайняті ліжка:',
+        freeBeds: 'Вільні ліжка:',
+        currentTenants: 'Актуальні мешканці:',
+        createAd: 'Додати нове оголошення'
     },
     becomeHostView: {
         list: {
-            item1 : '[UK] Zostań Wynajmującym bez opłat',
-            item2 : '[UK] Korzystaj z wygodnej formy zarządzania swoją nieruchomością',
-            item3: '[UK] Bezpieczniej wynajmuj łóżka z gwarancja do 2000 PLN',
-            item4: '[UK] Uzyskaj bezpłatną pomoc prawną'
+            item1 : 'Стати орендодавцем безкоштовно',
+            item2 : 'Використовуйте зручну форму управління своєю нерухомістю',
+            item3: 'Безпечніше орендувати ліжка з гарантією до 2000 злотих',
+            item4: 'Отримайте безкоштовну юридичну допомогу'
         },
         action : {
-            add: '[UK] Dodaj ogłoszenie',
-            hint: '[UK] I ciesz się bezpiecznym wynajmem'
+            add: 'Додати оголошення',
+            hint: 'І насолоджуйтесь безпечною орендою'
         }
     },
     searchInput: {
         location: {
-            label: '[UK] Lokalizacja',
-            placeholder: '[UK] Gdzie szukasz noclegu'
+            label: 'Локалізація',
+            placeholder: 'Де ви шукаєте нічліг'
         },
-        since: '[UK] Od kiedy',
-        to: '[UK] Do kiedy',
+        since: 'Від коли',
+        to: 'До коли',
         who: {
-            label: '[UK] Kto',
-            placeholder: '[UK] Ile osób'
+            label: 'Хто',
+            placeholder: 'Скільки людей'
         },
-        search: '[UK] Szukaj'
+        search: 'Пошук'
     },
     roomCard: {
-        district: '[UK] Dzielnica:',
-        bedsInRoom: '[UK] {count} łóżka w pokoju',
-        dayPrice: '[UK] {price} zł / dzień',
-        bedDayPrice: '[UK] {price} zł / dzień / łóżko',
-        femaleRoom: '[UK] Pokój żenski',
-        maleRoom: '[UK] Pokój męski',
-        otherGenderRoom: '[UK] Pokój mieszany',
-        tenants: '[UK] Lokatorzy:',
-        tenantInfo: '[UK] {name}, lat {age}',
-        join: '[UK] Dołącz do pokoju'
+        district: 'Район:',
+        bedsInRoom: '{count} ліжок у кімнаті',
+        dayPrice: '{price} zł / в день',
+        bedDayPrice: '{price} zł / в день/ за ліжко',
+        femaleRoom: 'Жіноча кімната',
+        maleRoom: 'Чоловіча кімната',
+        otherGenderRoom: 'Змішана кімната',
+        tenants: 'Мешканці:',
+        tenantInfo: '{name}, років {age}',
+        join: 'Приєднуйтесь до кімнати'
     },
     order: {
-        header: '[UK] Podsumowanie zamówienia:',
-        currentGuests: '[UK] Aktualnie zamieszkany przez:',
-        totalAmount: '[UK] Całkowita kwota do zapłaty: {price}{currency} ({duration} noce)',
-        host: '[UK] Gospodarz:',
-        hint: '[UK] Dokładny adres i wskazówki dojazdu do miejsca zamieszkania zostaną\nudostępnione po dokonaniu płatności.',
-        proceedToPayment: '[UK] Przejdź do płatności'
+        header: 'Підсумок замовлення:',
+        currentGuests: 'На даний час мешкає:',
+        totalAmount: 'Загальна сума для оплати: {price}{currency} ({duration} ніч)',
+        host: 'Орендодавець:',
+        hint: 'Точна адреса та вказівки доїзду до місця проживання будуть\nдоступні після оплати.',
+        proceedToPayment: 'Перейти до оплати'
     },
     blog: {
-        header: '[UK] Blog i aktualności',
-        published: '[UK] Opublikowano: {date}',
-        readMore: '[UK] ...czytaj dalej',
+        header: 'Блог та новини',
+        published: 'Опубліковано: {date}',
+        readMore: '...читати далі',
         feed: {
-            firstLine: '[UK] Zapraszmy do zapoznania się z najnowszymi wiadomościami o',
-            secondLine: '[UK] Zachęcamy do śledzenia tej strony, ponieważ pojawiają się tutaj ważne\nkomunikaty o funkcjonowaniu serwisu, zmianach oraz planowanych pracach\nrozwojowych. Zamieszczamy też również nasze oficjalne informacje prasowe.',
-            thirdLine: '[UK] Ponadto w niniejszym dziale regularnie publikujemy naszym klientom\n(wynajmującym i najemcom) zdobyć praktyczne informacje na temat rynku\nnieruchomości. Prosimy jednak pamiętać, że blok ma charakter nie tylko\nedukacyjny, ale także rozrywkowy. Niemniej jednak na pewno każdy\nzainteresowany tematem mieszkalnictwa znajdzie na nim coś dla siebie.',
-            title: '[UK] Co u nas słychać',
-            subtitle: '[UK] Blog i aktualności',
-            loadMore: '[UK] Wczytaj starsze wiadomości...'
+            firstLine: 'Пропонуємо вам ознайомитися з останніми новинами про',
+            secondLine: 'Ми рекомендуємо вам стежити за цією сторінкою, тому що тут з\'являються\nважливі повідомлення про функціонування сайту, зміни і заплановані роботи\nрозробку. Ми також публікуємо наші офіційні прес-релізи.',
+            thirdLine: 'Крім того, в цьому розділі ми регулярно пропонуємо нашим клієнтам\n(орендодавцям і орендарям) отримати практичну інформацію про ринок\nнерухомості. Зверніть увагу, що блог носить не тільки освітній,\nа й розважальний характер. Проте, напевно кожен, хто цікавиться темою\nпомешкання, знайде тут щось для себе.',
+            title: 'Що у на нового',
+            subtitle: 'Блог та новини',
+            loadMore: 'Завантажити попередні повідомлення...'
         }
     },
     about: {
-        header: '[UK] O nas',
-        firstLine: '[UK] to\ninnowacyjny i szybko rozwijający się serwis internetowy, niezwołocznie\nadoptujący i wykorzystujący najnowsze technologie (m.in.AI) do\nopytmalizacji świadczonych przez siebie usług. Łączymy poszukujących\nzakwaterownaia (gości) z osobami oferującymi noclegi (gospodarzami).\nZamiast tradycyjnej formuły oferowania pokojów, my stawiamy na pojedyncze\nłóżka - najbardziej opłacalne z możliwych rozwiązań z punktu widzenia\nzarówno wynajmnującego, jak i najemcy.',
+        header: 'Про нас',
+        firstLine: 'це\nінноваційний веб-сервіс який швидко розвивається та оперативно\nвикористовує новітні технології (m.in.AI) для опису наданих нами\nпослуг. Ми пов\'язуємо пошук та розміщення (гостей) з особами, що\nпропонують розміщення (господарями).Замість традиційної формули\nпропозиції кімнат, ми робимо ставку на односпальні кімнати та окремі\nліжка-найбільш вигідні з можливих рішень з точки зору\nяк орендодавця, так і орендаря.',
         secondLine: {
-            firstPart: '[UK] Dzięki',
-            secondPart: '[UK] szybko znajdziesz tani nocleg.'
+            firstPart: 'Дякуємо',
+            secondPart: 'ви швидко знайдете дешевий нічліг.'
         },
-        thirdLine: '[UK] Potrzebujesz łóżka od zaraz, w niskiej cenie, w dobrej lokalizacji, u\nwiarygodnego wynajmnującego? Dobrze trafiłeś!',
-        fourthLine: '[UK] Nieważne czy chcesz spędzić jedną noc, czy szukasz czegoś na cały rok lub\ndłużej, u nas od razu znajdziesz takie miejsce.'
+        thirdLine: 'Вам потрібен нічліг прямо зараз,за низькою ціною, в хорошому місці, у\nнадійного орендодавця? Ви потрапили в потрібне місце!',
+        fourthLine: 'Незалежно від того, чи хочете ви провести одну ніч або шукаєте щос на\nцілий рік або довше, у нас ви відразу знайдете це місце.'
     },
     career: {
-        header: '[UK] Kariera',
+        header: 'Кар\'єра',
         firstLine: {
-            firstPart: '[UK] W',
-            secondPart: '[UK] stawiamy na ludzi. Wierzymy w ich ambicję, motywację do rozwoju oraz chęć\nposzukiwania własniej drogi zawodowej. Zapraszmy do aplikowania osoby -\npoczątkujących oraz specjalistów - które podzielają nasze wartości:\nzaangażownanie, systematyczność, stosunek do drugiej osoby.',
+            firstPart: 'в',
+            secondPart: 'ми робимо ставку на людей. Ми віримо в їхні амбіції, мотивацію до\nрозвитку та бажання шукати свій професійний шлях. Ми запрошуємо Вас\nподати заявку (початківців і фахівців) -\nякі поділяють наші цінності:залученість, систематичність, гарне ставлення до іншої людини.',
         },
         secondLine: {
-            firstPart: '[UK] Poniżej znadują się aktualne oferty pracy i opisy stanowisk, na które\nszukamy kandydatów. Nawet jeśli w danej chwili nie prowadzimy żadnej\nrekrutacji, zachęcamy do aplikowania. Jeśli czujesz, że pasujesz do\nklimatu startupowego',
-            secondPart: '[UK] , wypełnij poniższy formularz i powiedz nam coś więcej na swój temat -\nmoże okazać się, że jest nam naprawdę po drodze.'
+            firstPart: 'Нижче наведені поточні вакансії та посадові інструкції, на які ми\nшукаємо кандидатів. Навіть якщо в даний момент ми не ведемо жодного\nнабору персоналу, ми рекомендуємо вам подати заявку. Якщо ви\nвідчуваєте, що вписуєтеся в атмосферу стартапу',
+            secondPart: ', заповніть форму нижче і розкажіть нам більше про себе - може виявитися, що ми дійсно на одному шляху.'
         },
         thirdLine: {
-            firstPart: '[UK] Uwaga studenci i pełnoletni uczniowe szkół ponadpodstawowych. Jeśli\nposzukujecie wartościowych praktyk zawodowych, podczas których możecie\nzdobyć konkretną wiedzę, doświadczenie i nauczyć się czegoś rzeczywiście\ndobrze, zapraszamy do',
-            secondPart: '[UK] Program staży i praktyk zawodowych w naszym sartupie to doskonały\npoczątek Waszej przyszłej kariery profesjonalnej.'
+            firstPart: 'Увага для студентів та повнолітніх учнів середніх шкіл! Якщо ви шукаєте\nцінну професійну практику, в якій ви можете отримати конкретні знання\n досвід і навчитися чомусь дійсно, Ласкаво просимо!',
+            secondPart: 'Програма стажування та практики в нашому сартапі-чудовий початок\nвашої майбутньої професійної кар\'єри.'
         },
         roles: {
-            juniorDev: '[UK] Junior developer',
-            keyAccountManager: '[UK] Key account manager',
-            photo: '[UK] Fotograf'
+            juniorDev: 'Junior developer - Молодший Розробник',
+            keyAccountManager: 'Key account manager - Менеджер по роботі з ключовими клієнтами',
+            photo: 'Fotograf - Фотограф'
         }
     },
     contact: {
-        header: '[UK] Kontakt',
-        firstLine: '[UK] Zachęcamy do kontaktu z nami. Na większość zapytań odpowiadamy na bieżąco.\nBardziej złożone kwestie obsługujemy w ciągu maksymalnie 2 dni roboczych.',
-        secondLine: '[UK] Najszybszym sposobem dotarcia do naszego Biura Obsługi jest skorzystanie z\nponiższego formularza. W sprawie współpracy, propozycji biznesowych i\nzapytań, które bezpośrednio nie dotyczą funkcjonowaniu serwisu, uprzejmie\nprosimy o przesłanie wiadomości na adres:',
+        header: 'Контакт',
+        firstLine: 'Не соромтеся звертатися до нас. На більшість запитів ми відповідаємо на постійній основі.\nМи обробляємо більш складні питання протягом максимум 2 робочих днів.',
+        secondLine: 'Найшвидший спосіб дістатися до нашого сервісного центру-скористатися\nформою нижче. З питань співпраці, бізнес-пропозицій та запитів, які\nбезпосередньо не стосуються функціонування сайту, просимо Вас\nнадіслати повідомлення за адресою:',
         thirdLine: {
-            firstPart: '[UK] Dziennikarzy i przedstawicieli mediów zapraszamy do kontaktu z naszym\nbiurem prasowym: współpracy, propozycji biznesowych i zapytań, które\nbezpośrednio nie dotyczą funkcjonowaniu serwisu, uprzejmie prosimy o\nprzesłanie wiadomości na adres:',
-            secondPart: '[UK] Po wiecej informacji zapraszamy do sekcji Media.'
+            firstPart: 'Журналістів та представників ЗМІ запрошуємо зв\'язатися з нашим\nпрес-відділом: співпраця, ділові пропозиції та запити, які безпосередньо\nне стосуються функціонування сайту, просимо надіслати повідомлення за\nадресою:',
+            secondPart: 'За додатковою інформацією звертайтеся в розділ ЗМІ - Media.'
         },
         form: {
             name: {
-                label: '[UK] Wpisz swoje imię:*',
-                placeholder: '[UK] Imię',
+                label: 'Введіть своє ім\'я:*',
+                placeholder: 'Ім\'я',
                 validationMessages: {
-                    required: '[UK] Imię jest wymagane.'
+                    required: 'Ім\'я необхідне.'
                 }
             },
             phone: {
-                label: '[UK] Nr telefonu:*',
-                placeholder: '[UK] np.: +48 000 000 000',
+                label: 'Номер телефону:*',
+                placeholder: 'Наприклад: +48 000 000 000',
                 validationMessages: {
-                    required: '[UK] Numer telefonu jest wymagany.'
+                    required: 'Номер телефону необхідний.'
                 }
             },
             email: {
-                label: '[UK] Email:*',
-                placeholder: '[UK] np. jan{at}kowalski.com',
+                label: 'Email:*',
+                placeholder: 'Наприклад jan{at}kowalski.com',
                 validationMessages: {
-                    required: '[UK] Email jest wymagany.',
-                    email: '[UK] Niepoprawny format adresu email.'
+                    required: 'Email необхідний.',
+                    email: 'Неправильний формат електронної пошти.'
                 }
             },
             message: {
-                label: '[UK] Napisz do nas wiadomość:*',
-                placeholder: '[UK] Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.',
+                label: 'Напишіть нам повідомлення:*',
+                placeholder: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.',
                 validationMessages: {
-                    required: '[UK] Wiadomość jest wymagana.'
+                    required: 'Повідомлення необхідне.'
                 }
             },
-            hint: '[UK] Wpisanie tych informacji jest obowiązkowe*',
-            send: '[UK] Wyślij wiadomość'
+            hint: 'Введення цієї інформації є обов\'язковим*',
+            send: 'Надіслати повідомлення'
         }
     },
     help: {
-        header: '[UK] Pomoc (FAQ)',
+        header: 'Довідка (FAQ)',
         firstLine: {
-            firstPart: '[UK] Prezentujemy tu listę najczęstszych pytań jakie zadają użytkownicy naszego\nserwisu oraz odpowiedzi, które mają im pomóc rozwiązać dany problem.\nUprzejmie prosimy o zapoznanie się z nimi zanim zwrócą sie Państwa do nas\no pomoc. Z doświadczenia wiemy, że ponad 95% problemów, które zgłaszają\nużytkownicy',
-            secondPart: '[UK] jest prosta do samodzielnego rozwiązania właśnie dzięki poniższym\nwyjaśnieniom oraz wskazówkom.'
+            firstPart: 'Тут ми представляємо список найбільш поширених питань, які задають\nкористувачі нашого сайту, і відповіді, які допоможуть їм вирішити дану\nпроблему.Просимо вас ознайомитися з ними, перш ніж звертатися до нас\nза допомогою. З досвіду ми знаємо, що тут є понад 95% проблем, про які\nповідомляють користувачі',
+            secondPart: 'є простими для вирішиення самостійно завдяки наведеним нижче\nпоясненням і порадам.'
         },
-        howTo: '[UK] Jak to działa',
-        qna: '[UK] Pytania i odpowiedzi,',
+        howTo: 'Як це працює',
+        qna: 'Питання і відповіді,',
         questions: {
             howToGetAccount: {
-                q: '[UK] Jak założyć konto w serwisie',
-                a: '[UK] Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book'
+                q: 'Як створити обліковий запис в сервісі',
+                a: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book'
             },
             dataNeededToRegister: {
-                q: '[UK] Jakie dane muszę muszę podać przy rejestracji?',
-                a: '[UK] Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book'
+                q: 'Які дані Я повинен надати під час реєстрації?',
+                a: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book'
             },
             howDoPaymentsWork: {
-                q: '[UK] Jak dokonywane są płatności na rzecz gospodarza?',
-                a: '[UK] Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book'
+                q: 'Як здійснюються платежі орендодавцю?',
+                a: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book'
             },
             howToBeSafe: {
-                q: '[UK] W jaki sposób dbać o swoje bezpieczeństwo szukając noclegu?',
-                a: '[UK] Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book'
+                q: 'Як забезпечити свою безпеку при пошуку житла?',
+                a: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book'
             }
         }
     },
     media: {
-        header: '[UK] Media',
-        firstLine: '[UK] Wszelkie zapytania od dziennikarzy, w tym chęć uzyskania wypowiedzi\neksperckiej czy przeprowadzenia wywiadu, mają dla nas charakter\npriorytetowy. Jesteśmy do Państwa dyspozycji pod adresem:',
-        secondLine: '[UK] Informujemy, że wszystkie materiały w serwisie bedOk chronione są prawami\nautorskimi i majątkowymi. W celu ich wykorzystania w publikacji prosimy o\nwcześniejszy kontakt pisemny (mailowy) i uzgodnienie szczegółów. W\nszczególności dotyczy to użycia logotypów, wykorzystania zdjęć i\nmateriałów video oraz zamieszczonych tekstów. Każde wykorzystanie tych\nmateriałów wymaga wcześniejszej autoryzacji.',
-        thirdLine: '[UK] W przypadku propozycji objęcia patronatem danego wydarzenia czy projektu,\nzakupi treści sponsorowanych (w tym reklam) oraz jakichkolwiek innych\nofert komercyjnych, prosimy o szczegółowe informacje, m.in.:',
+        header: 'ЗМІ - Media',
+        firstLine: 'Будь-які запити від журналістів, в тому числі бажання отримати Експертний\nвисновок або інтерв\'ю, є для нас пріоритетними. Ми до ваших послуг за\nадресою:',
+        secondLine: 'Звертаємо Вашу увагу, що всі матеріали на сайті bedOk захищені\nавторськими та майновими правами. Для їх використання в публікації,\nбудь ласка, зв\'яжіться з нами заздалегідь в письмовій формі (по електронній\nпошті) і узгодьте деталі. Зокрема, це стосується використання логотипів,\nвикористання фотографій і відео, а також розміщених текстів. Будь-яке\nвикористання цих матеріалів вимагає попереднього дозволу.',
+        thirdLine: 'Якщо ви пропонуєте взяти участь у заході або проекті, придбати\nспонсорований контент (в тому числі рекламу) і будь-які інші комерційні\nпропозиції, будь ласка, повідомте нам подробиці:',
         details: {
-            title: '[UK] tytuł i wydawca - podmot odpowedzialny',
-            reach: '[UK] weryfikowalny zasięg',
-            contact: '[UK] dane kontaktowe (e-mail, telefon) oferenta',
-            duration: '[UK] format i czas trwania oferty',
-            benefit: '[UK] konkretyzacja świadczeń'
+            title: 'назва і видавець-відповідальний суб\'єкт',
+            reach: 'перевіряється покриття',
+            contact: 'контактні дані (e-mail, телефон) учасника торгів',
+            duration: 'формат і тривалість пропозиції',
+            benefit: 'конкретизація переваг'
         },
         fourthLine: {
-            firstPart: '[UK] Komunikaty publikujemy w części',
-            secondPart: '[UK]  "Blog i aktualności"',
-            thirdPart: '[UK] - strona jest również oficjalnym źródłem naszych informacji prasowych.'
+            firstPart: 'Публікуємо повідомлення в розділі',
+            secondPart: ' "Блог та новини"',
+            thirdPart: '- сайт також є офіційним джерелом наших прес-релізів.'
         }
     }
 };
