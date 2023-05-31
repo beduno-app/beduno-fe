@@ -1,544 +1,544 @@
 export default {
     header: {
-        logoSubtitle: '[RU] i masz spanie!',
-        callToAction: '[RU] Wynajmij i zarabiaj bez opłat',
+       logoSubtitle: 'И уже имеешь ночлег!',
+        callToAction: 'Арендуйте и зарабатывайте бесплатно',
         download: {
             firstLine: {
-                beforeLogo: '[RU] Pobierz naszą aplikację',
-                afterLogo: '[RU] na'
+                beforeLogo: 'Загрузите наше приложение',
+                afterLogo: 'на'
             },
-            secondLine: '[RU] system Android i IOS'
+            secondLine: 'системы Android и IOS'
         },
-        login: '[RU] Zaloguj się'
+        login: 'Войти'
     },
     footer: {
-        callToAction: '[RU] Zostań wynajmującym bez opłat',
-        informationSection: '[RU] Informacje',
-        prices: '[RU] Ceny',
-        cityList: '[RU] Lista miast',
-        partnerProgram: '[RU] Program partnerski',
-        faq: '[RU] Pytania i odpowiedzi Q&A',
-        help: '[RU] Centrum pomocy',
-        contact: '[RU] Kontakt',
-        about: '[RU] O bed!OK',
-        careers: '[RU] Kariera',
-        information: '[RU] Informacje',
-        termsOfCooperation: '[RU] Zasady współpracy',
-        privacyPolicy: '[RU] Oświadczenie o ochronie prywatności i plikach cookies',
-        cookies: '[RU] Zarządzaj ustawieniami dotyczącymi plików cookies',
-        clientSection: '[RU] klient',
-        login: '[RU] Logowanie',
-        registration: '[RU] Rejestracja',
-        specialOffers: '[RU] Oferty specjalne',
+        callToAction: 'Стань арендодателем бесплатно',
+        informationSection: 'Информация',
+        prices: 'Цены',
+        cityList: 'Список городов',
+        partnerProgram: 'Партнерская программа',
+        faq: 'Вопросы и ответы Q&A',
+        help: 'Справочный центр',
+        contact: 'Контакты',
+        about: 'O bed!OK',
+        careers: 'Карьера',
+        information: 'Информация',
+        termsOfCooperation: 'Правила сотрудничества',
+        privacyPolicy: 'Заявление о конфиденциальности и cookies',
+        cookies: 'Управление настройками файлов cookies',
+        clientSection: 'Клиент',
+        login: 'Вход в систему',
+        registration: 'Регистрация',
+        specialOffers: 'Специальные предложения',
         copyrightsNote: {
-            firstPart: '[RU] Prawa autorskie',
-            year: '[RU] 2022',
-            lastPart: '[RU] bed!Ok. Wszelkie prawa autorskie zastrzeżone.'
+            firstPart: 'Авторские права',
+            year: '2022',
+            lastPart: 'bed!Ok. Все авторские права защищены.'
         }
     },
     auth: {
         login: {
-            login: '[RU] Zaloguj się',
-            facebook: '[RU] Zaloguj się przez facebook',
-            google: '[RU] Zaloguj się przez Google',
+            login: 'Войти',
+            facebook: 'Войти через facebook',
+            google: 'Войти через Google',
             email: {
-                placeholder: '[RU] Email'
+                placeholder: 'Email'
             },
             password: {
-                placeholder: '[RU] Hasło'
+                placeholder: 'Пароль'
             },
             phoneNumber: {
-                placeholder: '[RU] Nr tel.'
+                placeholder: 'Номер телефона.'
             },
-            forgotPassword: '[RU] Zapomniałem hasła',
+            forgotPassword: 'Не помню пароль',
             action: {
-                login: '[RU] ZALOGUJ SIĘ',
-                hint: '[RU] Jeśli nie posiadasz u nas konta, możesz się w prosty sposób zarejestrować',
-                register: '[RU] ZAŁÓŻ KONTO'
+                login: 'ВОЙТИ',
+                hint: 'Если у вас нет учетной записи, вы можете легко зарегистрироваться',
+                register: 'СОЗДАТЬ УЧЕТНУЮ ЗАПИСЬ'
             },
         },
         register: {
-            register: '[RU] Załóż konto w prosty sposób',
+            register: 'Создать учетную запись простым способом',
             name: {
-                placeholder: '[RU] Imię*',
+                placeholder: 'Имя*',
                 validationMessages: {
-                    required: '[RU] To pole jest wymagane.'
+                    required: 'Это поле обязательно.'
                 }
             },
             phoneNumber: {
-                placeholder: '[RU] Nr tel.*',
+                placeholder: 'Номер телефона*',
                 validationMessages: {
-                    required: '[RU] To pole jest wymagane.'
+                    required: 'Это поле обязательно.'
                 }
             },
             email: {
-                placeholder: '[RU] Email*',
+                placeholder: 'Email*',
                 validationMessages: {
-                    required: '[RU] To pole jest wymagane.'
+                    required: 'Это поле обязательно.'
                 }
             },
             password: {
-                placeholder: '[RU] Hasło*',
+                placeholder: 'Пароль*',
                 validationMessages: {
-                    required: '[RU] To pole jest wymagane.'
+                    required: 'Это поле обязательно.'
                 }
             },
             repeatPassword: {
-                placeholder: '[RU] Powtórz hasło*',
+                placeholder: 'Повторите пароль*',
                 validationMessages: {
-                    required: '[RU] To pole jest wymagane.'
+                    required: 'Это поле обязательно.'
                 }
             },
             birthYear: {
-                label:  'Rok urodzenia*',
+                label:  'Год рождения*',
                 validationMessages: {
-                    required: '[RU] To pole jest wymagane.'
+                    required: 'Это поле обязательно.'
                 }
             },
             gender: {
-                label: '[RU] Płeć*',
+                label: 'Пол*',
                 validationMessages: {
-                    required: '[RU] To pole jest wymagane.'
+                    required: 'Это поле обязательно.'
                 },
                 options: {
-                    woman: "Kobieta",
-                    man: "Mężczyzna"
+                    woman: "Женщина",
+                    man: "Мужчина"
                 },
             },
             languages: {
-                label: '[RU] Języki w któryh się komunikujesz*',
+                label: 'Языки, на которых вы общаетесь*',
                 validationMessages: {
-                    required: '[RU] To pole jest wymagane.'
+                    required: 'Это поле обязательно.'
                 }
             },
             action: {
-                hint: '[RU] Jeśli już posiadasz u nas konto, po prostu się zaloguj'
+                hint: 'Если у вас уже есть учетная запись с нами, просто войдите в систему'
             },
-            generatePassword:'Wygeneruj hasło',
+            generatePassword:'Создать пароль',
             acceptRegulation: {
-                label: '[RU] Akceptuję regulamin',
-                link: '[RU] kliknij tutaj, aby się z nim zapoznać'
+                label: 'Я принимаю правила',
+                link: 'нажмите здесь, чтобы ознакомиться с ними'
             }
         }
     },
     homeView: {
         title: {
-            firstLine: '[RU] Potrzebne zakwaterowanie?',
-            secondLine: '[RU] Wejdź na BedOK i masz spanie!',
+           firstLine: 'Нужно жилье?',
+            secondLine: 'Зайди на BedOK и уже имеешь ночлег!',
         },
-        looking: '[RU] szukam',
-        offering: '[RU] oferuję',
-        joinRoom: '[RU] NOWOŚĆ! Dołącz do pokoju',
-        citiesTitle: '[RU] W którym mieście chcesz znaleźć nocleg?',
-        howItWorks: '[RU] Jak to działa?',
-        subscribe: '[RU] Zapisz się aby otrzymywać najświeższe informacje i promocje',
-        freeAppLink: '[RU] Chcę otrzymać link do bezpłatnej aplikacji'
+        looking: 'ищу',
+        offering: 'предлагаю',
+        joinRoom: 'Новинка! Присоединяйтесь в комнату',
+        citiesTitle: 'В каком городе вы хотите найти жилье?',
+        howItWorks: 'Как это работает?',
+        subscribe: 'Подпишитесь, чтобы получать последние новости и акции',
+        freeAppLink: 'Я хочу получить ссылку на бесплатное приложение'
     },
     advertisementView: {
-        header: '[RU] Dodaj ogłoszenie',
+        header: 'Добавить объявление',
         mainSection: {
             title: {
-                label: '[RU] Tytuł ogłoszenia*',
-                tip: '[RU] od 7 do 70 znaków',
-                placeholder: '[RU] Np. Pokój dwuosobowy w cichej okolicy',
+                label: 'Название объявления*',
+                tip: 'от 7 до 70 символов',
+                placeholder: 'Например, двухместный номер в тихом районе',
                 validationMessages: {
-                    length: '[RU] Tytuł musi mieć min. 7 znaków, max. 70 znaków.',
-                    required: '[RU] To pole jest wymagane.'
+                    length: 'Название должно быть мин. 7 символов, макс. 70 символов.',
+                    required: 'Это поле обязательно.'
                 }
             },
             address: {
-                label: '[RU] Adres*',
-                cityPlaceholder: '[RU] Miasto',
-                zipCodePlaceholder: '[RU] Kod pocztowy',
-                streetPlaceholder: '[RU] Ulica',
-                streetNumberPlaceholder: '[RU] Nr domu',
-                flatNumberPlaceholder: '[RU] Nr lokalu',
+                label: 'Адрес*',
+                cityPlaceholder: 'Город',
+                zipCodePlaceholder: 'Индекс',
+                streetPlaceholder: 'Улица',
+                streetNumberPlaceholder: 'Номер дома',
+                flatNumberPlaceholder: 'Номер квартиры',
                 validationMessages: {
-                    required: '[RU] To pole jest wymagane.'
+                    required: 'Это поле обязательно.'
                 }
             },
             photos: {
-                label: '[RU] Zdjęcia*',
-                tip: '[RU] min. 1 szt. , max 8 szt.'
+                label: 'Фотографии*',
+                tip: 'мин. 1 шт. , макс 8 шт.'
             }
         },
         hostSection: {
             hostName: {
-                label: '[RU] Nazwa gospodarza*',
-                placeholder: '[RU] Imię',
+                label: 'Название арендодателя*',
+                placeholder: 'Имя',
                 validationMessages: {
-                    required: '[RU] To pole jest wymagane.'
+                    required: 'Это поле обязательно.'
                 }
             },
             phoneNumber: {
-                label: '[RU] Nr telefonu*',
-                placeholder: '[RU] Np. +48 000 000 000',
+                label: 'Номер телефона*',
+                placeholder: 'Например. +48 000 000 000',
                 validationMessages: {
-                    required: '[RU] To pole jest wymagane.'
+                    required: 'Это поле обязательно.'
                 }
             },
             email: {
-                label: '[RU] E-mail*',
-                placeholder: "Np. jan_kowalski{'@'}o2.pl",
+                label: 'E-mail*',
+                placeholder: "Например. jan_kowalski{'@'}o2.pl",
                 validationMessages: {
-                    required: '[RU] To pole jest wymagane.',
-                    email: '[RU] Nieprawdiłowy email'
+                    required: 'Это поле обязательно.',
+                    email: 'Неверный адрес электронной почты'
                 }
             },
             photo: {
-                label: '[RU] Zdjęcie gospodarza'
+                label: 'Фото арендодателя'
             },
             languages: {
-                label: '[RU] Języki, którymi posługuje się gospodarz*',
+                label: 'Языки, на которых говорит арендодатель*',
                 validationMessages: {
-                    required: '[RU] To pole jest wymagane.'
+                    required: 'Это поле обязательно.'
                 }
             },
             communicators: {
-                label: '[RU] Komunikatory, których używa gospodarz*',
-                tip: '[RU] Aplikacje do komnikacji przez internet',
+                label: 'Мессенджеры, которые использует арендодатель*',
+                tip: 'Приложения для общения через интернет',
                 validationMessages: {
-                    required: '[RU] To pole jest wymagane.'
+                    required: 'Это поле обязательно.'
                 }
             }
         },
         descriptionSection: {
             description: {
-                label: '[RU] Opis*',
-                tip: '[RU] maksimum 5000 znaków',
+                label: 'Описание*',
+                tip: 'максимум 5000 символов',
                 tabs: {
-                    own: '[RU] Własny',
-                    preset1: '[RU] Szablon 1',
-                    preset2: '[RU] Szablon 2'
+                    own: 'Собственный',
+                    preset1: 'Шаблон 1',
+                    preset2: 'Шаблон 2'
                 },
-                charactersCounter: '[RU] Pozostało {count} znaków'
+                charactersCounter: 'Осталось {count} символов'
             },
             roomSize: {
-                label: '[RU] Powierzchnia pokoju (m2)*',
-                placeholder: '[RU] np. 4.86',
+                label: 'Площадь жилья (m2)*',
+                placeholder: 'например. 4.86',
                 validationMessages: {
-                    required: '[RU] To pole jest wymagane.'
+                    required: 'Это поле обязательно.'
                 }
             },
             splitIntoBeds: {
-                label: '[RU] Pokój dzielony na łóżka',
-                value: '[RU] Podziel'
+                label: 'Комната, разделенная на кровати',
+                value: 'Разделить'
             },
             bedsCount: {
-                label: '[RU] Liczba łóżek w pokoju*',
-                placeholder: '[RU] np. 6',
+                label: 'Количество кроватей в комнате*',
+                placeholder: 'например. 6',
                 validationMessages: {
-                    required: '[RU] To pole jest wymagane.'
+                    required: 'Это поле обязательно.'
                 }
             },
             roomType: {
-                label: '[RU] Typ pokoju'
+                label: 'Тип комнаты'
             },
             freeBedsCount: {
-                label: '[RU] Liczba wolnych łóżek w pokoj*',
+                label: 'Количество свободных кроватей в комнате*',
                 validationMessages: {
-                    required: '[RU] To pole jest wymagane.'
+                    required: 'Это поле обязательно.'
                 }
             }
         },
         currentGuestsSection: {
-            title: '[RU] Podaj informację o aktualnych lokatorach, tj. imię, wiek, języki, którymi się posługują',
+            title: 'Предоставьте информацию о текущих арендаторах, т. е. имя, возраст, языки, на которых они говорят',
             name: {
-                placeholder: '[RU] Imię'
+                placeholder: 'Имя*'
             },
             birthYear: {
-                label: '[RU] Rok urodzenia*'
+                label: 'Год рождения*'
             }
         },
         paymentSection: {
             paymentMethod: {
-                label: '[RU] Formy płatności:'
+                label: 'Способы оплаты:'
             },
             pricing: {
-                label: '[RU] Ceny (zł):'
+                label: 'Цены(zł):'
             },
-            day: '[RU] doba',
-            discount1: '[RU] Próg zniżkowy 1',
-            discount2: '[RU] Próg zniżkowy 2',
-            discount3: '[RU] Próg zniżkowy 3',
-            discount4: '[RU] Próg zniżkowy 4',
-            discountMonth: '[RU] Próg zniżkowy powyżej miesiąca',
+            day: 'сутки',
+            discount1: 'Порог скидки1',
+            discount2: 'Порог скидки 2',
+            discount3: 'Порог скидки 3',
+            discount4: 'Порог скидки 4',
+            discountMonth: 'Порог скидки проживания более месяца',
         },
         rulesSection: {
-            termsOfStay: '[RU] Zasady pobytu:',
-            animals: '[RU] Akceptujemy zwierzęta:',
-            curfew: '[RU] Cisza nocna (22:00 - 6:00):',
-            smoking: '[RU] Palenie w budynku dozwolone:',
+            termsOfStay: 'Правила проживания:',
+            animals: 'Принимаем с домашними животными:',
+            curfew: 'Тихий час (22:00 - 6:00):',
+            smoking: 'Курение в здании разрешено:',
             others: {
-                label: '[RU] Inne:',
-                placeholder: '[RU] np. brak parkingu, grill w ogrodzie'
+                label: 'Другое:',
+                placeholder: 'например, нет парковки, барбекю в саду'
             }
         },
         equipmentSection: {
             roomEquipment: {
-                label: '[RU] Wyposażenie pokoju',
-                placeholder: '[RU] np. lampka, dywan'
+                label: 'Оборудование комнаты',
+                placeholder: 'например, лампа, ковер'
             },
             sharedEquipment: {
-                label: '[RU] Wyposażenie strefy wspólnej',
-                placeholder: '[RU] np. lampka, dywan'
+                label: 'Оборудование общей зоны',
+                placeholder: 'например, лампа, ковер'
             }
         },
         actions: {
             preview: {
-                label: '[RU] Zobacz podgląd ogłoszenia',
-                tip: '[RU] (zobaczysz jak podgląd ogłoszenie przed jego publikacją)'
+                label: 'Предварительный просмотр объявления',
+                tip: '(вы увидите, как выглядит объявление перед его публикацией)'
             },
             save: {
-                label: '[RU] Zapisz ogłoszenie',
-                tip: '[RU] (nadal będziesz mieć możliwość wprowadzenia zmian w dowolnym momencie)'
+                label: 'Сохранить объявление',
+                tip: '(у вас по-прежнему будет возможность вносить изменения в любое время)'
             },
             publish: {
-                label: '[RU] Opublikuj ogłoszenie',
-                tip: '[RU] (nadal będziesz mieć możliwość wprowadzenia zmian w dowolnym momencie)'
+                label: 'Опубликовать объявление',
+                tip: '(у вас по-прежнему будет возможность вносить изменения в любое время)'
             },
             duplicate: {
-                label: '[RU] Zduplikuj ogłoszenie z wypełnionymi danymi',
-                tip: '[RU] (zaoszczędzisz czas dodając pokoje w tym samymy budynku)'
+                label: 'Продублируйте объявление с заполненными данными',
+                tip: '(вы сэкономите время, добавив комнаты в одном здании)'
             }
         }
     },
     advertisementDetailsView: {
         subheader: {
-            markAsFavorite: '[RU] Dodaj do ulubionych',
-            share: '[RU] Udostępnij'
+            markAsFavorite: 'Добавить в избранное',
+            share: 'Поделиться'
         },
         descriptionWithMap: {
-            description: '[RU] Opis:',
-            location: '[RU] Lokalizacja'
+            description: 'Описание:',
+            location: 'Расположение'
         },
         host: {
-            meetTheHost: '[RU] POZNAJ GOSPODARZA',
-            communicators: '[RU] Używam:'
+            meetTheHost: 'ПОЗНАКОМЬТЕСЬ С АРЕНДОДАТЕЛЕМ',
+            communicators: 'Я использую:'
         },
-        roomArea: '[RU] Powierzchnia pokoju: {area} m2',
-        currentTenants: '[RU] Aktualnie u nas mieszka:',
-        currentTenantsCount: '[RU] Liczba osób aktualnie zamieszkujących pokój:',
-        seeOtherEquipment: '[RU] Zobacz pozostałe udogodnienia',
-        sharedArea: '[RU] Część wspólna: lobby, kuchnia, łazienka',
-        roomSplitToBeds: '[RU] Pokój dzielony na łóżka',
-        sharedRoom: '[RU] Współdzielony z innymi mieszkańcami',
-        roomEquipment: '[RU] Wyposażenie pokoju:',
-        sharedEquipment: '[RU] Wyposażenie części wspólnej:',
-        paymentMethods: '[RU] Metody płatności:',
-        rulesOfStay: '[RU] Zasady pobytu:',
-        pricePerBed: '[RU] Cena za łóżko {price} {currency} ({duration})',
-        book: '[RU] Zarezerwuj łóżko',
-        beds: '[RU] {count} łóżka',
-        rooms: '[RU] {count} pokoje'
+        roomArea: 'Площадь номера: {area} m2',
+        currentTenants: 'В настоящее время у нас живет:',
+        currentTenantsCount: 'Количество людей, проживающих в данный момент в комнате:',
+        seeOtherEquipment: 'Посмотреть другие удобства',
+        sharedArea: 'Общая зона: лобби, кухня, ванная комната',
+        roomSplitToBeds: 'Комната, разделенная на кровати',
+        sharedRoom: 'Совместно с другими жителями',
+        roomEquipment: 'Оборудование комнаты:',
+        sharedEquipment: 'Оборудование общей части:',
+        paymentMethods: 'Способы оплаты:',
+        rulesOfStay: 'Правила проживания:',
+        pricePerBed: 'Цена за кровать {price} {currency} ({duration})',
+        book: 'Забронировать кровать',
+        beds: '{count} кровати',
+        rooms: '{count} комнаты'
     },
     hostAdvertisementsView: {
-        myAdvertisements: '[RU] Moje ogłoszenia',
-        expertPanel: '[RU] Panel EXPERT',
-        active: '[RU] Aktywne',
-        inactive: '[RU] Nieaktywne',
-        addNewAd: '[RU] Dodaj nowe ogłoszenie',
-        freeBeds: '[RU] Wolne: {count} łóżka',
-        messages: '[RU] Wiadomości:',
-        newMessagesCount: '[RU] {count} nieprzeczytanych',
-        editAd: '[RU] Edytuj ogłoszenie',
-        createFromCurrent: '[RU] Stwórz nowe ogłoszenie na podstawie obecnego',
-        createFromCurrentHint: '[RU] (zaoszczędzisz czas dodając pokoje w tym samym budynku)',
-        deactivateAd: '[RU] Zakończ ogłoszenie',
-        deactivateAdHint: '[RU] (ogłoszenie przejdzie do sekcji Nieaktywne)',
-        publishAd: '[RU] Opublikuj ogłoszenie',
-        publishAdHint: '[RU] (nadal będziesz miał/a możliwość wprowadzania zmian w dowolnym momencie)',
-        removeAd: '[RU] Usuń ogłoszenie',
-        removeAdHint: '[RU] (ogłoszenie zostanie usunięte)'
+        myAdvertisements: 'Мои объявления',
+        expertPanel: 'Панель Эксперт',
+        active: 'Активные',
+        inactive: 'Неактивные',
+        addNewAd: 'Добавить новое объявление',
+        freeBeds: 'Свободно: {count} кроватей',
+        messages: 'Сообщения:',
+        newMessagesCount: '{count} непрочитанных',
+        editAd: 'Редактировать объявление',
+        createFromCurrent: 'Создайте новое объявление на основе текущего',
+        createFromCurrentHint: '(вы сэкономите время, добавив комнаты в том же здании)',
+        deactivateAd: 'Деактивировать объявление',
+        deactivateAdHint: '(объявление перейдет в неактивный раздел)',
+        publishAd: 'Опубликовать объявление',
+        publishAdHint: '(вы по-прежнему будете иметь возможность вносить изменения в любое время)',
+        removeAd: 'Удалить объявление',
+        removeAdHint: '(объявление будет удалено)'
     },
     expertPanelView: {
-        removeTenant: '[RU] Usuń lokatora',
-        addTenant: '[RU] Dodaj lokatora',
-        removeAllTenants: '[RU] Usuń wszystkich lokatorów',
-        editAd: '[RU] Edytuj ogłoszenie',
-        createAdFromCurrent: '[RU] Stwórz nowe ogłoszenie na podstawie obecnego',
-        expertPanel: '[RU] Panel EXPERT',
-        myAdvertisements: '[RU] Moje ogłoszenia:',
-        address: '[RU] Adres:',
-        room: '[RU] Pokój:',
-        occupiedBeds: '[RU] Zajęte łóżka:',
-        freeBeds: '[RU] Wolne łóżka:',
-        currentTenants: '[RU] Aktualni lokatorzy:',
-        createAd: '[RU] Dodaj nowe ogłoszenie'
+        removeTenant: 'Удалить арендатора',
+        addTenant: 'Добавить арендатора',
+        removeAllTenants: 'Удалить всех арендаторов',
+        editAd: 'Редактировать объявление',
+        createAdFromCurrent: 'Создайте новое объявление на основе текущего',
+        expertPanel: 'Панель Эксперт',
+        myAdvertisements: 'Мои объявления:',
+        address: 'Адрес:',
+        room: 'Комната:',
+        occupiedBeds: 'Занятые кровати:',
+        freeBeds: 'Свободные кровати:',
+        currentTenants: 'Текущие арендаторы:',
+        createAd: 'Добавить новое объявление'
     },
     becomeHostView: {
         list: {
-            item1 : '[RU] Zostań Wynajmującym bez opłat',
-            item2 : '[RU] Korzystaj z wygodnej formy zarządzania swoją nieruchomością',
-            item3: '[RU] Bezpieczniej wynajmuj łóżka z gwarancja do 2000 PLN',
-            item4: '[RU] Uzyskaj bezpłatną pomoc prawną'
+            item1 : 'Стать арендодателем бесплатно',
+            item2 : 'Используйте удобную форму управления своей недвижимостью',
+            item3: 'Безопаснее арендовать кровати с гарантией до 2000 злотых',
+            item4: 'Получите бесплатную юридическую помощь'
         },
         action : {
-            add: '[RU] Dodaj ogłoszenie',
-            hint: '[RU] I ciesz się bezpiecznym wynajmem'
+            add: 'Добавить объявление',
+            hint: 'И наслаждайтесь безопасной арендой'
         }
     },
     searchInput: {
         location: {
-            label: '[RU] Lokalizacja',
-            placeholder: '[RU] Gdzie szukasz noclegu'
+           label: 'Расположение',
+            placeholder: 'Где вы ищете жилье'
         },
-        since: '[RU] Od kiedy',
-        to: '[RU] Do kiedy',
+        since: 'От когда',
+        to: 'До когда',
         who: {
-            label: '[RU] Kto',
-            placeholder: '[RU] Ile osób'
+            label: 'Кто',
+            placeholder: 'Сколько человек'
         },
-        search: '[RU] Szukaj'
+        search: 'Поиск'
     },
     roomCard: {
-        district: '[RU] Dzielnica:',
-        bedsInRoom: '[RU] {count} łóżka w pokoju',
-        dayPrice: '[RU] {price} zł / dzień',
-        bedDayPrice: '[RU] {price} zł / dzień / łóżko',
-        femaleRoom: '[RU] Pokój żenski',
-        maleRoom: '[RU] Pokój męski',
-        otherGenderRoom: '[RU] Pokój mieszany',
-        tenants: '[RU] Lokatorzy:',
-        tenantInfo: '[RU] {name}, lat {age}',
-        join: '[RU] Dołącz do pokoju'
+        district: 'Район:',
+        bedsInRoom: '{count} кроватей в номере',
+        dayPrice: '{price} zł / день',
+        bedDayPrice: '{price} zł / день / кровать',
+        femaleRoom: 'Женская комната',
+        maleRoom: 'Мужская комната',
+        otherGenderRoom: 'Смешанная комната',
+        tenants: 'Арендаторы:',
+        tenantInfo: '{name}, лет {age}',
+        join: 'Присоединяйтесь в комнату'
     },
     order: {
-        header: '[RU] Podsumowanie zamówienia:',
-        currentGuests: '[RU] Aktualnie zamieszkany przez:',
-        totalAmount: '[RU] Całkowita kwota do zapłaty: {price}{currency} ({duration} noce)',
-        host: '[RU] Gospodarz:',
-        hint: '[RU] Dokładny adres i wskazówki dojazdu do miejsca zamieszkania zostaną\nudostępnione po dokonaniu płatności.',
-        proceedToPayment: '[RU] Przejdź do płatności'
+        header: 'Итог заказа:',
+        currentGuests: 'В настоящее время проживают:',
+        totalAmount: 'Общая сумма к оплате: {price}{currency} ({duration} ночей)',
+        host: 'Арендодатель:',
+        hint: 'Точный адрес и инструкции доезда к месту жительств будут\nпредоставлены после оплаты.',
+        proceedToPayment: 'Перейти к оплате'
     },
     blog: {
-        header: '[RU] Blog i aktualności',
-        published: '[RU] Opublikowano: {date}',
-        readMore: '[RU] ...czytaj dalej',
+        header: 'Блог и новости',
+        published: 'Опубликовано: {date}',
+        readMore: '...читать дальше',
         feed: {
-            firstLine: '[RU] Zapraszmy do zapoznania się z najnowszymi wiadomościami o',
-            secondLine: '[RU] Zachęcamy do śledzenia tej strony, ponieważ pojawiają się tutaj ważne\nkomunikaty o funkcjonowaniu serwisu, zmianach oraz planowanych pracach\nrozwojowych. Zamieszczamy też również nasze oficjalne informacje prasowe.',
-            thirdLine: '[RU] Ponadto w niniejszym dziale regularnie publikujemy naszym klientom\n(wynajmującym i najemcom) zdobyć praktyczne informacje na temat rynku\nnieruchomości. Prosimy jednak pamiętać, że blok ma charakter nie tylko\nedukacyjny, ale także rozrywkowy. Niemniej jednak na pewno każdy\nzainteresowany tematem mieszkalnictwa znajdzie na nim coś dla siebie.',
-            title: '[RU] Co u nas słychać',
-            subtitle: '[RU] Blog i aktualności',
-            loadMore: '[RU] Wczytaj starsze wiadomości...'
+            firstLine: 'Предлагаем вам ознакомиться с последними новостями о',
+            secondLine: 'Мы рекомендуем Вам следить за этой страницей, так как здесь появляются\nважные сообщения о функционировании сайта, изменениях и планируемых\nразработках. Мы также публикуем наши официальные пресс-релизы.',
+            thirdLine: 'Кроме того, в этом разделе мы регулярно публикуем нашим клиентам\n(арендодателям и арендаторам) получить практическую информацию о рынке\nнедвижимости. Обратите внимание, что блог носит не только образовательный,\nно и развлекательный характер. Тем не менее, наверняка каждый, кто\nинтересуется темой жилищного строительства, найдет на нем что-то для себя',
+            title: 'Что у нас нового',
+            subtitle: 'Блог и новости',
+            loadMore: 'Загрузить старые сообщения...'
         }
     },
     about: {
-        header: '[RU] O nas',
-        firstLine: '[RU] to\ninnowacyjny i szybko rozwijający się serwis internetowy, niezwołocznie\nadoptujący i wykorzystujący najnowsze technologie (m.in.AI) do\nopytmalizacji świadczonych przez siebie usług. Łączymy poszukujących\nzakwaterownaia (gości) z osobami oferującymi noclegi (gospodarzami).\nZamiast tradycyjnej formuły oferowania pokojów, my stawiamy na pojedyncze\nłóżka - najbardziej opłacalne z możliwych rozwiązań z punktu widzenia\nzarówno wynajmnującego, jak i najemcy.',
+        header: 'О нас',
+        firstLine: 'это\nинновационный и быстро развивающийся интернет-сервис, быстро\nвнедряющий и использующий новейшие технологии (m.in.AI) для\nоптимизации предоставляемых ими услуг. Мы связываем ищущих жилье\n(гостей) с людьми, предлагающими жилье (хозяевами). Вместо традиционной\nформулы предложения комнат, мы делаем ставку на односпальные\nкровати-наиболее выгодные из возможных решений с точки зрения как\nарендодателя, так и арендатора.',
         secondLine: {
-            firstPart: '[RU] Dzięki',
-            secondPart: '[RU] szybko znajdziesz tani nocleg.'
+            firstPart: 'Благодаря нам',
+            secondPart: 'ты быстро найдешь недорогой ночлег.'
         },
-        thirdLine: '[RU] Potrzebujesz łóżka od zaraz, w niskiej cenie, w dobrej lokalizacji, u\nwiarygodnego wynajmnującego? Dobrze trafiłeś!',
-        fourthLine: '[RU] Nieważne czy chcesz spędzić jedną noc, czy szukasz czegoś na cały rok lub\ndłużej, u nas od razu znajdziesz takie miejsce.'
+        thirdLine: 'Вам нужен ночлег прямо сейчас, по низкой цене, в хорошем месте, у\nнадежного арендодателя? Вы попали в нужное место!',
+        fourthLine: 'Независимо от того, хотите ли вы провести тут одну ночь или ищете\nчто-то на целый год или дольше, у нас вы сразу найдете такое место.'
     },
     career: {
-        header: '[RU] Kariera',
+        header: 'Карьера',
         firstLine: {
-            firstPart: '[RU] W',
-            secondPart: '[RU] stawiamy na ludzi. Wierzymy w ich ambicję, motywację do rozwoju oraz chęć\nposzukiwania własniej drogi zawodowej. Zapraszmy do aplikowania osoby -\npoczątkujących oraz specjalistów - które podzielają nasze wartości:\nzaangażownanie, systematyczność, stosunek do drugiej osoby.',
+            firstPart: 'W',
+            secondPart: '. Мы стараемся для людей! Мы верим в их амбиции, мотивацию к развитию\nи желание искать свой собственный профессиональный путь. Приглашаем\nк применению людей начинающих и специалистов-которые разделяют наши\nценности: приверженность, систематичность, хорошее отношение к другим людям.',
         },
         secondLine: {
-            firstPart: '[RU] Poniżej znadują się aktualne oferty pracy i opisy stanowisk, na które\nszukamy kandydatów. Nawet jeśli w danej chwili nie prowadzimy żadnej\nrekrutacji, zachęcamy do aplikowania. Jeśli czujesz, że pasujesz do\nklimatu startupowego',
-            secondPart: '[RU] , wypełnij poniższy formularz i powiedz nam coś więcej na swój temat -\nmoże okazać się, że jest nam naprawdę po drodze.'
+            firstPart: 'Ниже приведены текущие вакансии на которые мы ищем кандидатов. Даже\nесли в данный момент у нас нет набора персонала, мы рекомендуем Вам\nподать заявку. Если вы чувствуете, что вписываетесь в атмосферу\nстартапа',
+            secondPart: ', заполните форму ниже и расскажите нам больше о себе..'
         },
         thirdLine: {
-            firstPart: '[RU] Uwaga studenci i pełnoletni uczniowe szkół ponadpodstawowych. Jeśli\nposzukujecie wartościowych praktyk zawodowych, podczas których możecie\nzdobyć konkretną wiedzę, doświadczenie i nauczyć się czegoś rzeczywiście\ndobrze, zapraszamy do',
-            secondPart: '[RU] Program staży i praktyk zawodowych w naszym sartupie to doskonały\npoczątek Waszej przyszłej kariery profesjonalnej.'
+            firstPart: 'Внимание для студентов и совершеннолетних учащихся средних школ! Если\nвы ищете ценную профессиональную практику, в ходе которой вы можете\nполучить конкретные знания, опыт и научиться чему-то действительно\nхорошо, мы приглашаем вас',
+            secondPart: 'Программа стажировок и практики в нашем стартапе - отличное начало\nвашей будущей профессиональной карьеры.'
         },
         roles: {
-            juniorDev: '[RU] Junior developer',
-            keyAccountManager: '[RU] Key account manager',
-            photo: '[RU] Fotograf'
+            juniorDev: 'Junior developer - Младший разработчик',
+            keyAccountManager: 'Key account manager - Менеджер по работе с ключевыми клиентами',
+            photo: 'Fotograf - Фотограф'
         }
     },
     contact: {
-        header: '[RU] Kontakt',
-        firstLine: '[RU] Zachęcamy do kontaktu z nami. Na większość zapytań odpowiadamy na bieżąco.\nBardziej złożone kwestie obsługujemy w ciągu maksymalnie 2 dni roboczych.',
-        secondLine: '[RU] Najszybszym sposobem dotarcia do naszego Biura Obsługi jest skorzystanie z\nponiższego formularza. W sprawie współpracy, propozycji biznesowych i\nzapytań, które bezpośrednio nie dotyczą funkcjonowaniu serwisu, uprzejmie\nprosimy o przesłanie wiadomości na adres:',
+        header: 'Контактная информация',
+        firstLine: 'Не стесняйтесь обращаться к нам. На большинство запросов мы отвечаем на\nпостоянной основе. Мы обрабатываем более сложные вопросы в течение максимум 2 рабочих дней.',
+        secondLine: 'Самый быстрый способ связаться с нашим сервисным центром -использовать\nформу ниже. О сотрудничестве, деловых предложениях и запросах, которые\nнепосредственно не касаются функционирования сайта, просим вас\nотправить сообщение по адресу:',
         thirdLine: {
-            firstPart: '[RU] Dziennikarzy i przedstawicieli mediów zapraszamy do kontaktu z naszym\nbiurem prasowym: współpracy, propozycji biznesowych i zapytań, które\nbezpośrednio nie dotyczą funkcjonowaniu serwisu, uprzejmie prosimy o\nprzesłanie wiadomości na adres:',
-            secondPart: '[RU] Po wiecej informacji zapraszamy do sekcji Media.'
+            firstPart: 'Журналистов и представителей СМИ приглашаем связаться с нашим\nпресс-отделом: сотрудничество, деловые предложения и запросы, которые\nнапрямую не касаются функционирования сайта, просим отправить сообщение\nпо адресу:',
+            secondPart: 'За дополнительной информацией обращайтесь в раздел СМИ - Media.'
         },
         form: {
             name: {
-                label: '[RU] Wpisz swoje imię:*',
-                placeholder: '[RU] Imię',
+                  label: 'Введите свое имя:*',
+                placeholder: 'Имя',
                 validationMessages: {
-                    required: '[RU] Imię jest wymagane.'
+                    required: 'требуется указать Имя .'
                 }
             },
             phone: {
-                label: '[RU] Nr telefonu:*',
-                placeholder: '[RU] np.: +48 000 000 000',
+                label: 'Номер телефона:*',
+                placeholder: 'например.: +48 000 000 000',
                 validationMessages: {
-                    required: '[RU] Numer telefonu jest wymagany.'
+                    required: 'требуется указать Номер телефона.'
                 }
             },
             email: {
-                label: '[RU] Email:*',
-                placeholder: '[RU] np. jan{at}kowalski.com',
+                label: 'Email:*',
+                placeholder: 'например. jan{at}kowalski.com',
                 validationMessages: {
-                    required: '[RU] Email jest wymagany.',
-                    email: '[RU] Niepoprawny format adresu email.'
+                    required: 'требуется указатьEmail.',
+                    email: 'Неправильный формат адреса электронной почты.'
                 }
             },
             message: {
-                label: '[RU] Napisz do nas wiadomość:*',
-                placeholder: '[RU] Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.',
+                label: 'Напишите нам сообщение:*',
+                placeholder: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.',
                 validationMessages: {
-                    required: '[RU] Wiadomość jest wymagana.'
+                    required: 'сообщение обязательно.'
                 }
             },
-            hint: '[RU] Wpisanie tych informacji jest obowiązkowe*',
-            send: '[RU] Wyślij wiadomość'
+            hint: 'Ввод этой информации является обязательным*',
+            send: 'Отправить сообщение'
         }
     },
     help: {
-        header: '[RU] Pomoc (FAQ)',
+        header: 'Помощь (FAQ)',
         firstLine: {
-            firstPart: '[RU] Prezentujemy tu listę najczęstszych pytań jakie zadają użytkownicy naszego\nserwisu oraz odpowiedzi, które mają im pomóc rozwiązać dany problem.\nUprzejmie prosimy o zapoznanie się z nimi zanim zwrócą sie Państwa do nas\no pomoc. Z doświadczenia wiemy, że ponad 95% problemów, które zgłaszają\nużytkownicy',
-            secondPart: '[RU] jest prosta do samodzielnego rozwiązania właśnie dzięki poniższym\nwyjaśnieniom oraz wskazówkom.'
+            firstPart: 'Здесь мы представляем список наиболее распространенных вопросов,\nкоторые задают пользователи нашего сайта, и ответы, которые помогут им\nрешить данную проблему. Просим Вас ознакомиться с ними, прежде чем\nобращаться к нам за помощью. По опыту мы знаем, что тут есть более 95%\nпроблем, о которых сообщают пользователи',
+            secondPart: 'ее легко решить самостоятельно благодаря приведенным ниже\nобъяснениям и советам.'
         },
-        howTo: '[RU] Jak to działa',
-        qna: '[RU] Pytania i odpowiedzi,',
+        howTo: 'Как это работает',
+        qna: 'Вопросы и ответы,',
         questions: {
             howToGetAccount: {
-                q: '[RU] Jak założyć konto w serwisie',
-                a: '[RU] Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book'
+                q: 'Как создать учетную запись в сервисе',
+                a: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book'
             },
             dataNeededToRegister: {
-                q: '[RU] Jakie dane muszę muszę podać przy rejestracji?',
-                a: '[RU] Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book'
+                q: 'Какие данные я должен предоставить при регистрации?',
+                a: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book'
             },
             howDoPaymentsWork: {
-                q: '[RU] Jak dokonywane są płatności na rzecz gospodarza?',
-                a: '[RU] Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book'
+                q: 'Как производятся платежи арендодателю?',
+                a: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book'
             },
             howToBeSafe: {
-                q: '[RU] W jaki sposób dbać o swoje bezpieczeństwo szukając noclegu?',
-                a: '[RU] Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book'
+                q: 'Как обеспечить свою безопасность при поиске жилья?',
+                a: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book'
             }
         }
     },
     media: {
-        header: '[RU] Media',
-        firstLine: '[RU] Wszelkie zapytania od dziennikarzy, w tym chęć uzyskania wypowiedzi\neksperckiej czy przeprowadzenia wywiadu, mają dla nas charakter\npriorytetowy. Jesteśmy do Państwa dyspozycji pod adresem:',
-        secondLine: '[RU] Informujemy, że wszystkie materiały w serwisie bedOk chronione są prawami\nautorskimi i majątkowymi. W celu ich wykorzystania w publikacji prosimy o\nwcześniejszy kontakt pisemny (mailowy) i uzgodnienie szczegółów. W\nszczególności dotyczy to użycia logotypów, wykorzystania zdjęć i\nmateriałów video oraz zamieszczonych tekstów. Każde wykorzystanie tych\nmateriałów wymaga wcześniejszej autoryzacji.',
-        thirdLine: '[RU] W przypadku propozycji objęcia patronatem danego wydarzenia czy projektu,\nzakupi treści sponsorowanych (w tym reklam) oraz jakichkolwiek innych\nofert komercyjnych, prosimy o szczegółowe informacje, m.in.:',
+        header: 'Media - СМИ',
+        firstLine: 'Любые запросы от журналистов, в том числе желание получить экспертное\nзаключение или интервью, являются для нас приоритетными. Мы к вашим\nуслугам по адресу:',
+        secondLine: 'Обращаем ваше внимание, что все материалы на сайте bedOk защищены\nавторскими и имущественными правами. Для их использования в публикации,\nпожалуйста, свяжитесь с нами заранее в письменной форме (по электронной\nпочте) и согласуйте детали. В частности, это касается использования\nлоготипов, использования фотографий и видео, а также размещенных\nтекстов. Любое использование этих материалов требует предварительного разрешения.',
+        thirdLine: 'Если вы предлагаете принять участие в мероприятии или проекте, приобрести\nспонсируемый контент (в том числе рекламу) и любые другие коммерческие\nпредложения, пожалуйста, сообщите нам подробности.:',
         details: {
-            title: '[RU] tytuł i wydawca - podmot odpowedzialny',
-            reach: '[RU] weryfikowalny zasięg',
-            contact: '[RU] dane kontaktowe (e-mail, telefon) oferenta',
-            duration: '[RU] format i czas trwania oferty',
-            benefit: '[RU] konkretyzacja świadczeń'
+            title: 'название и издатель - ответственный субъект',
+            reach: 'проверяемое покрытие',
+            contact: 'контактные данные (e-mail, телефон) участника',
+            duration: 'формат и продолжительность предложения',
+            benefit: 'конкретизация преимуществ'
         },
         fourthLine: {
-            firstPart: '[RU] Komunikaty publikujemy w części',
-            secondPart: '[RU]  "Blog i aktualności"',
-            thirdPart: '[RU] - strona jest również oficjalnym źródłem naszych informacji prasowych.'
+            firstPart: 'Мы публикуем сообщения в части',
+            secondPart: ' "Блог и новости"',
+            thirdPart: '- сайт также является официальным источником наших пресс-релизов.'
         }
     }
 };
