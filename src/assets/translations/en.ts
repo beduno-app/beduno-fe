@@ -1,544 +1,544 @@
 export default {
     header: {
-        logoSubtitle: '[EN] i masz spanie!',
-        callToAction: '[EN] Wynajmij i zarabiaj bez opłat',
+        logoSubtitle: 'and you got your bed!',
+        callToAction: 'Rent out and make money without additional fees',
         download: {
             firstLine: {
-                beforeLogo: '[EN] Pobierz naszą aplikację',
-                afterLogo: '[EN] na'
+                beforeLogo: 'Get our app',
+                afterLogo: 'for'
             },
-            secondLine: '[EN] system Android i IOS'
+            secondLine: 'Android or IOS'
         },
-        login: '[EN] Zaloguj się'
+        login: 'Log in'
     },
     footer: {
-        callToAction: '[EN] Zostań wynajmującym bez opłat',
-        informationSection: '[EN] Informacje',
-        prices: '[EN] Ceny',
-        cityList: '[EN] Lista miast',
-        partnerProgram: '[EN] Program partnerski',
-        faq: '[EN] Pytania i odpowiedzi Q&A',
-        help: '[EN] Centrum pomocy',
-        contact: '[EN] Kontakt',
-        about: '[EN] O bed!OK',
-        careers: '[EN] Kariera',
-        information: '[EN] Informacje',
-        termsOfCooperation: '[EN] Zasady współpracy',
-        privacyPolicy: '[EN] Oświadczenie o ochronie prywatności i plikach cookies',
-        cookies: '[EN] Zarządzaj ustawieniami dotyczącymi plików cookies',
-        clientSection: '[EN] klient',
-        login: '[EN] Logowanie',
-        registration: '[EN] Rejestracja',
-        specialOffers: '[EN] Oferty specjalne',
+        callToAction: 'Start renting out with no additional fees',
+        informationSection: 'Information',
+        prices: 'Prices',
+        cityList: 'Places (city list)',
+        partnerProgram: 'Partnership program',
+        faq: 'Questions and answers (FAQ)',
+        help: 'Assistance center',
+        contact: 'Contact',
+        about: 'About bed!OK',
+        careers: 'Career',
+        information: 'Information',
+        termsOfCooperation: 'Cooperation terms',
+        privacyPolicy: 'Privacy and cookies policy',
+        cookies: 'Manage your cookies settings',
+        clientSection: 'customer',
+        login: 'Log in',
+        registration: 'Registration (sign in)',
+        specialOffers: 'Special offers',
         copyrightsNote: {
-            firstPart: '[EN] Prawa autorskie',
-            year: '[EN] 2022',
-            lastPart: '[EN] bed!Ok. Wszelkie prawa autorskie zastrzeżone.'
+            firstPart: 'Copyrights',
+            year: '2022',
+            lastPart: 'bed!Ok. All rights reserved.'
         }
     },
     auth: {
         login: {
-            login: '[EN] Zaloguj się',
-            facebook: '[EN] Zaloguj się przez facebook',
-            google: '[EN] Zaloguj się przez Google',
+            login: 'Log in',
+            facebook: 'Facebook log in',
+            google: 'Google log in',
             email: {
-                placeholder: '[EN] Email'
+                placeholder: 'Email'
             },
             password: {
-                placeholder: '[EN] Hasło'
+                placeholder: 'Password'
             },
             phoneNumber: {
-                placeholder: '[EN] Nr tel.'
+                placeholder: 'Phone number'
             },
-            forgotPassword: '[EN] Zapomniałem hasła',
+            forgotPassword: 'Forgotten password',
             action: {
-                login: '[EN] ZALOGUJ SIĘ',
-                hint: '[EN] Jeśli nie posiadasz u nas konta, możesz się w prosty sposób zarejestrować',
-                register: '[EN] ZAŁÓŻ KONTO'
+                login: 'LOG IN',
+                hint: 'Dont have an account? You can create it easily',
+                register: 'CREATE NEW ACCOUNT'
             },
         },
         register: {
-            register: '[EN] Załóż konto w prosty sposób',
+            register: 'Create an account in an easy way',
             name: {
-                placeholder: '[EN] Imię*',
+                placeholder: 'Name*',
                 validationMessages: {
-                    required: '[EN] To pole jest wymagane.'
+                    required: 'Required field.'
                 }
             },
             phoneNumber: {
-                placeholder: '[EN] Nr tel.*',
+                placeholder: 'Phone number*',
                 validationMessages: {
-                    required: '[EN] To pole jest wymagane.'
+                    required: 'Required field.'
                 }
             },
             email: {
-                placeholder: '[EN] Email*',
+                placeholder: 'Email*',
                 validationMessages: {
-                    required: '[EN] To pole jest wymagane.'
+                    required: 'Required field.'
                 }
             },
             password: {
-                placeholder: '[EN] Hasło*',
+                placeholder: 'Password*',
                 validationMessages: {
-                    required: '[EN] To pole jest wymagane.'
+                    required: 'Required field.'
                 }
             },
             repeatPassword: {
-                placeholder: '[EN] Powtórz hasło*',
+                placeholder: 'Repeat password*',
                 validationMessages: {
-                    required: '[EN] To pole jest wymagane.'
+                    required: 'Required field.'
                 }
             },
             birthYear: {
-                label:  'Rok urodzenia*',
+                label: 'Year of birth*',
                 validationMessages: {
-                    required: '[EN] To pole jest wymagane.'
+                    required: 'Required field.'
                 }
             },
             gender: {
-                label: '[EN] Płeć*',
+                label: 'Sex*',
                 validationMessages: {
-                    required: '[EN] To pole jest wymagane.'
+                    required: 'Required field.'
                 },
                 options: {
-                    woman: "Kobieta",
-                    man: "Mężczyzna"
+                    woman: "Female",
+                    man: "Male"
                 },
             },
             languages: {
-                label: '[EN] Języki w któryh się komunikujesz*',
+                label: 'Spoken languages*',
                 validationMessages: {
-                    required: '[EN] To pole jest wymagane.'
+                    required: 'Required field.'
                 }
             },
             action: {
-                hint: '[EN] Jeśli już posiadasz u nas konto, po prostu się zaloguj'
+                hint: 'Already have an account? Just log in'
             },
-            generatePassword:'Wygeneruj hasło',
+            generatePassword: 'Generate strong password',
             acceptRegulation: {
-                label: '[EN] Akceptuję regulamin',
-                link: '[EN] kliknij tutaj, aby się z nim zapoznać'
+                label: 'I accept terms and conditions',
+                link: 'click here to read them'
             }
         }
     },
     homeView: {
         title: {
-            firstLine: '[EN] Potrzebne zakwaterowanie?',
-            secondLine: '[EN] Wejdź na BedOK i masz spanie!',
+            firstLine: 'Accommodation needed?',
+            secondLine: 'Go to Bed!OK and proceed it!',
         },
-        looking: '[EN] szukam',
-        offering: '[EN] oferuję',
-        joinRoom: '[EN] NOWOŚĆ! Dołącz do pokoju',
-        citiesTitle: '[EN] W którym mieście chcesz znaleźć nocleg?',
-        howItWorks: '[EN] Jak to działa?',
-        subscribe: '[EN] Zapisz się aby otrzymywać najświeższe informacje i promocje',
-        freeAppLink: '[EN] Chcę otrzymać link do bezpłatnej aplikacji'
+        looking: 'searching for',
+        offering: 'offering',
+        joinRoom: 'NEW! Join a room',
+        citiesTitle: 'What place are you looking accommodation in?',
+        howItWorks: 'How does it work?',
+        subscribe: 'Sign up to get updates and promotions',
+        freeAppLink: 'Get me link to a free app'
     },
     advertisementView: {
-        header: '[EN] Dodaj ogłoszenie',
+        header: 'Add offer',
         mainSection: {
             title: {
-                label: '[EN] Tytuł ogłoszenia*',
-                tip: '[EN] od 7 do 70 znaków',
-                placeholder: '[EN] Np. Pokój dwuosobowy w cichej okolicy',
+                label: 'Offer title*',
+                tip: '7 to 70 characters',
+                placeholder: 'E. g. two bed room in a quiet neighbourhood',
                 validationMessages: {
-                    length: '[EN] Tytuł musi mieć min. 7 znaków, max. 70 znaków.',
-                    required: '[EN] To pole jest wymagane.'
+                    length: 'Title needs to be from 7 to 70 characters.',
+                    required: 'Required field.'
                 }
             },
             address: {
-                label: '[EN] Adres*',
-                cityPlaceholder: '[EN] Miasto',
-                zipCodePlaceholder: '[EN] Kod pocztowy',
-                streetPlaceholder: '[EN] Ulica',
-                streetNumberPlaceholder: '[EN] Nr domu',
-                flatNumberPlaceholder: '[EN] Nr lokalu',
+                label: 'Address*',
+                cityPlaceholder: 'City',
+                zipCodePlaceholder: 'Zip code',
+                streetPlaceholder: 'Street name',
+                streetNumberPlaceholder: 'House No.',
+                flatNumberPlaceholder: 'Flat No.',
                 validationMessages: {
-                    required: '[EN] To pole jest wymagane.'
+                    required: 'Required field.'
                 }
             },
             photos: {
-                label: '[EN] Zdjęcia*',
-                tip: '[EN] min. 1 szt. , max 8 szt.'
+                label: 'Photos*',
+                tip: '1 to 8 photos'
             }
         },
         hostSection: {
             hostName: {
-                label: '[EN] Nazwa gospodarza*',
-                placeholder: '[EN] Imię',
+                label: 'Host name*',
+                placeholder: 'Name',
                 validationMessages: {
-                    required: '[EN] To pole jest wymagane.'
+                    required: 'Required field.'
                 }
             },
             phoneNumber: {
-                label: '[EN] Nr telefonu*',
-                placeholder: '[EN] Np. +48 000 000 000',
+                label: 'Phone number*',
+                placeholder: 'E.g. +48 000 000 000',
                 validationMessages: {
-                    required: '[EN] To pole jest wymagane.'
+                    required: 'Required field.'
                 }
             },
             email: {
-                label: '[EN] E-mail*',
-                placeholder: "Np. jan_kowalski{'@'}o2.pl",
+                label: 'E-mail*',
+                placeholder: "E. g.john_smith{'@'}o2.pl",
                 validationMessages: {
-                    required: '[EN] To pole jest wymagane.',
-                    email: '[EN] Nieprawdiłowy email'
+                    required: 'Required field.',
+                    email: 'Invalid email'
                 }
             },
             photo: {
-                label: '[EN] Zdjęcie gospodarza'
+                label: 'Host photo'
             },
             languages: {
-                label: '[EN] Języki, którymi posługuje się gospodarz*',
+                label: 'Host spoken languages*',
                 validationMessages: {
-                    required: '[EN] To pole jest wymagane.'
+                    required: 'Required field.'
                 }
             },
             communicators: {
-                label: '[EN] Komunikatory, których używa gospodarz*',
-                tip: '[EN] Aplikacje do komnikacji przez internet',
+                label: 'Host communicators*',
+                tip: 'Applications for network communication',
                 validationMessages: {
-                    required: '[EN] To pole jest wymagane.'
+                    required: 'Required field.'
                 }
             }
         },
         descriptionSection: {
             description: {
-                label: '[EN] Opis*',
-                tip: '[EN] maksimum 5000 znaków',
+                label: 'Description*',
+                tip: 'max. 5000 charackters',
                 tabs: {
-                    own: '[EN] Własny',
-                    preset1: '[EN] Szablon 1',
-                    preset2: '[EN] Szablon 2'
+                    own: 'Own',
+                    preset1: 'Template 1',
+                    preset2: 'Template 2'
                 },
-                charactersCounter: '[EN] Pozostało {count} znaków'
+                charactersCounter: 'Characters count'
             },
             roomSize: {
-                label: '[EN] Powierzchnia pokoju (m2)*',
-                placeholder: '[EN] np. 4.86',
+                label: 'Room space (m2)*',
+                placeholder: 'e.g. 4.86',
                 validationMessages: {
-                    required: '[EN] To pole jest wymagane.'
+                    required: 'Required field.'
                 }
             },
             splitIntoBeds: {
-                label: '[EN] Pokój dzielony na łóżka',
-                value: '[EN] Podziel'
+                label: 'Bed shared room',
+                value: 'share'
             },
             bedsCount: {
-                label: '[EN] Liczba łóżek w pokoju*',
-                placeholder: '[EN] np. 6',
+                label: 'Room bed number*',
+                placeholder: 'e. g. 6',
                 validationMessages: {
-                    required: '[EN] To pole jest wymagane.'
+                    required: 'Required field.'
                 }
             },
             roomType: {
-                label: '[EN] Typ pokoju'
+                label: 'Room type'
             },
             freeBedsCount: {
-                label: '[EN] Liczba wolnych łóżek w pokoj*',
+                label: 'Room vacant beds number*',
                 validationMessages: {
-                    required: '[EN] To pole jest wymagane.'
+                    required: 'Required field.'
                 }
             }
         },
         currentGuestsSection: {
-            title: '[EN] Podaj informację o aktualnych lokatorach, tj. imię, wiek, języki, którymi się posługują',
+            title: 'Enter current tenants data: name, age, spoken languahes',
             name: {
-                placeholder: '[EN] Imię'
+                placeholder: 'Name'
             },
             birthYear: {
-                label: '[EN] Rok urodzenia*'
+                label: 'Year of birth*'
             }
         },
         paymentSection: {
             paymentMethod: {
-                label: '[EN] Formy płatności:'
+                label: 'Payment forms:'
             },
             pricing: {
-                label: '[EN] Ceny (zł):'
+                label: 'Prices (PLN):'
             },
-            day: '[EN] doba',
-            discount1: '[EN] Próg zniżkowy 1',
-            discount2: '[EN] Próg zniżkowy 2',
-            discount3: '[EN] Próg zniżkowy 3',
-            discount4: '[EN] Próg zniżkowy 4',
-            discountMonth: '[EN] Próg zniżkowy powyżej miesiąca',
+            day: 'day and night',
+            discount1: 'Discount level 1',
+            discount2: 'Discount level 2',
+            discount3: 'Discount level 3',
+            discount4: 'Discount level 4',
+            discountMonth: 'Discount level above one month',
         },
         rulesSection: {
-            termsOfStay: '[EN] Zasady pobytu:',
-            animals: '[EN] Akceptujemy zwierzęta:',
-            curfew: '[EN] Cisza nocna (22:00 - 6:00):',
-            smoking: '[EN] Palenie w budynku dozwolone:',
+            termsOfStay: 'Terms of stay:',
+            animals: 'Animals allowed:',
+            curfew: 'Quiet hours(22:00 - 6:00):',
+            smoking: 'Smoking allowed:',
             others: {
-                label: '[EN] Inne:',
-                placeholder: '[EN] np. brak parkingu, grill w ogrodzie'
+                label: 'Others:',
+                placeholder: 'e. g. no parking lot, garden barbecue'
             }
         },
         equipmentSection: {
             roomEquipment: {
-                label: '[EN] Wyposażenie pokoju',
-                placeholder: '[EN] np. lampka, dywan'
+                label: 'Room equipment',
+                placeholder: 'e. g. lamp, carpet'
             },
             sharedEquipment: {
-                label: '[EN] Wyposażenie strefy wspólnej',
-                placeholder: '[EN] np. lampka, dywan'
+                label: 'Common zone equipment',
+                placeholder: 'e. g. lamp, carpet'
             }
         },
         actions: {
             preview: {
-                label: '[EN] Zobacz podgląd ogłoszenia',
-                tip: '[EN] (zobaczysz jak podgląd ogłoszenie przed jego publikacją)'
+                label: 'Offer preview',
+                tip: '(see how your offer looks like before publishing)'
             },
             save: {
-                label: '[EN] Zapisz ogłoszenie',
-                tip: '[EN] (nadal będziesz mieć możliwość wprowadzenia zmian w dowolnym momencie)'
+                label: 'Save offer',
+                tip: '(you can still edit your offer afterwards)'
             },
             publish: {
-                label: '[EN] Opublikuj ogłoszenie',
-                tip: '[EN] (nadal będziesz mieć możliwość wprowadzenia zmian w dowolnym momencie)'
+                label: 'Publish offer',
+                tip: '(you can still edit your offer in any time)'
             },
             duplicate: {
-                label: '[EN] Zduplikuj ogłoszenie z wypełnionymi danymi',
-                tip: '[EN] (zaoszczędzisz czas dodając pokoje w tym samymy budynku)'
+                label: 'Clone your offer',
+                tip: '(save yoyr time when adding rooms in the same house)'
             }
         }
     },
     advertisementDetailsView: {
         subheader: {
-            markAsFavorite: '[EN] Dodaj do ulubionych',
-            share: '[EN] Udostępnij'
+            markAsFavorite: 'Add to favourite',
+            share: 'Share'
         },
         descriptionWithMap: {
-            description: '[EN] Opis:',
-            location: '[EN] Lokalizacja'
+            description: 'Description:',
+            location: 'Location'
         },
         host: {
-            meetTheHost: '[EN] POZNAJ GOSPODARZA',
-            communicators: '[EN] Używam:'
+            meetTheHost: 'MEET YOUR HOST',
+            communicators: 'In use:'
         },
-        roomArea: '[EN] Powierzchnia pokoju: {area} m2',
-        currentTenants: '[EN] Aktualnie u nas mieszka:',
-        currentTenantsCount: '[EN] Liczba osób aktualnie zamieszkujących pokój:',
-        seeOtherEquipment: '[EN] Zobacz pozostałe udogodnienia',
-        sharedArea: '[EN] Część wspólna: lobby, kuchnia, łazienka',
-        roomSplitToBeds: '[EN] Pokój dzielony na łóżka',
-        sharedRoom: '[EN] Współdzielony z innymi mieszkańcami',
-        roomEquipment: '[EN] Wyposażenie pokoju:',
-        sharedEquipment: '[EN] Wyposażenie części wspólnej:',
-        paymentMethods: '[EN] Metody płatności:',
-        rulesOfStay: '[EN] Zasady pobytu:',
-        pricePerBed: '[EN] Cena za łóżko {price} {currency} ({duration})',
-        book: '[EN] Zarezerwuj łóżko',
-        beds: '[EN] {count} łóżka',
-        rooms: '[EN] {count} pokoje'
+        roomArea: 'Room space: {area} m2',
+        currentTenants: 'Current tenants:',
+        currentTenantsCount: 'Number of people currently living in your room:',
+        seeOtherEquipment: 'Check for other conveniences',
+        sharedArea: 'Common space: lobby, kitchen, bathroom',
+        roomSplitToBeds: 'Shared beds room',
+        sharedRoom: 'Shared with other tenants',
+        roomEquipment: 'Room equipment:',
+        sharedEquipment: 'Common space equipment:',
+        paymentMethods: 'Payment methods:',
+        rulesOfStay: 'Terms of stay:',
+        pricePerBed: 'Price per bed {price} {currency} ({duration})',
+        book: 'Book your bed',
+        beds: '{count} beds',
+        rooms: '{count} rooms'
     },
     hostAdvertisementsView: {
-        myAdvertisements: '[EN] Moje ogłoszenia',
-        expertPanel: '[EN] Panel EXPERT',
-        active: '[EN] Aktywne',
-        inactive: '[EN] Nieaktywne',
-        addNewAd: '[EN] Dodaj nowe ogłoszenie',
-        freeBeds: '[EN] Wolne: {count} łóżka',
-        messages: '[EN] Wiadomości:',
-        newMessagesCount: '[EN] {count} nieprzeczytanych',
-        editAd: '[EN] Edytuj ogłoszenie',
-        createFromCurrent: '[EN] Stwórz nowe ogłoszenie na podstawie obecnego',
-        createFromCurrentHint: '[EN] (zaoszczędzisz czas dodając pokoje w tym samym budynku)',
-        deactivateAd: '[EN] Zakończ ogłoszenie',
-        deactivateAdHint: '[EN] (ogłoszenie przejdzie do sekcji Nieaktywne)',
-        publishAd: '[EN] Opublikuj ogłoszenie',
-        publishAdHint: '[EN] (nadal będziesz miał/a możliwość wprowadzania zmian w dowolnym momencie)',
-        removeAd: '[EN] Usuń ogłoszenie',
-        removeAdHint: '[EN] (ogłoszenie zostanie usunięte)'
+        myAdvertisements: 'My offers',
+        expertPanel: 'EXPERT Panel',
+        active: 'Active',
+        inactive: 'Inactive',
+        addNewAd: 'Add new offer1',
+        freeBeds: 'Unoccupied: {count} beds',
+        messages: 'Messages:',
+        newMessagesCount: '{count} unread',
+        editAd: 'Edit your offer',
+        createFromCurrent: 'Create new offer based on existing one',
+        createFromCurrentHint: '(save your time when adding rooms in the same building)',
+        deactivateAd: 'Finish your offer',
+        deactivateAdHint: '(your offer will be transferred to Inactive section)',
+        publishAd: 'Publish your offer',
+        publishAdHint: '(you can still edit your offer in any time)',
+        removeAd: 'Remove your offer',
+        removeAdHint: '(your offer will be permanently removed)'
     },
     expertPanelView: {
-        removeTenant: '[EN] Usuń lokatora',
-        addTenant: '[EN] Dodaj lokatora',
-        removeAllTenants: '[EN] Usuń wszystkich lokatorów',
-        editAd: '[EN] Edytuj ogłoszenie',
-        createAdFromCurrent: '[EN] Stwórz nowe ogłoszenie na podstawie obecnego',
-        expertPanel: '[EN] Panel EXPERT',
-        myAdvertisements: '[EN] Moje ogłoszenia:',
-        address: '[EN] Adres:',
-        room: '[EN] Pokój:',
-        occupiedBeds: '[EN] Zajęte łóżka:',
-        freeBeds: '[EN] Wolne łóżka:',
-        currentTenants: '[EN] Aktualni lokatorzy:',
-        createAd: '[EN] Dodaj nowe ogłoszenie'
+        removeTenant: 'Remove tenant',
+        addTenant: 'Add tenant',
+        removeAllTenants: 'Remove all tenants',
+        editAd: 'Edit your offer',
+        createAdFromCurrent: 'Create new offer based on existing one',
+        expertPanel: 'EXPERT Panel',
+        myAdvertisements: 'My offers:',
+        address: 'Address:',
+        room: 'Room:',
+        occupiedBeds: 'Occupied beds:',
+        freeBeds: 'Vacant beds:',
+        currentTenants: 'Current tenants:',
+        createAd: 'Add new offer'
     },
     becomeHostView: {
         list: {
-            item1 : '[EN] Zostań Wynajmującym bez opłat',
-            item2 : '[EN] Korzystaj z wygodnej formy zarządzania swoją nieruchomością',
-            item3: '[EN] Bezpieczniej wynajmuj łóżka z gwarancja do 2000 PLN',
-            item4: '[EN] Uzyskaj bezpłatną pomoc prawną'
+            item1: 'Start renting out without additional fees',
+            item2: 'Use a convenient system to manage your real estate',
+            item3: 'Rent out beds safely with insurance of up to 2000 PLN',
+            item4: 'Get free legal aid'
         },
-        action : {
-            add: '[EN] Dodaj ogłoszenie',
-            hint: '[EN] I ciesz się bezpiecznym wynajmem'
+        action: {
+            add: 'Add your offer',
+            hint: 'And enjoy safe renting out process'
         }
     },
     searchInput: {
         location: {
-            label: '[EN] Lokalizacja',
-            placeholder: '[EN] Gdzie szukasz noclegu'
+            label: 'Location',
+            placeholder: 'Where are you looking for a bed?'
         },
-        since: '[EN] Od kiedy',
-        to: '[EN] Do kiedy',
+        since: 'From',
+        to: 'To',
         who: {
-            label: '[EN] Kto',
-            placeholder: '[EN] Ile osób'
+            label: 'Who',
+            placeholder: 'How many people'
         },
-        search: '[EN] Szukaj'
+        search: 'Search'
     },
     roomCard: {
-        district: '[EN] Dzielnica:',
-        bedsInRoom: '[EN] {count} łóżka w pokoju',
-        dayPrice: '[EN] {price} zł / dzień',
-        bedDayPrice: '[EN] {price} zł / dzień / łóżko',
-        femaleRoom: '[EN] Pokój żenski',
-        maleRoom: '[EN] Pokój męski',
-        otherGenderRoom: '[EN] Pokój mieszany',
-        tenants: '[EN] Lokatorzy:',
-        tenantInfo: '[EN] {name}, lat {age}',
-        join: '[EN] Dołącz do pokoju'
+        district: 'District:',
+        bedsInRoom: '{count} beds in your room',
+        dayPrice: '{price} PLN / day',
+        bedDayPrice: '{price} PLN / day / bed',
+        femaleRoom: 'Female room',
+        maleRoom: 'Male room',
+        otherGenderRoom: 'Mixed room',
+        tenants: 'Tenants:',
+        tenantInfo: '{name}, years {age}',
+        join: 'Join room'
     },
     order: {
-        header: '[EN] Podsumowanie zamówienia:',
-        currentGuests: '[EN] Aktualnie zamieszkany przez:',
-        totalAmount: '[EN] Całkowita kwota do zapłaty: {price}{currency} ({duration} noce)',
-        host: '[EN] Gospodarz:',
-        hint: '[EN] Dokładny adres i wskazówki dojazdu do miejsca zamieszkania zostaną\nudostępnione po dokonaniu płatności.',
-        proceedToPayment: '[EN] Przejdź do płatności'
+        header: 'Order summary:',
+        currentGuests: 'Currently occupied by:',
+        totalAmount: 'Total amount: {price}{currency} ({duration} nights)',
+        host: 'Host:',
+        hint: 'Exact address and getting there directions will be \navailable after payment.',
+        proceedToPayment: 'Proceed to payment'
     },
     blog: {
-        header: '[EN] Blog i aktualności',
-        published: '[EN] Opublikowano: {date}',
-        readMore: '[EN] ...czytaj dalej',
+        header: 'Blog and news',
+        published: 'Published: {date}',
+        readMore: '...read more',
         feed: {
-            firstLine: '[EN] Zapraszmy do zapoznania się z najnowszymi wiadomościami o',
-            secondLine: '[EN] Zachęcamy do śledzenia tej strony, ponieważ pojawiają się tutaj ważne\nkomunikaty o funkcjonowaniu serwisu, zmianach oraz planowanych pracach\nrozwojowych. Zamieszczamy też również nasze oficjalne informacje prasowe.',
-            thirdLine: '[EN] Ponadto w niniejszym dziale regularnie publikujemy naszym klientom\n(wynajmującym i najemcom) zdobyć praktyczne informacje na temat rynku\nnieruchomości. Prosimy jednak pamiętać, że blok ma charakter nie tylko\nedukacyjny, ale także rozrywkowy. Niemniej jednak na pewno każdy\nzainteresowany tematem mieszkalnictwa znajdzie na nim coś dla siebie.',
-            title: '[EN] Co u nas słychać',
-            subtitle: '[EN] Blog i aktualności',
-            loadMore: '[EN] Wczytaj starsze wiadomości...'
+            firstLine: 'Check out whats new',
+            secondLine: 'Follow our news section regularly as we publish here important\nannouncements, updates and planned development works. /nIn this section we publish official press releases as well.',
+            thirdLine: 'Moreover, we share with our customers (hosts and tenants) practical hints\nabout real estate market. Everyone finds something attractive for himself.',
+            title: 'Bed!OK updates',
+            subtitle: 'Blog and news',
+            loadMore: 'Read more news...'
         }
     },
     about: {
-        header: '[EN] O nas',
-        firstLine: '[EN] to\ninnowacyjny i szybko rozwijający się serwis internetowy, niezwołocznie\nadoptujący i wykorzystujący najnowsze technologie (m.in.AI) do\nopytmalizacji świadczonych przez siebie usług. Łączymy poszukujących\nzakwaterownaia (gości) z osobami oferującymi noclegi (gospodarzami).\nZamiast tradycyjnej formuły oferowania pokojów, my stawiamy na pojedyncze\nłóżka - najbardziej opłacalne z możliwych rozwiązań z punktu widzenia\nzarówno wynajmnującego, jak i najemcy.',
+        header: 'About us`',
+        firstLine: 'is\nan innovative and rapidly growing web service, quickly\nadopting and making use of most modern technologies (AI) for\noptimizing its solutions. We connect those who are looking for\naccommodation (guests) with those who offer beds (hosts).\nInstead of traditional room-for-rent formula we introduce bed-for-rent more practical solution.',
         secondLine: {
-            firstPart: '[EN] Dzięki',
-            secondPart: '[EN] szybko znajdziesz tani nocleg.'
+            firstPart: 'Thanks to our service',
+            secondPart: 'you will find accommodation quickly.'
         },
-        thirdLine: '[EN] Potrzebujesz łóżka od zaraz, w niskiej cenie, w dobrej lokalizacji, u\nwiarygodnego wynajmnującego? Dobrze trafiłeś!',
-        fourthLine: '[EN] Nieważne czy chcesz spędzić jedną noc, czy szukasz czegoś na cały rok lub\ndłużej, u nas od razu znajdziesz takie miejsce.'
+        thirdLine: 'Do you need bed quickly? In convenient location, low price and of from trustworthy host?\nwThen you are at the right place!',
+        fourthLine: 'No matter whether it is for one night or for the whole year or\neven more. With us you can find it in a minute.'
     },
     career: {
-        header: '[EN] Kariera',
+        header: 'Career',
         firstLine: {
-            firstPart: '[EN] W',
-            secondPart: '[EN] stawiamy na ludzi. Wierzymy w ich ambicję, motywację do rozwoju oraz chęć\nposzukiwania własniej drogi zawodowej. Zapraszmy do aplikowania osoby -\npoczątkujących oraz specjalistów - które podzielają nasze wartości:\nzaangażownanie, systematyczność, stosunek do drugiej osoby.',
+            firstPart: 'In',
+            secondPart: 'We put people first. We believe in their ambition, motivation and eagerness.\nThat is why we welcome to apply everyone, experienced and beginners, who share our values.',
         },
         secondLine: {
-            firstPart: '[EN] Poniżej znadują się aktualne oferty pracy i opisy stanowisk, na które\nszukamy kandydatów. Nawet jeśli w danej chwili nie prowadzimy żadnej\nrekrutacji, zachęcamy do aplikowania. Jeśli czujesz, że pasujesz do\nklimatu startupowego',
-            secondPart: '[EN] , wypełnij poniższy formularz i powiedz nam coś więcej na swój temat -\nmoże okazać się, że jest nam naprawdę po drodze.'
+            firstPart: 'There are current vacancies below. Even if you cannot find a position you like, send us your resume - we will get in touch with you.',
+            secondPart: ', Fill in the below form and tell us more about yourself. Maybe we can do something together...'
         },
         thirdLine: {
-            firstPart: '[EN] Uwaga studenci i pełnoletni uczniowe szkół ponadpodstawowych. Jeśli\nposzukujecie wartościowych praktyk zawodowych, podczas których możecie\nzdobyć konkretną wiedzę, doświadczenie i nauczyć się czegoś rzeczywiście\ndobrze, zapraszamy do',
-            secondPart: '[EN] Program staży i praktyk zawodowych w naszym sartupie to doskonały\npoczątek Waszej przyszłej kariery profesjonalnej.'
+            firstPart: 'Attention (adult) students. Are you \nlooking for quality apprenticeships? Let us know and join our students career program',
+            secondPart: 'which helps you start your professional life in an interesting and fast paced startup environment.'
         },
         roles: {
-            juniorDev: '[EN] Junior developer',
-            keyAccountManager: '[EN] Key account manager',
-            photo: '[EN] Fotograf'
+            juniorDev: 'Junior developer',
+            keyAccountManager: 'Key account manager',
+            photo: 'Photographer'
         }
     },
     contact: {
-        header: '[EN] Kontakt',
-        firstLine: '[EN] Zachęcamy do kontaktu z nami. Na większość zapytań odpowiadamy na bieżąco.\nBardziej złożone kwestie obsługujemy w ciągu maksymalnie 2 dni roboczych.',
-        secondLine: '[EN] Najszybszym sposobem dotarcia do naszego Biura Obsługi jest skorzystanie z\nponiższego formularza. W sprawie współpracy, propozycji biznesowych i\nzapytań, które bezpośrednio nie dotyczą funkcjonowaniu serwisu, uprzejmie\nprosimy o przesłanie wiadomości na adres:',
+        header: 'Contact',
+        firstLine: 'Feel free to contact us. We do our best to answer immediately.\nMore complex issues we handle in two working days.',
+        secondLine: 'The best way to reach our Customer Care office is using\nthe below form. All business inquires\nshould be directed to:',
         thirdLine: {
-            firstPart: '[EN] Dziennikarzy i przedstawicieli mediów zapraszamy do kontaktu z naszym\nbiurem prasowym: współpracy, propozycji biznesowych i zapytań, które\nbezpośrednio nie dotyczą funkcjonowaniu serwisu, uprzejmie prosimy o\nprzesłanie wiadomości na adres:',
-            secondPart: '[EN] Po wiecej informacji zapraszamy do sekcji Media.'
+            firstPart: 'Journalists and media representatives are welcome to contact our press office.\nFor everyhing else contact us at:',
+            secondPart: 'For more information check our Media section.'
         },
         form: {
             name: {
-                label: '[EN] Wpisz swoje imię:*',
-                placeholder: '[EN] Imię',
+                label: 'Your name:*',
+                placeholder: 'Name',
                 validationMessages: {
-                    required: '[EN] Imię jest wymagane.'
+                    required: 'Name is required.'
                 }
             },
             phone: {
-                label: '[EN] Nr telefonu:*',
-                placeholder: '[EN] np.: +48 000 000 000',
+                label: 'Phone number:*',
+                placeholder: 'np.: +48 000 000 000',
                 validationMessages: {
-                    required: '[EN] Numer telefonu jest wymagany.'
+                    required: 'Phone number is required.'
                 }
             },
             email: {
-                label: '[EN] Email:*',
-                placeholder: '[EN] np. jan{at}kowalski.com',
+                label: 'Email:*',
+                placeholder: 'e. g. john{at}smith.com',
                 validationMessages: {
-                    required: '[EN] Email jest wymagany.',
-                    email: '[EN] Niepoprawny format adresu email.'
+                    required: 'Email address is required.',
+                    email: 'Wrong format of email address.'
                 }
             },
             message: {
-                label: '[EN] Napisz do nas wiadomość:*',
-                placeholder: '[EN] Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.',
+                label: 'Write your message:*',
+                placeholder: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.',
                 validationMessages: {
-                    required: '[EN] Wiadomość jest wymagana.'
+                    required: 'Message is required.'
                 }
             },
-            hint: '[EN] Wpisanie tych informacji jest obowiązkowe*',
-            send: '[EN] Wyślij wiadomość'
+            hint: 'Data required*',
+            send: 'Send your message'
         }
     },
     help: {
-        header: '[EN] Pomoc (FAQ)',
+        header: 'Help (FAQ)',
         firstLine: {
-            firstPart: '[EN] Prezentujemy tu listę najczęstszych pytań jakie zadają użytkownicy naszego\nserwisu oraz odpowiedzi, które mają im pomóc rozwiązać dany problem.\nUprzejmie prosimy o zapoznanie się z nimi zanim zwrócą sie Państwa do nas\no pomoc. Z doświadczenia wiemy, że ponad 95% problemów, które zgłaszają\nużytkownicy',
-            secondPart: '[EN] jest prosta do samodzielnego rozwiązania właśnie dzięki poniższym\nwyjaśnieniom oraz wskazówkom.'
+            firstPart: 'Frequently asked questions and answers to them are below.\nCheck this section first before contacting us. There is a high chance yout issue has already been resolved.',
+            secondPart: 'All data is accurate and based on common problem users may experience.'
         },
-        howTo: '[EN] Jak to działa',
-        qna: '[EN] Pytania i odpowiedzi,',
+        howTo: 'How does it work',
+        qna: 'Questions and answers,',
         questions: {
             howToGetAccount: {
-                q: '[EN] Jak założyć konto w serwisie',
-                a: '[EN] Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book'
+                q: 'How to create new account (register) in bed!OK',
+                a: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book'
             },
             dataNeededToRegister: {
-                q: '[EN] Jakie dane muszę muszę podać przy rejestracji?',
-                a: '[EN] Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book'
+                q: 'What personal data are required?',
+                a: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book'
             },
             howDoPaymentsWork: {
-                q: '[EN] Jak dokonywane są płatności na rzecz gospodarza?',
-                a: '[EN] Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book'
+                q: 'What are payment methods?',
+                a: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book'
             },
             howToBeSafe: {
-                q: '[EN] W jaki sposób dbać o swoje bezpieczeństwo szukając noclegu?',
-                a: '[EN] Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book'
+                q: 'How to be safe when looking for accommodation?',
+                a: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book'
             }
         }
     },
     media: {
-        header: '[EN] Media',
-        firstLine: '[EN] Wszelkie zapytania od dziennikarzy, w tym chęć uzyskania wypowiedzi\neksperckiej czy przeprowadzenia wywiadu, mają dla nas charakter\npriorytetowy. Jesteśmy do Państwa dyspozycji pod adresem:',
-        secondLine: '[EN] Informujemy, że wszystkie materiały w serwisie bedOk chronione są prawami\nautorskimi i majątkowymi. W celu ich wykorzystania w publikacji prosimy o\nwcześniejszy kontakt pisemny (mailowy) i uzgodnienie szczegółów. W\nszczególności dotyczy to użycia logotypów, wykorzystania zdjęć i\nmateriałów video oraz zamieszczonych tekstów. Każde wykorzystanie tych\nmateriałów wymaga wcześniejszej autoryzacji.',
-        thirdLine: '[EN] W przypadku propozycji objęcia patronatem danego wydarzenia czy projektu,\nzakupi treści sponsorowanych (w tym reklam) oraz jakichkolwiek innych\nofert komercyjnych, prosimy o szczegółowe informacje, m.in.:',
+        header: 'Media',
+        firstLine: 'All press inquiries, including interviews or expert commentary\nare important for us and we always prioritize them. Contact us day and night at',
+        secondLine: 'All data published in this web service are copyrighted.\nShould you need to use them in your publication,o\ncontact us and describe your project in order to agree details.\nEspecially when you need to use our logo, pictures, videos and expert articles.\nIn every case the prior authorization of usage is required.',
+        thirdLine: 'All patronage and sponsorship reequests or other commercial offer should be thoroughly describe. Include in your offer:',
         details: {
-            title: '[EN] tytuł i wydawca - podmot odpowedzialny',
-            reach: '[EN] weryfikowalny zasięg',
-            contact: '[EN] dane kontaktowe (e-mail, telefon) oferenta',
-            duration: '[EN] format i czas trwania oferty',
-            benefit: '[EN] konkretyzacja świadczeń'
+            title: 'Title and publisher',
+            reach: 'Estimated (proven) coverage',
+            contact: 'Contact details (e-mail, phone number)',
+            duration: 'Short characteristic (including time frame)',
+            benefit: 'Your expectations'
         },
         fourthLine: {
-            firstPart: '[EN] Komunikaty publikujemy w części',
-            secondPart: '[EN]  "Blog i aktualności"',
-            thirdPart: '[EN] - strona jest również oficjalnym źródłem naszych informacji prasowych.'
+            firstPart: 'Announcements are published in the following section',
+            secondPart: ' "Blog and news"',
+            thirdPart: '- the webpage is also an official source for our press releases.'
         }
     }
 };
