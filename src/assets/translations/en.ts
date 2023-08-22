@@ -117,7 +117,8 @@ export default {
             generatePassword: 'Generate strong password',
             acceptRegulation: {
                 label: 'I accept terms and conditions',
-                link: 'click here to read them'
+                link: 'click here to read them',
+                error: '[EN] Zaakceptuj regulamin by kontynuować'
             }
         }
     },

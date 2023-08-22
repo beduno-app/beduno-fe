@@ -1,6 +1,6 @@
 <template>
   <search-input />
-  <form @submit="submitForm">
+  <form @submit="register">
     <div class="register container-fluid">
       <h3 class="px-3">{{ $t("auth.register.register") }}</h3>
       <div class="register-tile">
@@ -138,11 +138,12 @@
                     <label class="form-check-label">
                       <input
                         class="form-check-input"
-                        id="exampleRadios1"
+                        id="genderRadioButtonWoman"
                         type="radio"
-                        value="wo"
+                        value="FEMALE"
                         checked
                         name="gender"
+                        @change="checkGender('FEMALE')"
                       />
                       <span class="form-check-sign"></span>
                       {{ $t("auth.register.gender.options.woman") }}
@@ -153,10 +154,11 @@
                     <label class="form-check-label">
                       <input
                         class="form-check-input"
-                        id="exampleRadios2"
+                        id="genderRadioButtonMan"
                         type="radio"
-                        value="man"
+                        value="MALE"
                         name="gender"
+                        @change="checkGender('MALE')"
                       />
                       <span class="form-check-sign"></span>
                       {{ $t("auth.register.gender.options.man") }}
@@ -180,7 +182,7 @@
                         style="font-size: 14px; width: 150px"
                       >
                         <option
-                          :value="option"
+                          :value="option.value"
                           v-for="(option, idx) in languageOptions"
                           :key="idx"
                         >
@@ -215,36 +217,34 @@
           <label class="form-check-label">
             <input
               class="form-check-input"
-              id="exampleRadios1"
+              id="termsAcceptedCheckbox"
               type="checkbox"
+              v-model="termsAccepted"
+              @change="resetTermsAcceptedError()"
             />
             <span class="form-check-sign"></span>
             {{ $t("auth.register.acceptRegulation.label") }}
 
-            <a href="https://example.com" class="text-dark"
-              >( {{ $t("auth.register.acceptRegulation.link") }})</a
-            >
+            <a href="https://example.com" class="text-dark">( {{ $t("auth.register.acceptRegulation.link") }})</a>
+            <div v-if="showTermsNotAcceptedError" class="text-danger">{{ $t('auth.register.acceptRegulation.error') }}</div>
           </label>
         </div>
       </div>
     </div>
-    <div
-      class="d-flex justify-content-center align-items-center login-btn mt-5 p-2"
-    >
-      <img src="../assets/img/icon_login_top_01.png" alt="login-button" />
-      <span class="mx-2">{{ $t("auth.login.action.login") }}</span>
+    <div class="d-flex justify-content-center align-items-center">
+      <button class="register-btn mt-5 p-2" @click.prevent="register()">
+        <img src="../assets/img/icon_login_green.png" alt="register-button" />
+        <span class="mx-2">{{ $t("auth.login.action.register") }}</span>
+      </button>
     </div>
-    <p
-      class="text-center mt-3"
-      style="font-size: 1rem; font-weight: 600; margin: auto"
-    >
+    <p class="text-center mt-3" style="font-size: 1rem; font-weight: 600; margin: auto">
       {{ $t("auth.register.action.hint") }}
     </p>
-    <div
-      class="d-flex justify-content-center align-items-center register-btn mb-5 mt-3 p-2"
-    >
-      <img src="../assets/img/icon_login_green.png" alt="login-button" />
-      <span class="mx-2">{{ $t("auth.login.action.register") }}</span>
+    <div class="d-flex justify-content-center align-items-center">
+      <button class="login-btn mb-5 mt-3 p-2" @click.prevent="navigateToLogin()">
+        <img src="../assets/img/icon_login_top_01.png" alt="login-button" />
+        <span class="mx-2">{{ $t("auth.login.action.login") }}</span>
+      </button>
     </div>
   </form>
 </template>
@@ -260,7 +260,7 @@ import { computed } from "vue";
   components: { SearchInput, EyeIcon, EyeOffIcon },
 })
 export default class Login extends Vue {
-  lines = <any>[];
+  lines = <any>[]; // todo: improve typing
 
   languageOptions = [
     {
@@ -292,16 +292,15 @@ export default class Login extends Vue {
   showPassword = false;
   showRepeatPassword = false;
   selectedCountryCode = 1;
+  termsAccepted = false;
+  showTermsNotAcceptedError = false;
   selectedYear;
+  selectedGender: 'FEMALE' | 'MALE' = 'FEMALE'; // todo: extract type
   years = computed(() => {
     const year = new Date().getFullYear() - 18;
     return Array.from({ length: year - 1900 }, (_value, index) => 1901 + index);
   });
   blockRemoval = computed(() => this.lines.length <= 1);
-
-  submitForm() {
-    console.log('submit');
-  }
 
   changeValue(event, index) {
     this.lines[index] = event.target.value;
@@ -311,6 +310,14 @@ export default class Login extends Vue {
     this.lines.push("Polski");
   };
 
+  resetTermsAcceptedError() {
+    this.showTermsNotAcceptedError = false;
+  }
+
+  checkGender(gender: 'FEMALE' | 'MALE') {
+    this.selectedGender = gender;
+  }
+
   removeLine(lineId) {
     if (!this.blockRemoval) {
       this.lines.splice(lineId, 1);
@@ -319,6 +326,35 @@ export default class Login extends Vue {
 
   mounted() {
     this.addLine();
+  }
+
+  navigateToLogin() {
+    this.$router.push({
+      name: 'Login'
+    });
+  }
+
+  register() {
+    if (!this.termsAccepted) {
+      this.showTermsNotAcceptedError = true;
+      return;
+    }
+
+    const data = {
+      name: (this.$refs.name as any).node.value,
+      gender: this.selectedGender,
+      email: (this.$refs.email as any).node.value,
+      password: (this.$refs.password as any).node.value,
+      phone: (this.$refs.phoneNumber as any).node.value,
+      dateOfBirth: this.selectedYear,
+      language: this.lines.join(', '),
+      // todo: do we need fields below? there are not available in the form
+      viber: false,
+      signal: false,
+      whatsapp: false,
+      telegram: false
+    };
+    this.axios('http://localhost:8080/host/register', { method: 'POST', data });
   }
 }
 </script>
@@ -384,6 +420,7 @@ export default class Login extends Vue {
   width: 200px;
   margin: auto;
   border-radius: 0.6rem;
+  border: none;
   color: $black-color;
   font-weight: 700;
   font-size: 0.9rem;
