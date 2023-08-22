@@ -111,12 +111,14 @@
     <div class="py-3">
       <div class="row">
         <div class="col-md-5 mb-3">{{ $t('advertisementDetailsView.pricePerBed', { price: advertisementData.price, currency: 'zł', duration: '1 noc'}) }}</div>
-        <div class="col md-7" style="cursor: pointer">
-          <img
-            src="../../../assets/img/dot_green_big.png"
-            alt="green-dot"
-            class="me-2"
-          /><span>{{ $t('advertisementDetailsView.book') }}</span>
+        <div class="col md-7">
+          <button class="book-action" @click="goToOrderSummary()">
+            <img
+                src="../../../assets/img/dot_green_big.png"
+                alt="green-dot"
+                class="me-2"
+            /><span>{{ $t('advertisementDetailsView.book') }}</span>
+          </button>
         </div>
       </div>
     </div>
@@ -176,7 +178,14 @@ import Tenant from "../details/Tenant.vue";
     }
   }
 })
-export default class SingleAd extends Vue {}
+export default class SingleAd extends Vue {
+  goToOrderSummary() {
+    this.$router.push({
+      name: 'OrderSummaryView',
+      // params: { id }
+    });
+  }
+}
 </script>
 
 <style lang="scss">
@@ -199,6 +208,11 @@ export default class SingleAd extends Vue {}
   .room-desc {
     font-size: 0.8rem;
     color: $dark-gray;
+  }
+  .book-action {
+    background-color: initial;
+    border: none;
+    width: 300px;
   }
 }
 </style>

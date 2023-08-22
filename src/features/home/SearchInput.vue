@@ -56,10 +56,12 @@ export default class SearchInput extends Vue {
       ...(this.to ? { to: this.to } : {}),
       ...(this.guestsCount ? { guestsCount: this.guestsCount } : {}),
     };
-    this.$router.push({
+    if (Object.keys(queryParams).length > 0) {
+      this.$router.push({
         path: '/advertisements',
         query: queryParams
-    });
+      });
+    }
   }
 }
 </script>

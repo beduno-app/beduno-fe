@@ -74,7 +74,7 @@ import Tenant from "../details/Tenant.vue";
   props: { advertisementData: Object },
   computed: {
     mainPhoto() {
-      return `data:image/png;base64,${this.advertisementData?.mainPhoto[0]?.data.toString('base64')}`;
+      return `data:image/png;base64,${this.advertisementData?.mainPhotos[0]?.data.toString('base64')}`;
     }
   }
 })
