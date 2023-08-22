@@ -29,7 +29,7 @@
           <h6 class="mt-2 mx-2">{{ $t("auth.login.google") }}</h6>
           <img
             src="../assets/img/icon_google.png"
-            alt="login-by-facebook"
+            alt="login-by-google"
             :width="30"
             :height="30"
           />
@@ -53,8 +53,7 @@
           </div>
           <div class="d-flex flex-column">
             <div class="login-password">
-              <form>
-                <!-- other form elements -->
+              <form @submit.prevent="login">
                 <div class="input-wrap">
                   <FormKit
                     ref="password"
@@ -115,7 +114,7 @@
             <div class="login-password">
               <div class="input-wrap">
                 <FormKit
-                  ref="password"
+                  ref="passwordPhone"
                   :type="showPassword ? 'text' : 'password'"
                   :placeholder="$t('auth.login.password.placeholder')"
                   :classes="{
@@ -142,11 +141,11 @@
           </div>
         </div>
       </div>
-      <div
-        class="d-flex justify-content-center align-items-center login-btn mt-5 p-2"
-      >
-        <img src="../assets/img/icon_login_top_01.png" alt="login-buutton" />
-        <span class="mx-2">{{ $t("auth.login.action.login") }}</span>
+      <div class="d-flex justify-content-center align-items-center">
+        <button class="login-btn mt-5 p-2" @click="login()">
+          <img src="../assets/img/icon_login_top_01.png" alt="login button" />
+          <span class="mx-2">{{ $t("auth.login.action.login") }}</span>
+        </button>
       </div>
       <p
         class="text-center mt-3"
@@ -154,11 +153,11 @@
       >
         {{ $t("auth.login.action.hint") }}
       </p>
-      <div
-        class="d-flex justify-content-center align-items-center register-btn mb-5 mt-3 p-2"
-      >
-        <img src="../assets/img/icon_login_green.png" alt="login-button" />
-        <span class="mx-2">{{ $t("auth.login.action.register") }}</span>
+      <div class="d-flex justify-content-center align-items-center">
+        <button class="register-btn mb-5 mt-3 p-2" @click="navigateToRegistration()">
+          <img src="../assets/img/icon_login_green.png" alt="register button" />
+          <span class="mx-2">{{ $t("auth.login.action.register") }}</span>
+        </button>
       </div>
     </div>
   </div>
@@ -176,6 +175,33 @@ import EyeOffIcon from "vue-material-design-icons/EyeOff.vue";
 export default class Login extends Vue {
   showPassword = false;
   selectedCountry = 1;
+
+  navigateToRegistration() {
+    this.$router.push({
+      name: 'Register'
+    });
+  }
+
+  login() {
+    const data = {
+      email: '',
+      phoneNumber: '7966023832',
+      password: ''
+    };
+    const email = (this.$refs.email as any).node.value;
+    const phone = (this.$refs.phoneNumber as any).node.value;
+
+    if (email) {
+      data.email = email;
+      data.password = (this.$refs.password as any).node.value;
+    } else if (phone) {
+      data.phoneNumber = phone;
+      data.password = (this.$refs.passwordPhone as any).node.value;
+    }
+
+    console.log(data);
+    this.axios('http://localhost:8080/host/login', { method: 'POST', data });
+  }
 }
 </script>
 
@@ -225,6 +251,7 @@ export default class Login extends Vue {
     width: 200px;
     margin: auto;
     border-radius: 0.6rem;
+    border: none;
     color: $black-color;
     font-weight: 700;
     font-size: 0.9rem;
