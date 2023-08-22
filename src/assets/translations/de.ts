@@ -117,7 +117,8 @@ export default {
             generatePassword:'Wygeneruj hasło',
             acceptRegulation: {
                 label: '[DE] Akceptuję regulamin',
-                link: '[DE] kliknij tutaj, aby się z nim zapoznać'
+                link: '[DE] kliknij tutaj, aby się z nim zapoznać',
+                error: '[DE] Zaakceptuj regulamin by kontynuować'
             }
         }
     },
