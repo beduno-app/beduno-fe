@@ -117,7 +117,8 @@ export default {
             generatePassword:'Создать пароль',
             acceptRegulation: {
                 label: 'Я принимаю правила',
-                link: 'нажмите здесь, чтобы ознакомиться с ними'
+                link: 'нажмите здесь, чтобы ознакомиться с ними',
+                error: '[RU] Zaakceptuj regulamin by kontynuować'
             }
         }
     },
