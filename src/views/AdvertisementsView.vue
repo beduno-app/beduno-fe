@@ -27,8 +27,8 @@ export default class AdvertisementsView extends Vue {
     };
     this.axios('http://localhost:8080/advertisement/criteria', { method: 'POST', data })
         .then(resp => resp.data)
-        .then(advertisements => {
-          this.advertisements = advertisements;
+        .then(data => {
+          this.advertisements = data.content;
         });
   }
 }
