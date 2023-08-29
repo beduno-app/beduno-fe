@@ -135,6 +135,9 @@ export default {
         subscribe: 'Sign up to get updates and promotions',
         freeAppLink: 'Get me link to a free app'
     },
+    advertisements: {
+        emptyListHint: '[EN] Brak ogłoszeń spełniających kryteria'
+    },
     advertisementView: {
         header: 'Add offer',
         mainSection: {
@@ -329,6 +332,7 @@ export default {
         paymentMethods: 'Payment methods:',
         rulesOfStay: 'Terms of stay:',
         pricePerBed: 'Price per bed {price} {currency} ({duration})',
+        totalPrice: '[EN] Do zapłaty ({from} - {to}, {guestsCount} gości): {totalPrice} {currency}',
         book: 'Book your bed',
         beds: '{count} beds',
         rooms: '{count} rooms'
@@ -409,6 +413,7 @@ export default {
         currentGuests: 'Currently occupied by:',
         totalAmount: 'Total amount: {price}{currency} ({duration} nights)',
         host: 'Host:',
+        noGuests: '[EN] W tej chwili nie ma innych gości.',
         hint: 'Exact address and getting there directions will be \navailable after payment.',
         proceedToPayment: 'Proceed to payment'
     },
