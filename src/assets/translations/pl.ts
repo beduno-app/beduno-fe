@@ -135,6 +135,9 @@ export default {
         subscribe: 'Zapisz się aby otrzymywać najświeższe informacje i promocje',
         freeAppLink: 'Chcę otrzymać link do bezpłatnej aplikacji'
     },
+    advertisements: {
+      emptyListHint: 'Brak ogłoszeń spełniających kryteria'
+    },
     advertisementView: {
         header: 'Dodaj ogłoszenie',
         mainSection: {
@@ -329,6 +332,7 @@ export default {
         paymentMethods: 'Metody płatności:',
         rulesOfStay: 'Zasady pobytu:',
         pricePerBed: 'Cena za łóżko {price} {currency} ({duration})',
+        totalPrice: 'Do zapłaty ({from} - {to}, {guestsCount} gości): {totalPrice} {currency}',
         book: 'Zarezerwuj łóżko',
         beds: '{count} łóżka',
         rooms: '{count} pokoje'
@@ -409,6 +413,7 @@ export default {
         currentGuests: 'Aktualnie zamieszkany przez:',
         totalAmount: 'Całkowita kwota do zapłaty: {price}{currency} ({duration} noce)',
         host: 'Gospodarz:',
+        noGuests: 'W tej chwili nie ma innych gości.',
         hint: 'Dokładny adres i wskazówki dojazdu do miejsca zamieszkania zostaną\nudostępnione po dokonaniu płatności.',
         proceedToPayment: 'Przejdź do płatności'
     },

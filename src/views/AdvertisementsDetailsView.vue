@@ -1,6 +1,11 @@
 <template>
   <div v-if="advertisement !== null" class="container-fluid">
-    <single-full-ad :advertisement-data="advertisement" />
+    <single-full-ad
+        :advertisement-data="advertisement"
+        :guests-count-query="guestsCount"
+        :from-query="from"
+        :to-query="to"
+    />
   </div>
 </template>
 
@@ -13,8 +18,16 @@ import SingleFullAd from "../features/ad/list/SingleFullAd.vue";
 })
 export default class AdvertisementsDetailsView extends Vue {
   advertisement = null;
+  guestsCount;
+  from;
+  to;
 
   mounted() {
+    const { guestsCount, from, to } = this.$route.query;
+    this.guestsCount = guestsCount;
+    this.from = from;
+    this.to = to;
+
     const { id } = this.$route.params;
     this.axios.get(`http://localhost:8080/advertisement/details?advertisementId=${id}`)
         .then(resp => resp.data)

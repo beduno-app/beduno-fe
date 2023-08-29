@@ -135,6 +135,9 @@ export default {
         subscribe: 'Подпишитесь, чтобы получать последние новости и акции',
         freeAppLink: 'Я хочу получить ссылку на бесплатное приложение'
     },
+    advertisements: {
+        emptyListHint: '[RU] Brak ogłoszeń spełniających kryteria'
+    },
     advertisementView: {
         header: 'Добавить объявление',
         mainSection: {
@@ -329,6 +332,7 @@ export default {
         paymentMethods: 'Способы оплаты:',
         rulesOfStay: 'Правила проживания:',
         pricePerBed: 'Цена за кровать {price} {currency} ({duration})',
+        totalPrice: '[RU] Do zapłaty ({from} - {to}, {guestsCount} gości): {totalPrice} {currency}',
         book: 'Забронировать кровать',
         beds: '{count} кровати',
         rooms: '{count} комнаты'
@@ -409,6 +413,7 @@ export default {
         currentGuests: 'В настоящее время проживают:',
         totalAmount: 'Общая сумма к оплате: {price}{currency} ({duration} ночей)',
         host: 'Арендодатель:',
+        noGuests: '[RU] W tej chwili nie ma innych gości.',
         hint: 'Точный адрес и инструкции доезда к месту жительств будут\nпредоставлены после оплаты.',
         proceedToPayment: 'Перейти к оплате'
     },

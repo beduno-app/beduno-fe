@@ -14,7 +14,7 @@
         class="mx-2 heart-icon fa-2x"
       />
       <div class="card-footer">
-        <div class="d-flex justify-content-between align-items-center btn-join">
+        <div class="d-flex justify-content-between align-items-center btn-join" @click="navigateToAdDetails()">
           <span>{{ $t("roomCard.join") }}</span>
           <img class="img-join" src="../../../assets/img/join_ppl.png" />
         </div>
@@ -51,7 +51,9 @@
           alt="nationality-icon"
           class="me-2"
         />
-        <div class="more-amenities">{{ $t('advertisementDetailsView.seeOtherEquipment') }}</div>
+        <div class="more-amenities" @click="navigateToAdDetails()">
+          {{ $t('advertisementDetailsView.seeOtherEquipment') }}
+        </div>
       </div>
     </div>
     <div class="col-md-3">
@@ -71,10 +73,19 @@ import Tenant from "../details/Tenant.vue";
 @Options({
   components: { Equipments, Host, Tenant },
   // todo: make required, migrate whole component to use only props
-  props: { advertisementData: Object },
+  props: { advertisementData: Object, criteria: Object },
   computed: {
     mainPhoto() {
       return `data:image/png;base64,${this.advertisementData?.mainPhotos[0]?.data.toString('base64')}`;
+    }
+  },
+  methods: {
+    navigateToAdDetails() {
+      this.$router.push({
+        name: 'AdvertisementDetails',
+        params: { id: this.advertisementData.advertisementId },
+        query: this.criteria
+      });
     }
   }
 })
@@ -103,6 +114,7 @@ export default class SingleAd extends Vue {}
   }
   .more-amenities {
     font-size: 1.2rem;
+    cursor: pointer;
   }
   .card-footer {
     background: $success-color;
