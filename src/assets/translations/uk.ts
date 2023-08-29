@@ -135,6 +135,9 @@ export default {
         subscribe: 'Підпишіться, щоб отримувати останні новини та акції',
         freeAppLink: 'Я хочу отримати посилання на безкоштовний додаток'
     },
+    advertisements: {
+        emptyListHint: '[UK] Brak ogłoszeń spełniających kryteria'
+    },
     advertisementView: {
         header: 'Додати оголошення',
         mainSection: {
@@ -329,6 +332,7 @@ export default {
         paymentMethods: 'Способи оплати:',
         rulesOfStay: 'Правила проживання:',
         pricePerBed: 'Ціна за ліжко {price} {currency} ({duration})',
+        totalPrice: '[UK] Do zapłaty ({from} - {to}, {guestsCount} gości): {totalPrice} {currency}',
         book: 'Забронювати ліжко',
         beds: '{count} ліжок',
         rooms: '{count} кімнат'
@@ -409,6 +413,7 @@ export default {
         currentGuests: 'На даний час мешкає:',
         totalAmount: 'Загальна сума для оплати: {price}{currency} ({duration} ніч)',
         host: 'Орендодавець:',
+        noGuests: '[UK] W tej chwili nie ma innych gości.',
         hint: 'Точна адреса та вказівки доїзду до місця проживання будуть\nдоступні після оплати.',
         proceedToPayment: 'Перейти до оплати'
     },
