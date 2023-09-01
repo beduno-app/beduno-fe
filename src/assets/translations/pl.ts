@@ -293,6 +293,10 @@ export default {
                 label: 'Zobacz podgląd ogłoszenia',
                 tip: '(zobaczysz jak podgląd ogłoszenie przed jego publikacją)'
             },
+            edit: {
+                label: 'Edytuj ogłoszenie',
+                tip: '(edytuj utworzone ogłoszenie)'
+            },
             save: {
                 label: 'Zapisz ogłoszenie',
                 tip: '(nadal będziesz mieć możliwość wprowadzenia zmian w dowolnym momencie)'

@@ -21,10 +21,7 @@
           <span class="small-label">{{
             $t("advertisementView.currentGuestsSection.birthYear.label")
           }}</span>
-          <select
-            class="mb-2"
-            v-on:change="selectedYear = Number($event.target.value)"
-          >
+          <select class="mb-2" v-model="selectedYear">
             <option v-for="(year, idx) in years" :value="year" :key="idx">
               {{ year }}
             </option>
@@ -36,7 +33,7 @@
           <div>
             <select v-on:change="changeValue($event, index)" class="mb-2">
               <option
-                :value="languageOptions.option"
+                :value="option.value"
                 v-for="(option, idx) in languageOptions"
                 :key="idx"
               >
@@ -75,37 +72,42 @@ import { computed } from "@vue/runtime-core";
 export default class GuestSection extends Vue {
   lines = <any>[];
 
-  selectedYear = 1997;
+  selectedYear = 1990;
   languageOptions = [
     {
-      value: "Polski",
+      value: "pl",
       label: "Polski",
       src: "pl",
     },
     {
-      value: "English",
+      value: "uk",
       label: "English",
       src: "uk",
     },
     {
-      value: "Українська",
+      value: "ua",
       label: "Українська",
       src: "ua",
     },
     {
-      value: "Русский",
+      value: "ru",
       label: "Русский",
       src: "ru",
     },
     {
-      value: "Deutsch",
+      value: "de",
       label: "Deutsch",
       src: "de",
     },
   ];
   years = computed(() => {
-    const year = new Date().getFullYear() - 18;
-    return Array.from({ length: year - 1900 }, (_value, index) => 1901 + index);
+    const currentYear = new Date().getFullYear();
+    const maxBirthYear = currentYear - 18;
+    const minBirthYear = currentYear - 120;
+    return Array.from(
+      { length: maxBirthYear - minBirthYear + 1 },
+      (_value, index) => maxBirthYear - index
+    );
   });
   blockRemoval = computed(() => this.lines.length <= 1);
 
@@ -122,7 +124,7 @@ export default class GuestSection extends Vue {
   }
 
   addLine = () => {
-    this.lines.push("Polski");
+    this.lines.push("pl");
   };
 
   removeLine(lineId) {
