@@ -297,6 +297,10 @@ export default {
                 label: 'Save offer',
                 tip: '(you can still edit your offer afterwards)'
             },
+            edit: {
+                label: 'Edit offer',
+                tip: '(edit created offer)'
+            },
             publish: {
                 label: 'Publish offer',
                 tip: '(you can still edit your offer in any time)'
