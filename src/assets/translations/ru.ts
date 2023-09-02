@@ -276,7 +276,9 @@ export default {
             others: {
                 label: 'Другое:',
                 placeholder: 'например, нет парковки, барбекю в саду'
-            }
+            },
+            "yes": "[RU] Tak",
+            "no": "[RU] Nie"
         },
         equipmentSection: {
             roomEquipment: {
@@ -292,6 +294,10 @@ export default {
             preview: {
                 label: 'Предварительный просмотр объявления',
                 tip: '(вы увидите, как выглядит объявление перед его публикацией)'
+            },
+            edit: {
+                label: '[RU] Edytuj ogłoszenie',
+                tip: '[RU] (edytuj utworzone ogłoszenie)'
             },
             save: {
                 label: 'Сохранить объявление',

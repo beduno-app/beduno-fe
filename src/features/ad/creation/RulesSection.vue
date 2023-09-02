@@ -1,37 +1,40 @@
 <template>
   <div class="rules-section p-3">
-    <span class="label pt-2">{{ $t('advertisementView.rulesSection.termsOfStay') }}</span>
+    <span class="label pt-2">{{
+      $t("advertisementView.rulesSection.termsOfStay")
+    }}</span>
     <div class="row">
       <div class="col-lg-3 col-sm-6 col-sx-12">
-        <span class="label">{{ $t('advertisementView.rulesSection.animals') }}</span>
+        <span class="label">{{
+          $t("advertisementView.rulesSection.animals")
+        }}</span>
         <div class="d-flex align-items-center">
           <div>
             <div class="form-check form-check-radio">
               <label class="form-check-label">
                 <input
                   class="form-check-input"
-                  id="exampleRadios1"
-                  v-on:change="setPets(true)"
+                  name="animals"
                   type="radio"
-                  value="yes"
-                  checked
+                  value="no"
+                  v-on:change="setPets(false)"
                 />
                 <span class="form-check-sign"></span>
-                tak
+                {{ $t('advertisementView.rulesSection.no') }}
               </label>
             </div>
             <div class="form-check form-check-radio">
               <label class="form-check-label">
                 <input
                   class="form-check-input"
-                  id="exampleRadios1"
-                  v-on:change="setPets(false)"
+                  name="animals"
                   type="radio"
-                  formControlName="pets"
-                  value="no"
+                  value="yes"
+                  checked
+                  v-on:change="setPets(true)"
                 />
                 <span class="form-check-sign"></span>
-                nie
+                {{ $t('advertisementView.rulesSection.yes') }}
               </label>
             </div>
           </div>
@@ -43,7 +46,9 @@
         </div>
       </div>
       <div class="col-lg-3 col-sm-6 col-sx-12">
-        <span class="label">{{ $t('advertisementView.rulesSection.curfew') }}</span>
+        <span class="label">{{
+          $t("advertisementView.rulesSection.curfew")
+        }}</span>
         <div class="d-flex align-items-center">
           <div>
             <div class="form-check form-check-radio">
@@ -52,12 +57,12 @@
                   class="form-check-input"
                   type="radio"
                   v-on:change="setCurfew(false)"
-                  id="exampleRadios2"
+                  name="curfew"
                   value="no"
                   formControlName="curfew"
                 />
                 <span class="form-check-sign"></span>
-                nie
+                {{ $t('advertisementView.rulesSection.no') }}
               </label>
             </div>
             <div class="form-check form-check-radio">
@@ -65,14 +70,14 @@
                 <input
                   class="form-check-input"
                   type="radio"
-                  id="exampleRadios2"
+                  name="curfew"
                   v-on:change="setCurfew(true)"
                   value="yes"
                   checked
                   formControlName="curfew"
                 />
                 <span class="form-check-sign"></span>
-                tak
+                {{ $t('advertisementView.rulesSection.yes') }}
               </label>
             </div>
           </div>
@@ -84,7 +89,9 @@
         </div>
       </div>
       <div class="col-lg-3 col-sm-6 col-sx-12">
-        <span class="label">{{ $t('advertisementView.rulesSection.smoking') }}</span>
+        <span class="label">{{
+          $t("advertisementView.rulesSection.smoking")
+        }}</span>
         <div class="d-flex align-items-center">
           <div>
             <div class="form-check form-check-radio">
@@ -92,13 +99,13 @@
                 <input
                   class="form-check-input"
                   type="radio"
-                  id="exampleRadios3"
+                  name="smoking"
                   v-on:change="setSmoking(false)"
                   value="no"
                   formControlName="smoking"
                 />
                 <span class="form-check-sign"></span>
-                nie
+                {{ $t('advertisementView.rulesSection.no') }}
               </label>
             </div>
             <div class="form-check form-check-radio">
@@ -106,26 +113,28 @@
                 <input
                   class="form-check-input"
                   type="radio"
-                  id="exampleRadios3"
+                  name="smoking"
                   v-on:change="setSmoking(true)"
                   value="yes"
                   formControlName="smoking"
                   checked
                 />
                 <span class="form-check-sign"></span>
-                tak
+                {{ $t('advertisementView.rulesSection.yes') }}
               </label>
             </div>
           </div>
           <img
-            src="../../../assets/img/icon_sofa.png"
+            src="../../../assets/img/icon_smoking.png"
             class="px-2"
             alt="night"
           />
         </div>
       </div>
       <div class="col-lg-3 col-sm-6 col-sx-12">
-        <span class="label">{{ $t('advertisementView.rulesSection.others.label') }}</span>
+        <span class="label">{{
+          $t("advertisementView.rulesSection.others.label")
+        }}</span>
         <FormKit
           type="text"
           ref="others"
