@@ -2,11 +2,20 @@
   <div class="description-section p-3">
     <div class="row">
       <div class="col-sm-12 col-md-12 col-lg-6">
-        <span class="label d-block">{{ $t('advertisementView.descriptionSection.description.label') }}</span>
-        <div class="input-characters pb-2">{{ $t('advertisementView.descriptionSection.description.tip') }}</div>
+        <span class="label d-block">{{
+          $t("advertisementView.descriptionSection.description.label")
+        }}</span>
+        <div class="input-characters pb-2">
+          {{ $t("advertisementView.descriptionSection.description.tip") }}
+        </div>
         <b-card no-body>
-          <b-tabs pills card>
-            <b-tab :title="$t('advertisementView.descriptionSection.description.tabs.own')" active>
+          <b-tabs pills card v-model="selectedTab">
+            <b-tab
+              :title="
+                $t('advertisementView.descriptionSection.description.tabs.own')
+              "
+              active
+            >
               <textarea
                 name="own-description"
                 ref="descriptionOwn"
@@ -17,11 +26,26 @@
                 placeholder="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
               ></textarea>
               <span class="description-characters">{{
-                  $t('advertisementView.descriptionSection.description.charactersCounter', { count: 5000 - ownDescription.length})
+                $t(
+                  "advertisementView.descriptionSection.description.charactersCounter",
+                  { count: maxDescriptionLength - ownDescription.length }
+                )
               }}</span>
             </b-tab>
-            <b-tab :title="$t('advertisementView.descriptionSection.description.tabs.preset1')">
-              <textarea ref="descriptionTemplate1" name="template1" id="2" cols="30" rows="10">
+            <b-tab
+              :title="
+                $t(
+                  'advertisementView.descriptionSection.description.tabs.preset1'
+                )
+              "
+            >
+              <textarea
+                ref="descriptionTemplate1"
+                name="template1"
+                id="2"
+                cols="30"
+                rows="10"
+              >
 Oferuję komfortowy, nowoczesny oraz niezależny pokój w centrum miasta .
 Pokój w pełni umeblowany oraz przestronny.
 Łazienka oraz kuchnia ogólnodostępna.
@@ -31,8 +55,20 @@ W pobliżu restauracje, sklepy oraz miejsca usługowe.
 Możesz zamieszkać u Nas już dziś.</textarea
               >
             </b-tab>
-            <b-tab :title="$t('advertisementView.descriptionSection.description.tabs.preset2')">
-              <textarea ref="descriptionTemplate2" name="template2" id="3" cols="30" rows="10">
+            <b-tab
+              :title="
+                $t(
+                  'advertisementView.descriptionSection.description.tabs.preset2'
+                )
+              "
+            >
+              <textarea
+                ref="descriptionTemplate2"
+                name="template2"
+                id="3"
+                cols="30"
+                rows="10"
+              >
 Jeżeli szukasz wygodnego i przytulnego pokoju to ta oferta będzie idealna dla Ciebie. Pokój jest jasny i dobrze doświetlony oraz w pełni wyposażony. Znajduje się w cichej i spokojnej okolicy. Łazienka i kuchnia ogólnodostępna w pełni wyposażona.
 Każdy gość jest mile widziany, zapraszmy.</textarea
               >
@@ -43,14 +79,20 @@ Każdy gość jest mile widziany, zapraszmy.</textarea
     </div>
     <div class="row pt-3">
       <div class="col-lg-3 col-md-12 py-2">
-        <span class="label pb-2">{{ $t('advertisementView.descriptionSection.roomSize.label') }}</span>
+        <span class="label pb-2">{{
+          $t("advertisementView.descriptionSection.roomSize.label")
+        }}</span>
         <FormKit
           type="text"
           ref="roomSize"
-          :placeholder="$t('advertisementView.descriptionSection.roomSize.placeholder')"
+          :placeholder="
+            $t('advertisementView.descriptionSection.roomSize.placeholder')
+          "
           validation="required"
           :validation-messages="{
-            required: $t('advertisementView.descriptionSection.roomSize.validationMessages.required'),
+            required: $t(
+              'advertisementView.descriptionSection.roomSize.validationMessages.required'
+            ),
           }"
           :classes="{
             outer: 'foo-bar',
@@ -60,7 +102,9 @@ Każdy gość jest mile widziany, zapraszmy.</textarea
           }"
         />
 
-        <span class="label">{{ $t('advertisementView.descriptionSection.splitIntoBeds.label') }}</span>
+        <span class="label">{{
+          $t("advertisementView.descriptionSection.splitIntoBeds.label")
+        }}</span>
         <b-form-radio
           id="checkbox-1"
           ref="sharedBeds"
@@ -69,18 +113,24 @@ Każdy gość jest mile widziany, zapraszmy.</textarea
           value="accepted"
           unchecked-value="not_accepted"
         >
-          {{ $t('advertisementView.descriptionSection.splitIntoBeds.value') }}
+          {{ $t("advertisementView.descriptionSection.splitIntoBeds.value") }}
         </b-form-radio>
       </div>
       <div class="col-lg-3 col-md-12 py-2">
-        <span class="label pb-2">{{ $t('advertisementView.descriptionSection.bedsCount.label') }}</span>
+        <span class="label pb-2">{{
+          $t("advertisementView.descriptionSection.bedsCount.label")
+        }}</span>
         <FormKit
           type="text"
           ref="bedsCount"
-          :placeholder="$t('advertisementView.descriptionSection.bedsCount.placeholder')"
+          :placeholder="
+            $t('advertisementView.descriptionSection.bedsCount.placeholder')
+          "
           validation="required"
           :validation-messages="{
-            required: $t('advertisementView.descriptionSection.bedsCount.validationMessages.required'),
+            required: $t(
+              'advertisementView.descriptionSection.bedsCount.validationMessages.required'
+            ),
           }"
           :classes="{
             outer: 'foo-bar',
@@ -90,7 +140,9 @@ Każdy gość jest mile widziany, zapraszmy.</textarea
           }"
         />
         <div formGroupName="roomsType">
-          <span class="label pb-2">{{ $t('advertisementView.descriptionSection.roomType.label') }}</span>
+          <span class="label pb-2">{{
+            $t("advertisementView.descriptionSection.roomType.label")
+          }}</span>
           <div v-for="room in roomsType" :key="room.key" class="form-check">
             <input
               class="form-check-input"
@@ -112,14 +164,18 @@ Każdy gość jest mile widziany, zapraszmy.</textarea
         </div>
       </div>
       <div class="col-lg-3 col-md-12 py-2">
-        <span class="label pb-2">{{ $t('advertisementView.descriptionSection.freeBedsCount.label') }}</span>
+        <span class="label pb-2">{{
+          $t("advertisementView.descriptionSection.freeBedsCount.label")
+        }}</span>
         <FormKit
           type="text"
           ref="freeBeds"
           placeholder="1"
           validation="required"
           :validation-messages="{
-            required: $t('advertisementView.descriptionSection.freeBedsCount.validationMessages.required'),
+            required: $t(
+              'advertisementView.descriptionSection.freeBedsCount.validationMessages.required'
+            ),
           }"
           :classes="{
             outer: 'foo-bar',
@@ -138,23 +194,22 @@ import { Vue } from "vue-class-component";
 
 export default class HostSection extends Vue {
   ownDescription = <string>"";
-  selectedLanguages = <string[]>[];
-  selectedRentalTime = <string[]>[];
+  maxDescriptionLength = 5000;
   roomsType = [
     {
       content: "Tylko żeński",
-      key: "male",
-      icon: "icon_man",
-      value: "male",
-      for: "male",
-      id: "checkbox-1",
-    },
-    {
-      content: "Tylko męski",
       key: "female",
       icon: "icon_woman",
       value: "female",
       for: "female",
+      id: "checkbox-1",
+    },
+    {
+      content: "Tylko męski",
+      key: "male",
+      icon: "icon_man",
+      value: "male",
+      for: "male",
       id: "checkbox-2",
     },
     {
@@ -166,24 +221,25 @@ export default class HostSection extends Vue {
       id: "checkbox-3",
     },
   ];
-  roomType
-  rentalTime = [
-    { key: "days", content: "Krótkoterminowy (dni)" },
-    { key: "weeks", content: "Krótkoterminowy (tygodnie)" },
-    { key: "months", content: "Długoterminowy (miesiące)" },
-  ];
+  roomType = "";
+  selectedTab = 0;
 
   getData() {
+    const description =
+      this.selectedTab === 0
+        ? (this.$refs.descriptionOwn as any).value
+        : this.selectedTab === 1
+        ? (this.$refs.descriptionTemplate1 as any).value
+        : (this.$refs.descriptionTemplate2 as any).value;
+
     return {
-      descriptionOwn: (this.$refs.descriptionOwn as any).value,
-      descriptionTemplate1: (this.$refs.descriptionTemplate1 as any).value,
-      descriptionTemplate2: (this.$refs.descriptionTemplate2 as any).value,
+      description: description,
       roomSize: (this.$refs.roomSize as any).node.value,
-      sharedBeds: (this.$refs.sharedBeds as any).value === 'accepted',
+      sharedBeds: (this.$refs.sharedBeds as any).value === "accepted",
       bedsCount: (this.$refs.bedsCount as any).node.value,
       freeBeds: (this.$refs.freeBeds as any).node.value,
-      roomType: this.roomType
-    }
+      roomType: this.roomType,
+    };
   }
 }
 </script>

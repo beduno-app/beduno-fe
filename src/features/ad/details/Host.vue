@@ -1,7 +1,7 @@
 <template>
   <div class="row">
     <div class="col-xxl-5 col-xl-12 col-lg-12 mb-3 meet-host">
-      {{ $t('advertisementDetailsView.host.meetTheHost') }}
+      {{ $t("advertisementDetailsView.host.meetTheHost") }}
     </div>
     <div class="col-xxl-7 col-xl-12 col-lg-12">
       <div class="row mb-2">
@@ -19,7 +19,9 @@
         </div>
       </div>
       <div class="row">
-        <span class="my-3">{{ $t('advertisementDetailsView.host.communicators') }}</span>
+        <span class="my-3">{{
+          $t("advertisementDetailsView.host.communicators")
+        }}</span>
         <div class="d-flex">
           <div v-for="(communicator, idx) in communicators" :key="idx">
             <img
@@ -38,7 +40,7 @@
 import { Options, Vue } from "vue-class-component";
 @Options({
   props: {
-    host: Object
+    host: Object,
   }
 })
 export default class Host extends Vue {

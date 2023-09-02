@@ -1,111 +1,137 @@
 <template>
   <div class="row justify-content-center advertisement-section py-5">
     <div class="single-section pb-4">
-      <Header :title="advertisementData.title"/>
-      <!-- todo: pass real data to the subheader -->
-      <subheader/>
-      <gallery :main-photo="mainPhoto" :other-photos="otherPhotos"/>
+      <Header :title="advertisementData.title" />
+      <subheader
+        :city="advertisementData.city"
+        :district="advertisementData.district"
+        :voivodenship="advertisementData.voivodenship"
+      />
+      <gallery :main-photo="mainPhoto" :other-photos="otherPhotos" />
       <div class="row">
         <div class="col-md-8 mb-3">
           <div class="row">
             <div class="col-lg-3 col-md-6 col-sm-6 col-xs-3">
               <ul>
-                <li>{{ $t('advertisementDetailsView.beds', { count: advertisementData.numBeds }) }}</li>
+                <li>
+                  {{
+                    $t("advertisementDetailsView.beds", {
+                      count: advertisementData.numBeds,
+                    })
+                  }}
+                </li>
                 <!-- todo: change to data from BE -->
-                <li>{{ $t('advertisementDetailsView.rooms', { count: 1 }) }}</li>
+                <li>
+                  {{ $t("advertisementDetailsView.rooms", { count: 1 }) }}
+                </li>
               </ul>
             </div>
             <div class="col-lg-4 col-md-6 col-sm-6 col-xs-9 mb-2">
               <span class="me-1">{{ $t(roomGenderText) }}</span>
-              <img :src="roomGenderIcon.src" :alt="roomGenderIcon.alt"/>
+              <img :src="roomGenderIcon.src" :alt="roomGenderIcon.alt" />
             </div>
             <div class="col-lg-5">
               <div class="col-md-9 mb-2">
-                {{ $t('advertisementDetailsView.roomArea', { area: advertisementData?.roomArea }) }}
+                {{
+                  $t("advertisementDetailsView.roomArea", {
+                    area: advertisementData?.roomArea,
+                  })
+                }}
               </div>
             </div>
           </div>
           <div class="row">
             <div class="col-md-12">
-              {{ $t('advertisementDetailsView.sharedArea') }}
+              {{ $t("advertisementDetailsView.sharedArea") }}
             </div>
           </div>
           <div class="row mt-3">
             <div class="col-md-6">
               <div class="d-flex align-items-center">
                 <img
-                    src="../../../assets/img/icon_exclamation_orange.png"
-                    alt="icon-exclamation-orange"
-                    class="pe-2"
+                  src="../../../assets/img/icon_exclamation_orange.png"
+                  alt="icon-exclamation-orange"
+                  class="pe-2"
                 />
 
                 <div class="col-lg-5 col-md-12 col shared-room">
-                  {{ $t('advertisementDetailsView.roomSplitToBeds') }}
+                  {{ $t("advertisementDetailsView.roomSplitToBeds") }}
                 </div>
               </div>
 
-              <p class="room-desc">{{ $t('advertisementDetailsView.sharedRoom') }}</p>
+              <p class="room-desc">
+                {{ $t("advertisementDetailsView.sharedRoom") }}
+              </p>
             </div>
             <div class="col-md-6">
               <div class="d-flex">
                 <img
-                    src="../../../assets/img/icon_exclamation_grey.png"
-                    alt="icon-exclamation-grey"
-                    class="pe-2"
-                    :width="34"
-                    :height="27"
+                  src="../../../assets/img/icon_exclamation_grey.png"
+                  alt="icon-exclamation-grey"
+                  class="pe-2"
+                  width="34"
+                  height="27"
                 />
 
                 <div class="col-lg-7 col-md-12 col">
-                  {{ $t('advertisementDetailsView.currentTenantsCount') }} 2
+                  {{ $t("advertisementDetailsView.currentTenantsCount") }} 2
                 </div>
               </div>
             </div>
           </div>
           <div class="row mt-4">
-            <div class="col-sm-12 col-md-4">{{ $t('advertisementDetailsView.currentTenants') }}</div>
+            <div class="col-sm-12 col-md-4">
+              {{ $t("advertisementDetailsView.currentTenants") }}
+            </div>
             <div class="col-sm-12 col-md-8">
               <tenant
-                  v-for="(guest, idx) in advertisementData.guestsList"
-                  :key="idx"
-                  :name="guest.name"
-                  :age="guest.age"
-                  :languages="guest.languages"
+                v-for="(guest, idx) in advertisementData.guests"
+                :key="idx"
+                :name="guest.name"
+                :age="new Date().getFullYear() - guest.birthYear"
+                :languages="guest.languages"
               />
             </div>
           </div>
         </div>
-        <div class="col-md-4">
-          <host :host="advertisementData.host"/>
+        <div class="col-md-4" v-if="advertisementData?.host">
+           <host :host="advertisementData?.host" />
         </div>
       </div>
       <div class="row mt-4">
-        <div class="col-md-12 mb-2">{{ $t('advertisementDetailsView.roomEquipment') }}</div>
-        <equipments/>
+        <div class="col-md-12 mb-2">
+          {{ $t("advertisementDetailsView.roomEquipment") }}
+        </div>
+        <equipments :roomEquipments="advertisementData?.roomEquipment" />
       </div>
     </div>
     <div class="single-section py-3">
       <div class="row">
-        <div class="col-md-12 mb-2">{{ $t('advertisementDetailsView.sharedEquipment') }}</div>
-        <!-- todo: pass real data  -->
-        <shared-equipments/>
+        <div class="col-md-12 mb-2">
+          {{ $t("advertisementDetailsView.sharedEquipment") }}
+        </div>
+        <shared-equipments
+          :sharedEquipments="advertisementData.sharedEquipment"
+        />
       </div>
     </div>
     <div class="single-section py-3">
-      <description-with-map :description="advertisementData.roomDescription"/>
+      <description-with-map :description="advertisementData.roomDescription" />
     </div>
     <div class="single-section py-3">
       <div class="row">
-        <div class="col-md-12 mb-2">{{ $t('advertisementDetailsView.paymentMethods') }}</div>
-        <!-- todo: pass real data  -->
-        <payments/>
+        <div class="col-md-12 mb-2">
+          {{ $t("advertisementDetailsView.paymentMethods") }}
+        </div>
+        <payments :paymentType="advertisementData.paymentType" />
       </div>
     </div>
     <div class="single-section py-3">
       <div class="row">
-        <div class="col-md-12 mb-2">{{ $t('advertisementDetailsView.rulesOfStay') }}</div>
-        <!-- todo: pass real data  -->
-        <rules/>
+        <div class="col-md-12 mb-2">
+          {{ $t("advertisementDetailsView.rulesOfStay") }}
+        </div>
+        <rules :rentalRules="advertisementData.rentalRules" />
       </div>
     </div>
     <div class="py-3">
@@ -113,43 +139,69 @@
         <div class="col-md-5 mb-3">
           <div>
             {{
-              $t('advertisementDetailsView.pricePerBed', {
+              $t("advertisementDetailsView.pricePerBed", {
                 price: advertisementData.price,
-                currency: 'zł',
-                duration: '1 noc'
+                currency: "zł",
+                duration: "1 noc",
               })
             }}
           </div>
           <div v-if="!noOrderParams">
-            {{ $t('advertisementDetailsView.totalPrice', { totalPrice, currency: 'zł', guestsCount, from, to }) }}
+            {{
+              $t("advertisementDetailsView.totalPrice", {
+                totalPrice,
+                currency: "zł",
+                guestsCount,
+                from,
+                to,
+              })
+            }}
           </div>
           <b-row v-if="noOrderParams">
             <b-col class="col-md-4 col-sm-12 col-12">
-              <label-cols class="d-flex p-2">{{ $t('searchInput.since') }}</label-cols>
-              <b-form-input id="date-from" type="date" @blur="onFromChange($event)"></b-form-input>
-            </b-col>
-            <b-col class="col-md-4 col-sm-12 col-12">
-              <label-cols class="d-flex p-2">{{ $t('searchInput.to') }}</label-cols>
-              <b-form-input id="date-to" type="date" @blur="onToChange($event)"></b-form-input>
-            </b-col>
-            <b-col class="col-md-4 col-sm-12 col-12">
-              <label-cols class="d-flex p-2">{{ $t('searchInput.who.label') }}</label-cols>
+              <label-cols class="d-flex p-2">{{
+                $t("searchInput.since")
+              }}</label-cols>
               <b-form-input
-                  id="guestsCount"
-                  type="number"
-                  @blur="onGuestsCountChange($event)"
-                  :placeholder="$t('searchInput.who.placeholder')"
+                id="date-from"
+                type="date"
+                @blur="onFromChange($event)"
+              ></b-form-input>
+            </b-col>
+            <b-col class="col-md-4 col-sm-12 col-12">
+              <label-cols class="d-flex p-2">{{
+                $t("searchInput.to")
+              }}</label-cols>
+              <b-form-input
+                id="date-to"
+                type="date"
+                @blur="onToChange($event)"
+              ></b-form-input>
+            </b-col>
+            <b-col class="col-md-4 col-sm-12 col-12">
+              <label-cols class="d-flex p-2">{{
+                $t("searchInput.who.label")
+              }}</label-cols>
+              <b-form-input
+                id="guestsCount"
+                type="number"
+                @blur="onGuestsCountChange($event)"
+                :placeholder="$t('searchInput.who.placeholder')"
               ></b-form-input>
             </b-col>
           </b-row>
         </div>
         <div class="col md-7">
-          <button class="book-action" :disabled="noQueryParams" @click="goToOrderSummary()">
+          <button
+            class="book-action cursor-pointer"
+            :disabled="noQueryParams"
+            @click="goToOrderSummary()"
+          >
             <img
-                src="../../../assets/img/dot_green_big.png"
-                alt="green-dot"
-                class="me-2"
-            /><span>{{ $t('advertisementDetailsView.book') }}</span>
+              src="../../../assets/img/dot_green_big.png"
+              alt="green-dot"
+              class="me-2"
+            /><span>{{ $t("advertisementDetailsView.book") }}</span>
           </button>
         </div>
       </div>
@@ -189,29 +241,38 @@ import Tenant from "../details/Tenant.vue";
     advertisementData: Object,
     guestsCountQuery: Number,
     fromQuery: String,
-    toQuery: String
+    toQuery: String,
   },
   computed: {
     mainPhoto() {
-      return this.advertisementData.roomPhotos[0]?.data || '';
+      return this.advertisementData.roomPhotos
+        ? this.advertisementData.roomPhotos[0]?.data
+        : "";
     },
     otherPhotos() {
-      return this.advertisementData.roomPhotos.slice(1, 5).map(img => img.data);
+      return this.advertisementData.roomPhotos
+        ? this.advertisementData.roomPhotos.slice(1, 5).map((img) => img.data)
+        : [];
     },
     roomGenderText() {
-      return this.advertisementData.roomGender === 'FEMALE'
-          ? 'roomCard.femaleRoom'
-          : this.advertisementData.roomGender === 'MALE' ? 'roomCard.maleRoom' : 'roomCard.otherGenderRoom';
+      return this.advertisementData.roomGender === "female"
+        ? "roomCard.femaleRoom"
+        : this.advertisementData.roomGender === "male"
+        ? "roomCard.maleRoom"
+        : "roomCard.otherGenderRoom";
     },
     roomGenderIcon() {
-      const icon = this.advertisementData.roomGender === 'FEMALE'
-          ? 'icon_woman'
-          : this.advertisementData.roomGender === 'MALE' ? 'icon_man' : 'icon_people';
+      const icon =
+        this.advertisementData.roomGender === "female"
+          ? "icon_woman"
+          : this.advertisementData.roomGender === "male"
+          ? "icon_man"
+          : "icon_people";
 
       return {
         alt: icon,
-        src: require(`../../../assets/img/${icon}.png`)
-      }
+        src: require(`../../../assets/img/${icon}.png`),
+      };
     },
     from() {
       return this.fromQuery ?? this.fromForm;
@@ -223,7 +284,7 @@ import Tenant from "../details/Tenant.vue";
       return this.guestsCountQuery ?? this.guestsCountForm;
     },
     noQueryParams() {
-      return !(this.guestsCount && this.from && this.to) ;
+      return !(this.guestsCount && this.from && this.to);
     },
     totalPrice() {
       if (this.noOrderParams) {
@@ -235,7 +296,7 @@ import Tenant from "../details/Tenant.vue";
       const duration = (to.getTime() - from.getTime()) / 1000 / 60 / 60 / 24;
 
       return duration * this.guestsCount * this.advertisementData.price;
-    }
+    },
   },
   methods: {
     onFromChange(e) {
@@ -252,11 +313,16 @@ import Tenant from "../details/Tenant.vue";
     },
     goToOrderSummary() {
       this.$router.push({
-        name: 'OrderSummaryView',
-        query: { id: this.$route.params.id, from: this.fromQuery, to: this.toQuery, guestsCount: this.guestsCountQuery }
+        name: "OrderSummaryView",
+        query: {
+          id: this.$route.params.id,
+          from: this.fromQuery,
+          to: this.toQuery,
+          guestsCount: this.guestsCountQuery,
+        },
       });
-    }
-  }
+    },
+  },
 })
 export default class SingleAd extends Vue {
   fromForm;

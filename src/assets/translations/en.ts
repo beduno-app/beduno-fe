@@ -276,7 +276,9 @@ export default {
             others: {
                 label: 'Others:',
                 placeholder: 'e. g. no parking lot, garden barbecue'
-            }
+            },
+            "yes": "Yes",
+            "no": "No"
         },
         equipmentSection: {
             roomEquipment: {
@@ -296,6 +298,10 @@ export default {
             save: {
                 label: 'Save offer',
                 tip: '(you can still edit your offer afterwards)'
+            },
+            edit: {
+                label: 'Edit offer',
+                tip: '(edit created offer)'
             },
             publish: {
                 label: 'Publish offer',

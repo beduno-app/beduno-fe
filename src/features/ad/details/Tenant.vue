@@ -1,5 +1,5 @@
 <template>
-  <div class="row">
+  <div class="row" v-if="name">
     <div class="col-md-4 col">
       {{ $t("roomCard.tenantInfo", { name, age }) }}
     </div>
@@ -28,7 +28,7 @@ import { mapLanguageCodeToLanguageData } from "@/util";
   props: {
     name: String,
     age: Number,
-    languages: String,
+    languages: Array,
   },
   computed: {
     splitLanguages() {

@@ -276,7 +276,9 @@ export default {
             others: {
                 label: 'Inne:',
                 placeholder: 'np. brak parkingu, grill w ogrodzie'
-            }
+            },
+            "yes": "Tak",
+            "no": "Nie"
         },
         equipmentSection: {
             roomEquipment: {
@@ -292,6 +294,10 @@ export default {
             preview: {
                 label: 'Zobacz podgląd ogłoszenia',
                 tip: '(zobaczysz jak podgląd ogłoszenie przed jego publikacją)'
+            },
+            edit: {
+                label: 'Edytuj ogłoszenie',
+                tip: '(edytuj utworzone ogłoszenie)'
             },
             save: {
                 label: 'Zapisz ogłoszenie',

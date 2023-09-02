@@ -40,7 +40,7 @@
       </div>
       <div class="row"><p class="tenants">{{ $t('advertisementDetailsView.currentTenants') }} {{ advertisementData.guests.length }}</p></div>
       <div class="row">
-        <tenant v-for="guest in advertisementData.guests" :guest="guest" />
+        <tenant v-for="guest in advertisementData.guests" :name="guest.name" :age="guest.age" :languages="guest.languages" />
       </div>
       <div class="row mt-4">
         <equipments />

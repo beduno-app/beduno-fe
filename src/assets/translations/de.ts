@@ -90,7 +90,7 @@ export default {
                 }
             },
             birthYear: {
-                label:  'Rok urodzenia*',
+                label: '[DE] Rok urodzenia*',
                 validationMessages: {
                     required: '[DE] To pole jest wymagane.'
                 }
@@ -101,8 +101,8 @@ export default {
                     required: '[DE] To pole jest wymagane.'
                 },
                 options: {
-                    woman: "Kobieta",
-                    man: "Mężczyzna"
+                    woman: "[DE] Kobieta",
+                    man: "[DE] Mężczyzna"
                 },
             },
             languages: {
@@ -114,7 +114,7 @@ export default {
             action: {
                 hint: '[DE] Jeśli już posiadasz u nas konto, po prostu się zaloguj'
             },
-            generatePassword:'Wygeneruj hasło',
+            generatePassword:'[DE] Wygeneruj hasło',
             acceptRegulation: {
                 label: '[DE] Akceptuję regulamin',
                 link: '[DE] kliknij tutaj, aby się z nim zapoznać',
@@ -276,7 +276,9 @@ export default {
             others: {
                 label: '[DE] Inne:',
                 placeholder: '[DE] np. brak parkingu, grill w ogrodzie'
-            }
+            },
+            "yes": "Ja",
+            "no": "Nein"
         },
         equipmentSection: {
             roomEquipment: {
@@ -292,6 +294,10 @@ export default {
             preview: {
                 label: '[DE] Zobacz podgląd ogłoszenia',
                 tip: '[DE] (zobaczysz jak podgląd ogłoszenie przed jego publikacją)'
+            },
+            edit: {
+                label: '[DE] Edytuj ogłoszenie',
+                tip: '[DE] (edytuj utworzone ogłoszenie)'
             },
             save: {
                 label: '[DE] Zapisz ogłoszenie',
