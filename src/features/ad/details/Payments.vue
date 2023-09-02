@@ -1,7 +1,7 @@
 <template>
   <div class="row">
     <div
-      v-for="(form, idx) in filteredPeyments"
+      v-for="(form, idx) in filteredPayments"
       :key="idx"
       class="col-xl-2 col-lg-3 col-md-6 col-sm-6 col-xs-12 p-2"
     >
@@ -12,7 +12,7 @@
       {{ form.content }}
       <span class="form-check-sign"></span>
       {{ form.label }}
-      
+
     </div>
   </div>
 </template>
@@ -26,16 +26,17 @@ import { Options, Vue } from "vue-class-component";
   },
 
   computed: {
-    filteredPeyments() {
+    filteredPayments() {
       return this.paymentType
-        ? this.paymentForms.filter((peyment) =>
-            this.paymentType.includes(peyment.key)
+        ? this.paymentForms.filter((paymentForm) =>
+            this.paymentType.includes(paymentForm.key)
           )
         : [];
     },
   },
 })
 export default class Payments extends Vue {
+  // todo: make payment form names translatable
   paymentForms = [
     { label: "gotówka", key: "cash", icon: "icon_cash" },
     {

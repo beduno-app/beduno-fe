@@ -32,6 +32,7 @@ import { Options, Vue } from "vue-class-component";
   },
 })
 export default class Rules extends Vue {
+  // todo: make rules and yes/no above translatable
   rules = [
     {
       label: "Akceptujemy zwierzęta",

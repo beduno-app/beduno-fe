@@ -32,6 +32,7 @@ import { Options, Vue } from "vue-class-component";
   },
 })
 export default class SharedEquipments extends Vue {
+  // todo: make equipment names translatable
   equipments = [
     { content: "Kuchnia", key: "tv", icon: "icon_kitchen" },
     { content: "Piekarnik", key: "oven", icon: "icon_oven" },

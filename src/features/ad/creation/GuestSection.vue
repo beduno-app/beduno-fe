@@ -115,7 +115,7 @@ export default class GuestSection extends Vue {
     return {
       name: (this.$refs.name as any).node.value,
       birthYear: this.selectedYear,
-      languages: this.lines,
+      languages: this.lines.join(','),
     };
   }
 

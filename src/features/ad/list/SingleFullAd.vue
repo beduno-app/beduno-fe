@@ -88,16 +88,14 @@
                 v-for="(guest, idx) in advertisementData.guests"
                 :key="idx"
                 :name="guest.name"
-                :guests="advertisementData.guests"
                 :age="new Date().getFullYear() - guest.birthYear"
                 :languages="guest.languages"
               />
             </div>
           </div>
         </div>
-        <div class="col-md-4">
-          <!-- skad mam wziac hosta? zakomentowalam, bo mi wywalilo apke -->
-          <!-- <host :host="advertisementData?.host" /> -->
+        <div class="col-md-4" v-if="advertisementData?.host">
+           <host :host="advertisementData?.host" />
         </div>
       </div>
       <div class="row mt-4">

@@ -28,7 +28,7 @@
               <span class="description-characters">{{
                 $t(
                   "advertisementView.descriptionSection.description.charactersCounter",
-                  { count: 5000 - ownDescription.length }
+                  { count: maxDescriptionLength - ownDescription.length }
                 )
               }}</span>
             </b-tab>
@@ -194,8 +194,7 @@ import { Vue } from "vue-class-component";
 
 export default class HostSection extends Vue {
   ownDescription = <string>"";
-  selectedLanguages = <string[]>[];
-  selectedRentalTime = <string[]>[];
+  maxDescriptionLength = 5000;
   roomsType = [
     {
       content: "Tylko żeński",
@@ -223,12 +222,8 @@ export default class HostSection extends Vue {
     },
   ];
   roomType = "";
-  rentalTime = [
-    { key: "days", content: "Krótkoterminowy (dni)" },
-    { key: "weeks", content: "Krótkoterminowy (tygodnie)" },
-    { key: "months", content: "Długoterminowy (miesiące)" },
-  ];
   selectedTab = 0;
+
   getData() {
     const description =
       this.selectedTab === 0
@@ -236,6 +231,7 @@ export default class HostSection extends Vue {
         : this.selectedTab === 1
         ? (this.$refs.descriptionTemplate1 as any).value
         : (this.$refs.descriptionTemplate2 as any).value;
+
     return {
       description: description,
       roomSize: (this.$refs.roomSize as any).node.value,

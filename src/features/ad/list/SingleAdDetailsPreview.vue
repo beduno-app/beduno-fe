@@ -1,6 +1,7 @@
 <template>
   <div class="row justify-content-center advertisement-section py-5">
     <single-full-ad :advertisementData="advertisementData" />
+    <!-- todo: extract actions to separate component and reuse -->
     <div class="p-3 container">
       <div class="row">
         <div class="col-md-4 col-sm-6 col-sx-12">
@@ -44,10 +45,8 @@
           </div>
         </div>
         <div class="col-md-4 col-sm-6 col-sx-12">
-          <div
-            class="d-flex align-items-center cursor-pointer"
-            @click="publishAdvertisement"
-          >
+          <!-- todo: handle action button -->
+          <div class="d-flex align-items-center cursor-pointer">
             <img
               src="../../../assets/img/icon_post_advertisement.png"
               style="width: 40px; height: 40px"

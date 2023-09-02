@@ -276,7 +276,9 @@ export default {
             others: {
                 label: 'Inne:',
                 placeholder: 'np. brak parkingu, grill w ogrodzie'
-            }
+            },
+            "yes": "Tak",
+            "no": "Nie"
         },
         equipmentSection: {
             roomEquipment: {
