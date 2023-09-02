@@ -5,8 +5,7 @@
         icon="fa-solid fa-location-dot"
         class="location-icon mx-2"
       />
-      <u>{{ voivodenship }}</u
-      >, <u> {{ city }} </u>, <u> {{ district }}</u>
+      <u>{{ voivodenship }}</u>, <u> {{ city }} </u>, <u> {{ district }}</u>
     </div>
     <div class="col-lg-3 col-md-6 cursor-pointer">
       <font-awesome-icon
@@ -28,7 +27,7 @@ import { Options, Vue } from "vue-class-component";
   props: {
     district: String,
     city: String,
-    voivodenship: String,
+    voivodenship: String, // todo: wait for BE to implement and (probably) rename to (probably) "province"
   },
 })
 export default class Subheader extends Vue {}

@@ -29,7 +29,6 @@ import { mapLanguageCodeToLanguageData } from "@/util";
     name: String,
     age: Number,
     languages: Array,
-    guests: Array,
   },
   computed: {
     splitLanguages() {

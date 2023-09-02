@@ -276,7 +276,9 @@ export default {
             others: {
                 label: 'Інше:',
                 placeholder: 'наприклад, немає парковки, барбекю в саду'
-            }
+            },
+            "yes": "[UK] Tak",
+            "no": "[UK] Nie"
         },
         equipmentSection: {
             roomEquipment: {

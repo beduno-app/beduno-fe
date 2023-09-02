@@ -36,9 +36,9 @@ export default class AdvertisementsDetailsView extends Vue {
           // todo: remove mock data after handling reservations
           this.advertisement = {
               ...advertisement,
-              guestsList: [
-                  { name: 'Dawid', age: 30, languages: 'pl,en,de'},
-                  { name: 'Anita', age: 34, languages: 'pl,en'},
+              guests: [
+                  { name: 'Dawid', birthYear: 1993, languages: 'pl,en,de'},
+                  { name: 'Anita', birthYear: 1989, languages: 'pl,en'},
               ]
           };
         });

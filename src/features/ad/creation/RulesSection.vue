@@ -20,7 +20,7 @@
                   v-on:change="setPets(false)"
                 />
                 <span class="form-check-sign"></span>
-                nie
+                {{ $t('advertisementView.rulesSection.no') }}
               </label>
             </div>
             <div class="form-check form-check-radio">
@@ -34,7 +34,7 @@
                   v-on:change="setPets(true)"
                 />
                 <span class="form-check-sign"></span>
-                tak
+                {{ $t('advertisementView.rulesSection.yes') }}
               </label>
             </div>
           </div>
@@ -62,7 +62,7 @@
                   formControlName="curfew"
                 />
                 <span class="form-check-sign"></span>
-                nie
+                {{ $t('advertisementView.rulesSection.no') }}
               </label>
             </div>
             <div class="form-check form-check-radio">
@@ -77,7 +77,7 @@
                   formControlName="curfew"
                 />
                 <span class="form-check-sign"></span>
-                tak
+                {{ $t('advertisementView.rulesSection.yes') }}
               </label>
             </div>
           </div>
@@ -105,7 +105,7 @@
                   formControlName="smoking"
                 />
                 <span class="form-check-sign"></span>
-                nie
+                {{ $t('advertisementView.rulesSection.no') }}
               </label>
             </div>
             <div class="form-check form-check-radio">
@@ -120,7 +120,7 @@
                   checked
                 />
                 <span class="form-check-sign"></span>
-                tak
+                {{ $t('advertisementView.rulesSection.yes') }}
               </label>
             </div>
           </div>

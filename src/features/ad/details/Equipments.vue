@@ -24,7 +24,6 @@ import { Options, Vue } from "vue-class-component";
   },
   computed: {
     filteredEquipments() {
-
       return this.roomEquipments
         ? this.equipments.filter((equipment) =>
             this.roomEquipments.includes(equipment.key)
@@ -34,6 +33,7 @@ import { Options, Vue } from "vue-class-component";
   },
 })
 export default class Equipments extends Vue {
+  // todo: make equipment names translatable
   equipments = [
     { content: "Brak pościeli", key: "no_linen", icon: "icon_no_linen" },
     { content: "Pralka", key: "washer", icon: "washing_machine" },

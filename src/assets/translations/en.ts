@@ -276,7 +276,9 @@ export default {
             others: {
                 label: 'Others:',
                 placeholder: 'e. g. no parking lot, garden barbecue'
-            }
+            },
+            "yes": "Yes",
+            "no": "No"
         },
         equipmentSection: {
             roomEquipment: {

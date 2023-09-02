@@ -101,8 +101,8 @@ export default {
                     required: '[DE] To pole jest wymagane.'
                 },
                 options: {
-                    woman: "[DE]Kobieta",
-                    man: "[DE]Mężczyzna"
+                    woman: "[DE] Kobieta",
+                    man: "[DE] Mężczyzna"
                 },
             },
             languages: {
@@ -112,7 +112,7 @@ export default {
                 }
             },
             action: {
-                hint:  '[DE] Jeśli już posiadasz u nas konto, po prostu się zaloguj'
+                hint: '[DE] Jeśli już posiadasz u nas konto, po prostu się zaloguj'
             },
             generatePassword:'[DE] Wygeneruj hasło',
             acceptRegulation: {
@@ -276,7 +276,9 @@ export default {
             others: {
                 label: '[DE] Inne:',
                 placeholder: '[DE] np. brak parkingu, grill w ogrodzie'
-            }
+            },
+            "yes": "Ja",
+            "no": "Nein"
         },
         equipmentSection: {
             roomEquipment: {
@@ -336,6 +338,7 @@ export default {
         paymentMethods: '[DE] Metody płatności:',
         rulesOfStay: '[DE] Zasady pobytu:',
         pricePerBed: '[DE] Cena za łóżko {price} {currency} ({duration})',
+        totalPrice: '[DE] Do zapłaty ({from} - {to}, {guestsCount} gości): {totalPrice} {currency}',
         book: '[DE] Zarezerwuj łóżko',
         beds: '[DE] {count} łóżka',
         rooms: '[DE] {count} pokoje'
