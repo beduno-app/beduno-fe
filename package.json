@@ -8,7 +8,8 @@
     "build:prod": "vue-cli-service build --prod",
     "test:unit": "vue-cli-service test:unit",
     "test:e2e": "vue-cli-service test:e2e",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "docker:build": "docker build -f ./Dockerfile . -t superdyzio/bedok-fe"
   },
   "dependencies": {
     "@formkit/themes": "^1.0.0-beta.10",
