@@ -53,7 +53,7 @@ export default class HostAdvertisementsView extends Vue {
 
   mounted() {
     // todo: use url param
-    this.axios.get(`http://localhost:8080/advertisement/host?hostId=4fd1ab9b-770b-451c-be23-9b4761f9c92f`)
+    this.axios.get(`/advertisement/host?hostId=4fd1ab9b-770b-451c-be23-9b4761f9c92f`)
         .then(resp => resp.data)
         .then(advertisements => {
           advertisements.forEach(ad => {

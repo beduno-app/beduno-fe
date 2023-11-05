@@ -125,7 +125,7 @@ export default class HomeView extends Vue {
   advertisements = [];
 
   mounted() {
-    this.axios.get('http://localhost:8080/advertisement/list')
+    this.axios.get('/advertisement/list')
         .then(resp => resp.data)
         .then(advertisements => {
           this.advertisements = advertisements;

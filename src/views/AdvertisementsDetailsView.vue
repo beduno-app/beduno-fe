@@ -29,7 +29,7 @@ export default class AdvertisementsDetailsView extends Vue {
     this.to = to;
 
     const { id } = this.$route.params;
-    this.axios.get(`http://localhost:8080/advertisement/details?advertisementId=${id}`)
+    this.axios.get(`/advertisement/details?advertisementId=${id}`)
         .then(resp => resp.data)
         .then(advertisement => {
           console.log(advertisement);
