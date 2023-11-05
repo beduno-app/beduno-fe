@@ -200,7 +200,7 @@ export default class Login extends Vue {
     }
 
     console.log(data);
-    this.axios('http://localhost:8080/host/login', { method: 'POST', data });
+    this.axios('/host/login', { method: 'POST', data });
   }
 }
 </script>

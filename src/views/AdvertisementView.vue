@@ -220,7 +220,7 @@ export default class AdvertisementView extends Vue {
     this.updateAdvertisementData();
     const mainData = (this.$refs.main as any).getData();
     this.axios
-      .post("http://localhost:8080/advertisement", this.advertisementData, {
+      .post("/advertisement", this.advertisementData, {
         headers: { "Content-Type": "application/json" },
       })
       .then((response) => response.data)
@@ -233,7 +233,7 @@ export default class AdvertisementView extends Vue {
         mainData.images.forEach((image) => {
           formData.append("photos", image);
         });
-        this.axios.put("http://localhost:8080/advertisement/photos", formData, {
+        this.axios.put("/advertisement/photos", formData, {
           headers: { "Content-Type": "multipart/form-data" },
         });
       });

@@ -354,7 +354,7 @@ export default class Login extends Vue {
       whatsapp: false,
       telegram: false
     };
-    this.axios('http://localhost:8080/host/register', { method: 'POST', data });
+    this.axios('/host/register', { method: 'POST', data });
   }
 }
 </script>

@@ -82,7 +82,7 @@ export default class OrderSummaryView extends Vue {
     // @ts-ignore
     this.duration = (new Date(to).getTime() - new Date(from).getTime()) / 1000 / 60 / 60 / 24;
 
-    this.axios.get(`http://localhost:8080/advertisement/details?advertisementId=${id}`)
+    this.axios.get(`/advertisement/details?advertisementId=${id}`)
         .then(resp => resp.data)
         .then(advertisement => {
           console.log(advertisement);

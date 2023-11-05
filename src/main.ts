@@ -44,7 +44,11 @@ const i18n = createI18n({
     globalInjection: true
 });
 
-createApp(App).use(store).use(i18n).use(BootstrapVue3).use(router).use(VueAxios, axios).use(
+const axiosInstance = axios.create({
+    baseURL: process.env.VUE_APP_API_BASE_URL
+});
+
+createApp(App).use(store).use(i18n).use(BootstrapVue3).use(router).use(VueAxios, axiosInstance).use(
     plugin,
     defaultConfig({
         theme: 'genesis'

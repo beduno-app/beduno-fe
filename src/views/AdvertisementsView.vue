@@ -33,7 +33,7 @@ export default class AdvertisementsView extends Vue {
         ...(queryParams.location ? { location: queryParams.location } : {}),
         ...this.criteria
     };
-    this.axios('http://localhost:8080/advertisement/criteria', { method: 'POST', data })
+    this.axios('/advertisement/criteria', { method: 'POST', data })
         .then(resp => resp.data)
         .then(data => {
           this.advertisements = data.content;
