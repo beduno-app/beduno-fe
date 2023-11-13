@@ -20,8 +20,8 @@ import {faLocationDot}  from '@fortawesome/free-solid-svg-icons'
 
 import { UploadMedia, UpdateMedia } from 'vue-media-upload';
 
-import axios from 'axios'
-import VueAxios from 'vue-axios'
+import axios, { AxiosStatic } from 'axios'
+import VueAxios from 'vue-axios';
 
 // /* add icons to the library */
 
@@ -46,7 +46,7 @@ const i18n = createI18n({
 
 const axiosInstance = axios.create({
     baseURL: process.env.VUE_APP_API_BASE_URL
-});
+}) as AxiosStatic;
 
 createApp(App).use(store).use(i18n).use(BootstrapVue3).use(router).use(VueAxios, axiosInstance).use(
     plugin,
