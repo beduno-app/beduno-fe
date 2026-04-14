@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { watch, onMounted } from 'vue'
+import { watch, onMounted, onUnmounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useAuthStore } from '@/modules/auth/store/auth.store'
 import { useRouter } from 'vue-router'
@@ -8,6 +8,7 @@ import { usePropertiesStore } from '@/modules/properties/store/properties.store'
 import { useArrivalsStore } from '@/modules/arrivals/store/arrivals.store'
 import { useInHouseStore } from '@/modules/inhouse/store/inhouse.store'
 import { syncOfflineSnapshot } from '@/modules/ops/composables/useOfflineSnapshot'
+import { useSyncStore } from '@/modules/ops/store/sync.store'
 
 const { t } = useI18n()
 const auth = useAuthStore()
@@ -17,12 +18,17 @@ const propertiesStore = usePropertiesStore()
 const arrivalsStore = useArrivalsStore()
 const inhouseStore = useInHouseStore()
 
+const syncStore = useSyncStore()
 const today = new Date().toISOString().slice(0, 10)
 
 function syncProperty(id: string) {
   arrivalsStore.propertyIdFilter = id
   inhouseStore.propertyIdFilter = id
   if (id) syncOfflineSnapshot(id, today).catch(() => undefined)
+}
+
+function onOnline() {
+  syncStore.syncQueue()
 }
 
 watch(
@@ -33,6 +39,12 @@ watch(
 onMounted(() => {
   propertiesStore.fetchProperties()
   syncProperty(opsStore.selectedPropertyId)
+  syncStore.refreshQueueLength()
+  window.addEventListener('online', onOnline)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('online', onOnline)
 })
 
 function onPropertyChange(e: Event) {
