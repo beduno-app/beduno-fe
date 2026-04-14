@@ -221,20 +221,20 @@ This plan bridges the current codebase (docs/as-is) to the target product (docs/
 
 ### 7.1 Localisation
 
-- [ ] Extract all UI strings to i18n files (~400 strings per language)
-- [ ] Professional translation for PL, EN, DE, UA, RU
-- [ ] Localised status labels, action buttons, predefined reasons, error messages
-- [ ] Per-user language stored in profile; set on login
-- [ ] Export/report language selector (independent of UI)
-- [ ] Date/number formatting per locale
+- [x] Extract all UI strings to i18n files (~400 strings per language)
+- [x] Professional translation for PL, EN, DE, UA, RU
+- [x] Localised status labels, action buttons, predefined reasons, error messages
+- [x] Per-user language stored in profile; set on login
+- [x] Export/report language selector (independent of UI)
+- [x] Date/number formatting per locale
 
 ### 7.2 UX Polish
 
-- [ ] Loading states: skeleton loaders for data-fetching views
-- [ ] Error states: user-friendly error messages for API failures, offline conflicts
-- [ ] Empty states: helpful messages when no data exists yet ("No workers imported yet")
-- [ ] Keyboard navigation: accessibility for web admin power users
-- [ ] Notifications: toast for check-in success, conflict warnings, sync completion
+- [x] Loading states: skeleton loaders for data-fetching views
+- [x] Error states: user-friendly error messages for API failures, offline conflicts
+- [x] Empty states: helpful messages when no data exists yet ("No workers imported yet")
+- [x] Keyboard navigation: accessibility for web admin power users
+- [x] Notifications: toast for check-in success, conflict warnings, sync completion
 
 **Deliverable**: Production-ready app in 5 languages with polished UX.
 
