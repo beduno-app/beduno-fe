@@ -396,6 +396,62 @@ onUnmounted(stopPolling)
   text-align: right;
 }
 
+// Mobile card layout — switch table to stacked cards at narrow widths
+@media (max-width: 600px) {
+  .arrivals-table {
+    display: block;
+    box-shadow: none;
+
+    thead {
+      display: none;
+    }
+
+    tbody {
+      display: block;
+    }
+
+    :deep(tr) {
+      display: flex;
+      flex-direction: column;
+      background: #fff;
+      border-radius: 0.5rem;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      margin-bottom: 0.75rem;
+      padding: 0.75rem;
+      gap: 0.5rem;
+    }
+
+    :deep(td) {
+      display: block;
+      padding: 0;
+      border: none;
+      font-size: 0.875rem;
+    }
+
+    :deep(.actions-cell) {
+      justify-content: flex-start;
+      margin-top: 0.25rem;
+    }
+  }
+
+  .filters {
+    flex-direction: column;
+
+    select,
+    input {
+      width: 100%;
+    }
+  }
+
+  .stats-bar {
+    gap: 0.75rem;
+  }
+
+  .header-actions {
+    flex-wrap: wrap;
+  }
+}
+
 .pagination {
   display: flex;
   align-items: center;

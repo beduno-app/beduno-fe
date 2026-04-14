@@ -206,6 +206,19 @@ onMounted(() => {
   display: flex;
   gap: 0.75rem;
   align-items: flex-start;
+
+  @media (max-width: 480px) {
+    flex-direction: column;
+
+    .filter-select {
+      width: 100%;
+    }
+
+    :deep(button) {
+      width: 100%;
+      min-height: 44px;
+    }
+  }
 }
 
 .filter-select {

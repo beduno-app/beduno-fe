@@ -257,9 +257,29 @@ onMounted(() => {
 
 .rooms-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(360px, 100%), 1fr));
   gap: 1rem;
   margin-top: 1rem;
+}
+
+@media (max-width: 600px) {
+  .filters {
+    flex-direction: column;
+
+    select {
+      width: 100%;
+    }
+  }
+
+  .stats-bar {
+    gap: 0.75rem;
+  }
+
+  .page-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
 }
 
 .loading,
