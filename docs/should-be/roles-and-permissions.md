@@ -34,21 +34,21 @@ Manages a specific property's inventory and rules. May be an internal employee o
 **Responsibilities:**
 - Manage rooms within their property (capacity, gender rules, block/unblock)
 - View and confirm planned stays for their property
-- Perform all operational actions (check-in/out, move, no-show, redirect)
+- Perform all operational actions (check-in/out, move, no-show)
 - View occupancy and audit log for their property only
 - Export reports for their property
 
 **Typical person:** Hotel/property manager, hostel manager.
 
-### Front Desk / Shift Lead
-The hands-on operational role. Performs check-ins and manages immediate occupancy changes.
+### Front Desk
+The hands-on operational role. Performs check-ins, manages immediate occupancy changes, and leads shift-level operations.
 
 **Responsibilities:**
 - View arrivals for today at their property
 - Check in workers (QR scan or manual search)
 - Check out workers
 - Move workers between rooms
-- Mark no-shows and redirected workers
+- Mark no-shows and moved workers
 - Run inspections (room-by-room verification)
 - Block/unblock rooms (e.g. for maintenance)
 
@@ -80,7 +80,7 @@ This separation exists because:
 | Confirm check-out | No | **Yes** |
 | Move room | No | **Yes** |
 | Mark no-show | No | **Yes** |
-| Redirect to another property | No | **Yes** |
+| Move to another property | No | **Yes** |
 | Block/unblock a room | No | **Yes** |
 | Edit room inventory | No | **Yes** (Property Admin only) |
 
@@ -139,16 +139,16 @@ Creates planned stay
                                       actor + timestamp + reason
 ```
 
-### Redirect Path
+### Move to Another Property Path
 
 ```
   System: → EXPECTED_TODAY           
                                       WRK-0412 arrives but
                                       Room 101 is blocked (damage)
                                      
-                                      Taps "Redirect"
+                                      Taps "Move"
                                       Selects: Hotel Wola, Room 203
-                                      Status: → REDIRECTED
+                                      Status: → MOVED
                                      
                                       New stay created at Hotel Wola
                                       Status: CHECKED_IN
@@ -239,7 +239,7 @@ Agency Planner
 
 ### PII Minimisation
 
-Front Desk / Shift Lead screens show **only what's needed for check-in**:
+Front Desk screens show **only what's needed for check-in**:
 - Worker name (for visual confirmation)
 - Internal ID (for QR/manual lookup)
 - Assigned room

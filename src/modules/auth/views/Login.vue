@@ -5,11 +5,11 @@ import { useAuthStore } from '../store/auth.store'
 import { useI18n } from 'vue-i18n'
 
 const LANGUAGES = [
-  { code: 'pl', label: 'PL' },
-  { code: 'en', label: 'EN' },
-  { code: 'de', label: 'DE' },
-  { code: 'ua', label: 'UA' },
-  { code: 'ru', label: 'RU' },
+  { code: 'pl', label: 'PL', apiCode: 'PL' },
+  { code: 'en', label: 'EN', apiCode: 'EN' },
+  { code: 'de', label: 'DE', apiCode: 'DE' },
+  { code: 'ua', label: 'UA', apiCode: 'UA' },
+  { code: 'ru', label: 'RU', apiCode: 'RU' },
 ] as const
 
 const auth = useAuthStore()
@@ -32,7 +32,7 @@ async function handleLogin() {
   try {
     await auth.login({ email: email.value, password: password.value })
     if (auth.user?.language) {
-      locale.value = auth.user.language
+      locale.value = auth.user.language.toLowerCase()
     }
     await router.push({ name: 'Dashboard' })
   } catch (e) {

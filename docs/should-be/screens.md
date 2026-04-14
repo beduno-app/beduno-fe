@@ -46,15 +46,15 @@
 
 | Screen | Route | Role | Description |
 |--------|-------|------|-------------|
-| **Arrivals Today** | `/property/:id/arrivals` | Front Desk, Shift Lead, Property Admin | Expected today list; QR scan button; one-tap check-in; no-show/redirect actions |
+| **Arrivals Today** | `/property/:id/arrivals` | Front Desk, Property Admin | Expected today list; QR scan button; one-tap check-in; no-show/move actions |
 | **In-House (Nightly)** | `/property/:id/occupancy` | All property roles | Room-by-room current occupancy; exception badges (over-capacity, unknown); one-tap export |
-| **Inspection Mode** | `/property/:id/inspection` | Front Desk, Shift Lead, Property Admin | Room-by-room roster; "expected vs present" toggle; discrepancy capture with timestamp + confirmer |
+| **Inspection Mode** | `/property/:id/inspection` | Property Admin, Front Desk | Room-by-room roster; "expected vs present" toggle; discrepancy capture with timestamp + confirmer |
 
 ### Admin Module
 
 | Screen | Route | Role | Description |
 |--------|-------|------|-------------|
-| User Management | `/admin/users` | Agency Admin | List users, invite new, assign roles, revoke sessions |
+| User Management | `/users` | Agency Admin | List users, invite new, assign roles, revoke sessions |
 | Audit Log | `/audit` | Agency Admin, Planner (read), Property Admin (own property) | Filterable event log: actor, action, entity, before/after, timestamp |
 | Export Center | `/exports` | Agency Admin, Planner, Property Admin | Generate nightly reports, occupancy summaries; choose format (CSV/PDF) and language |
 
@@ -229,6 +229,7 @@ at "Hotel Wola", Room 203
 | CHECKED_IN | Zameldowany | Checked in | Eingecheckt | Зареєстровано | Заселён |
 | CHECKED_OUT | Wymeldowany | Checked out | Ausgecheckt | Виселено | Выселен |
 | NO_SHOW | Nieobecny | No-show | Nicht erschienen | Не з'явився | Не явился |
+| MOVED | Przeniesiony | Moved | Verschoben | Переміщено | Перемещён |
 
 ### Predefined Reasons (localized tags instead of free text)
 

@@ -15,7 +15,7 @@ export const useAuthStore = defineStore(
 
     async function login(payload: LoginPayload) {
       const response = await authApi.login(payload)
-      token.value = response.token
+      token.value = response.accessToken
       refreshToken.value = response.refreshToken
       user.value = response.user
     }
@@ -23,7 +23,8 @@ export const useAuthStore = defineStore(
     async function refresh() {
       if (!refreshToken.value) throw new Error('No refresh token')
       const response = await authApi.refresh(refreshToken.value)
-      token.value = response.token
+      token.value = response.accessToken
+      refreshToken.value = response.refreshToken
     }
 
     function logout() {

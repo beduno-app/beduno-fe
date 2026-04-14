@@ -17,7 +17,7 @@ Owners of temporary work agencies move hundreds of workers between locations. Wo
 | **Agency Admin** | User management, permissions, audit review, billing | Web Admin |
 | **Agency Planner** | Creates planned stays, proposes assignments, bulk imports | Web Admin |
 | **Property Admin** | Manages room inventory, capacity rules, property settings | Web Admin |
-| **Front Desk / Shift Lead** | Operational check-in/out, room moves, no-show marking | Mobile Ops |
+| **Front Desk** | Operational check-in/out, room moves, no-show marking, inspections | Mobile Ops |
 
 ## Core Workflow: Propose → Confirm
 
@@ -53,7 +53,7 @@ The MVP is designed around three operational moments that must work perfectly:
 The locked decisions force a specific product architecture:
 
 - **Web Admin** — for agency + property admin (desktop-first, responsive)
-- **Mobile Ops App** — for front desk / shift leads (mobile-first, offline-capable)
+- **Mobile Ops App** — for front desk (mobile-first, offline-capable)
 - **Offline-first with conflict resolution** — poor reception at properties
 - **Strict RBAC** — role-based access, session revocation, minimal PII on operational screens
 - **Multi-language from day 1** — PL, EN, DE, UA, RU (per-user language, localized exports)
@@ -88,5 +88,5 @@ The locked decisions force a specific product architecture:
 - GDPR applies (PII: names, IDs, phone numbers, addresses, potentially immigration/work eligibility data)
 - MVP approach: store minimum data, field-level access control, audit trail, retention policy
 - QR codes contain zero PII (internal ID + checksum only)
-- BYOD shift leads see minimal PII — only what's needed for check-in
+- BYOD front desk devices see minimal PII — only what's needed for check-in
 - Device/session revocation must work instantly

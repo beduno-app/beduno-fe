@@ -6,15 +6,22 @@
 
 ```typescript
 interface Worker {
-  id: string                    // UUID (system-generated)
-  internalId: string            // agency's own ID (primary lookup key)
-  name: string
+  id: string                    // UUID
+  internalId: string            // agency's own ID
+  firstName: string
+  lastName: string
   phone?: string
-  gender?: 'MALE' | 'FEMALE'
-  tags: string[]                // flexible: skills, nationality, notes
+  gender: 'MALE' | 'FEMALE' | 'OTHER'
+  tags: string[]
+  notes?: string
   status: 'ACTIVE' | 'INACTIVE' | 'BLACKLISTED'
-  agencyId: string
-  createdAt: string             // ISO 8601
+  currentStay?: {
+    propertyId: string
+    propertyName: string
+    roomNumber: string
+    since: string               // LocalDate
+  }
+  createdAt: string
   updatedAt: string
 }
 ```
@@ -25,25 +32,19 @@ interface Worker {
 interface Property {
   id: string
   name: string
-  address: {
-    street: string
-    city: string
-    postCode: string
-    country: string             // ISO 3166-1 alpha-2
-  }
-  agencyId: string
+  address: string               // flat string, not nested object
   type: 'INTERNAL' | 'PARTNER'
-  rules: PropertyRules
-  isActive: boolean
+  genderRule: 'MIXED' | 'MALE_ONLY' | 'FEMALE_ONLY' | 'PER_ROOM'
+  status: 'ACTIVE' | 'BLOCKED' | 'MAINTENANCE'
+  notes?: string
+  roomSummary: {
+    totalRooms: number
+    totalCapacity: number
+    totalBlockedSpots: number
+    currentOccupancy: number
+  }
   createdAt: string
   updatedAt: string
-}
-
-interface PropertyRules {
-  genderSeparation: boolean     // if true, rooms enforce gender rule
-  maxOccupancyStrict: boolean   // if true, over-capacity is hard-blocked
-  curfew?: string               // e.g. "22:00"
-  customRules?: string[]        // predefined localized tags
 }
 ```
 
@@ -53,14 +54,17 @@ interface PropertyRules {
 interface Room {
   id: string
   propertyId: string
-  label: string                 // e.g. "101", "A-3"
-  capacity: number              // max spots (not beds — room-capacity model)
-  genderRule?: 'MALE' | 'FEMALE' | 'ANY'
-  isBlocked: boolean            // temporarily unavailable
-  blockReason?: string          // predefined: 'MAINTENANCE' | 'RESERVED' | 'DAMAGE' | 'OTHER'
+  roomNumber: string            // e.g. "101", "A-3"
+  capacity: number
+  blockedSpots: number
+  availableSpots: number
+  currentOccupancy: number
+  genderRule: 'MIXED' | 'MALE_ONLY' | 'FEMALE_ONLY' | 'PER_ROOM'
+  floor: number
+  status: 'ACTIVE' | 'BLOCKED' | 'MAINTENANCE'
   notes?: string
+  occupants: StayOccupant[]
   createdAt: string
-  updatedAt: string
 }
 ```
 
@@ -69,17 +73,15 @@ interface Room {
 ```typescript
 interface Stay {
   id: string
-  workerId: string
-  propertyId: string
-  roomId: string
-  startDate: string             // ISO 8601 date (no time)
-  endDate: string
+  worker: WorkerSummary         // nested object, not just workerId
+  property: PropertySummary     // nested object
+  room: RoomSummary             // nested object
+  dateFrom: string              // ISO 8601 date (no time)
+  dateTo: string
   status: StayStatus
-  source: 'AGENCY_PLANNED' | 'PROPERTY_CONFIRMED' | 'WALK_IN'
-  createdBy: string             // userId
-  confirmedBy?: string          // userId (property side)
-  confirmedAt?: string
-  notes?: string
+  overrideReason?: string       // for soft constraint overrides
+  createdBy: UserSummary
+  confirmedBy?: UserSummary
   createdAt: string
   updatedAt: string
 }
@@ -90,7 +92,7 @@ type StayStatus =
   | 'CHECKED_IN'               // property confirmed arrival
   | 'CHECKED_OUT'              // property confirmed departure
   | 'NO_SHOW'                  // didn't arrive by end of day
-  | 'REDIRECTED'               // sent to another property
+  | 'MOVED'                    // moved to another property/room
   | 'CANCELLED'                // stay cancelled before arrival
 ```
 
@@ -99,27 +101,27 @@ type StayStatus =
 ```typescript
 interface AuditEvent {
   id: string
-  actorId: string               // userId who performed the action
-  actorRole: UserRole
-  action: AuditAction
   entityType: 'WORKER' | 'PROPERTY' | 'ROOM' | 'STAY' | 'USER'
   entityId: string
-  before: Record<string, unknown> | null
-  after: Record<string, unknown> | null
-  deviceId?: string
-  offlineFlag: boolean          // true if action was queued offline
-  syncedAt?: string             // when offline action was synced
-  reason?: string               // predefined localized reason tag
-  timestamp: string
+  action: AuditAction
+  performedBy: {
+    id: string
+    firstName: string
+    lastName: string
+    role: UserRole
+  }
+  previousState: Record<string, unknown> | null
+  newState: Record<string, unknown> | null
+  reasonTag?: string
+  notes?: string
+  createdAt: string
 }
 
 type AuditAction =
-  | 'CREATE' | 'UPDATE' | 'DELETE'
-  | 'CHECK_IN' | 'CHECK_OUT'
-  | 'MOVE_ROOM' | 'MARK_NO_SHOW' | 'REDIRECT'
-  | 'BLOCK_ROOM' | 'UNBLOCK_ROOM'
-  | 'BULK_IMPORT' | 'BULK_ASSIGN' | 'BULK_CHECKOUT'
-  | 'LOGIN' | 'LOGOUT' | 'PERMISSION_CHANGE'
+  | 'CREATED' | 'UPDATED' | 'DELETED'
+  | 'CHECKED_IN' | 'CHECKED_OUT'
+  | 'NO_SHOW' | 'MOVED' | 'CANCELLED'
+  | 'IMPORTED' | 'BULK_ASSIGNED' | 'BULK_CHECKED_OUT'
 ```
 
 ### User
@@ -127,17 +129,15 @@ type AuditAction =
 ```typescript
 interface User {
   id: string
-  name: string
   email: string
-  phone?: string
+  firstName: string
+  lastName: string
   role: UserRole
-  agencyId: string
-  propertyId?: string           // set for property-scoped roles
-  language: 'pl' | 'en' | 'de' | 'ua' | 'ru'
-  isActive: boolean
-  deviceIds: string[]           // for session/device revocation
+  language: 'PL' | 'EN' | 'DE' | 'UA' | 'RU'
+  assignedPropertyIds: string[] // for property-scoped roles
+  status: 'ACTIVE' | 'INACTIVE'
+  lastLoginAt?: string
   createdAt: string
-  updatedAt: string
 }
 
 type UserRole =
@@ -145,14 +145,13 @@ type UserRole =
   | 'AGENCY_PLANNER'
   | 'PROPERTY_ADMIN'
   | 'FRONT_DESK'
-  | 'SHIFT_LEAD'
 ```
 
 ---
 
 ## Permission Matrix
 
-| Action | Agency Admin | Agency Planner | Property Admin | Front Desk / Shift Lead |
+| Action | Agency Admin | Agency Planner | Property Admin | Front Desk |
 |--------|:-:|:-:|:-:|:-:|
 | Manage users & roles | W | — | — | — |
 | View audit log | R | R | R (own property) | — |
@@ -169,7 +168,7 @@ type UserRole =
 | View occupancy (all properties) | R | R | — | — |
 | View occupancy (own property) | R | R | R | R |
 | Export reports | W | W | W (own property) | — |
-| Inspection mode | — | — | W | W |
+| Inspection mode | — | — | W | — |
 
 `W` = read + write, `R` = read only, `—` = no access
 
@@ -179,90 +178,94 @@ type UserRole =
 
 ### Auth
 ```
-POST   /auth/login              { email, password } → { token, refreshToken, user }
-POST   /auth/refresh            { refreshToken } → { token }
-POST   /auth/logout             (revoke session)
+POST   /api/v1/auth/login              { email, password } → { token, refreshToken, user }
+POST   /api/v1/auth/refresh            { refreshToken } → { token }
+POST   /api/v1/auth/logout             (revoke session)
+GET    /api/v1/auth/me                 → { user }
 ```
 
 ### Workers
 ```
-GET    /workers                 ?page&size&search&status&agencyId
-GET    /workers/:id
-POST   /workers                 { internalId, name, phone?, gender?, tags[] }
-PUT    /workers/:id             (partial update)
-POST   /workers/import          multipart/form-data (CSV)
-DELETE /workers/:id             (soft delete → INACTIVE)
-GET    /workers/:id/qr          → QR code image (contains internalId + checksum)
+GET    /api/v1/workers                 ?page&size&search&status
+GET    /api/v1/workers/:id
+POST   /api/v1/workers                 { internalId, firstName, lastName, phone?, gender, tags[] }
+PUT    /api/v1/workers/:id             (partial update)
+POST   /api/v1/workers/import          multipart/form-data (CSV)
+DELETE /api/v1/workers/:id             (soft delete → INACTIVE)
+GET    /api/v1/workers/:id/stays       → stays for worker
+GET    /api/v1/workers/:id/qr          → QR code image (contains internalId + checksum)
 ```
 
 ### Properties
 ```
-GET    /properties              ?agencyId&isActive
-GET    /properties/:id
-POST   /properties              { name, address, type, rules }
-PUT    /properties/:id
+GET    /api/v1/properties              ?status
+GET    /api/v1/properties/:id
+POST   /api/v1/properties              { name, address, type, genderRule }
+PUT    /api/v1/properties/:id
 ```
 
 ### Rooms
 ```
-GET    /properties/:propertyId/rooms    ?isBlocked&genderRule
-POST   /properties/:propertyId/rooms    { label, capacity, genderRule? }
-PUT    /rooms/:id
-PATCH  /rooms/:id/block         { reason }
-PATCH  /rooms/:id/unblock
+GET    /api/v1/properties/:propertyId/rooms      ?status&genderRule
+POST   /api/v1/properties/:propertyId/rooms      { roomNumber, capacity, genderRule, floor }
+POST   /api/v1/properties/:propertyId/rooms/bulk  [{ roomNumber, capacity, genderRule, floor }]
+PUT    /api/v1/properties/:propertyId/rooms/:id
 ```
 
 ### Stays
 ```
-GET    /stays                   ?propertyId&workerId&status&dateFrom&dateTo&page&size
-POST   /stays                   { workerId, propertyId, roomId, startDate, endDate }
-PUT    /stays/:id               (update dates, room)
-DELETE /stays/:id               (cancel planned stay)
+GET    /api/v1/stays                   ?propertyId&workerId&status&dateFrom&dateTo&page&size
+POST   /api/v1/stays                   { workerId, propertyId, roomId, dateFrom, dateTo }
+PUT    /api/v1/stays/:id               (update dates, room)
+DELETE /api/v1/stays/:id               (cancel planned stay)
 ```
 
 ### Operations (property-side actions)
 ```
-POST   /stays/:id/check-in     { deviceId? }
-POST   /stays/:id/check-out    { deviceId?, reason? }
-POST   /stays/:id/no-show      { reason? }
-POST   /stays/:id/redirect     { targetPropertyId, targetRoomId?, reason? }
-POST   /stays/:id/move-room    { newRoomId, reason? }
+POST   /api/v1/stays/:id/check-in     { }
+POST   /api/v1/stays/:id/check-out    { reason? }
+POST   /api/v1/stays/:id/no-show      { reason? }
+POST   /api/v1/stays/:id/move         { targetPropertyId?, targetRoomId, reason? }
 ```
 
 ### Bulk Operations
 ```
-POST   /stays/bulk-assign       { assignments: [{ workerId, propertyId, roomId, startDate, endDate }] }
-POST   /stays/bulk-checkout     { stayIds: string[], reason? }
+POST   /api/v1/stays/bulk-assign       { assignments: [{ workerId, propertyId, roomId, dateFrom, dateTo }] }
+POST   /api/v1/stays/bulk-checkout     { stayIds: string[], reason? }
 ```
 
 ### Occupancy & Reports
 ```
-GET    /occupancy/:propertyId                ?date (default today)
-GET    /occupancy/:propertyId/arrivals       ?date (default today)
-GET    /occupancy/:propertyId/inspection     ?date
-GET    /occupancy/:propertyId/exceptions     ?date (over-capacity, unassigned, etc.)
-GET    /reports/nightly          ?propertyId&date → CSV/PDF export
-GET    /reports/occupancy-summary ?agencyId&dateFrom&dateTo
+GET    /api/v1/properties/:id/occupancy           ?date (default today)
+GET    /api/v1/properties/:id/occupancy/export    ?date → CSV/PDF export
+GET    /api/v1/properties/:id/exceptions          ?date (over-capacity, unassigned, etc.)
+GET    /api/v1/stays/arrivals                     ?propertyId&date (default today)
 ```
 
-### Offline Sync
+### Inspection
 ```
-POST   /sync/actions            { actions: OfflineAction[] } → { applied[], conflicts[] }
-GET    /sync/state              ?since=timestamp → delta of changes since last sync
+GET    /api/v1/properties/:id/inspection          ?date
+POST   /api/v1/properties/:id/inspection          { roomId, status, notes? }
+```
+
+### Dashboard
+```
+GET    /api/v1/dashboard                          → agency-wide summary
+GET    /api/v1/properties/:id/dashboard           → property-level summary
 ```
 
 ### Audit
 ```
-GET    /audit                   ?entityType&entityId&actorId&action&dateFrom&dateTo&page&size
+GET    /api/v1/audit                   ?entityType&entityId&action&dateFrom&dateTo&page&size
 ```
 
 ### Users & Roles
 ```
-GET    /users                   ?agencyId&role&propertyId
-POST   /users                   { name, email, role, propertyId?, language }
-PUT    /users/:id
-DELETE /users/:id               (deactivate)
-POST   /users/:id/revoke-sessions
+GET    /api/v1/users                   ?role&propertyId
+POST   /api/v1/users                   { email, firstName, lastName, role, assignedPropertyIds?, language }
+PUT    /api/v1/users/:id
+DELETE /api/v1/users/:id               (deactivate)
+PUT    /api/v1/users/me/language       { language }
 ```
 
 ---
@@ -274,20 +277,32 @@ When a stay is created or a check-in occurs, the system validates:
 | Rule | Type | Behaviour |
 |------|------|-----------|
 | Room at capacity | Hard | Block action; return error with room details |
-| Gender mismatch (if rule enabled) | Hard | Block action; return error |
+| Gender mismatch (if rule enabled) | Soft | Allow with override; return warning |
 | Worker already checked-in elsewhere | Hard | Block check-in; require check-out first |
 | Room is blocked | Hard | Block assignment; show block reason |
+| Property is blocked | Hard | Block assignment; show property status |
 | Double-booking (same worker, overlapping dates) | Hard | Block; return conflicting stay |
-| Near-capacity (capacity - 1) | Soft | Allow but return warning |
-| Worker tagged 'BLACKLISTED' | Hard | Block; return reason |
+| Near-capacity (over-planned) | Soft | Allow with override; return warning |
+| Worker tagged 'BLACKLISTED' | Soft | Allow with override; return warning |
 
-### Offline Conflict Resolution
+### Conflict Response Format
 
-When syncing offline actions:
-1. Apply each action in queue order
-2. If a hard conflict is detected, mark the action as `NEEDS_REVIEW`
-3. Return all conflicts in the sync response
-4. Property admin resolves via a "Conflict inbox" in the UI
+When a 422 response is returned:
+
+```typescript
+{
+  hardViolations: Array<{
+    code: string
+    message: string
+    overridable: false
+  }>
+  softViolations: Array<{
+    code: string
+    message: string
+    overridable: true
+  }>
+}
+```
 
 ---
 

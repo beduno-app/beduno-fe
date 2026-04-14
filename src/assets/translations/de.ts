@@ -38,7 +38,6 @@ export default {
     AGENCY_PLANNER: 'Agentur-Planer',
     PROPERTY_ADMIN: 'Objekt-Admin',
     FRONT_DESK: 'Rezeption',
-    SHIFT_LEAD: 'Schichtleiter',
   },
   permissions: {
     title: 'Rollenberechtigungen',
@@ -59,7 +58,7 @@ export default {
     CHECKED_IN: 'Eingecheckt',
     CHECKED_OUT: 'Ausgecheckt',
     NO_SHOW: 'Nicht erschienen',
-    REDIRECTED: 'Umgeleitet',
+    MOVED: 'Verschoben',
     CANCELLED: 'Storniert',
   },
 }

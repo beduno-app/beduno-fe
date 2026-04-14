@@ -56,7 +56,7 @@ onMounted(async () => {
           :key="user.id"
         >
           <td>{{ user.email }}</td>
-          <td>{{ user.name }}</td>
+          <td>{{ user.firstName }} {{ user.lastName }}</td>
           <td><span class="role-badge">{{ user.role }}</span></td>
           <td>
             <button class="action-btn">
