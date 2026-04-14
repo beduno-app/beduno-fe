@@ -82,12 +82,12 @@ This plan bridges the current codebase (docs/as-is) to the target product (docs/
 
 ### 2.2 Properties Module
 
-- [ ] `property.types.ts` — Property, Room, PropertyRules interfaces
-- [ ] `properties.store.ts` — list, detail, room management
-- [ ] `properties.api.ts` — property CRUD + room CRUD + block/unblock
-- [ ] `PropertyList.vue` — all properties with occupancy summary card
-- [ ] `PropertyDetail.vue` — address, rules, room grid, occupancy overview
-- [ ] `RoomManagement.vue` — add/edit rooms, capacity, gender rule toggle, block/unblock with reason
+- [x] `property.types.ts` — Property, Room, PropertyRules interfaces
+- [x] `properties.store.ts` — list, detail, room management
+- [x] `properties.api.ts` — property CRUD + room CRUD + block/unblock
+- [x] `PropertyList.vue` — all properties with occupancy summary card
+- [x] `PropertyDetail.vue` — address, rules, room grid, occupancy overview
+- [x] `RoomManagement.vue` — add/edit rooms, capacity, gender rule toggle, block/unblock with reason
 
 **Deliverable**: Agency can manage its full worker directory and property/room inventory. QR badges can be printed.
 
