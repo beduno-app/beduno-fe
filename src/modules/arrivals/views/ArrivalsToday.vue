@@ -11,6 +11,7 @@ import MoveAction from '../components/MoveAction.vue'
 import type { NoShowReason } from '../types/arrival.types'
 import { usePullToRefresh } from '@/shared/composables/usePullToRefresh'
 import { decodeQrData } from '@/shared/utils/qrCode'
+import { loadSnapshot } from '@/shared/services/offlineDb'
 
 const { t } = useI18n()
 const store = useArrivalsStore()
@@ -74,11 +75,19 @@ async function handleQrScanned(rawCode: string) {
   try {
     // Try decoding as bedok QR format first, fall back to internalId match
     const decoded = decodeQrData(rawCode)
+
+    // Look up arrival in live store first; fall back to offline snapshot if empty
+    let sourceArrivals = store.arrivals
+    if (!sourceArrivals.length && !navigator.onLine) {
+      const snapshot = await loadSnapshot()
+      if (snapshot) sourceArrivals = snapshot.arrivals
+    }
+
     const arrival = decoded
-      ? store.arrivals.find(
+      ? sourceArrivals.find(
           (a) => a.worker.id === decoded.workerId && a.status === 'EXPECTED_TODAY',
         )
-      : store.arrivals.find(
+      : sourceArrivals.find(
           (a) => a.worker.internalId === rawCode && a.status === 'EXPECTED_TODAY',
         )
 
@@ -129,10 +138,18 @@ function stopPolling() {
   }
 }
 
-onMounted(() => {
+onMounted(async () => {
   propertiesStore.fetchProperties()
   if (store.propertyIdFilter) {
-    store.fetchArrivals()
+    if (navigator.onLine) {
+      store.fetchArrivals()
+    } else {
+      // Load arrivals from offline snapshot
+      const snapshot = await loadSnapshot()
+      if (snapshot && snapshot.propertyId === store.propertyIdFilter) {
+        store.arrivals = snapshot.arrivals
+      }
+    }
   }
   startPolling()
 })
