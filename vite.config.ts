@@ -2,6 +2,7 @@ import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import { fileURLToPath, URL } from 'node:url'
 import { VitePWA } from 'vite-plugin-pwa'
+import { visualizer } from 'rollup-plugin-visualizer'
 
 export default defineConfig({
   test: {
@@ -11,6 +12,10 @@ export default defineConfig({
   },
   plugins: [
     vue(),
+    // Bundle visualizer — only active when ANALYZE=true (npm run build:analyze)
+    ...(process.env.ANALYZE
+      ? [visualizer({ open: true, filename: 'dist/stats.html', gzipSize: true, brotliSize: true })]
+      : []),
     VitePWA({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.ico', 'pwa-192.svg', 'pwa-512.svg'],
