@@ -124,6 +124,12 @@ const router = createRouter({
           component: () => import('@/modules/arrivals/views/ArrivalsToday.vue'),
           meta: { roles: ['PROPERTY_ADMIN', 'FRONT_DESK'] },
         },
+        {
+          path: 'in-house',
+          name: 'InHouse',
+          component: () => import('@/modules/inhouse/views/InHouseView.vue'),
+          meta: { roles: ['PROPERTY_ADMIN', 'FRONT_DESK'] },
+        },
       ],
     },
   ],

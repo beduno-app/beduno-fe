@@ -81,6 +81,15 @@ async function handleLogout() {
             t('nav.arrivals')
           }}
         </RouterLink>
+        <RouterLink
+          v-if="auth.userRole === 'PROPERTY_ADMIN' || auth.userRole === 'FRONT_DESK'"
+          to="/in-house"
+          class="nav-item"
+        >
+          {{
+            t('nav.occupancy')
+          }}
+        </RouterLink>
       </nav>
       <div class="sidebar-footer">
         <div
