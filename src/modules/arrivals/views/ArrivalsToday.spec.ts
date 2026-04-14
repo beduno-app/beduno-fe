@@ -115,7 +115,7 @@ describe('ArrivalsToday', () => {
       totalPages: 1,
       totalElements: 1,
       size: 50,
-      number: 0,
+      page: 0,
     })
 
     const wrapper = mountView()
