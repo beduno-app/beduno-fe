@@ -340,4 +340,27 @@ export default {
       USER: 'Користувач',
     },
   },
+  exports: {
+    exportLanguage: 'Мова експорту',
+    languageNote: 'Незалежно від мови інтерфейсу',
+    selectProperty: "Виберіть об'єкт",
+    selectDate: 'Дата',
+    dateFrom: 'Дата від',
+    dateTo: 'Дата до',
+    exportCsv: 'Експорт CSV',
+    exportPdf: 'Експорт PDF',
+    generating: 'Генерація...',
+    nightlyOccupancy: {
+      title: 'Нічний список',
+      description: "Зайнятість кімнат для вибраного об'єкта та дати.",
+    },
+    exceptionReport: {
+      title: 'Звіт про виключення',
+      description: "Переповнені кімнати та працівники без призначення для вибраного об'єкта та дати.",
+    },
+    occupancySummary: {
+      title: 'Зведення по заповнюваності',
+      description: 'Сукупна заповнюваність усіх об\'єктів за вибраний період.',
+    },
+  },
 }
