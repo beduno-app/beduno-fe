@@ -5,14 +5,17 @@ import { useI18n } from 'vue-i18n'
 import { useStaysStore } from '../store/stays.store'
 import { usePropertiesStore } from '@/modules/properties/store/properties.store'
 import { useWorkersStore } from '@/modules/workers/store/workers.store'
+import { useConflicts } from '../composables/useConflicts'
 import type { BulkAssignmentItem, BulkAssignResponse } from '../types/stay.types'
 import { BaseButton, BaseBadge } from '@/shared/components'
+import ConflictBanner from '../components/ConflictBanner.vue'
 
 const router = useRouter()
 const { t } = useI18n()
 const staysStore = useStaysStore()
 const propertiesStore = usePropertiesStore()
 const workersStore = useWorkersStore()
+const conflicts = useConflicts()
 
 const selectedWorkerIds = ref<string[]>([])
 const propertyId = ref('')
@@ -22,6 +25,16 @@ const dateTo = ref('')
 const isSaving = ref(false)
 const error = ref('')
 const result = ref<BulkAssignResponse | null>(null)
+
+const selectedWorkers = computed(() =>
+  workersStore.workers.filter((w) => selectedWorkerIds.value.includes(w.id)),
+)
+const selectedRoom = computed(() =>
+  propertiesStore.rooms.find((r) => r.id === roomId.value) ?? null,
+)
+const selectedProperty = computed(() =>
+  propertiesStore.properties.find((p) => p.id === propertyId.value) ?? null,
+)
 
 watch(
   () => propertyId.value,
@@ -33,12 +46,25 @@ watch(
   },
 )
 
+// Live pre-submit validation
+watch(
+  [selectedWorkers, selectedRoom, selectedProperty],
+  () => {
+    conflicts.validateBulk(
+      selectedWorkers.value,
+      selectedRoom.value,
+      selectedProperty.value?.status,
+    )
+  },
+)
+
 const isValid = computed(() => {
   return (
     selectedWorkerIds.value.length > 0 &&
     propertyId.value &&
     roomId.value &&
-    dateFrom.value
+    dateFrom.value &&
+    !conflicts.isBlocked.value
   )
 })
 
@@ -160,6 +186,11 @@ propertiesStore.fetchProperties()
 
     <!-- Assignment form -->
     <template v-else>
+      <ConflictBanner
+        :hard-violations="conflicts.hardViolations.value"
+        :soft-violations="conflicts.softViolations.value"
+      />
+
       <div class="form-card">
         <h3>{{ t('stays.selectWorkers') }}</h3>
         <div class="worker-grid">
