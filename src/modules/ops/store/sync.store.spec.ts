@@ -31,6 +31,15 @@ import { getPendingActions, removeAction, getQueueLength } from '@/shared/servic
 import { arrivalsApi } from '@/modules/arrivals/api/arrivals.api'
 import { inhouseApi } from '@/modules/inhouse/api/inhouse.api'
 import type { ArrivalStay } from '@/modules/arrivals/types/arrival.types'
+import type { OccupantStay } from '@/modules/inhouse/types/inhouse.types'
+
+const mockOccupantStay: OccupantStay = {
+  id: 'stay-1',
+  worker: { id: 'w1', internalId: 'W001', firstName: 'Jan', lastName: 'Kowalski', gender: 'MALE' },
+  dateFrom: '2024-03-15',
+  dateTo: null,
+  status: 'CHECKED_OUT',
+}
 
 const mockArrivalStay: ArrivalStay = {
   id: 'stay-1',
@@ -107,7 +116,7 @@ describe('useSyncStore', () => {
     it('replays queued CHECK_OUT action', async () => {
       const action = makeAction({ type: 'CHECK_OUT', stayId: 'stay-3', payload: { note: 'Early checkout' } })
       vi.mocked(getPendingActions).mockResolvedValue([action])
-      vi.mocked(inhouseApi.checkOut).mockResolvedValue(undefined)
+      vi.mocked(inhouseApi.checkOut).mockResolvedValue(mockOccupantStay)
 
       const store = useSyncStore()
       const result = await store.syncQueue()

@@ -176,7 +176,7 @@ describe('useArrivalsStore — stay status transitions', () => {
         totalPages: 2,
         totalElements: 51,
         size: 50,
-        number: 0,
+        page: 0,
       })
 
       await store.fetchArrivals()

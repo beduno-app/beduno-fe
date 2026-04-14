@@ -7,6 +7,7 @@ export default defineConfig({
   test: {
     passWithNoTests: true,
     environment: 'jsdom',
+    exclude: ['**/node_modules/**', '**/dist/**', 'e2e/**'],
   },
   plugins: [
     vue(),

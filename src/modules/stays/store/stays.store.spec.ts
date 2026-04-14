@@ -96,7 +96,7 @@ describe('useStaysStore — stay creation with conflict', () => {
   describe('cancelStay()', () => {
     it('cancels stay and removes from cache', async () => {
       vi.mocked(staysApi.createStay).mockResolvedValue(makeStay())
-      vi.mocked(staysApi.cancelStay).mockResolvedValue(undefined)
+      vi.mocked(staysApi.cancelStay).mockResolvedValue({ data: null, status: 204, statusText: 'No Content', headers: {}, config: {} as never })
 
       const store = useStaysStore()
       await store.createStay({ workerId: 'w1', propertyId: 'prop-1', roomId: 'room-1', dateFrom: '2024-03-15', dateTo: '2024-03-20' })
@@ -107,7 +107,7 @@ describe('useStaysStore — stay creation with conflict', () => {
 
     it('clears currentStay when the current stay is cancelled', async () => {
       vi.mocked(staysApi.getStay).mockResolvedValue(makeStay())
-      vi.mocked(staysApi.cancelStay).mockResolvedValue(undefined)
+      vi.mocked(staysApi.cancelStay).mockResolvedValue({ data: null, status: 204, statusText: 'No Content', headers: {}, config: {} as never })
 
       const store = useStaysStore()
       await store.fetchStay('stay-1')
