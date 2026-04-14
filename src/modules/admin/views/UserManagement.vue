@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { api } from '@/shared/composables/useApi'
+import { adminApi } from '@/modules/admin/api/admin.api'
 import type { AuthUser } from '@/modules/auth/types/auth.types'
 
 const { t } = useI18n()
@@ -12,8 +12,8 @@ const error = ref('')
 
 onMounted(async () => {
   try {
-    const response = await api.get<AuthUser[]>('/users')
-    users.value = response.data
+    const response = await adminApi.getUsers()
+    users.value = response.content
   } catch (e) {
     error.value = e instanceof Error ? e.message : 'Failed to load users'
   } finally {
@@ -26,9 +26,22 @@ onMounted(async () => {
   <div>
     <h2>{{ t('nav.users') }}</h2>
 
-    <div v-if="isLoading" class="loading">{{ t('common.loading') }}</div>
-    <div v-else-if="error" class="error">{{ error }}</div>
-    <table v-else-if="users.length" class="users-table">
+    <div
+      v-if="isLoading"
+      class="loading"
+    >
+      {{ t('common.loading') }}
+    </div>
+    <div
+      v-else-if="error"
+      class="error"
+    >
+      {{ error }}
+    </div>
+    <table
+      v-else-if="users.length"
+      class="users-table"
+    >
       <thead>
         <tr>
           <th>{{ t('auth.email') }}</th>
@@ -38,17 +51,27 @@ onMounted(async () => {
         </tr>
       </thead>
       <tbody>
-        <tr v-for="user in users" :key="user.id">
+        <tr
+          v-for="user in users"
+          :key="user.id"
+        >
           <td>{{ user.email }}</td>
           <td>{{ user.name }}</td>
           <td><span class="role-badge">{{ user.role }}</span></td>
           <td>
-            <button class="action-btn">{{ t('common.edit') }}</button>
+            <button class="action-btn">
+              {{ t('common.edit') }}
+            </button>
           </td>
         </tr>
       </tbody>
     </table>
-    <p v-else class="empty">No users found.</p>
+    <p
+      v-else
+      class="empty"
+    >
+      No users found.
+    </p>
   </div>
 </template>
 
