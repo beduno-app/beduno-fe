@@ -21,6 +21,9 @@ async function handleLogout() {
       </div>
       <nav class="sidebar-nav">
         <RouterLink to="/" class="nav-item">{{ t('nav.dashboard') }}</RouterLink>
+        <RouterLink v-if="auth.userRole === 'AGENCY_ADMIN'" to="/users" class="nav-item">{{
+          t('nav.users')
+        }}</RouterLink>
       </nav>
       <div class="sidebar-footer">
         <div class="user-info" v-if="auth.user">

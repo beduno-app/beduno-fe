@@ -4,14 +4,26 @@ import { useRouter } from 'vue-router'
 import { useAuthStore } from '../store/auth.store'
 import { useI18n } from 'vue-i18n'
 
+const LANGUAGES = [
+  { code: 'pl', label: 'PL' },
+  { code: 'en', label: 'EN' },
+  { code: 'de', label: 'DE' },
+  { code: 'ua', label: 'UA' },
+  { code: 'ru', label: 'RU' },
+] as const
+
 const auth = useAuthStore()
 const router = useRouter()
-const { t } = useI18n()
+const { t, locale } = useI18n()
 
 const email = ref('')
 const password = ref('')
 const error = ref('')
 const isLoading = ref(false)
+
+function setLanguage(code: string) {
+  locale.value = code
+}
 
 async function handleLogin() {
   error.value = ''
@@ -19,6 +31,9 @@ async function handleLogin() {
 
   try {
     await auth.login({ email: email.value, password: password.value })
+    if (auth.user?.language) {
+      locale.value = auth.user.language
+    }
     await router.push({ name: 'Dashboard' })
   } catch (e) {
     error.value = e instanceof Error ? e.message : 'Login failed'
@@ -30,6 +45,17 @@ async function handleLogin() {
 
 <template>
   <div class="login-page">
+    <div class="language-bar">
+      <button
+        v-for="lang in LANGUAGES"
+        :key="lang.code"
+        class="lang-btn"
+        :class="{ active: locale === lang.code }"
+        @click="setLanguage(lang.code)"
+      >
+        {{ lang.label }}
+      </button>
+    </div>
     <div class="login-card">
       <h1 class="login-logo">bed!OK</h1>
       <form @submit.prevent="handleLogin">
@@ -60,9 +86,39 @@ async function handleLogin() {
 .login-page {
   min-height: 100vh;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   background: #f5f5f5;
+}
+
+.language-bar {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  display: flex;
+  gap: 0.25rem;
+}
+
+.lang-btn {
+  padding: 0.375rem 0.625rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.25rem;
+  background: #fff;
+  color: #666;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+
+  &.active {
+    background: #e66e00;
+    border-color: #e66e00;
+    color: #fff;
+  }
+
+  &:hover:not(.active) {
+    background: #f0f0f0;
+  }
 }
 
 .login-card {
