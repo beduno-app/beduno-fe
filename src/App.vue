@@ -1,22 +1,30 @@
-<template>
-  <div>
-    <Header/>
-    <Content/>
-    <Footer/>
-  </div>
-</template>
-
-<script>
-import { Vue, Options } from 'vue-class-component';
-import Header from '@/components/Header';
-import Footer from '@/components/Footer';
-import Content from '@/components/Content';
-
-@Options({
-  components: { Footer, Header, Content }
-})
-export default class App extends Vue {}
+<script setup lang="ts">
 </script>
 
-<style lang="scss">
+<template>
+  <RouterView />
+</template>
+
+<style>
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    Roboto,
+    'Helvetica Neue',
+    Arial,
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: #2c2c2c;
+}
 </style>
