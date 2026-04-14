@@ -368,5 +368,6 @@ export default {
     dismiss: 'Schließen',
     offlineBanner: 'Offline — {count} Aktion(en) in der Warteschlange',
     syncing: 'Synchronisierung...',
+    roomOnlineOnly: 'Zimmeränderungen erfordern eine Internetverbindung.',
   },
 }

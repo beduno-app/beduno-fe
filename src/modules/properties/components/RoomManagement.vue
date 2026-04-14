@@ -53,6 +53,10 @@ onMounted(() => {
 })
 
 async function save() {
+  if (!navigator.onLine) {
+    error.value = t('offline.roomOnlineOnly')
+    return
+  }
   isSaving.value = true
   error.value = ''
   try {
@@ -85,7 +89,12 @@ async function save() {
 }
 
 async function deleteRoom() {
-  if (!props.room || !confirm(t('properties.confirmDeleteRoom'))) return
+  if (!props.room) return
+  if (!navigator.onLine) {
+    error.value = t('offline.roomOnlineOnly')
+    return
+  }
+  if (!confirm(t('properties.confirmDeleteRoom'))) return
   isDeleting.value = true
   error.value = ''
   try {

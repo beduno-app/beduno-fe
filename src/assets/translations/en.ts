@@ -368,5 +368,6 @@ export default {
     dismiss: 'Dismiss',
     offlineBanner: 'Offline — {count} action(s) queued',
     syncing: 'Syncing...',
+    roomOnlineOnly: 'Room inventory changes require an internet connection.',
   },
 }

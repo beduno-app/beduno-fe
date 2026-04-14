@@ -368,5 +368,6 @@ export default {
     dismiss: 'Odrzuć',
     offlineBanner: 'Offline — {count} akcja(-e) w kolejce',
     syncing: 'Synchronizacja...',
+    roomOnlineOnly: 'Zmiany w pokojach wymagają połączenia z internetem.',
   },
 }

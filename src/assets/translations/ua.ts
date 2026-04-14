@@ -368,5 +368,6 @@ export default {
     dismiss: 'Закрити',
     offlineBanner: 'Офлайн — {count} дій у черзі',
     syncing: 'Синхронізація...',
+    roomOnlineOnly: 'Зміни у кімнатах потребують підключення до інтернету.',
   },
 }
