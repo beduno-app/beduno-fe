@@ -1,15 +1,21 @@
 <script setup lang="ts">
-import { onMounted } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useInHouseStore } from '../store/inhouse.store'
 import { usePropertiesStore } from '@/modules/properties/store/properties.store'
 import { BaseButton } from '@/shared/components'
 import RoomCard from '../components/RoomCard.vue'
 import UnassignedWorkers from '../components/UnassignedWorkers.vue'
+import { usePullToRefresh } from '@/shared/composables/usePullToRefresh'
 
 const { t, locale } = useI18n()
 const store = useInHouseStore()
 const propertiesStore = usePropertiesStore()
+
+const containerRef = ref<HTMLElement | null>(null)
+const { isRefreshing } = usePullToRefresh(containerRef, async () => {
+  if (store.propertyIdFilter) await store.fetchInHouse()
+})
 
 function onPropertyChange(e: Event) {
   store.propertyIdFilter = (e.target as HTMLSelectElement).value
@@ -52,7 +58,16 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="inhouse-view">
+  <div
+    ref="containerRef"
+    class="inhouse-view"
+  >
+    <div
+      v-if="isRefreshing"
+      class="pull-refresh-indicator"
+    >
+      ↻
+    </div>
     <div class="page-header">
       <h2>{{ t('nav.occupancy') }}</h2>
       <div
@@ -257,5 +272,18 @@ onMounted(() => {
 
 .error {
   color: #dc2626;
+}
+
+.pull-refresh-indicator {
+  text-align: center;
+  padding: 0.5rem;
+  font-size: 1.25rem;
+  color: #e66e00;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 </style>

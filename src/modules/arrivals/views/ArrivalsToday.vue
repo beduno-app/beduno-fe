@@ -9,10 +9,16 @@ import NoShowAction from '../components/NoShowAction.vue'
 import QrCheckin from '../components/QrCheckin.vue'
 import MoveAction from '../components/MoveAction.vue'
 import type { NoShowReason } from '../types/arrival.types'
+import { usePullToRefresh } from '@/shared/composables/usePullToRefresh'
 
 const { t } = useI18n()
 const store = useArrivalsStore()
 const propertiesStore = usePropertiesStore()
+
+const containerRef = ref<HTMLElement | null>(null)
+const { isRefreshing } = usePullToRefresh(containerRef, async () => {
+  if (store.propertyIdFilter) await store.fetchArrivals()
+})
 
 const activePanel = ref<'none' | 'qr' | 'noshow' | 'move'>('none')
 const activeStayId = ref('')
@@ -126,7 +132,16 @@ onUnmounted(stopPolling)
 </script>
 
 <template>
-  <div class="arrivals-today">
+  <div
+    ref="containerRef"
+    class="arrivals-today"
+  >
+    <div
+      v-if="isRefreshing"
+      class="pull-refresh-indicator"
+    >
+      ↻
+    </div>
     <div class="page-header">
       <h2>{{ t('nav.arrivals') }}</h2>
       <div class="header-actions">
@@ -404,5 +419,18 @@ onUnmounted(stopPolling)
 
 .error {
   color: #dc2626;
+}
+
+.pull-refresh-indicator {
+  text-align: center;
+  padding: 0.5rem;
+  font-size: 1.25rem;
+  color: #e66e00;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 </style>
