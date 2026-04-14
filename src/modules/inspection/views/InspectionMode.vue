@@ -8,11 +8,13 @@ import { BaseButton } from '@/shared/components'
 import RoomInspectionCard from '../components/RoomInspectionCard.vue'
 import InspectionSummaryReport from '../components/InspectionSummaryReport.vue'
 import type { PresenceStatus, DiscrepancyReason } from '../types/inspection.types'
+import { useToast } from '@/shared/composables/useToast'
 
 const { t, locale } = useI18n()
 const store = useInspectionStore()
 const propertiesStore = usePropertiesStore()
 const opsStore = useOpsStore()
+const toast = useToast()
 
 const propertyId = ref(opsStore.selectedPropertyId)
 
@@ -36,8 +38,9 @@ async function handleMarkPresence(
 ) {
   try {
     await store.markPresence(stayId, presence, reason, note)
+    toast.success(t('inspection.presenceUpdated'))
   } catch (e) {
-    alert(e instanceof Error ? e.message : 'Failed to update presence')
+    toast.error(e instanceof Error ? e.message : t('inspection.presenceFailed'))
   }
 }
 
@@ -45,8 +48,9 @@ async function handleAddUnexpected(description: string, reason: DiscrepancyReaso
   if (!store.currentRoom) return
   try {
     await store.addUnexpected(store.currentRoom.room.id, description, reason, note)
+    toast.success(t('inspection.unexpectedAdded'))
   } catch (e) {
-    alert(e instanceof Error ? e.message : 'Failed to add unexpected presence')
+    toast.error(e instanceof Error ? e.message : t('inspection.unexpectedFailed'))
   }
 }
 
@@ -54,8 +58,9 @@ async function handleVerify() {
   if (!store.currentRoom) return
   try {
     await store.verifyRoom(store.currentRoom.room.id)
+    toast.success(t('inspection.roomVerified'))
   } catch (e) {
-    alert(e instanceof Error ? e.message : 'Failed to verify room')
+    toast.error(e instanceof Error ? e.message : t('inspection.verifyFailed'))
   }
 }
 
@@ -63,8 +68,9 @@ async function handleComplete() {
   if (!confirm(t('inspection.confirmComplete'))) return
   try {
     await store.completeInspection()
+    toast.success(t('inspection.inspectionCompleted'))
   } catch (e) {
-    alert(e instanceof Error ? e.message : 'Failed to complete inspection')
+    toast.error(e instanceof Error ? e.message : t('inspection.completeFailed'))
   }
 }
 

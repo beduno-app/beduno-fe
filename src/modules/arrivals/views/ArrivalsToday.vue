@@ -12,10 +12,12 @@ import type { NoShowReason } from '../types/arrival.types'
 import { usePullToRefresh } from '@/shared/composables/usePullToRefresh'
 import { decodeQrData } from '@/shared/utils/qrCode'
 import { loadSnapshot } from '@/shared/services/offlineDb'
+import { useToast } from '@/shared/composables/useToast'
 
 const { t } = useI18n()
 const store = useArrivalsStore()
 const propertiesStore = usePropertiesStore()
+const toast = useToast()
 
 const containerRef = ref<HTMLElement | null>(null)
 const { isRefreshing } = usePullToRefresh(containerRef, async () => {
@@ -64,8 +66,9 @@ async function handleDirectCheckIn(stayId: string) {
   actionError.value = ''
   try {
     await store.checkIn(stayId)
+    toast.success(t('arrivals.checkInSuccess'))
   } catch (e) {
-    actionError.value = e instanceof Error ? e.message : 'Check-in failed'
+    actionError.value = e instanceof Error ? e.message : t('arrivals.checkInFailed')
   }
 }
 
@@ -96,9 +99,10 @@ async function handleQrScanned(rawCode: string) {
       return
     }
     await store.checkIn(arrival.id, { qrCode: decoded ? rawCode : undefined })
+    toast.success(t('arrivals.checkInSuccess'))
     closePanel()
   } catch (e) {
-    actionError.value = e instanceof Error ? e.message : 'Check-in failed'
+    actionError.value = e instanceof Error ? e.message : t('arrivals.checkInFailed')
   }
 }
 
@@ -106,9 +110,10 @@ async function handleNoShowConfirm(reason: NoShowReason, note: string) {
   actionError.value = ''
   try {
     await store.noShow(activeStayId.value, { reason, note: note || undefined })
+    toast.success(t('arrivals.noShowSuccess'))
     closePanel()
   } catch (e) {
-    actionError.value = e instanceof Error ? e.message : 'No-show failed'
+    actionError.value = e instanceof Error ? e.message : t('arrivals.noShowFailed')
   }
 }
 
@@ -116,9 +121,10 @@ async function handleMoveConfirm(targetPropertyId: string, targetRoomId: string)
   actionError.value = ''
   try {
     await store.move(activeStayId.value, { targetPropertyId, targetRoomId })
+    toast.success(t('arrivals.moveSuccess'))
     closePanel()
   } catch (e) {
-    actionError.value = e instanceof Error ? e.message : 'Move failed'
+    actionError.value = e instanceof Error ? e.message : t('arrivals.moveFailed')
   }
 }
 

@@ -7,10 +7,12 @@ import { BaseButton } from '@/shared/components'
 import RoomCard from '../components/RoomCard.vue'
 import UnassignedWorkers from '../components/UnassignedWorkers.vue'
 import { usePullToRefresh } from '@/shared/composables/usePullToRefresh'
+import { useToast } from '@/shared/composables/useToast'
 
 const { t, locale } = useI18n()
 const store = useInHouseStore()
 const propertiesStore = usePropertiesStore()
+const toast = useToast()
 
 const containerRef = ref<HTMLElement | null>(null)
 const { isRefreshing } = usePullToRefresh(containerRef, async () => {
@@ -28,16 +30,18 @@ async function handleCheckOut(stayId: string) {
   if (!confirm(t('inhouse.confirmCheckOut'))) return
   try {
     await store.checkOut(stayId)
+    toast.success(t('inhouse.checkOutSuccess'))
   } catch (e) {
-    alert(e instanceof Error ? e.message : 'Check-out failed')
+    toast.error(e instanceof Error ? e.message : t('inhouse.checkOutFailed'))
   }
 }
 
 async function handleMoveRoom(stayId: string, targetRoomId: string) {
   try {
     await store.moveRoom(stayId, { targetRoomId })
+    toast.success(t('inhouse.moveRoomSuccess'))
   } catch (e) {
-    alert(e instanceof Error ? e.message : 'Move failed')
+    toast.error(e instanceof Error ? e.message : t('inhouse.moveFailed'))
   }
 }
 
