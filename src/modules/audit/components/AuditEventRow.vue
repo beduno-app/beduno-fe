@@ -4,16 +4,17 @@ import { useI18n } from 'vue-i18n'
 import type { AuditEvent, AuditEntityType } from '../types/audit.types'
 import { BaseBadge } from '@/shared/components'
 import AuditDiffViewer from './AuditDiffViewer.vue'
+import { formatDateTime } from '@/shared/utils/formatDate'
 
 defineProps<{
   event: AuditEvent
 }>()
 
-const { t } = useI18n()
+const { t, locale } = useI18n()
 const expanded = ref(false)
 
 function formatTimestamp(ts: string): string {
-  return new Date(ts).toLocaleString('sv').replace('T', ' ').slice(0, 16)
+  return formatDateTime(ts, locale.value)
 }
 
 function buildEntityLink(type: AuditEntityType, id: string): object {
