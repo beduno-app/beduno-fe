@@ -15,7 +15,7 @@ onMounted(async () => {
     const response = await adminApi.getUsers()
     users.value = response.content
   } catch (e) {
-    error.value = e instanceof Error ? e.message : 'Failed to load users'
+    error.value = e instanceof Error ? e.message : t('users.loadFailed')
   } finally {
     isLoading.value = false
   }
@@ -45,9 +45,9 @@ onMounted(async () => {
       <thead>
         <tr>
           <th>{{ t('auth.email') }}</th>
-          <th>Name</th>
-          <th>Role</th>
-          <th>Actions</th>
+          <th>{{ t('common.name') }}</th>
+          <th>{{ t('common.role') }}</th>
+          <th>{{ t('common.actions') }}</th>
         </tr>
       </thead>
       <tbody>
@@ -70,7 +70,7 @@ onMounted(async () => {
       v-else
       class="empty"
     >
-      No users found.
+      {{ t('users.noUsers') }}
     </p>
   </div>
 </template>

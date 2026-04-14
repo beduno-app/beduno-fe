@@ -36,7 +36,7 @@ async function handleLogin() {
     }
     await router.push({ name: 'Dashboard' })
   } catch (e) {
-    error.value = e instanceof Error ? e.message : 'Login failed'
+    error.value = e instanceof Error ? e.message : t('auth.loginFailed')
   } finally {
     isLoading.value = false
   }
