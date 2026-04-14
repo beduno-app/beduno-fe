@@ -26,25 +26,49 @@ const { t } = useI18n()
     <table class="data-table">
       <thead>
         <tr>
-          <th v-for="col in columns" :key="col.key" :style="col.width ? { width: col.width } : {}">
+          <th
+            v-for="col in columns"
+            :key="col.key"
+            :style="col.width ? { width: col.width } : {}"
+          >
             {{ col.label }}
           </th>
         </tr>
       </thead>
       <tbody v-if="loading">
         <tr>
-          <td :colspan="columns.length" class="table-status">{{ t('common.loading') }}</td>
+          <td
+            :colspan="columns.length"
+            class="table-status"
+          >
+            {{ t('common.loading') }}
+          </td>
         </tr>
       </tbody>
       <tbody v-else-if="rows.length === 0">
         <tr>
-          <td :colspan="columns.length" class="table-status">{{ emptyText ?? 'No data' }}</td>
+          <td
+            :colspan="columns.length"
+            class="table-status"
+          >
+            {{ emptyText ?? 'No data' }}
+          </td>
         </tr>
       </tbody>
       <tbody v-else>
-        <tr v-for="(row, idx) in rows" :key="idx">
-          <td v-for="col in columns" :key="col.key">
-            <slot :name="`cell-${col.key}`" :row="row" :value="row[col.key]">
+        <tr
+          v-for="(row, idx) in rows"
+          :key="idx"
+        >
+          <td
+            v-for="col in columns"
+            :key="col.key"
+          >
+            <slot
+              :name="`cell-${col.key}`"
+              :row="row"
+              :value="row[col.key]"
+            >
               {{ row[col.key] }}
             </slot>
           </td>

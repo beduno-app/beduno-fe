@@ -16,16 +16,33 @@ function onBackdrop(e: MouseEvent) {
 
 <template>
   <Teleport to="body">
-    <div class="modal-backdrop" @click="onBackdrop">
-      <div class="modal" role="dialog" aria-modal="true">
+    <div
+      class="modal-backdrop"
+      @click="onBackdrop"
+    >
+      <div
+        class="modal"
+        role="dialog"
+        aria-modal="true"
+      >
         <div class="modal-header">
-          <h3 class="modal-title">{{ title }}</h3>
-          <button class="modal-close" @click="$emit('close')">&times;</button>
+          <h3 class="modal-title">
+            {{ title }}
+          </h3>
+          <button
+            class="modal-close"
+            @click="$emit('close')"
+          >
+            &times;
+          </button>
         </div>
         <div class="modal-body">
           <slot />
         </div>
-        <div v-if="$slots.footer" class="modal-footer">
+        <div
+          v-if="$slots.footer"
+          class="modal-footer"
+        >
           <slot name="footer" />
         </div>
       </div>
