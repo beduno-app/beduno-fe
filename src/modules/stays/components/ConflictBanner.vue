@@ -8,7 +8,7 @@ const props = defineProps<{
   softViolations: ConstraintViolation[]
 }>()
 
-const emit = defineEmits<{
+defineEmits<{
   override: [reason: string]
 }>()
 
