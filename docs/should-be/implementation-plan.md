@@ -123,12 +123,12 @@ This plan bridges the current codebase (docs/as-is) to the target product (docs/
 
 ### 4.1 Arrivals Today
 
-- [ ] `ArrivalsToday.vue` — list of expected arrivals for selected property + date
-- [ ] `ArrivalRow.vue` — worker info, assigned room, one-tap check-in button
-- [ ] `QrCheckin.vue` — camera-based QR scanner → worker card → check-in confirmation
-- [ ] `NoShowAction.vue` — mark no-show with predefined reason
-- [ ] Move action — select target property + room
-- [ ] Real-time updates (polling or WebSocket) when another user checks someone in
+- [x] `ArrivalsToday.vue` — list of expected arrivals for selected property + date
+- [x] `ArrivalRow.vue` — worker info, assigned room, one-tap check-in button
+- [x] `QrCheckin.vue` — camera-based QR scanner → worker card → check-in confirmation
+- [x] `NoShowAction.vue` — mark no-show with predefined reason
+- [x] Move action — select target property + room
+- [x] Real-time updates (polling or WebSocket) when another user checks someone in
 
 ### 4.2 In-House (Nightly List)
 

@@ -118,6 +118,12 @@ const router = createRouter({
           component: () => import('@/modules/stays/views/StayDetail.vue'),
           meta: { roles: ['AGENCY_ADMIN', 'AGENCY_PLANNER', 'PROPERTY_ADMIN', 'FRONT_DESK'] },
         },
+        {
+          path: 'arrivals',
+          name: 'Arrivals',
+          component: () => import('@/modules/arrivals/views/ArrivalsToday.vue'),
+          meta: { roles: ['PROPERTY_ADMIN', 'FRONT_DESK'] },
+        },
       ],
     },
   ],
