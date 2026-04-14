@@ -363,4 +363,10 @@ export default {
       description: 'Gesamtbelegung aller Objekte für den ausgewählten Zeitraum.',
     },
   },
+  offline: {
+    conflictInboxTitle: 'Überprüfung erforderlich',
+    dismiss: 'Schließen',
+    offlineBanner: 'Offline — {count} Aktion(en) in der Warteschlange',
+    syncing: 'Synchronisierung...',
+  },
 }
