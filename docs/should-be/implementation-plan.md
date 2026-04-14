@@ -246,19 +246,19 @@ This plan bridges the current codebase (docs/as-is) to the target product (docs/
 
 ### 8.1 Automated Testing
 
-- [ ] Unit tests: conflict engine, stay status transitions, QR decode, date utilities
-- [ ] Component tests: Arrivals, In-House, Inspection views with mock data
-- [ ] Integration tests: auth flow, stay creation with conflict, bulk import
-- [ ] E2E tests (Playwright): full check-in journey, inspection flow, export generation
-- [ ] Offline scenario tests: queue actions → reconnect → sync → conflict resolution
+- [x] Unit tests: conflict engine, stay status transitions, QR decode, date utilities
+- [x] Component tests: Arrivals, In-House, Inspection views with mock data
+- [x] Integration tests: auth flow, stay creation with conflict, bulk import
+- [x] E2E tests (Playwright): full check-in journey, inspection flow, export generation
+- [x] Offline scenario tests: queue actions → reconnect → sync → conflict resolution
 
 ### 8.2 Performance & Security
 
-- [ ] Bundle analysis + code splitting per module
-- [ ] Lazy-load routes (already built into Vite + Vue Router)
-- [ ] Security review: XSS, CSRF, token storage, PII exposure
-- [ ] Session timeout + auto-logout
-- [ ] Device revocation testing
+- [x] Bundle analysis + code splitting per module
+- [x] Lazy-load routes (already built into Vite + Vue Router)
+- [x] Security review: XSS, CSRF, token storage, PII exposure
+- [x] Session timeout + auto-logout
+- [x] Device revocation testing
 - [ ] Load test: 500 workers / 50 rooms / 200 stays in a single property view
 
 **Deliverable**: Test suite covering critical paths. Performance verified for target scale.
