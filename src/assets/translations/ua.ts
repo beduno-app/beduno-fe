@@ -24,6 +24,7 @@ export default {
     password: 'Пароль',
     forgotPassword: 'Забули пароль',
     loginFailed: 'Помилка входу.',
+    sessionExpiringSoon: 'Ваша сесія завершиться через {seconds} секунд через неактивність.',
   },
   users: {
     noUsers: 'Користувачів не знайдено.',

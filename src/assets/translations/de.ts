@@ -24,6 +24,7 @@ export default {
     password: 'Passwort',
     forgotPassword: 'Passwort vergessen',
     loginFailed: 'Anmeldung fehlgeschlagen.',
+    sessionExpiringSoon: 'Ihre Sitzung läuft in {seconds} Sekunden wegen Inaktivität ab.',
   },
   users: {
     noUsers: 'Keine Benutzer gefunden.',
