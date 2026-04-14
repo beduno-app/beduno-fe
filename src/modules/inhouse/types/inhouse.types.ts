@@ -42,4 +42,14 @@ export interface RoomMovePayload {
   targetRoomId: string
 }
 
+export interface BulkCheckoutPayload {
+  stayIds: string[]
+}
+
+export interface BulkCheckoutResponse {
+  total: number
+  succeeded: number
+  failed: number
+}
+
 export type ExportFormat = 'csv' | 'pdf'

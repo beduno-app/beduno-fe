@@ -3,6 +3,8 @@ import type {
   InHouseResponse,
   CheckOutPayload,
   RoomMovePayload,
+  BulkCheckoutPayload,
+  BulkCheckoutResponse,
   ExportFormat,
   OccupantStay,
 } from '../types/inhouse.types'
@@ -16,6 +18,9 @@ export const inhouseApi = {
 
   moveRoom: (stayId: string, payload: RoomMovePayload) =>
     api.post<OccupantStay>(`/stays/${stayId}/move`, payload).then((r) => r.data),
+
+  bulkCheckout: (payload: BulkCheckoutPayload) =>
+    api.post<BulkCheckoutResponse>('/stays/bulk-checkout', payload).then((r) => r.data),
 
   exportInHouse: (propertyId: string, format: ExportFormat, lang: string) =>
     api.get(`/properties/${propertyId}/in-house/export`, {
