@@ -14,6 +14,7 @@ import OfflineBanner from '@/modules/ops/components/OfflineBanner.vue'
 import { ToastNotifications } from '@/shared/components'
 import { adminApi } from '@/modules/admin/api/admin.api'
 import type { AppLanguage } from '@/modules/auth/types/auth.types'
+import { useToast } from '@/shared/composables/useToast'
 
 const LANGUAGES: { code: string; label: string; apiCode: AppLanguage }[] = [
   { code: 'pl', label: 'PL', apiCode: 'PL' },
@@ -37,6 +38,7 @@ const arrivalsStore = useArrivalsStore()
 const inhouseStore = useInHouseStore()
 
 const syncStore = useSyncStore()
+const toast = useToast()
 const today = new Date().toISOString().slice(0, 10)
 
 function syncProperty(id: string) {
@@ -45,8 +47,14 @@ function syncProperty(id: string) {
   if (id) syncOfflineSnapshot(id, today).catch(() => undefined)
 }
 
-function onOnline() {
-  syncStore.syncQueue()
+async function onOnline() {
+  const result = await syncStore.syncQueue()
+  if (result.synced === 0 && result.conflicted === 0) return
+  if (result.conflicted > 0) {
+    toast.warning(t('offline.syncWithConflicts', { count: result.conflicted }))
+  } else {
+    toast.success(t('offline.syncComplete'))
+  }
 }
 
 watch(

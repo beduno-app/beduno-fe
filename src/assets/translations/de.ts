@@ -399,5 +399,7 @@ export default {
     offlineBanner: 'Offline — {count} Aktion(en) in der Warteschlange',
     syncing: 'Synchronisierung...',
     roomOnlineOnly: 'Zimmeränderungen erfordern eine Internetverbindung.',
+    syncComplete: 'Synchronisierung abgeschlossen.',
+    syncWithConflicts: 'Synchronisierung abgeschlossen. {count} Aktion(en) erfordern Überprüfung.',
   },
 }

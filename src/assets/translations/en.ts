@@ -399,5 +399,7 @@ export default {
     offlineBanner: 'Offline — {count} action(s) queued',
     syncing: 'Syncing...',
     roomOnlineOnly: 'Room inventory changes require an internet connection.',
+    syncComplete: 'Sync complete.',
+    syncWithConflicts: 'Sync complete. {count} action(s) need review.',
   },
 }

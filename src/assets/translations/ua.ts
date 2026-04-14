@@ -399,5 +399,7 @@ export default {
     offlineBanner: 'Офлайн — {count} дій у черзі',
     syncing: 'Синхронізація...',
     roomOnlineOnly: 'Зміни у кімнатах потребують підключення до інтернету.',
+    syncComplete: 'Синхронізацію завершено.',
+    syncWithConflicts: 'Синхронізацію завершено. {count} дія(-ї) потребує перегляду.',
   },
 }
