@@ -7,6 +7,7 @@ import { useOpsStore } from '@/modules/ops/store/ops.store'
 import { usePropertiesStore } from '@/modules/properties/store/properties.store'
 import { useArrivalsStore } from '@/modules/arrivals/store/arrivals.store'
 import { useInHouseStore } from '@/modules/inhouse/store/inhouse.store'
+import { syncOfflineSnapshot } from '@/modules/ops/composables/useOfflineSnapshot'
 
 const { t } = useI18n()
 const auth = useAuthStore()
@@ -16,9 +17,12 @@ const propertiesStore = usePropertiesStore()
 const arrivalsStore = useArrivalsStore()
 const inhouseStore = useInHouseStore()
 
+const today = new Date().toISOString().slice(0, 10)
+
 function syncProperty(id: string) {
   arrivalsStore.propertyIdFilter = id
   inhouseStore.propertyIdFilter = id
+  if (id) syncOfflineSnapshot(id, today).catch(() => undefined)
 }
 
 watch(
