@@ -1,0 +1,408 @@
+<script setup lang="ts">
+import { ref, onMounted, onUnmounted } from 'vue'
+import { useI18n } from 'vue-i18n'
+import { useArrivalsStore } from '../store/arrivals.store'
+import { usePropertiesStore } from '@/modules/properties/store/properties.store'
+import { BaseButton } from '@/shared/components'
+import ArrivalRow from '../components/ArrivalRow.vue'
+import NoShowAction from '../components/NoShowAction.vue'
+import QrCheckin from '../components/QrCheckin.vue'
+import MoveAction from '../components/MoveAction.vue'
+import type { NoShowReason } from '../types/arrival.types'
+
+const { t } = useI18n()
+const store = useArrivalsStore()
+const propertiesStore = usePropertiesStore()
+
+const activePanel = ref<'none' | 'qr' | 'noshow' | 'move'>('none')
+const activeStayId = ref('')
+const actionError = ref('')
+
+let pollInterval: ReturnType<typeof setInterval> | null = null
+const POLL_MS = 30_000
+
+function onPropertyChange(e: Event) {
+  store.propertyIdFilter = (e.target as HTMLSelectElement).value
+  store.setPage(0)
+}
+
+function onDateChange(e: Event) {
+  store.dateFilter = (e.target as HTMLInputElement).value
+  store.setPage(0)
+}
+
+function openQrCheckin() {
+  activePanel.value = 'qr'
+  activeStayId.value = ''
+}
+
+function openNoShow(stayId: string) {
+  activePanel.value = 'noshow'
+  activeStayId.value = stayId
+}
+
+function openMove(stayId: string) {
+  activePanel.value = 'move'
+  activeStayId.value = stayId
+}
+
+function closePanel() {
+  activePanel.value = 'none'
+  activeStayId.value = ''
+  actionError.value = ''
+}
+
+async function handleDirectCheckIn(stayId: string) {
+  actionError.value = ''
+  try {
+    await store.checkIn(stayId)
+  } catch (e) {
+    actionError.value = e instanceof Error ? e.message : 'Check-in failed'
+  }
+}
+
+async function handleQrScanned(qrCode: string) {
+  actionError.value = ''
+  try {
+    const arrival = store.arrivals.find(
+      (a) => a.worker.internalId === qrCode && a.status === 'EXPECTED_TODAY',
+    )
+    if (!arrival) {
+      actionError.value = t('arrivals.workerNotFound')
+      return
+    }
+    await store.checkIn(arrival.id, { qrCode })
+    closePanel()
+  } catch (e) {
+    actionError.value = e instanceof Error ? e.message : 'Check-in failed'
+  }
+}
+
+async function handleNoShowConfirm(reason: NoShowReason, note: string) {
+  actionError.value = ''
+  try {
+    await store.noShow(activeStayId.value, { reason, note: note || undefined })
+    closePanel()
+  } catch (e) {
+    actionError.value = e instanceof Error ? e.message : 'No-show failed'
+  }
+}
+
+async function handleMoveConfirm(targetPropertyId: string, targetRoomId: string) {
+  actionError.value = ''
+  try {
+    await store.move(activeStayId.value, { targetPropertyId, targetRoomId })
+    closePanel()
+  } catch (e) {
+    actionError.value = e instanceof Error ? e.message : 'Move failed'
+  }
+}
+
+function startPolling() {
+  stopPolling()
+  pollInterval = setInterval(() => {
+    if (store.propertyIdFilter) {
+      store.fetchArrivals()
+    }
+  }, POLL_MS)
+}
+
+function stopPolling() {
+  if (pollInterval) {
+    clearInterval(pollInterval)
+    pollInterval = null
+  }
+}
+
+onMounted(() => {
+  propertiesStore.fetchProperties()
+  if (store.propertyIdFilter) {
+    store.fetchArrivals()
+  }
+  startPolling()
+})
+
+onUnmounted(stopPolling)
+</script>
+
+<template>
+  <div class="arrivals-today">
+    <div class="page-header">
+      <h2>{{ t('nav.arrivals') }}</h2>
+      <div class="header-actions">
+        <BaseButton
+          size="sm"
+          @click="openQrCheckin"
+        >
+          {{ t('arrivals.scanQr') }}
+        </BaseButton>
+      </div>
+    </div>
+
+    <div class="filters">
+      <select
+        class="filter-select"
+        :value="store.propertyIdFilter"
+        @change="onPropertyChange"
+      >
+        <option value="">
+          {{ t('arrivals.selectProperty') }}
+        </option>
+        <option
+          v-for="prop in propertiesStore.properties"
+          :key="prop.id"
+          :value="prop.id"
+        >
+          {{ prop.name }}
+        </option>
+      </select>
+      <input
+        type="date"
+        class="filter-input"
+        :value="store.dateFilter"
+        @change="onDateChange"
+      >
+    </div>
+
+    <div
+      v-if="store.propertyIdFilter && store.arrivals.length"
+      class="stats-bar"
+    >
+      <span class="stat">
+        {{ t('arrivals.pending') }}: <strong>{{ store.pendingCount }}</strong>
+      </span>
+      <span class="stat">
+        {{ t('arrivals.checkedIn') }}: <strong>{{ store.checkedInCount }}</strong>
+      </span>
+      <span class="stat">
+        {{ t('arrivals.total') }}: <strong>{{ store.totalElements }}</strong>
+      </span>
+    </div>
+
+    <!-- Action panels -->
+    <div
+      v-if="actionError"
+      class="error"
+    >
+      {{ actionError }}
+    </div>
+
+    <QrCheckin
+      v-if="activePanel === 'qr'"
+      @scanned="handleQrScanned"
+      @cancel="closePanel"
+    />
+
+    <NoShowAction
+      v-if="activePanel === 'noshow'"
+      :stay-id="activeStayId"
+      @confirm="handleNoShowConfirm"
+      @cancel="closePanel"
+    />
+
+    <MoveAction
+      v-if="activePanel === 'move'"
+      :stay-id="activeStayId"
+      @confirm="handleMoveConfirm"
+      @cancel="closePanel"
+    />
+
+    <!-- Main content -->
+    <div
+      v-if="!store.propertyIdFilter"
+      class="empty"
+    >
+      {{ t('arrivals.selectPropertyHint') }}
+    </div>
+    <div
+      v-else-if="store.isLoading"
+      class="loading"
+    >
+      {{ t('common.loading') }}
+    </div>
+    <div
+      v-else-if="store.error"
+      class="error"
+    >
+      {{ store.error }}
+    </div>
+    <template v-else>
+      <table
+        v-if="store.arrivals.length"
+        class="arrivals-table"
+      >
+        <thead>
+          <tr>
+            <th>{{ t('arrivals.worker') }}</th>
+            <th>{{ t('arrivals.room') }}</th>
+            <th>{{ t('arrivals.statusLabel') }}</th>
+            <th class="actions-header">
+              {{ t('arrivals.actions') }}
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <ArrivalRow
+            v-for="arrival in store.arrivals"
+            :key="arrival.id"
+            :arrival="arrival"
+            @check-in="handleDirectCheckIn"
+            @no-show="openNoShow"
+            @move="openMove"
+          />
+        </tbody>
+      </table>
+      <p
+        v-else
+        class="empty"
+      >
+        {{ t('arrivals.noArrivals') }}
+      </p>
+
+      <div
+        v-if="store.totalPages > 1"
+        class="pagination"
+      >
+        <BaseButton
+          variant="secondary"
+          size="sm"
+          :disabled="!store.hasPreviousPage"
+          @click="store.setPage(store.page - 1)"
+        >
+          {{ t('common.back') }}
+        </BaseButton>
+        <span class="page-info">
+          {{ store.page + 1 }} / {{ store.totalPages }}
+        </span>
+        <BaseButton
+          variant="secondary"
+          size="sm"
+          :disabled="!store.hasNextPage"
+          @click="store.setPage(store.page + 1)"
+        >
+          {{ t('arrivals.next') }}
+        </BaseButton>
+      </div>
+    </template>
+  </div>
+</template>
+
+<style scoped lang="scss">
+.arrivals-today {
+  max-width: 1200px;
+}
+
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+
+  h2 {
+    margin: 0;
+  }
+}
+
+.header-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.filters {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+
+.filter-select,
+.filter-input {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+  background: #fff;
+
+  &:focus {
+    outline: none;
+    border-color: #e66e00;
+    box-shadow: 0 0 0 2px rgba(230, 110, 0, 0.15);
+  }
+}
+
+.stats-bar {
+  display: flex;
+  gap: 1.5rem;
+  padding: 0.75rem 1rem;
+  background: #f9fafb;
+  border-radius: 0.375rem;
+  margin-bottom: 1rem;
+  font-size: 0.875rem;
+  color: #374151;
+}
+
+.stat strong {
+  color: #111827;
+}
+
+.arrivals-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+
+  th,
+  td {
+    padding: 0.75rem 1rem;
+    text-align: left;
+    font-size: 0.875rem;
+  }
+
+  th {
+    background: #f9fafb;
+    font-weight: 600;
+    color: #374151;
+    border-bottom: 1px solid #e5e7eb;
+  }
+
+  td {
+    border-bottom: 1px solid #f3f4f6;
+  }
+
+  tr:last-child td {
+    border-bottom: none;
+  }
+}
+
+.actions-header {
+  text-align: right;
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.page-info {
+  font-size: 0.875rem;
+  color: #4b5563;
+}
+
+.loading,
+.error,
+.empty {
+  padding: 2rem;
+  text-align: center;
+  color: #666;
+}
+
+.error {
+  color: #dc2626;
+}
+</style>
