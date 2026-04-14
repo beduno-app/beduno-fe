@@ -10,32 +10,32 @@ This plan bridges the current codebase (docs/as-is) to the target product (docs/
 
 ### 0.1 Project Infrastructure
 
-- [ ] Migrate from Vue CLI (webpack) to **Vite** for faster dev/build cycles
-- [ ] Replace Vuex with **Pinia** (store is empty, so this is trivial)
-- [ ] Set up **strict TypeScript** (`strict: true` in tsconfig)
-- [ ] Add **ESLint flat config** + Prettier (replace current eslintrc)
-- [ ] Add **Vitest** for unit tests (replaces Jest; native Vite integration)
-- [ ] Set up **Playwright** for E2E tests (replaces outdated Cypress)
-- [ ] Delete broken test files (`tests/unit/example.spec.ts`, `tests/e2e/specs/test.js`)
+- [x] Migrate from Vue CLI (webpack) to **Vite** for faster dev/build cycles
+- [x] Replace Vuex with **Pinia** (store is empty, so this is trivial)
+- [x] Set up **strict TypeScript** (`strict: true` in tsconfig)
+- [x] Add **ESLint flat config** + Prettier (replace current eslintrc)
+- [x] Add **Vitest** for unit tests (replaces Jest; native Vite integration)
+- [x] Set up **Playwright** for E2E tests (replaces outdated Cypress)
+- [x] Delete broken test files (`tests/unit/example.spec.ts`, `tests/e2e/specs/test.js`)
 - [ ] Set up CI pipeline (lint → typecheck → unit tests → build)
 
 ### 0.2 Codebase Cleanup
 
-- [ ] Remove all hardcoded UUIDs, mock data, `console.log` calls
-- [ ] Fix nginx.conf: add `try_files` SPA fallback, externalise backend IP
-- [ ] Pin Docker base image to specific version
-- [ ] Deduplicate `_variables.scss`
-- [ ] Remove unused `HostSection.vue`
-- [ ] Delete the existing `src/auth/`, `src/views/`, `src/features/` code (the current bed marketplace UI is being replaced by the new ops system)
+- [x] Remove all hardcoded UUIDs, mock data, `console.log` calls
+- [x] Fix nginx.conf: add `try_files` SPA fallback, externalise backend IP
+- [x] Pin Docker base image to specific version
+- [x] Deduplicate `_variables.scss`
+- [x] Remove unused `HostSection.vue`
+- [x] Delete the existing `src/auth/`, `src/views/`, `src/features/` code (the current bed marketplace UI is being replaced by the new ops system)
 
 ### 0.3 New Project Structure
 
-- [ ] Create the modular directory layout (`src/app/`, `src/modules/`, `src/shared/`)
-- [ ] Set up shared axios instance with interceptors (`src/app/plugins/axios.ts`)
-- [ ] Set up Pinia with persistence (`src/app/plugins/pinia.ts`)
-- [ ] Set up vue-i18n with the 5 language files (`src/app/plugins/i18n.ts`)
-- [ ] Create shared UI components: `Button`, `Input`, `Modal`, `Badge`, `StatusChip`, `DataTable`
-- [ ] Create shared layouts: `AdminLayout.vue` (sidebar + header), `OpsLayout.vue` (mobile-optimised)
+- [x] Create the modular directory layout (`src/app/`, `src/modules/`, `src/shared/`)
+- [x] Set up shared axios instance with interceptors (`src/app/plugins/axios.ts`)
+- [x] Set up Pinia with persistence (`src/app/plugins/pinia.ts`)
+- [x] Set up vue-i18n with the 5 language files (`src/app/plugins/i18n.ts`)
+- [x] Create shared UI components: `Button`, `Input`, `Modal`, `Badge`, `StatusChip`, `DataTable`
+- [x] Create shared layouts: `AdminLayout.vue` (sidebar + header), `OpsLayout.vue` (mobile-optimised)
 
 **Deliverable**: Empty app shell with login page, language switcher, and shared component library. Fully typed, linted, and tested infrastructure.
 
@@ -47,19 +47,19 @@ This plan bridges the current codebase (docs/as-is) to the target product (docs/
 
 ### 1.1 Auth Module
 
-- [ ] `auth.store.ts` — Pinia store: token, refreshToken, user, isAuthenticated, login(), logout()
-- [ ] `auth.api.ts` — login, refresh, logout endpoints
-- [ ] `Login.vue` — email + password, language selector, redirect on success
-- [ ] Axios request interceptor: attach `Authorization: Bearer {token}`
-- [ ] Axios response interceptor: handle 401 → refresh or redirect to login
-- [ ] Router guards: `requiresAuth`, `requiresRole` meta fields
+- [x] `auth.store.ts` — Pinia store: token, refreshToken, user, isAuthenticated, login(), logout()
+- [x] `auth.api.ts` — login, refresh, logout endpoints
+- [x] `Login.vue` — email + password, language selector, redirect on success
+- [x] Axios request interceptor: attach `Authorization: Bearer {token}`
+- [x] Axios response interceptor: handle 401 → refresh or redirect to login
+- [x] Router guards: `requiresAuth`, `requiresRole` meta fields
 
 ### 1.2 User Management
 
 - [ ] `admin.api.ts` — CRUD users, assign roles, revoke sessions
-- [ ] `UserManagement.vue` — list, invite, edit, deactivate users
+- [x] `UserManagement.vue` — list, invite, edit, deactivate users
 - [ ] `RolePermissions.vue` — visual permission matrix (read-only reference)
-- [ ] Per-user language preference (stored in user profile, applied on login)
+- [x] Per-user language preference (stored in user profile, applied on login)
 
 **Deliverable**: Users can log in, see role-appropriate UI, manage other users (admin only). Sessions can be revoked.
 
