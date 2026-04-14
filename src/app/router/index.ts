@@ -40,6 +40,12 @@ const router = createRouter({
           component: () => import('@/modules/admin/views/UserManagement.vue'),
           meta: { roles: ['AGENCY_ADMIN'] },
         },
+        {
+          path: 'roles',
+          name: 'RolePermissions',
+          component: () => import('@/modules/admin/views/RolePermissions.vue'),
+          meta: { roles: ['AGENCY_ADMIN'] },
+        },
       ],
     },
   ],

@@ -17,20 +17,50 @@ async function handleLogout() {
   <div class="admin-layout">
     <aside class="sidebar">
       <div class="sidebar-header">
-        <h1 class="logo">bed!OK</h1>
+        <h1 class="logo">
+          bed!OK
+        </h1>
       </div>
       <nav class="sidebar-nav">
-        <RouterLink to="/" class="nav-item">{{ t('nav.dashboard') }}</RouterLink>
-        <RouterLink v-if="auth.userRole === 'AGENCY_ADMIN'" to="/users" class="nav-item">{{
-          t('nav.users')
-        }}</RouterLink>
+        <RouterLink
+          to="/"
+          class="nav-item"
+        >
+          {{ t('nav.dashboard') }}
+        </RouterLink>
+        <RouterLink
+          v-if="auth.userRole === 'AGENCY_ADMIN'"
+          to="/users"
+          class="nav-item"
+        >
+          {{
+            t('nav.users')
+          }}
+        </RouterLink>
+        <RouterLink
+          v-if="auth.userRole === 'AGENCY_ADMIN'"
+          to="/roles"
+          class="nav-item"
+        >
+          {{
+            t('nav.roles')
+          }}
+        </RouterLink>
       </nav>
       <div class="sidebar-footer">
-        <div class="user-info" v-if="auth.user">
+        <div
+          v-if="auth.user"
+          class="user-info"
+        >
           <span class="user-name">{{ auth.user.name }}</span>
           <span class="user-role">{{ auth.user.role }}</span>
         </div>
-        <button class="logout-btn" @click="handleLogout">{{ t('auth.logout') }}</button>
+        <button
+          class="logout-btn"
+          @click="handleLogout"
+        >
+          {{ t('auth.logout') }}
+        </button>
       </div>
     </aside>
     <main class="main-content">
