@@ -109,9 +109,9 @@ This plan bridges the current codebase (docs/as-is) to the target product (docs/
 
 ### 3.2 Conflict Engine (Frontend)
 
-- [ ] Pre-submit validation: check capacity, gender rules, double-booking before API call
-- [ ] Display hard conflicts (blocking) vs soft warnings (allow with confirmation)
-- [ ] `useConflicts()` composable — re-usable conflict checking logic
+- [x] Pre-submit validation: check capacity, gender rules, double-booking before API call
+- [x] Display hard conflicts (blocking) vs soft warnings (allow with confirmation)
+- [x] `useConflicts()` composable — re-usable conflict checking logic
 
 **Deliverable**: Agency planners can create and manage stay assignments with real-time constraint validation. Bulk operations work for large groups.
 
