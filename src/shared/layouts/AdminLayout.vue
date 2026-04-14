@@ -99,6 +99,13 @@ async function handleLogout() {
             t('nav.inspection')
           }}
         </RouterLink>
+        <RouterLink
+          v-if="auth.userRole === 'AGENCY_ADMIN'"
+          to="/audit"
+          class="nav-item"
+        >
+          {{ t('nav.audit') }}
+        </RouterLink>
       </nav>
       <div class="sidebar-footer">
         <div
