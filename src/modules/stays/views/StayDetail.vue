@@ -9,6 +9,7 @@ import type { UpdateStayPayload, ConstraintViolationResponse } from '../types/st
 import { BaseButton, BaseBadge, StatusChip } from '@/shared/components'
 import ConflictBanner from '../components/ConflictBanner.vue'
 import { AxiosError } from 'axios'
+import { useAuthStore } from '@/modules/auth/store/auth.store'
 
 const route = useRoute()
 const router = useRouter()
@@ -24,6 +25,7 @@ const isEditing = ref(false)
 
 const editForm = ref<UpdateStayPayload>({})
 
+const auth = useAuthStore()
 const stayId = computed(() => route.params.id as string)
 const stay = computed(() => staysStore.currentStay)
 const canEdit = computed(() => stay.value?.status === 'PLANNED')
@@ -134,6 +136,18 @@ onMounted(loadStay)
         </div>
         <div class="detail-actions">
           <StatusChip :status="stay.status" />
+          <RouterLink
+            v-if="auth.userRole === 'AGENCY_ADMIN'"
+            :to="{ name: 'AuditLog', query: { entityType: 'STAY', entityId: stay.id } }"
+            class="audit-link"
+          >
+            <BaseButton
+              variant="ghost"
+              size="sm"
+            >
+              {{ t('audit.viewHistory') }}
+            </BaseButton>
+          </RouterLink>
           <BaseButton
             v-if="canEdit && !isEditing"
             size="sm"

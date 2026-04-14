@@ -7,6 +7,7 @@ import { propertiesApi } from '../api/properties.api'
 import type { UpdatePropertyPayload, GenderRule, PropertyType, Room } from '../types/property.types'
 import RoomManagement from '../components/RoomManagement.vue'
 import { BaseButton, BaseInput, BaseBadge } from '@/shared/components'
+import { useAuthStore } from '@/modules/auth/store/auth.store'
 
 const route = useRoute()
 const router = useRouter()
@@ -21,6 +22,7 @@ const editForm = ref<UpdatePropertyPayload>({})
 const selectedRoom = ref<Room | null>(null)
 const showRoomManagement = ref(false)
 
+const auth = useAuthStore()
 const propertyId = computed(() => route.params.id as string)
 
 const typeOptions: { value: PropertyType; label: string }[] = [
@@ -149,6 +151,18 @@ onMounted(load)
           </p>
         </div>
         <div class="detail-actions">
+          <RouterLink
+            v-if="auth.userRole === 'AGENCY_ADMIN'"
+            :to="{ name: 'AuditLog', query: { entityType: 'PROPERTY', entityId: store.currentProperty.id } }"
+            class="audit-link"
+          >
+            <BaseButton
+              variant="ghost"
+              size="sm"
+            >
+              {{ t('audit.viewHistory') }}
+            </BaseButton>
+          </RouterLink>
           <BaseButton
             v-if="!isEditing"
             size="sm"
