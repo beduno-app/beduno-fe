@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
 import { useI18n } from 'vue-i18n'
+import jsQR from 'jsqr'
 import { BaseButton } from '@/shared/components'
 
 const emit = defineEmits<{
@@ -20,7 +21,7 @@ let animationId: number | null = null
 async function startCamera() {
   try {
     stream = await navigator.mediaDevices.getUserMedia({
-      video: { facingMode: 'environment' },
+      video: { facingMode: 'environment', width: { ideal: 640 }, height: { ideal: 480 } },
     })
     if (videoRef.value) {
       videoRef.value.srcObject = stream
@@ -37,31 +38,32 @@ function scanLoop() {
   if (!videoRef.value || !canvasRef.value || !isScanning.value) return
 
   const video = videoRef.value
+  if (video.readyState !== video.HAVE_ENOUGH_DATA) {
+    animationId = requestAnimationFrame(scanLoop)
+    return
+  }
+
   const canvas = canvasRef.value
+  canvas.width = video.videoWidth
+  canvas.height = video.videoHeight
+
   const ctx = canvas.getContext('2d')
   if (!ctx) return
 
-  canvas.width = video.videoWidth
-  canvas.height = video.videoHeight
   ctx.drawImage(video, 0, 0)
+  const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
 
-  if ('BarcodeDetector' in window) {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const detector = new (window as Record<string, any>).BarcodeDetector({ formats: ['qr_code'] })
-    detector.detect(canvas).then((barcodes: { rawValue: string }[]) => {
-      if (barcodes.length > 0) {
-        emit('scanned', barcodes[0].rawValue)
-        stopCamera()
-        return
-      }
-      animationId = requestAnimationFrame(scanLoop)
-    }).catch(() => {
-      animationId = requestAnimationFrame(scanLoop)
-    })
-  } else {
-    error.value = t('arrivals.noBarcodeApi')
+  const code = jsQR(imageData.data, imageData.width, imageData.height, {
+    inversionAttempts: 'dontInvert',
+  })
+
+  if (code) {
+    emit('scanned', code.data)
     stopCamera()
+    return
   }
+
+  animationId = requestAnimationFrame(scanLoop)
 }
 
 function stopCamera() {
@@ -71,7 +73,7 @@ function stopCamera() {
     animationId = null
   }
   if (stream) {
-    stream.getTracks().forEach((t) => t.stop())
+    stream.getTracks().forEach((track) => track.stop())
     stream = null
   }
 }
