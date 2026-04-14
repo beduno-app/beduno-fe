@@ -12,8 +12,23 @@ import { useSyncStore } from '@/modules/ops/store/sync.store'
 import ConflictInbox from '@/modules/ops/components/ConflictInbox.vue'
 import OfflineBanner from '@/modules/ops/components/OfflineBanner.vue'
 import { ToastNotifications } from '@/shared/components'
+import { adminApi } from '@/modules/admin/api/admin.api'
+import type { AppLanguage } from '@/modules/auth/types/auth.types'
 
-const { t } = useI18n()
+const LANGUAGES: { code: string; label: string; apiCode: AppLanguage }[] = [
+  { code: 'pl', label: 'PL', apiCode: 'PL' },
+  { code: 'en', label: 'EN', apiCode: 'EN' },
+  { code: 'de', label: 'DE', apiCode: 'DE' },
+  { code: 'ua', label: 'UA', apiCode: 'UA' },
+  { code: 'ru', label: 'RU', apiCode: 'RU' },
+]
+
+const { t, locale } = useI18n()
+
+function setLanguage(lang: (typeof LANGUAGES)[number]) {
+  locale.value = lang.code
+  adminApi.updateMyLanguage(lang.apiCode).catch(() => undefined)
+}
 const auth = useAuthStore()
 const router = useRouter()
 const opsStore = useOpsStore()
@@ -83,6 +98,18 @@ async function handleLogout() {
         </select>
       </div>
       <div class="ops-header-right">
+        <div class="ops-lang-switcher">
+          <button
+            v-for="lang in LANGUAGES"
+            :key="lang.code"
+            class="ops-lang-btn"
+            :class="{ active: locale === lang.code }"
+            :aria-label="lang.label"
+            @click="setLanguage(lang)"
+          >
+            {{ lang.label }}
+          </button>
+        </div>
         <span
           v-if="auth.user"
           class="ops-user"
@@ -185,6 +212,33 @@ async function handleLogout() {
   white-space: nowrap;
 }
 
+.ops-lang-switcher {
+  display: flex;
+  gap: 0.125rem;
+}
+
+.ops-lang-btn {
+  padding: 0.15rem 0.35rem;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: rgba(255, 255, 255, 0.45);
+  border-radius: 0.2rem;
+  font-size: 0.65rem;
+  font-weight: 600;
+  cursor: pointer;
+  line-height: 1.4;
+
+  &.active {
+    background: #e66e00;
+    border-color: #e66e00;
+    color: #fff;
+  }
+
+  &:hover:not(.active) {
+    color: rgba(255, 255, 255, 0.7);
+  }
+}
+
 .ops-user {
   font-size: 0.75rem;
   color: rgba(255, 255, 255, 0.7);
@@ -255,7 +309,8 @@ async function handleLogout() {
 }
 
 @media (max-width: 360px) {
-  .ops-user {
+  .ops-user,
+  .ops-lang-switcher {
     display: none;
   }
 
