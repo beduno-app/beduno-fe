@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import { onMounted, onUnmounted, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
+
 defineProps<{
   title: string
 }>()
@@ -7,11 +10,62 @@ const emit = defineEmits<{
   close: []
 }>()
 
-function onBackdrop(e: MouseEvent) {
-  if (e.target === e.currentTarget) {
-    emit('close')
+const { t } = useI18n()
+const modalRef = ref<HTMLElement | null>(null)
+let previouslyFocused: Element | null = null
+
+const FOCUSABLE = [
+  'a[href]',
+  'button:not([disabled])',
+  'input:not([disabled])',
+  'select:not([disabled])',
+  'textarea:not([disabled])',
+  '[tabindex]:not([tabindex="-1"])',
+].join(', ')
+
+function getFocusable(): HTMLElement[] {
+  return modalRef.value ? Array.from(modalRef.value.querySelectorAll<HTMLElement>(FOCUSABLE)) : []
+}
+
+function trapFocus(e: KeyboardEvent) {
+  if (e.key !== 'Tab') return
+  const focusable = getFocusable()
+  if (!focusable.length) return
+  const first = focusable[0]
+  const last = focusable[focusable.length - 1]
+  if (e.shiftKey) {
+    if (document.activeElement === first) {
+      e.preventDefault()
+      last.focus()
+    }
+  } else {
+    if (document.activeElement === last) {
+      e.preventDefault()
+      first.focus()
+    }
   }
 }
+
+function onKeydown(e: KeyboardEvent) {
+  if (e.key === 'Escape') emit('close')
+  trapFocus(e)
+}
+
+function onBackdrop(e: MouseEvent) {
+  if (e.target === e.currentTarget) emit('close')
+}
+
+onMounted(() => {
+  previouslyFocused = document.activeElement
+  document.addEventListener('keydown', onKeydown)
+  const focusable = getFocusable()
+  if (focusable.length) focusable[0].focus()
+})
+
+onUnmounted(() => {
+  document.removeEventListener('keydown', onKeydown)
+  if (previouslyFocused instanceof HTMLElement) previouslyFocused.focus()
+})
 </script>
 
 <template>
@@ -21,16 +75,22 @@ function onBackdrop(e: MouseEvent) {
       @click="onBackdrop"
     >
       <div
+        ref="modalRef"
         class="modal"
         role="dialog"
+        :aria-label="title"
         aria-modal="true"
       >
         <div class="modal-header">
-          <h3 class="modal-title">
+          <h3
+            id="modal-title"
+            class="modal-title"
+          >
             {{ title }}
           </h3>
           <button
             class="modal-close"
+            :aria-label="t('common.cancel')"
             @click="$emit('close')"
           >
             &times;
