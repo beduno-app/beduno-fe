@@ -3,7 +3,7 @@ import { ref, onMounted, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useWorkersStore } from '../store/workers.store'
-import { BaseButton, BaseInput, BaseBadge } from '@/shared/components'
+import { BaseButton, BaseInput, BaseBadge, SkeletonLoader } from '@/shared/components'
 import BatchBadgePrint from '../components/BatchBadgePrint.vue'
 import type { Worker, WorkerStatus, Gender } from '../types/worker.types'
 
@@ -157,9 +157,12 @@ onMounted(() => {
 
     <div
       v-if="store.isLoading"
-      class="loading"
+      class="skeleton-section"
     >
-      {{ t('common.loading') }}
+      <SkeletonLoader
+        :lines="6"
+        height="2.5rem"
+      />
     </div>
     <div
       v-else-if="store.error"
@@ -403,7 +406,10 @@ onMounted(() => {
   color: #4b5563;
 }
 
-.loading,
+.skeleton-section {
+  padding: 0.5rem 0;
+}
+
 .error,
 .empty {
   padding: 2rem;
