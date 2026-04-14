@@ -141,20 +141,20 @@ This plan bridges the current codebase (docs/as-is) to the target product (docs/
 
 ### 4.3 Inspection Mode
 
-- [ ] `InspectionMode.vue` — sequential room-by-room walkthrough
-- [ ] Per room: "expected" list + checkboxes for present/absent
-- [ ] "Found but not expected" — add unknown presence
-- [ ] "Mark as Verified" — timestamps + confirmer ID
-- [ ] Discrepancy notes using predefined reason tags (localized)
-- [ ] Inspection summary report (exportable)
+- [x] `InspectionMode.vue` — sequential room-by-room walkthrough
+- [x] Per room: "expected" list + checkboxes for present/absent
+- [x] "Found but not expected" — add unknown presence
+- [x] "Mark as Verified" — timestamps + confirmer ID
+- [x] Discrepancy notes using predefined reason tags (localized)
+- [x] Inspection summary report (exportable)
 
 ### 4.4 Operational API Integration
 
-- [ ] `POST /stays/:id/check-in`
-- [ ] `POST /stays/:id/check-out`
-- [ ] `POST /stays/:id/no-show`
-- [ ] `POST /stays/:id/move`
-- [ ] `POST /stays/bulk-checkout`
+- [x] `POST /stays/:id/check-in`
+- [x] `POST /stays/:id/check-out`
+- [x] `POST /stays/:id/no-show`
+- [x] `POST /stays/:id/move`
+- [x] `POST /stays/bulk-checkout`
 
 **Deliverable**: Property staff can run daily arrivals, maintain nightly occupancy truth, and complete inspections — all from the browser. This is the **core product loop**.
 
