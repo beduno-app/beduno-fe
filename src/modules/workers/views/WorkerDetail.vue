@@ -7,10 +7,11 @@ import type { Worker, UpdateWorkerPayload, Gender } from '../types/worker.types'
 import type { Stay } from '@/modules/stays/types/stay.types'
 import { BaseButton, BaseInput, BaseBadge, StatusChip } from '@/shared/components'
 import { useAuthStore } from '@/modules/auth/store/auth.store'
+import { formatDate } from '@/shared/utils/formatDate'
 
 const route = useRoute()
 const router = useRouter()
-const { t } = useI18n()
+const { t, locale } = useI18n()
 const auth = useAuthStore()
 
 const worker = ref<Worker | null>(null)
@@ -309,8 +310,8 @@ onMounted(loadWorker)
             >
               <td>{{ stay.property.name }}</td>
               <td>{{ stay.room.roomNumber }}</td>
-              <td>{{ stay.dateFrom }}</td>
-              <td>{{ stay.dateTo ?? '—' }}</td>
+              <td>{{ formatDate(stay.dateFrom, locale) }}</td>
+              <td>{{ formatDate(stay.dateTo, locale) }}</td>
               <td>
                 <StatusChip :status="stay.status" />
               </td>

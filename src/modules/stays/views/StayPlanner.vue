@@ -6,8 +6,9 @@ import { useStaysStore } from '../store/stays.store'
 import { usePropertiesStore } from '@/modules/properties/store/properties.store'
 import { BaseButton, StatusChip } from '@/shared/components'
 import type { StayStatus } from '../types/stay.types'
+import { formatDate } from '@/shared/utils/formatDate'
 
-const { t } = useI18n()
+const { t, locale } = useI18n()
 const router = useRouter()
 const store = useStaysStore()
 const propertiesStore = usePropertiesStore()
@@ -166,8 +167,8 @@ onMounted(() => {
             <td>{{ stay.worker.lastName }}, {{ stay.worker.firstName }}</td>
             <td>{{ stay.property.name }}</td>
             <td>{{ stay.room.roomNumber }}</td>
-            <td>{{ stay.dateFrom }}</td>
-            <td>{{ stay.dateTo ?? '—' }}</td>
+            <td>{{ formatDate(stay.dateFrom, locale) }}</td>
+            <td>{{ formatDate(stay.dateTo, locale) }}</td>
             <td>
               <StatusChip :status="stay.status" />
             </td>
