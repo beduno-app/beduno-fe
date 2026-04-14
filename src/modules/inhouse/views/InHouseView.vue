@@ -3,7 +3,7 @@ import { ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useInHouseStore } from '../store/inhouse.store'
 import { usePropertiesStore } from '@/modules/properties/store/properties.store'
-import { BaseButton } from '@/shared/components'
+import { BaseButton, SkeletonLoader } from '@/shared/components'
 import RoomCard from '../components/RoomCard.vue'
 import UnassignedWorkers from '../components/UnassignedWorkers.vue'
 import { usePullToRefresh } from '@/shared/composables/usePullToRefresh'
@@ -154,9 +154,12 @@ onMounted(() => {
     </div>
     <div
       v-else-if="store.isLoading"
-      class="loading"
+      class="skeleton-section"
     >
-      {{ t('common.loading') }}
+      <SkeletonLoader
+        :lines="4"
+        height="5rem"
+      />
     </div>
     <div
       v-else-if="store.error"
@@ -286,7 +289,10 @@ onMounted(() => {
   }
 }
 
-.loading,
+.skeleton-section {
+  padding: 0.5rem 0;
+}
+
 .error,
 .empty {
   padding: 2rem;

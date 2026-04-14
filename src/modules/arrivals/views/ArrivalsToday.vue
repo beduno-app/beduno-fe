@@ -13,6 +13,7 @@ import { usePullToRefresh } from '@/shared/composables/usePullToRefresh'
 import { decodeQrData } from '@/shared/utils/qrCode'
 import { loadSnapshot } from '@/shared/services/offlineDb'
 import { useToast } from '@/shared/composables/useToast'
+import { SkeletonLoader } from '@/shared/components'
 
 const { t } = useI18n()
 const store = useArrivalsStore()
@@ -263,9 +264,12 @@ onUnmounted(stopPolling)
     </div>
     <div
       v-else-if="store.isLoading"
-      class="loading"
+      class="skeleton-section"
     >
-      {{ t('common.loading') }}
+      <SkeletonLoader
+        :lines="5"
+        height="2.75rem"
+      />
     </div>
     <div
       v-else-if="store.error"
@@ -497,7 +501,13 @@ onUnmounted(stopPolling)
   color: #4b5563;
 }
 
-.loading,
+.skeleton-section {
+  padding: 0.5rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
 .error,
 .empty {
   padding: 2rem;

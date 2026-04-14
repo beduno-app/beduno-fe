@@ -4,7 +4,7 @@ import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useStaysStore } from '../store/stays.store'
 import { usePropertiesStore } from '@/modules/properties/store/properties.store'
-import { BaseButton, StatusChip } from '@/shared/components'
+import { BaseButton, StatusChip, SkeletonLoader } from '@/shared/components'
 import type { StayStatus } from '../types/stay.types'
 import { formatDate } from '@/shared/utils/formatDate'
 
@@ -132,9 +132,12 @@ onMounted(() => {
 
     <div
       v-if="store.isLoading"
-      class="loading"
+      class="skeleton-section"
     >
-      {{ t('common.loading') }}
+      <SkeletonLoader
+        :lines="5"
+        height="2.75rem"
+      />
     </div>
     <div
       v-else-if="store.error"
@@ -307,7 +310,10 @@ onMounted(() => {
   color: #4b5563;
 }
 
-.loading,
+.skeleton-section {
+  padding: 0.5rem 0;
+}
+
 .error,
 .empty {
   padding: 2rem;
