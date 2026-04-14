@@ -281,6 +281,8 @@ export default {
     cameraError: 'Kamera konnte nicht gestartet werden.',
     noBarcodeApi: 'Browser unterstützt kein QR-Code-Scanning.',
     workerNotFound: 'Kein erwarteter Arbeiter mit diesem QR-Code gefunden.',
+    manualIdLabel: 'Oder Arbeiter-ID manuell eingeben:',
+    manualIdPlaceholder: 'Interne Arbeiter-ID',
     noShowTitle: 'Als nicht erschienen markieren',
     noShowReason: 'Grund',
     notePlaceholder: 'Notiz (optional)',

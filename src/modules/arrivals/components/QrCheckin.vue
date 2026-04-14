@@ -15,8 +15,17 @@ const videoRef = ref<HTMLVideoElement | null>(null)
 const canvasRef = ref<HTMLCanvasElement | null>(null)
 const error = ref('')
 const isScanning = ref(false)
+const manualId = ref('')
+const manualError = ref('')
 let stream: MediaStream | null = null
 let animationId: number | null = null
+
+function submitManualId() {
+  const id = manualId.value.trim()
+  if (!id) return
+  manualError.value = ''
+  emit('scanned', id)
+}
 
 async function startCamera() {
   try {
@@ -114,6 +123,34 @@ onUnmounted(stopCamera)
       </div>
     </div>
 
+    <!-- Manual fallback -->
+    <div class="manual-fallback">
+      <p class="manual-label">
+        {{ t('arrivals.manualIdLabel') }}
+      </p>
+      <div class="manual-form">
+        <input
+          v-model="manualId"
+          class="manual-input"
+          :placeholder="t('arrivals.manualIdPlaceholder')"
+          @keydown.enter="submitManualId"
+        >
+        <BaseButton
+          size="sm"
+          :disabled="!manualId.trim()"
+          @click="submitManualId"
+        >
+          {{ t('common.confirm') }}
+        </BaseButton>
+      </div>
+      <p
+        v-if="manualError"
+        class="manual-error"
+      >
+        {{ manualError }}
+      </p>
+    </div>
+
     <div class="qr-actions">
       <BaseButton
         variant="secondary"
@@ -181,6 +218,44 @@ onUnmounted(stopCamera)
   border: 2px solid #e66e00;
   border-radius: 0.5rem;
   box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.3);
+}
+
+.manual-fallback {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e5e7eb;
+}
+
+.manual-label {
+  font-size: 0.8rem;
+  color: #6b7280;
+  margin: 0 0 0.5rem;
+}
+
+.manual-form {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.manual-input {
+  flex: 1;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+  font-family: monospace;
+
+  &:focus {
+    outline: none;
+    border-color: #e66e00;
+    box-shadow: 0 0 0 2px rgba(230, 110, 0, 0.15);
+  }
+}
+
+.manual-error {
+  color: #dc2626;
+  font-size: 0.8rem;
+  margin: 0.375rem 0 0;
 }
 
 .qr-actions {

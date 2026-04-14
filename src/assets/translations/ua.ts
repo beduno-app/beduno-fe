@@ -281,6 +281,8 @@ export default {
     cameraError: 'Не вдалося запустити камеру.',
     noBarcodeApi: 'Браузер не підтримує сканування QR-кодів.',
     workerNotFound: 'Очікуваного працівника з цим QR-кодом не знайдено.',
+    manualIdLabel: 'Або введіть ID працівника вручну:',
+    manualIdPlaceholder: 'Внутрішній ID працівника',
     noShowTitle: "Позначити як нез'явлення",
     noShowReason: 'Причина',
     notePlaceholder: "Нотатка (необов'язково)",

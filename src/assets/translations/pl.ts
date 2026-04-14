@@ -281,6 +281,8 @@ export default {
     cameraError: 'Nie udało się uruchomić kamery.',
     noBarcodeApi: 'Przeglądarka nie obsługuje skanowania kodów QR.',
     workerNotFound: 'Nie znaleziono oczekiwanego pracownika z tym kodem QR.',
+    manualIdLabel: 'Lub wprowadź ID pracownika ręcznie:',
+    manualIdPlaceholder: 'Wewnętrzny ID pracownika',
     noShowTitle: 'Oznacz jako nieobecny',
     noShowReason: 'Powód',
     notePlaceholder: 'Notatka (opcjonalnie)',

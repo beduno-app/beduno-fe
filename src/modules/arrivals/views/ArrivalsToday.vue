@@ -71,21 +71,22 @@ async function handleDirectCheckIn(stayId: string) {
 async function handleQrScanned(rawCode: string) {
   actionError.value = ''
 
-  const decoded = decodeQrData(rawCode)
-  if (!decoded) {
-    actionError.value = t('arrivals.workerNotFound')
-    return
-  }
-
   try {
-    const arrival = store.arrivals.find(
-      (a) => a.worker.id === decoded.workerId && a.status === 'EXPECTED_TODAY',
-    )
+    // Try decoding as bedok QR format first, fall back to internalId match
+    const decoded = decodeQrData(rawCode)
+    const arrival = decoded
+      ? store.arrivals.find(
+          (a) => a.worker.id === decoded.workerId && a.status === 'EXPECTED_TODAY',
+        )
+      : store.arrivals.find(
+          (a) => a.worker.internalId === rawCode && a.status === 'EXPECTED_TODAY',
+        )
+
     if (!arrival) {
       actionError.value = t('arrivals.workerNotFound')
       return
     }
-    await store.checkIn(arrival.id, { qrCode: rawCode })
+    await store.checkIn(arrival.id, { qrCode: decoded ? rawCode : undefined })
     closePanel()
   } catch (e) {
     actionError.value = e instanceof Error ? e.message : 'Check-in failed'
