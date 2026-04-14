@@ -340,4 +340,27 @@ export default {
       USER: 'Benutzer',
     },
   },
+  exports: {
+    exportLanguage: 'Exportsprache',
+    languageNote: 'Unabhängig von der UI-Sprache',
+    selectProperty: 'Objekt auswählen',
+    selectDate: 'Datum',
+    dateFrom: 'Datum von',
+    dateTo: 'Datum bis',
+    exportCsv: 'CSV exportieren',
+    exportPdf: 'PDF exportieren',
+    generating: 'Wird generiert...',
+    nightlyOccupancy: {
+      title: 'Nächliche Belegungsliste',
+      description: 'Zimmerbelegung für das ausgewählte Objekt und Datum.',
+    },
+    exceptionReport: {
+      title: 'Ausnahmenbericht',
+      description: 'Überbelegte Zimmer und nicht zugewiesene Arbeiter für das ausgewählte Objekt und Datum.',
+    },
+    occupancySummary: {
+      title: 'Belegungsübersicht',
+      description: 'Gesamtbelegung aller Objekte für den ausgewählten Zeitraum.',
+    },
+  },
 }

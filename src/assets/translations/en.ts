@@ -340,4 +340,27 @@ export default {
       USER: 'User',
     },
   },
+  exports: {
+    exportLanguage: 'Export language',
+    languageNote: 'Independent of the UI language',
+    selectProperty: 'Select property',
+    selectDate: 'Date',
+    dateFrom: 'Date from',
+    dateTo: 'Date to',
+    exportCsv: 'Export CSV',
+    exportPdf: 'Export PDF',
+    generating: 'Generating...',
+    nightlyOccupancy: {
+      title: 'Nightly occupancy list',
+      description: 'Room-by-room occupancy for the selected property and date.',
+    },
+    exceptionReport: {
+      title: 'Exception report',
+      description: 'Over-capacity rooms and unassigned workers for the selected property and date.',
+    },
+    occupancySummary: {
+      title: 'Occupancy summary',
+      description: 'Aggregate occupancy across all properties for the selected date range.',
+    },
+  },
 }

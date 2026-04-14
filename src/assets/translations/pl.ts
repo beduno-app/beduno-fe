@@ -340,4 +340,27 @@ export default {
       USER: 'Użytkownik',
     },
   },
+  exports: {
+    exportLanguage: 'Język eksportu',
+    languageNote: 'Niezależny od języka interfejsu',
+    selectProperty: 'Wybierz obiekt',
+    selectDate: 'Data',
+    dateFrom: 'Data od',
+    dateTo: 'Data do',
+    exportCsv: 'Eksport CSV',
+    exportPdf: 'Eksport PDF',
+    generating: 'Generowanie...',
+    nightlyOccupancy: {
+      title: 'Lista nocna',
+      description: 'Zajętość pokojów dla wybranego obiektu i daty.',
+    },
+    exceptionReport: {
+      title: 'Raport wyjątków',
+      description: 'Przepełnione pokoje i pracownicy bez przypisania dla wybranego obiektu i daty.',
+    },
+    occupancySummary: {
+      title: 'Podsumowanie obłożenia',
+      description: 'Zbiorcze obłożenie wszystkich obiektów dla wybranego zakresu dat.',
+    },
+  },
 }
