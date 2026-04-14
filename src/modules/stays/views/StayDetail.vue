@@ -4,7 +4,8 @@ import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useStaysStore } from '../store/stays.store'
 import { usePropertiesStore } from '@/modules/properties/store/properties.store'
-import type { UpdateStayPayload, ConstraintViolation, ConstraintViolationResponse } from '../types/stay.types'
+import { useConflicts } from '../composables/useConflicts'
+import type { UpdateStayPayload, ConstraintViolationResponse } from '../types/stay.types'
 import { BaseButton, BaseBadge, StatusChip } from '@/shared/components'
 import ConflictBanner from '../components/ConflictBanner.vue'
 import { AxiosError } from 'axios'
@@ -14,6 +15,7 @@ const router = useRouter()
 const { t } = useI18n()
 const staysStore = useStaysStore()
 const propertiesStore = usePropertiesStore()
+const conflicts = useConflicts()
 
 const isLoading = ref(true)
 const isSaving = ref(false)
@@ -21,8 +23,6 @@ const error = ref('')
 const isEditing = ref(false)
 
 const editForm = ref<UpdateStayPayload>({})
-const hardViolations = ref<ConstraintViolation[]>([])
-const softViolations = ref<ConstraintViolation[]>([])
 
 const stayId = computed(() => route.params.id as string)
 const stay = computed(() => staysStore.currentStay)
@@ -55,8 +55,7 @@ function startEdit() {
 
 function cancelEdit() {
   isEditing.value = false
-  hardViolations.value = []
-  softViolations.value = []
+  conflicts.clear()
 }
 
 function isConstraintViolation(data: unknown): data is ConstraintViolationResponse {
@@ -71,8 +70,7 @@ function isConstraintViolation(data: unknown): data is ConstraintViolationRespon
 async function saveEdit() {
   isSaving.value = true
   error.value = ''
-  hardViolations.value = []
-  softViolations.value = []
+  conflicts.clear()
 
   try {
     await staysStore.updateStay(stayId.value, editForm.value)
@@ -81,8 +79,7 @@ async function saveEdit() {
     if (e instanceof AxiosError && e.response?.status === 422) {
       const data = e.response.data
       if (isConstraintViolation(data)) {
-        hardViolations.value = data.hardViolations
-        softViolations.value = data.softViolations
+        conflicts.setServerViolations(data.hardViolations, data.softViolations)
         return
       }
     }
@@ -156,8 +153,8 @@ onMounted(loadStay)
       </div>
 
       <ConflictBanner
-        :hard-violations="hardViolations"
-        :soft-violations="softViolations"
+        :hard-violations="conflicts.hardViolations.value"
+        :soft-violations="conflicts.softViolations.value"
       />
 
       <!-- View mode -->

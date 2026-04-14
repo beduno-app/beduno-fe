@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useStaysStore } from '../store/stays.store'
 import { usePropertiesStore } from '@/modules/properties/store/properties.store'
 import { useWorkersStore } from '@/modules/workers/store/workers.store'
-import type { StayCreatePayload, ConstraintViolation, ConstraintViolationResponse } from '../types/stay.types'
+import { useConflicts } from '../composables/useConflicts'
+import type { StayCreatePayload, ConstraintViolationResponse } from '../types/stay.types'
 import { BaseButton, BaseInput } from '@/shared/components'
 import ConflictBanner from '../components/ConflictBanner.vue'
 import { AxiosError } from 'axios'
@@ -15,6 +16,7 @@ const { t } = useI18n()
 const staysStore = useStaysStore()
 const propertiesStore = usePropertiesStore()
 const workersStore = useWorkersStore()
+const conflicts = useConflicts()
 
 const form = ref<StayCreatePayload>({
   workerId: '',
@@ -26,10 +28,17 @@ const form = ref<StayCreatePayload>({
 const overrideReason = ref('')
 const isSaving = ref(false)
 const error = ref('')
-
-const hardViolations = ref<ConstraintViolation[]>([])
-const softViolations = ref<ConstraintViolation[]>([])
 const showOverride = ref(false)
+
+const selectedWorker = computed(() =>
+  workersStore.workers.find((w) => w.id === form.value.workerId) ?? null,
+)
+const selectedRoom = computed(() =>
+  propertiesStore.rooms.find((r) => r.id === form.value.roomId) ?? null,
+)
+const selectedProperty = computed(() =>
+  propertiesStore.properties.find((p) => p.id === form.value.propertyId) ?? null,
+)
 
 watch(
   () => form.value.propertyId,
@@ -41,12 +50,19 @@ watch(
   },
 )
 
-function clearViolations() {
-  hardViolations.value = []
-  softViolations.value = []
-  showOverride.value = false
-  overrideReason.value = ''
-}
+// Live pre-submit validation on form changes
+watch(
+  [selectedWorker, selectedRoom, selectedProperty],
+  () => {
+    showOverride.value = false
+    overrideReason.value = ''
+    conflicts.validate({
+      worker: selectedWorker.value,
+      room: selectedRoom.value,
+      propertyStatus: selectedProperty.value?.status,
+    })
+  },
+)
 
 function isConstraintViolation(data: unknown): data is ConstraintViolationResponse {
   return (
@@ -60,7 +76,8 @@ function isConstraintViolation(data: unknown): data is ConstraintViolationRespon
 async function save() {
   isSaving.value = true
   error.value = ''
-  clearViolations()
+
+  if (conflicts.isBlocked.value) return
 
   try {
     const payload: StayCreatePayload = { ...form.value }
@@ -73,8 +90,7 @@ async function save() {
     if (e instanceof AxiosError && e.response?.status === 422) {
       const data = e.response.data
       if (isConstraintViolation(data)) {
-        hardViolations.value = data.hardViolations
-        softViolations.value = data.softViolations
+        conflicts.setServerViolations(data.hardViolations, data.softViolations)
         if (!data.hardViolations.length && data.softViolations.length) {
           showOverride.value = true
         }
@@ -114,8 +130,8 @@ propertiesStore.fetchProperties()
     </div>
 
     <ConflictBanner
-      :hard-violations="hardViolations"
-      :soft-violations="softViolations"
+      :hard-violations="conflicts.hardViolations.value"
+      :soft-violations="conflicts.softViolations.value"
     />
 
     <div class="form-card">
