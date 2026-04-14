@@ -136,6 +136,12 @@ const router = createRouter({
           component: () => import('@/modules/inspection/views/InspectionMode.vue'),
           meta: { roles: ['PROPERTY_ADMIN', 'FRONT_DESK'] },
         },
+        {
+          path: 'audit',
+          name: 'AuditLog',
+          component: () => import('@/modules/audit/views/AuditLog.vue'),
+          meta: { roles: ['AGENCY_ADMIN'] },
+        },
       ],
     },
   ],
