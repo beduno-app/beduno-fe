@@ -99,13 +99,13 @@ This plan bridges the current codebase (docs/as-is) to the target product (docs/
 
 ### 3.1 Stay Management
 
-- [ ] `stay.types.ts` — Stay, StayStatus, StayCreatePayload interfaces
-- [ ] `stays.store.ts` — list, filter, create, update, cancel
-- [ ] `stays.api.ts` — CRUD + bulk assign + bulk checkout
-- [ ] `StayPlanner.vue` — calendar/list view of all stays; filter by property, worker, date range, status
-- [ ] `CreateStay.vue` — select worker → property → room → dates; live conflict warnings inline
-- [ ] `BulkAssign.vue` — select multiple workers → target property/rooms → date range; conflict summary → confirm
-- [ ] `ConflictBanner.vue` — shared component showing capacity/gender/double-booking warnings
+- [x] `stay.types.ts` — Stay, StayStatus, StayCreatePayload interfaces
+- [x] `stays.store.ts` — list, filter, create, update, cancel
+- [x] `stays.api.ts` — CRUD + bulk assign + bulk checkout
+- [x] `StayPlanner.vue` — calendar/list view of all stays; filter by property, worker, date range, status
+- [x] `CreateStay.vue` — select worker → property → room → dates; live conflict warnings inline
+- [x] `BulkAssign.vue` — select multiple workers → target property/rooms → date range; conflict summary → confirm
+- [x] `ConflictBanner.vue` — shared component showing capacity/gender/double-booking warnings
 
 ### 3.2 Conflict Engine (Frontend)
 
