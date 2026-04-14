@@ -9,6 +9,8 @@ const { t } = useI18n()
 <template>
   <div>
     <h2>{{ t('nav.dashboard') }}</h2>
-    <p v-if="auth.user">{{ auth.user.name }} ({{ auth.user.role }})</p>
+    <p v-if="auth.user">
+      {{ auth.user.name }} ({{ auth.user.role }})
+    </p>
   </div>
 </template>

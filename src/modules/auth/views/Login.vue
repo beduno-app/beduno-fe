@@ -57,11 +57,19 @@ async function handleLogin() {
       </button>
     </div>
     <div class="login-card">
-      <h1 class="login-logo">bed!OK</h1>
+      <h1 class="login-logo">
+        bed!OK
+      </h1>
       <form @submit.prevent="handleLogin">
         <div class="form-group">
           <label for="email">{{ t('auth.email') }}</label>
-          <input id="email" v-model="email" type="email" required autocomplete="username" />
+          <input
+            id="email"
+            v-model="email"
+            type="email"
+            required
+            autocomplete="username"
+          >
         </div>
         <div class="form-group">
           <label for="password">{{ t('auth.password') }}</label>
@@ -71,10 +79,19 @@ async function handleLogin() {
             type="password"
             required
             autocomplete="current-password"
-          />
+          >
         </div>
-        <div v-if="error" class="error-message">{{ error }}</div>
-        <button type="submit" class="login-btn" :disabled="isLoading">
+        <div
+          v-if="error"
+          class="error-message"
+        >
+          {{ error }}
+        </div>
+        <button
+          type="submit"
+          class="login-btn"
+          :disabled="isLoading"
+        >
           {{ isLoading ? t('common.loading') : t('auth.login') }}
         </button>
       </form>

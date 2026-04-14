@@ -9,7 +9,9 @@ const router = useRouter()
     <div class="forbidden-card">
       <h1>403</h1>
       <p>You do not have permission to access this page.</p>
-      <button @click="router.push({ name: 'Dashboard' })">Go to Dashboard</button>
+      <button @click="router.push({ name: 'Dashboard' })">
+        Go to Dashboard
+      </button>
     </div>
   </div>
 </template>

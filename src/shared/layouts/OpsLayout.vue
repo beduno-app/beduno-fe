@@ -18,23 +18,40 @@ async function handleLogout() {
     <header class="ops-header">
       <span class="ops-logo">bed!OK</span>
       <div class="ops-header-right">
-        <span v-if="auth.user" class="ops-user">{{ auth.user.name }}</span>
-        <button class="ops-logout" @click="handleLogout">{{ t('auth.logout') }}</button>
+        <span
+          v-if="auth.user"
+          class="ops-user"
+        >{{ auth.user.name }}</span>
+        <button
+          class="ops-logout"
+          @click="handleLogout"
+        >
+          {{ t('auth.logout') }}
+        </button>
       </div>
     </header>
     <main class="ops-content">
       <RouterView />
     </main>
     <nav class="ops-bottom-nav">
-      <RouterLink to="/ops/arrivals" class="ops-nav-item">
+      <RouterLink
+        to="/ops/arrivals"
+        class="ops-nav-item"
+      >
         <span class="ops-nav-icon">&#8595;</span>
         <span class="ops-nav-label">{{ t('nav.arrivals') }}</span>
       </RouterLink>
-      <RouterLink to="/ops/occupancy" class="ops-nav-item">
+      <RouterLink
+        to="/ops/occupancy"
+        class="ops-nav-item"
+      >
         <span class="ops-nav-icon">&#9632;</span>
         <span class="ops-nav-label">{{ t('nav.occupancy') }}</span>
       </RouterLink>
-      <RouterLink to="/ops/inspection" class="ops-nav-item">
+      <RouterLink
+        to="/ops/inspection"
+        class="ops-nav-item"
+      >
         <span class="ops-nav-icon">&#10003;</span>
         <span class="ops-nav-label">{{ t('nav.inspection') }}</span>
       </RouterLink>

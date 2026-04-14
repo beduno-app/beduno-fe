@@ -10,7 +10,10 @@ withDefaults(
 </script>
 
 <template>
-  <span class="badge" :class="`badge--${variant}`">
+  <span
+    class="badge"
+    :class="`badge--${variant}`"
+  >
     <slot />
   </span>
 </template>

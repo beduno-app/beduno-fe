@@ -24,7 +24,10 @@ const variant = computed(() => {
 </script>
 
 <template>
-  <span class="chip" :class="`chip--${variant}`">
+  <span
+    class="chip"
+    :class="`chip--${variant}`"
+  >
     {{ t(`status.${status}`) }}
   </span>
 </template>

@@ -22,10 +22,19 @@ withDefaults(
 </script>
 
 <template>
-  <div class="input-group" :class="{ 'input-group--error': error }">
-    <label v-if="label" class="input-label">
+  <div
+    class="input-group"
+    :class="{ 'input-group--error': error }"
+  >
+    <label
+      v-if="label"
+      class="input-label"
+    >
       {{ label }}
-      <span v-if="required" class="input-required">*</span>
+      <span
+        v-if="required"
+        class="input-required"
+      >*</span>
     </label>
     <input
       v-model="model"
@@ -34,8 +43,11 @@ withDefaults(
       :placeholder="placeholder"
       :required="required"
       :disabled="disabled"
-    />
-    <span v-if="error" class="input-error">{{ error }}</span>
+    >
+    <span
+      v-if="error"
+      class="input-error"
+    >{{ error }}</span>
   </div>
 </template>
 
