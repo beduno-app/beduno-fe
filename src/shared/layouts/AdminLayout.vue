@@ -64,6 +64,14 @@ async function handleLogout() {
             t('nav.properties')
           }}
         </RouterLink>
+        <RouterLink
+          to="/stays"
+          class="nav-item"
+        >
+          {{
+            t('nav.stays')
+          }}
+        </RouterLink>
       </nav>
       <div class="sidebar-footer">
         <div
