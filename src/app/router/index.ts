@@ -25,6 +25,32 @@ const router = createRouter({
       meta: { requiresAuth: false },
     },
     {
+      path: '/ops',
+      component: () => import('@/shared/layouts/OpsLayout.vue'),
+      meta: { requiresAuth: true, roles: ['PROPERTY_ADMIN', 'FRONT_DESK'] },
+      children: [
+        {
+          path: '',
+          redirect: '/ops/arrivals',
+        },
+        {
+          path: 'arrivals',
+          name: 'OpsArrivals',
+          component: () => import('@/modules/arrivals/views/ArrivalsToday.vue'),
+        },
+        {
+          path: 'in-house',
+          name: 'OpsInHouse',
+          component: () => import('@/modules/inhouse/views/InHouseView.vue'),
+        },
+        {
+          path: 'inspection',
+          name: 'OpsInspection',
+          component: () => import('@/modules/inspection/views/InspectionMode.vue'),
+        },
+      ],
+    },
+    {
       path: '/',
       component: () => import('@/shared/layouts/AdminLayout.vue'),
       meta: { requiresAuth: true },

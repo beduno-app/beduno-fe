@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { onMounted } from 'vue'
+import { ref, watch, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useInspectionStore } from '../store/inspection.store'
 import { usePropertiesStore } from '@/modules/properties/store/properties.store'
+import { useOpsStore } from '@/modules/ops/store/ops.store'
 import { BaseButton } from '@/shared/components'
 import RoomInspectionCard from '../components/RoomInspectionCard.vue'
 import InspectionSummaryReport from '../components/InspectionSummaryReport.vue'
@@ -11,8 +12,16 @@ import type { PresenceStatus, DiscrepancyReason } from '../types/inspection.type
 const { t, locale } = useI18n()
 const store = useInspectionStore()
 const propertiesStore = usePropertiesStore()
+const opsStore = useOpsStore()
 
-const propertyId = defineModel<string>('propertyId', { default: '' })
+const propertyId = ref(opsStore.selectedPropertyId)
+
+watch(
+  () => opsStore.selectedPropertyId,
+  (id) => {
+    if (id && !store.inspection) propertyId.value = id
+  },
+)
 
 async function startNew() {
   if (!propertyId.value) return
