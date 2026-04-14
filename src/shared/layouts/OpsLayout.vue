@@ -9,6 +9,7 @@ import { useArrivalsStore } from '@/modules/arrivals/store/arrivals.store'
 import { useInHouseStore } from '@/modules/inhouse/store/inhouse.store'
 import { syncOfflineSnapshot } from '@/modules/ops/composables/useOfflineSnapshot'
 import { useSyncStore } from '@/modules/ops/store/sync.store'
+import ConflictInbox from '@/modules/ops/components/ConflictInbox.vue'
 
 const { t } = useI18n()
 const auth = useAuthStore()
@@ -93,6 +94,7 @@ async function handleLogout() {
       </div>
     </header>
     <main class="ops-content">
+      <ConflictInbox />
       <RouterView />
     </main>
     <nav class="ops-bottom-nav">

@@ -363,4 +363,10 @@ export default {
       description: 'Сукупна заповнюваність усіх об\'єктів за вибраний період.',
     },
   },
+  offline: {
+    conflictInboxTitle: 'Потребує перевірки',
+    dismiss: 'Закрити',
+    offlineBanner: 'Офлайн — {count} дій у черзі',
+    syncing: 'Синхронізація...',
+  },
 }

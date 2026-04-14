@@ -363,4 +363,10 @@ export default {
       description: 'Aggregate occupancy across all properties for the selected date range.',
     },
   },
+  offline: {
+    conflictInboxTitle: 'Needs review',
+    dismiss: 'Dismiss',
+    offlineBanner: 'Offline — {count} action(s) queued',
+    syncing: 'Syncing...',
+  },
 }

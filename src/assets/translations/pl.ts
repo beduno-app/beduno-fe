@@ -363,4 +363,10 @@ export default {
       description: 'Zbiorcze obłożenie wszystkich obiektów dla wybranego zakresu dat.',
     },
   },
+  offline: {
+    conflictInboxTitle: 'Wymaga sprawdzenia',
+    dismiss: 'Odrzuć',
+    offlineBanner: 'Offline — {count} akcja(-e) w kolejce',
+    syncing: 'Synchronizacja...',
+  },
 }
