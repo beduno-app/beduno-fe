@@ -142,6 +142,12 @@ const router = createRouter({
           component: () => import('@/modules/audit/views/AuditLog.vue'),
           meta: { roles: ['AGENCY_ADMIN'] },
         },
+        {
+          path: 'exports',
+          name: 'ExportCenter',
+          component: () => import('@/modules/exports/views/ExportCenter.vue'),
+          meta: { roles: ['AGENCY_ADMIN', 'AGENCY_PLANNER'] },
+        },
       ],
     },
   ],
