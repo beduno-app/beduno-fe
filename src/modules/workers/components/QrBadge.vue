@@ -1,10 +1,12 @@
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted, computed, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
+import QRCode from 'qrcode'
 import { workersApi } from '../api/workers.api'
 import type { Worker } from '../types/worker.types'
 import { BaseButton } from '@/shared/components'
+import { encodeQrData } from '@/shared/utils/qrCode'
 
 const route = useRoute()
 const router = useRouter()
@@ -16,13 +18,18 @@ const error = ref('')
 
 const workerId = computed(() => route.params.id as string)
 
-const qrDataUrl = computed(() => {
-  if (!worker.value) return ''
-  const data = encodeURIComponent(
-    JSON.stringify({ id: worker.value.id, internalId: worker.value.internalId }),
-  )
-  // Use a placeholder QR API — in production, replace with a local library like qrcode
-  return `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${data}`
+const qrDataUrl = ref('')
+
+async function generateQr(w: Worker) {
+  qrDataUrl.value = await QRCode.toDataURL(encodeQrData(w.id), {
+    width: 200,
+    margin: 2,
+    color: { dark: '#000000', light: '#ffffff' },
+  })
+}
+
+watch(worker, (w) => {
+  if (w) generateQr(w)
 })
 
 async function loadWorker() {
@@ -35,6 +42,7 @@ async function loadWorker() {
     isLoading.value = false
   }
 }
+
 
 function printBadge() {
   window.print()

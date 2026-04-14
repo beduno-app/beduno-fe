@@ -10,6 +10,7 @@ import QrCheckin from '../components/QrCheckin.vue'
 import MoveAction from '../components/MoveAction.vue'
 import type { NoShowReason } from '../types/arrival.types'
 import { usePullToRefresh } from '@/shared/composables/usePullToRefresh'
+import { decodeQrData } from '@/shared/utils/qrCode'
 
 const { t } = useI18n()
 const store = useArrivalsStore()
@@ -67,17 +68,24 @@ async function handleDirectCheckIn(stayId: string) {
   }
 }
 
-async function handleQrScanned(qrCode: string) {
+async function handleQrScanned(rawCode: string) {
   actionError.value = ''
+
+  const decoded = decodeQrData(rawCode)
+  if (!decoded) {
+    actionError.value = t('arrivals.workerNotFound')
+    return
+  }
+
   try {
     const arrival = store.arrivals.find(
-      (a) => a.worker.internalId === qrCode && a.status === 'EXPECTED_TODAY',
+      (a) => a.worker.id === decoded.workerId && a.status === 'EXPECTED_TODAY',
     )
     if (!arrival) {
       actionError.value = t('arrivals.workerNotFound')
       return
     }
-    await store.checkIn(arrival.id, { qrCode })
+    await store.checkIn(arrival.id, { qrCode: rawCode })
     closePanel()
   } catch (e) {
     actionError.value = e instanceof Error ? e.message : 'Check-in failed'
