@@ -234,4 +234,10 @@ function confirmMove() {
   color: #9ca3af;
   margin: 0;
 }
+
+@media (pointer: coarse) {
+  .occupant-actions :deep(button) {
+    min-height: 44px;
+  }
+}
 </style>
