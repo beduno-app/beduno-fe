@@ -231,4 +231,15 @@ async function handleLogout() {
 .ops-nav-label {
   font-weight: 600;
 }
+
+@media (max-width: 360px) {
+  .ops-user {
+    display: none;
+  }
+
+  .ops-header {
+    padding: 0.5rem 0.625rem;
+    gap: 0.5rem;
+  }
+}
 </style>
