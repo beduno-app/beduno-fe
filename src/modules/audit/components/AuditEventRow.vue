@@ -62,7 +62,7 @@ function buildEntityLink(type: AuditEntityType, id: string): object {
         <span
           v-if="event.syncedAt"
           class="synced-offline"
-          :title="`Synced at ${formatTimestamp(event.syncedAt)}`"
+          :title="t('audit.syncedAtTooltip', { time: formatTimestamp(event.syncedAt) })"
         >
           <BaseBadge variant="warning">{{ t('audit.syncedOffline') }}</BaseBadge>
         </span>
