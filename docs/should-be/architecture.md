@@ -181,7 +181,7 @@ const props = defineProps<{
 const { worker, isLoading, error } = useWorkers(props.workerId)
 
 const displayName = computed(() =>
-  worker.value ? `${worker.value.name} (${worker.value.internalId})` : ''
+  worker.value ? `${worker.value.firstName} ${worker.value.lastName} (${worker.value.internalId})` : ''
 )
 </script>
 
@@ -203,18 +203,18 @@ import type { Worker, WorkerCreatePayload } from '../types/worker.types'
 
 export const workersApi = {
   list: (params?: { page: number; size: number }) =>
-    api.get<PaginatedResponse<Worker>>('/workers', { params }),
+    api.get<PaginatedResponse<Worker>>('/workers', { params }).then((r) => r.data),
 
   getById: (id: string) =>
-    api.get<Worker>(`/workers/${id}`),
+    api.get<Worker>(`/workers/${id}`).then((r) => r.data),
 
   create: (payload: WorkerCreatePayload) =>
-    api.post<Worker>('/workers', payload),
+    api.post<Worker>('/workers', payload).then((r) => r.data),
 
   bulkImport: (file: File) => {
     const form = new FormData()
     form.append('file', file)
-    return api.post('/workers/import', form)
+    return api.post('/workers/import', form).then((r) => r.data)
   },
 }
 ```
@@ -300,36 +300,41 @@ router.beforeEach((to, from, next) => {
 │──────────────│       │──────────────│
 │ id           │       │ id           │
 │ name         │       │ name         │
-│ billingInfo  │       │ address      │
+│ billingInfo  │       │ address      │  (string)
 │ settings     │◄──┐   │ agencyId     │
-└──────────────┘   │   │ rules{}      │
+└──────────────┘   │   │ genderRule   │  (MIXED|MALE_ONLY|FEMALE_ONLY|PER_ROOM)
+                   │   │ status       │  (ACTIVE|BLOCKED|MAINTENANCE)
+                   │   │ notes        │
                    │   └──────┬───────┘
 ┌──────────────┐   │          │ 1:N
 │   User       │   │   ┌──────┴───────┐
 │──────────────│   │   │    Room      │
 │ id           │   │   │──────────────│
-│ name         │   │   │ id           │
-│ email        │   │   │ propertyId   │
-│ role         │   │   │ label        │
-│ agencyId     │───┘   │ capacity     │
-│ propertyId?  │       │ genderRule?  │
-│ language     │       │ isBlocked    │
-│ deviceIds[]  │       └──────┬───────┘
+│ firstName    │   │   │ id           │
+│ lastName     │   │   │ propertyId   │
+│ email        │   │   │ roomNumber   │
+│ role         │   │   │ capacity     │
+│ agencyId     │───┘   │ genderRule   │  (MIXED|MALE_ONLY|FEMALE_ONLY|PER_ROOM)
+│ assignedPropertyIds[] │ floor        │
+│ language     │       │ status       │  (ACTIVE|BLOCKED|MAINTENANCE)
+│  (PL|EN|DE|  │       └──────┬───────┘
+│   UA|RU)     │              │
+│ status       │              │
 └──────────────┘              │
                               │
 ┌──────────────┐       ┌──────┴───────┐
 │   Worker     │       │    Stay      │
 │──────────────│       │──────────────│
 │ internalId   │◄──────│ workerId     │
-│ name         │       │ propertyId   │
-│ phone?       │       │ roomId       │
-│ gender?      │       │ startDate    │
-│ tags[]       │       │ endDate      │
-│ status       │       │ status       │ ← planned/expected/checked-in/
-│ agencyId     │       │ source       │   checked-out/no-show/redirected
-└──────────────┘       │ createdBy    │
-                       │ confirmedBy  │
-                       └──────────────┘
+│ firstName    │       │ propertyId   │
+│ lastName     │       │ roomId       │
+│ phone?       │       │ dateFrom     │
+│ gender       │       │ dateTo       │
+│ tags[]       │       │ status       │ ← planned/expected/checked-in/
+│ notes?       │       │ overrideReason? │ checked-out/no-show/moved
+│ status       │       │ createdBy    │
+│ agencyId     │       │ confirmedBy  │
+└──────────────┘       └──────────────┘
 
 ┌──────────────────────┐
 │   AuditEvent         │
@@ -353,26 +358,38 @@ router.beforeEach((to, from, next) => {
                     ┌─────────────┐
   Agency creates    │   PLANNED   │
   assignment ──────►│             │
-                    └──────┬──────┘
-                           │
-          arrival day      │ system marks as
-                           ▼
-                    ┌─────────────┐
-                    │  EXPECTED   │
-                    │  (today)    │
-                    └──┬───────┬──┘
-                       │       │
-         front desk    │       │  end of day
-         scans QR      │       │  (no scan)
-                       ▼       ▼
-              ┌────────────┐ ┌──────────┐
-              │ CHECKED_IN │ │ NO_SHOW  │
-              │            │ └──────────┘
-              └──────┬─────┘
-                     │
-        front desk   │     or property admin
-        checks out   │     redirects
-                     ▼
+                    └──┬───┬──────┘
+                       │   │
+          arrival day  │   │ cancelled
+                       ▼   ▼
+                    ┌─────────────┐  ┌───────────┐
+                    │  EXPECTED   │  │ CANCELLED │
+                    │  (today)    │  └───────────┘
+                    └──┬───┬───┬──┘
+                       │   │   │
+         front desk    │   │   │ end of day
+         scans QR      │   │   │ (no scan)
+                       │   │   ▼
+                       │   │ ┌──────────┐
+                       │   │ │ NO_SHOW  │
+                       │   │ └──────────┘
+                       │   ▼
+                       │ ┌───────────┐
+                       │ │ CANCELLED │
+                       ▼ └───────────┘
+              ┌────────────┐
+              │ CHECKED_IN │
+              └──┬───┬───┬─┘
+                 │   │   │
+    checks out   │   │   │ cancelled
+                 │   │   ▼
+                 │   │ ┌───────────┐
+                 │   │ │ CANCELLED │
+                 │   │ └───────────┘
+                 │   ▼
+                 │ ┌──────────┐
+                 │ │  MOVED   │
+                 ▼ └──────────┘
              ┌──────────────┐
              │ CHECKED_OUT  │
              └──────────────┘

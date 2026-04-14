@@ -38,7 +38,6 @@ export default {
     AGENCY_PLANNER: 'Planista agencji',
     PROPERTY_ADMIN: 'Administrator obiektu',
     FRONT_DESK: 'Recepcja',
-    SHIFT_LEAD: 'Kierownik zmiany',
   },
   permissions: {
     title: 'Uprawnienia ról',
@@ -59,7 +58,7 @@ export default {
     CHECKED_IN: 'Zameldowany',
     CHECKED_OUT: 'Wymeldowany',
     NO_SHOW: 'Nieobecny',
-    REDIRECTED: 'Przekierowany',
+    MOVED: 'Przeniesiony',
     CANCELLED: 'Anulowany',
   },
 }

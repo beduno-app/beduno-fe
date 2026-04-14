@@ -38,7 +38,6 @@ export default {
     AGENCY_PLANNER: 'Планувальник агенції',
     PROPERTY_ADMIN: "Адміністратор об'єкту",
     FRONT_DESK: 'Рецепція',
-    SHIFT_LEAD: 'Керівник зміни',
   },
   permissions: {
     title: 'Дозволи ролей',
@@ -59,7 +58,7 @@ export default {
     CHECKED_IN: 'Зареєстровано',
     CHECKED_OUT: 'Виселено',
     NO_SHOW: "Не з'явився",
-    REDIRECTED: 'Перенаправлено',
+    MOVED: 'Переміщено',
     CANCELLED: 'Скасовано',
   },
 }

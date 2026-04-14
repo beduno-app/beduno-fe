@@ -38,7 +38,6 @@ export default {
     AGENCY_PLANNER: 'Agency Planner',
     PROPERTY_ADMIN: 'Property Admin',
     FRONT_DESK: 'Front Desk',
-    SHIFT_LEAD: 'Shift Lead',
   },
   permissions: {
     title: 'Role Permissions',
@@ -59,7 +58,7 @@ export default {
     CHECKED_IN: 'Checked in',
     CHECKED_OUT: 'Checked out',
     NO_SHOW: 'No-show',
-    REDIRECTED: 'Redirected',
+    MOVED: 'Moved',
     CANCELLED: 'Cancelled',
   },
 }

@@ -56,12 +56,12 @@ This plan bridges the current codebase (docs/as-is) to the target product (docs/
 
 ### 1.2 User Management
 
-- [x] `admin.api.ts` — CRUD users, assign roles, revoke sessions
+- [x] `admin.api.ts` — CRUD users, assign roles
 - [x] `UserManagement.vue` — list, invite, edit, deactivate users
 - [x] `RolePermissions.vue` — visual permission matrix (read-only reference)
 - [x] Per-user language preference (stored in user profile, applied on login)
 
-**Deliverable**: Users can log in, see role-appropriate UI, manage other users (admin only). Sessions can be revoked.
+**Deliverable**: Users can log in, see role-appropriate UI, manage other users (admin only).
 
 ---
 
@@ -127,7 +127,7 @@ This plan bridges the current codebase (docs/as-is) to the target product (docs/
 - [ ] `ArrivalRow.vue` — worker info, assigned room, one-tap check-in button
 - [ ] `QrCheckin.vue` — camera-based QR scanner → worker card → check-in confirmation
 - [ ] `NoShowAction.vue` — mark no-show with predefined reason
-- [ ] Redirect action — select target property + room
+- [ ] Move action — select target property + room
 - [ ] Real-time updates (polling or WebSocket) when another user checks someone in
 
 ### 4.2 In-House (Nightly List)
@@ -153,8 +153,8 @@ This plan bridges the current codebase (docs/as-is) to the target product (docs/
 - [ ] `POST /stays/:id/check-in`
 - [ ] `POST /stays/:id/check-out`
 - [ ] `POST /stays/:id/no-show`
-- [ ] `POST /stays/:id/redirect`
-- [ ] `POST /stays/:id/move-room`
+- [ ] `POST /stays/:id/move`
+- [ ] `POST /stays/bulk-checkout`
 
 **Deliverable**: Property staff can run daily arrivals, maintain nightly occupancy truth, and complete inspections — all from the browser. This is the **core product loop**.
 
@@ -211,7 +211,7 @@ This plan bridges the current codebase (docs/as-is) to the target product (docs/
 - [ ] Fallback: manual internal ID search input
 - [ ] Works offline (worker data is cached locally)
 
-**Deliverable**: Front desk / shift lead can operate the app on a phone, even with poor or no connectivity. All actions sync when back online.
+**Deliverable**: Front desk can operate the app on a phone, even with poor or no connectivity. All actions sync when back online.
 
 ---
 

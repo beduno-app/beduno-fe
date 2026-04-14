@@ -7,7 +7,9 @@ export interface PaginatedResponse<T> {
 }
 
 export interface ApiError {
-  status: number
+  error: string
   message: string
-  details?: Record<string, string[]>
+  details: string[]
+  timestamp: string
+  traceId: string
 }

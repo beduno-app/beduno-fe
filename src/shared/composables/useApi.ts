@@ -3,7 +3,7 @@ import { useAuthStore } from '@/modules/auth/store/auth.store'
 import router from '@/app/router'
 
 export const api = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL ?? '/api',
+  baseURL: import.meta.env.VITE_API_BASE_URL ?? '/api/v1',
   headers: {
     'Content-Type': 'application/json',
   },

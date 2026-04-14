@@ -4,13 +4,7 @@ import type { UserRole } from '@/modules/auth/types/auth.types'
 
 const { t } = useI18n()
 
-const roles: UserRole[] = [
-  'AGENCY_ADMIN',
-  'AGENCY_PLANNER',
-  'PROPERTY_ADMIN',
-  'FRONT_DESK',
-  'SHIFT_LEAD',
-]
+const roles: UserRole[] = ['AGENCY_ADMIN', 'AGENCY_PLANNER', 'PROPERTY_ADMIN', 'FRONT_DESK']
 
 interface PermissionRow {
   key: string
@@ -25,7 +19,6 @@ const permissionMatrix: PermissionRow[] = [
       AGENCY_PLANNER: true,
       PROPERTY_ADMIN: false,
       FRONT_DESK: false,
-      SHIFT_LEAD: false,
     },
   },
   {
@@ -35,7 +28,6 @@ const permissionMatrix: PermissionRow[] = [
       AGENCY_PLANNER: true,
       PROPERTY_ADMIN: true,
       FRONT_DESK: false,
-      SHIFT_LEAD: false,
     },
   },
   {
@@ -45,17 +37,15 @@ const permissionMatrix: PermissionRow[] = [
       AGENCY_PLANNER: true,
       PROPERTY_ADMIN: true,
       FRONT_DESK: false,
-      SHIFT_LEAD: false,
     },
   },
   {
     key: 'checkin',
     permissions: {
-      AGENCY_ADMIN: true,
+      AGENCY_ADMIN: false,
       AGENCY_PLANNER: false,
       PROPERTY_ADMIN: true,
       FRONT_DESK: true,
-      SHIFT_LEAD: true,
     },
   },
   {
@@ -65,17 +55,15 @@ const permissionMatrix: PermissionRow[] = [
       AGENCY_PLANNER: true,
       PROPERTY_ADMIN: true,
       FRONT_DESK: true,
-      SHIFT_LEAD: true,
     },
   },
   {
     key: 'inspection',
     permissions: {
-      AGENCY_ADMIN: true,
+      AGENCY_ADMIN: false,
       AGENCY_PLANNER: false,
       PROPERTY_ADMIN: true,
-      FRONT_DESK: false,
-      SHIFT_LEAD: true,
+      FRONT_DESK: true,
     },
   },
   {
@@ -85,7 +73,6 @@ const permissionMatrix: PermissionRow[] = [
       AGENCY_PLANNER: true,
       PROPERTY_ADMIN: true,
       FRONT_DESK: false,
-      SHIFT_LEAD: false,
     },
   },
   {
@@ -95,7 +82,6 @@ const permissionMatrix: PermissionRow[] = [
       AGENCY_PLANNER: false,
       PROPERTY_ADMIN: false,
       FRONT_DESK: false,
-      SHIFT_LEAD: false,
     },
   },
 ]

@@ -10,7 +10,7 @@ const { t } = useI18n()
   <div>
     <h2>{{ t('nav.dashboard') }}</h2>
     <p v-if="auth.user">
-      {{ auth.user.name }} ({{ auth.user.role }})
+      {{ auth.user.firstName }} {{ auth.user.lastName }} ({{ auth.user.role }})
     </p>
   </div>
 </template>

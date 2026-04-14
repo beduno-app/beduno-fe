@@ -21,7 +21,7 @@ async function handleLogout() {
         <span
           v-if="auth.user"
           class="ops-user"
-        >{{ auth.user.name }}</span>
+        >{{ auth.user.firstName }} {{ auth.user.lastName }}</span>
         <button
           class="ops-logout"
           @click="handleLogout"

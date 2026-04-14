@@ -52,7 +52,7 @@ async function handleLogout() {
           v-if="auth.user"
           class="user-info"
         >
-          <span class="user-name">{{ auth.user.name }}</span>
+          <span class="user-name">{{ auth.user.firstName }} {{ auth.user.lastName }}</span>
           <span class="user-role">{{ auth.user.role }}</span>
         </div>
         <button

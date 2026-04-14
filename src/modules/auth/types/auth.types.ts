@@ -3,18 +3,20 @@ export type UserRole =
   | 'AGENCY_PLANNER'
   | 'PROPERTY_ADMIN'
   | 'FRONT_DESK'
-  | 'SHIFT_LEAD'
 
-export type AppLanguage = 'pl' | 'en' | 'de' | 'ua' | 'ru'
+export type AppLanguage = 'PL' | 'EN' | 'DE' | 'UA' | 'RU'
 
 export interface AuthUser {
   id: string
-  name: string
   email: string
+  firstName: string
+  lastName: string
   role: UserRole
-  agencyId: string
-  propertyId?: string
   language: AppLanguage
+  assignedPropertyIds: string[]
+  status?: string
+  lastLoginAt?: string
+  createdAt?: string
 }
 
 export interface LoginPayload {
@@ -23,7 +25,8 @@ export interface LoginPayload {
 }
 
 export interface LoginResponse {
-  token: string
+  accessToken: string
   refreshToken: string
+  expiresIn: number
   user: AuthUser
 }

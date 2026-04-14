@@ -16,7 +16,7 @@ const variant = computed(() => {
     CHECKED_IN: 'success',
     CHECKED_OUT: 'default',
     NO_SHOW: 'danger',
-    REDIRECTED: 'warning',
+    MOVED: 'warning',
     CANCELLED: 'danger',
   }
   return map[props.status]

@@ -38,7 +38,6 @@ export default {
     AGENCY_PLANNER: 'Планировщик агентства',
     PROPERTY_ADMIN: 'Администратор объекта',
     FRONT_DESK: 'Ресепшен',
-    SHIFT_LEAD: 'Руководитель смены',
   },
   permissions: {
     title: 'Разрешения ролей',
@@ -59,7 +58,7 @@ export default {
     CHECKED_IN: 'Заселён',
     CHECKED_OUT: 'Выселен',
     NO_SHOW: 'Не явился',
-    REDIRECTED: 'Перенаправлен',
+    MOVED: 'Перемещён',
     CANCELLED: 'Отменён',
   },
 }
