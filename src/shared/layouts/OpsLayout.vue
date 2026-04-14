@@ -11,6 +11,7 @@ import { syncOfflineSnapshot } from '@/modules/ops/composables/useOfflineSnapsho
 import { useSyncStore } from '@/modules/ops/store/sync.store'
 import ConflictInbox from '@/modules/ops/components/ConflictInbox.vue'
 import OfflineBanner from '@/modules/ops/components/OfflineBanner.vue'
+import { ToastNotifications } from '@/shared/components'
 
 const { t } = useI18n()
 const auth = useAuthStore()
@@ -99,6 +100,7 @@ async function handleLogout() {
       <ConflictInbox />
       <RouterView />
     </main>
+  <ToastNotifications />
     <nav class="ops-bottom-nav">
       <RouterLink
         to="/ops/arrivals"

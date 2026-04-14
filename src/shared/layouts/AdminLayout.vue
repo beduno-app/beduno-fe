@@ -2,6 +2,7 @@
 import { useAuthStore } from '@/modules/auth/store/auth.store'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
+import { ToastNotifications } from '@/shared/components'
 
 const auth = useAuthStore()
 const router = useRouter()
@@ -134,6 +135,7 @@ async function handleLogout() {
       <RouterView />
     </main>
   </div>
+  <ToastNotifications />
 </template>
 
 <style scoped lang="scss">
