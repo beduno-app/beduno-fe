@@ -8,6 +8,7 @@ import type {
   MovePayload,
 } from '../types/arrival.types'
 import { arrivalsApi } from '../api/arrivals.api'
+import { enqueueAction } from '@/shared/services/actionQueue'
 
 export const useArrivalsStore = defineStore('arrivals', () => {
   const arrivals = ref<ArrivalStay[]>([])
@@ -58,18 +59,48 @@ export const useArrivalsStore = defineStore('arrivals', () => {
   }
 
   async function checkIn(stayId: string, payload?: CheckInPayload): Promise<ArrivalStay> {
+    if (!navigator.onLine) {
+      await enqueueAction('CHECK_IN', stayId, payload ?? {})
+      const stay = arrivals.value.find((a) => a.id === stayId)
+      if (stay) {
+        const optimistic = { ...stay, status: 'CHECKED_IN' as const }
+        updateStayInList(stayId, optimistic)
+        return optimistic
+      }
+      throw new Error('Arrival not found locally')
+    }
     const updated = await arrivalsApi.checkIn(stayId, payload)
     updateStayInList(stayId, updated)
     return updated
   }
 
   async function noShow(stayId: string, payload: NoShowPayload): Promise<ArrivalStay> {
+    if (!navigator.onLine) {
+      await enqueueAction('NO_SHOW', stayId, payload)
+      const stay = arrivals.value.find((a) => a.id === stayId)
+      if (stay) {
+        const optimistic = { ...stay, status: 'NO_SHOW' as const }
+        updateStayInList(stayId, optimistic)
+        return optimistic
+      }
+      throw new Error('Arrival not found locally')
+    }
     const updated = await arrivalsApi.noShow(stayId, payload)
     updateStayInList(stayId, updated)
     return updated
   }
 
   async function move(stayId: string, payload: MovePayload): Promise<ArrivalStay> {
+    if (!navigator.onLine) {
+      await enqueueAction('MOVE', stayId, payload)
+      const stay = arrivals.value.find((a) => a.id === stayId)
+      if (stay) {
+        const optimistic = { ...stay, status: 'MOVED' as const }
+        updateStayInList(stayId, optimistic)
+        return optimistic
+      }
+      throw new Error('Arrival not found locally')
+    }
     const updated = await arrivalsApi.move(stayId, payload)
     updateStayInList(stayId, updated)
     return updated

@@ -10,6 +10,7 @@ import type {
   ExportFormat,
 } from '../types/inhouse.types'
 import { inhouseApi } from '../api/inhouse.api'
+import { enqueueAction } from '@/shared/services/actionQueue'
 
 export const useInHouseStore = defineStore('inhouse', () => {
   const data = ref<InHouseResponse | null>(null)
@@ -35,11 +36,19 @@ export const useInHouseStore = defineStore('inhouse', () => {
   }
 
   async function checkOut(stayId: string, payload?: CheckOutPayload): Promise<void> {
+    if (!navigator.onLine) {
+      await enqueueAction('CHECK_OUT', stayId, payload ?? {})
+      return
+    }
     await inhouseApi.checkOut(stayId, payload)
     await fetchInHouse()
   }
 
   async function moveRoom(stayId: string, payload: RoomMovePayload): Promise<void> {
+    if (!navigator.onLine) {
+      await enqueueAction('MOVE', stayId, payload)
+      return
+    }
     await inhouseApi.moveRoom(stayId, payload)
     await fetchInHouse()
   }
