@@ -71,14 +71,14 @@ This plan bridges the current codebase (docs/as-is) to the target product (docs/
 
 ### 2.1 Workers Module
 
-- [ ] `worker.types.ts` — Worker interface, WorkerCreatePayload, etc.
-- [ ] `workers.store.ts` — list, search, pagination, cache by ID
-- [ ] `workers.api.ts` — CRUD + bulk import
-- [ ] `WorkerList.vue` — searchable, filterable data table (internal ID, name, status, tags, current property)
-- [ ] `WorkerDetail.vue` — profile, current stay, stay history
-- [ ] `WorkerImport.vue` — CSV upload → preview table → validation errors → confirm
-- [ ] `QrBadge.vue` — generate + preview QR badge; print/download
-- [ ] Batch badge print (select workers → generate PDF)
+- [x] `worker.types.ts` — Worker interface, WorkerCreatePayload, etc.
+- [x] `workers.store.ts` — list, search, pagination, cache by ID
+- [x] `workers.api.ts` — CRUD + bulk import
+- [x] `WorkerList.vue` — searchable, filterable data table (internal ID, name, status, tags, current property)
+- [x] `WorkerDetail.vue` — profile, current stay, stay history
+- [x] `WorkerImport.vue` — CSV upload → preview table → validation errors → confirm
+- [x] `QrBadge.vue` — generate + preview QR badge; print/download
+- [x] Batch badge print (select workers → generate PDF)
 
 ### 2.2 Properties Module
 
