@@ -6,10 +6,12 @@ import { workersApi } from '../api/workers.api'
 import type { Worker, UpdateWorkerPayload, Gender } from '../types/worker.types'
 import type { Stay } from '@/modules/stays/types/stay.types'
 import { BaseButton, BaseInput, BaseBadge, StatusChip } from '@/shared/components'
+import { useAuthStore } from '@/modules/auth/store/auth.store'
 
 const route = useRoute()
 const router = useRouter()
 const { t } = useI18n()
+const auth = useAuthStore()
 
 const worker = ref<Worker | null>(null)
 const stays = ref<Stay[]>([])
@@ -126,6 +128,18 @@ onMounted(loadWorker)
           <span class="internal-id">{{ worker.internalId }}</span>
         </div>
         <div class="detail-actions">
+          <RouterLink
+            v-if="auth.userRole === 'AGENCY_ADMIN'"
+            :to="{ name: 'AuditLog', query: { entityType: 'WORKER', entityId: worker.id } }"
+            class="audit-link"
+          >
+            <BaseButton
+              variant="ghost"
+              size="sm"
+            >
+              {{ t('audit.viewHistory') }}
+            </BaseButton>
+          </RouterLink>
           <BaseButton
             v-if="!isEditing"
             variant="secondary"
