@@ -30,6 +30,17 @@ vi.mock('@/modules/inhouse/api/inhouse.api', () => ({
 import { getPendingActions, removeAction, getQueueLength } from '@/shared/services/actionQueue'
 import { arrivalsApi } from '@/modules/arrivals/api/arrivals.api'
 import { inhouseApi } from '@/modules/inhouse/api/inhouse.api'
+import type { ArrivalStay } from '@/modules/arrivals/types/arrival.types'
+
+const mockArrivalStay: ArrivalStay = {
+  id: 'stay-1',
+  worker: { id: 'w1', internalId: 'W001', firstName: 'Jan', lastName: 'Kowalski', gender: 'MALE' },
+  property: { id: 'prop-1', name: 'Hotel A', type: 'INTERNAL' },
+  room: { id: 'room-1', roomNumber: '101', capacity: 4, availableSpots: 3 },
+  dateFrom: '2024-03-15',
+  dateTo: null,
+  status: 'CHECKED_IN',
+}
 
 function makeAction(overrides: Partial<QueuedAction> = {}): QueuedAction {
   return {
@@ -68,7 +79,7 @@ describe('useSyncStore', () => {
   describe('syncQueue()', () => {
     it('replays queued CHECK_IN action', async () => {
       vi.mocked(getPendingActions).mockResolvedValue([makeAction({ type: 'CHECK_IN', stayId: 'stay-1' })])
-      vi.mocked(arrivalsApi.checkIn).mockResolvedValue({} as any)
+      vi.mocked(arrivalsApi.checkIn).mockResolvedValue(mockArrivalStay)
       vi.mocked(getQueueLength).mockResolvedValue(0)
 
       const store = useSyncStore()
@@ -84,7 +95,7 @@ describe('useSyncStore', () => {
     it('replays queued NO_SHOW action', async () => {
       const action = makeAction({ type: 'NO_SHOW', stayId: 'stay-2', payload: { reason: 'DID_NOT_ARRIVE' } })
       vi.mocked(getPendingActions).mockResolvedValue([action])
-      vi.mocked(arrivalsApi.noShow).mockResolvedValue({} as any)
+      vi.mocked(arrivalsApi.noShow).mockResolvedValue(mockArrivalStay)
 
       const store = useSyncStore()
       const result = await store.syncQueue()
@@ -108,7 +119,7 @@ describe('useSyncStore', () => {
     it('replays queued MOVE action', async () => {
       const action = makeAction({ type: 'MOVE', stayId: 'stay-4', payload: { targetPropertyId: 'p2', targetRoomId: 'r2' } })
       vi.mocked(getPendingActions).mockResolvedValue([action])
-      vi.mocked(arrivalsApi.move).mockResolvedValue({} as any)
+      vi.mocked(arrivalsApi.move).mockResolvedValue(mockArrivalStay)
 
       const store = useSyncStore()
       const result = await store.syncQueue()
@@ -140,7 +151,7 @@ describe('useSyncStore', () => {
       ]
       vi.mocked(getPendingActions).mockResolvedValue(actions)
       vi.mocked(arrivalsApi.checkIn)
-        .mockResolvedValueOnce({} as any)
+        .mockResolvedValueOnce(mockArrivalStay)
         .mockRejectedValueOnce(new Error('Conflict'))
 
       const store = useSyncStore()
