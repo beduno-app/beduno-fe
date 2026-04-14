@@ -132,12 +132,12 @@ This plan bridges the current codebase (docs/as-is) to the target product (docs/
 
 ### 4.2 In-House (Nightly List)
 
-- [ ] `InHouseView.vue` — room-by-room occupancy for selected property
-- [ ] Exception badges: over-capacity (red), near-capacity (amber), blocked (grey)
-- [ ] Unassigned workers section (workers at property but no room assigned)
-- [ ] One-tap export: CSV and PDF in selected language
-- [ ] Check-out action inline (for early departures)
-- [ ] Room move action (drag or select new room)
+- [x] `InHouseView.vue` — room-by-room occupancy for selected property
+- [x] Exception badges: over-capacity (red), near-capacity (amber), blocked (grey)
+- [x] Unassigned workers section (workers at property but no room assigned)
+- [x] One-tap export: CSV and PDF in selected language
+- [x] Check-out action inline (for early departures)
+- [x] Room move action (drag or select new room)
 
 ### 4.3 Inspection Mode
 
