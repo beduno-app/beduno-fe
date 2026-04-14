@@ -10,6 +10,7 @@ import { useInHouseStore } from '@/modules/inhouse/store/inhouse.store'
 import { syncOfflineSnapshot } from '@/modules/ops/composables/useOfflineSnapshot'
 import { useSyncStore } from '@/modules/ops/store/sync.store'
 import ConflictInbox from '@/modules/ops/components/ConflictInbox.vue'
+import OfflineBanner from '@/modules/ops/components/OfflineBanner.vue'
 
 const { t } = useI18n()
 const auth = useAuthStore()
@@ -93,6 +94,7 @@ async function handleLogout() {
         </button>
       </div>
     </header>
+    <OfflineBanner />
     <main class="ops-content">
       <ConflictInbox />
       <RouterView />
