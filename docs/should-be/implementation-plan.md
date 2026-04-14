@@ -166,18 +166,18 @@ This plan bridges the current codebase (docs/as-is) to the target product (docs/
 
 ### 5.1 Audit Log
 
-- [ ] `AuditLog.vue` — filterable event log with: actor, role, action, entity, before/after diff, timestamp
-- [ ] Filter by: entity type, entity ID, actor, action, date range
-- [ ] Highlight offline-synced actions (with sync timestamp)
-- [ ] Link from any entity detail page to its audit history
+- [x] `AuditLog.vue` — filterable event log with: actor, role, action, entity, before/after diff, timestamp
+- [x] Filter by: entity type, entity ID, actor, action, date range
+- [x] Highlight offline-synced actions (with sync timestamp)
+- [x] Link from any entity detail page to its audit history
 
 ### 5.2 Export Center
 
-- [ ] `ExportCenter.vue` — generate reports with filters
-- [ ] Nightly occupancy list per property (CSV + PDF)
-- [ ] Exception report (unassigned workers, over-capacity rooms)
-- [ ] Occupancy summary across properties for date range
-- [ ] Language selector for exports (independent of UI language)
+- [x] `ExportCenter.vue` — generate reports with filters
+- [x] Nightly occupancy list per property (CSV + PDF)
+- [x] Exception report (unassigned workers, over-capacity rooms)
+- [x] Occupancy summary across properties for date range
+- [x] Language selector for exports (independent of UI language)
 
 **Deliverable**: Every change is traceable. Reports can be generated for internal use and external audits.
 
@@ -189,27 +189,27 @@ This plan bridges the current codebase (docs/as-is) to the target product (docs/
 
 ### 6.1 Mobile-Optimised UI
 
-- [ ] `OpsLayout.vue` — bottom navigation (Arrivals / In-House / Inspection), property selector
-- [ ] Touch-optimised components: large tap targets, swipe actions, pull-to-refresh
-- [ ] Responsive breakpoints: the 3 operational screens must work flawlessly on 360px+ screens
-- [ ] Install as PWA (service worker, manifest, icons)
+- [x] `OpsLayout.vue` — bottom navigation (Arrivals / In-House / Inspection), property selector
+- [x] Touch-optimised components: large tap targets, swipe actions, pull-to-refresh
+- [x] Responsive breakpoints: the 3 operational screens must work flawlessly on 360px+ screens
+- [x] Install as PWA (service worker, manifest, icons)
 
 ### 6.2 Offline Support
 
-- [ ] Service worker: cache app shell + static assets
-- [ ] IndexedDB: store current property's room/worker/stay data locally
-- [ ] Action queue: check-in/out/move stored locally when offline
-- [ ] Sync engine: on reconnect, replay queued actions to server in order
-- [ ] Conflict inbox: when sync detects a conflict (capacity exceeded, already checked-in), show "Needs review" list
-- [ ] Visual indicator: "Offline — X actions queued" banner
-- [ ] Room inventory changes remain **online-only** (prevent capacity conflicts from offline edits)
+- [x] Service worker: cache app shell + static assets
+- [x] IndexedDB: store current property's room/worker/stay data locally
+- [x] Action queue: check-in/out/move stored locally when offline
+- [x] Sync engine: on reconnect, replay queued actions to server in order
+- [x] Conflict inbox: when sync detects a conflict (capacity exceeded, already checked-in), show "Needs review" list
+- [x] Visual indicator: "Offline — X actions queued" banner
+- [x] Room inventory changes remain **online-only** (prevent capacity conflicts from offline edits)
 
 ### 6.3 QR Scanner
 
-- [ ] Camera-based QR scanning using a library (e.g. `html5-qrcode` or `jsQR`)
-- [ ] Decode `bedok:{workerId}:{checksum}` → validate checksum → resolve worker
-- [ ] Fallback: manual internal ID search input
-- [ ] Works offline (worker data is cached locally)
+- [x] Camera-based QR scanning using a library (e.g. `html5-qrcode` or `jsQR`)
+- [x] Decode `bedok:{workerId}:{checksum}` → validate checksum → resolve worker
+- [x] Fallback: manual internal ID search input
+- [x] Works offline (worker data is cached locally)
 
 **Deliverable**: Front desk can operate the app on a phone, even with poor or no connectivity. All actions sync when back online.
 
