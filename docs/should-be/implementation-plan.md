@@ -17,7 +17,7 @@ This plan bridges the current codebase (docs/as-is) to the target product (docs/
 - [x] Add **Vitest** for unit tests (replaces Jest; native Vite integration)
 - [x] Set up **Playwright** for E2E tests (replaces outdated Cypress)
 - [x] Delete broken test files (`tests/unit/example.spec.ts`, `tests/e2e/specs/test.js`)
-- [ ] Set up CI pipeline (lint → typecheck → unit tests → build)
+- [x] Set up CI pipeline (lint → typecheck → unit tests → build)
 
 ### 0.2 Codebase Cleanup
 
@@ -56,9 +56,9 @@ This plan bridges the current codebase (docs/as-is) to the target product (docs/
 
 ### 1.2 User Management
 
-- [ ] `admin.api.ts` — CRUD users, assign roles, revoke sessions
+- [x] `admin.api.ts` — CRUD users, assign roles, revoke sessions
 - [x] `UserManagement.vue` — list, invite, edit, deactivate users
-- [ ] `RolePermissions.vue` — visual permission matrix (read-only reference)
+- [x] `RolePermissions.vue` — visual permission matrix (read-only reference)
 - [x] Per-user language preference (stored in user profile, applied on login)
 
 **Deliverable**: Users can log in, see role-appropriate UI, manage other users (admin only). Sessions can be revoked.
