@@ -56,10 +56,17 @@ export const useSyncStore = defineStore('sync', () => {
     }
   }
 
-  async function syncQueue(): Promise<void> {
-    if (isSyncing.value || !navigator.onLine) return
+  interface SyncResult {
+    synced: number
+    conflicted: number
+  }
+
+  async function syncQueue(): Promise<SyncResult> {
+    if (isSyncing.value || !navigator.onLine) return { synced: 0, conflicted: 0 }
 
     isSyncing.value = true
+    let synced = 0
+    let conflicted = 0
 
     try {
       const actions = await getPendingActions()
@@ -68,6 +75,7 @@ export const useSyncStore = defineStore('sync', () => {
         try {
           await replayAction(action)
           await removeAction(action.id)
+          synced++
         } catch (e) {
           conflicts.value.push({
             action,
@@ -75,6 +83,7 @@ export const useSyncStore = defineStore('sync', () => {
             detectedAt: new Date().toISOString(),
           })
           await removeAction(action.id)
+          conflicted++
         }
       }
 
@@ -83,6 +92,8 @@ export const useSyncStore = defineStore('sync', () => {
       isSyncing.value = false
       await refreshQueueLength()
     }
+
+    return { synced, conflicted }
   }
 
   function dismissConflict(index: number) {
