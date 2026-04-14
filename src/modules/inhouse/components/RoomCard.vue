@@ -5,7 +5,7 @@ import type { RoomOccupancy } from '../types/inhouse.types'
 import { BaseButton } from '@/shared/components'
 import CapacityBadge from './CapacityBadge.vue'
 
-const props = defineProps<{
+defineProps<{
   room: RoomOccupancy
   allRooms: RoomOccupancy[]
 }>()
