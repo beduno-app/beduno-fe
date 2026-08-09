@@ -843,8 +843,8 @@ GET /api/v1/stays?propertyId=uuid&date=2026-04-14&status=EXPECTED_TODAY&page=0&s
 **Roles:** All authenticated (scoped to assigned properties)
 
 **Response 200:** the standard `PaginatedResponse<StayResponse>` envelope. There is no
-`summary` block — the arrivals store derives the expected/checked-in/no-show/pending counts
-client-side from the returned page.
+`summary` block — the arrivals store derives the checked-in and pending counts client-side
+from the returned page.
 
 ### POST /api/v1/stays/{id}/check-in
 Confirm a worker has arrived.
@@ -989,16 +989,10 @@ Current occupancy breakdown by room. The path is `/in-house`, not `/occupancy`.
 ```json
 {
   "property": { "id": "uuid", "name": "Hotel Warszawa", "type": "INTERNAL" },
-  "date": "2026-04-14",
   "rooms": [
     {
-      "id": "uuid",
-      "roomNumber": "12",
-      "floor": 2,
-      "capacity": 4,
-      "blockedSpots": 0,
-      "genderRule": "MALE_ONLY",
-      "status": "ACTIVE",
+      "room": { "id": "uuid", "roomNumber": "12", "capacity": 4, "availableSpots": 2 },
+      "status": "OK",
       "occupants": [
         {
           "id": "uuid",
@@ -1026,8 +1020,11 @@ Current occupancy breakdown by room. The path is `/in-house`, not `/occupancy`.
 
 Notes on the real shape:
 
+- The room is **nested** under a `room` key (a `RoomSummary`), not flattened into the array
+  element
 - Each room entry carries a computed `status` of `OK | NEAR_CAPACITY | OVER_CAPACITY | BLOCKED`
-  (`RoomOccupancyStatus`) alongside `blocked` and `blockReason`
+  (`RoomOccupancyStatus`) alongside `blocked` and `blockReason`. This is *not* the room's own
+  `RoomStatus` — `ACTIVE` never appears here
 - `unassignedWorkers[]` — workers present at the property with no room — is returned **inline**
   here, not only via `/exceptions`
 - The summary is a room-count summary. There is no `totalBlocked`, `totalAvailable`, or
@@ -1075,7 +1072,7 @@ Export the current in-house list.
 - the language param is `lang`, not `language`
 - no `date` param; the export follows the today-only in-house view
 
-**Roles:** AGENCY_ADMIN, AGENCY_PLANNER, PROPERTY_ADMIN (own)
+**Roles:** AGENCY_ADMIN, AGENCY_PLANNER, PROPERTY_ADMIN (own), FRONT_DESK (own) — the export buttons live on the In-House screen, which Front Desk can reach
 
 **Response 200:** binary file download (the client requests `responseType: 'blob'`)
 
