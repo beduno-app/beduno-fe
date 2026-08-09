@@ -86,7 +86,7 @@ async function handleLogout() {
 <template>
   <div class="ops-layout">
     <header class="ops-header">
-      <span class="ops-logo">bed!OK</span>
+      <span class="ops-logo">{{ t('common.appName') }}</span>
       <div class="ops-header-center">
         <select
           class="ops-property-select"

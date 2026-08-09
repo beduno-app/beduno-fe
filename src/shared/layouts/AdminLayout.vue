@@ -34,7 +34,7 @@ async function handleLogout() {
     <aside class="sidebar">
       <div class="sidebar-header">
         <h1 class="logo">
-          bed!OK
+          {{ t('common.appName') }}
         </h1>
       </div>
       <nav class="sidebar-nav">
