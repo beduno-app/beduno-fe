@@ -1,4 +1,6 @@
-# API Reference
+# API Reference (pre-rewrite, historical)
+
+> **Historical.** This describes the pre-rewrite bed-marketplace codebase, which was deleted in Phase 0 of `docs/should-be/implementation-plan.md`. It is retained for history and does **not** describe the current application. For current state see `docs/should-be/` and the root `README.md`.
 
 All requests go through the axios instance configured with `baseURL: process.env.VUE_APP_API_BASE_URL`. The frontend calls `this.axios` directly in components.
 
