@@ -11,6 +11,8 @@ import type {
 } from '../types/inhouse.types'
 import { inhouseApi } from '../api/inhouse.api'
 import { enqueueAction } from '@/shared/services/actionQueue'
+import type { QueuedActionType } from '@/shared/services/actionQueue'
+import { useSyncStore } from '@/modules/ops/store/sync.store'
 
 export const useInHouseStore = defineStore('inhouse', () => {
   const data = ref<InHouseResponse | null>(null)
@@ -35,9 +37,16 @@ export const useInHouseStore = defineStore('inhouse', () => {
     }
   }
 
+  // Queue an action and refresh the counter, so the offline banner reflects
+  // the queue depth immediately rather than only on reconnect.
+  async function queueOffline(type: QueuedActionType, stayId: string, payload: unknown) {
+    await enqueueAction(type, stayId, payload)
+    await useSyncStore().refreshQueueLength()
+  }
+
   async function checkOut(stayId: string, payload?: CheckOutPayload): Promise<void> {
     if (!navigator.onLine) {
-      await enqueueAction('CHECK_OUT', stayId, payload ?? {})
+      await queueOffline('CHECK_OUT', stayId, payload ?? {})
       return
     }
     await inhouseApi.checkOut(stayId, payload)
@@ -46,7 +55,7 @@ export const useInHouseStore = defineStore('inhouse', () => {
 
   async function moveRoom(stayId: string, payload: RoomMovePayload): Promise<void> {
     if (!navigator.onLine) {
-      await enqueueAction('MOVE', stayId, payload)
+      await queueOffline('MOVE', stayId, payload)
       return
     }
     await inhouseApi.moveRoom(stayId, payload)

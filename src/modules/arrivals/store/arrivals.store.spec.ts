@@ -15,6 +15,8 @@ vi.mock('../api/arrivals.api', () => ({
 
 vi.mock('@/shared/services/actionQueue', () => ({
   enqueueAction: vi.fn(),
+  // queueing refreshes the offline banner's counter via the sync store
+  getQueueLength: vi.fn().mockResolvedValue(0),
 }))
 
 import { arrivalsApi } from '../api/arrivals.api'
