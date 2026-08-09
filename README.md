@@ -1,34 +1,96 @@
 # beduno-fe
 
-## Project setup
-```
-yarn install
+Frontend for **Beduno** — an operational system for temporary work agencies to manage worker
+accommodation: who is expected today, who is currently in-house, and who was verified during an
+inspection. It replaces spreadsheets and WhatsApp as the single source of truth for
+*"who sleeps where tonight"*.
+
+Two surfaces, one app:
+
+- **Web Admin** (`/`) — workers, properties and rooms, planned stays, users, audit log, exports.
+  Used by agency admins/planners and property admins.
+- **Mobile Ops** (`/ops`) — arrivals, in-house occupancy, inspection mode. Mobile-first,
+  installable as a PWA, and offline-capable for properties with poor reception.
+
+Stack: Vue 3 (`<script setup>`, Composition API) · TypeScript (strict) · Vite · Pinia ·
+vue-router · vue-i18n (PL/EN/DE/UA/RU) · Vitest · Playwright.
+
+## Requirements
+
+- Node.js 20+
+- A running backend on `http://localhost:8080` (or set `VITE_API_BASE_URL`)
+
+## Setup
+
+```bash
+npm install
+npm run dev
 ```
 
-### Compiles and hot-reloads for development
-```
-yarn serve
+The dev server runs on **http://localhost:8081** and proxies `/api` to `http://localhost:8080`.
+
+## Scripts
+
+| Command | Description |
+|---|---|
+| `npm run dev` | Dev server with HMR (port 8081) |
+| `npm run build` | Typecheck + production build to `dist/` |
+| `npm run build:analyze` | Build with bundle visualizer (`dist/stats.html`) |
+| `npm run preview` | Serve the production build locally |
+| `npm run lint` | ESLint over `src/` with `--fix` |
+| `npm run typecheck` | `vue-tsc --noEmit` |
+| `npm test` | Unit + component tests (Vitest) |
+| `npm run test:watch` | Vitest in watch mode |
+| `npm run test:e2e` | Playwright E2E tests (starts the dev server automatically) |
+| `npm run docker:build` | Build the production nginx image |
+
+Run a single unit test file:
+
+```bash
+npx vitest run src/modules/stays/composables/useConflicts.spec.ts
 ```
 
-### Compiles and minifies for production
+## Configuration
+
+| Variable | Default | Description |
+|---|---|---|
+| `VITE_API_BASE_URL` | `/api/v1` | API base URL used by the shared axios instance |
+| `BACKEND_URL` | — | Backend upstream for the nginx container (production only) |
+
+## Project structure
+
 ```
-yarn build
+src/
+├── app/          Router (with auth + role guards) and plugins (i18n, Pinia)
+├── modules/      Feature modules — admin, arrivals, audit, auth, exports,
+│                 inhouse, inspection, ops, properties, stays, workers
+├── shared/       Base components, composables, layouts, offline services, utils
+└── assets/       Translations (pl, en, de, ua, ru)
 ```
 
-### Run your unit tests
-```
-yarn test:unit
+Each module is a vertical slice with its own `api/`, `store/`, `composables/`,
+`components/`, `views/`, and `types/`.
+
+## Testing
+
+Unit and component tests are co-located with the code as `*.spec.ts` and run with Vitest in a
+jsdom environment. End-to-end specs live in `e2e/` and run with Playwright against Chromium and
+a Pixel 5 profile.
+
+## Deployment
+
+`npm run build`, then build the image — the Dockerfile copies `dist/` into
+`nginx:1.27-alpine` and templates `nginx.conf` (SPA fallback plus an `/api/` proxy to
+`${BACKEND_URL}`).
+
+```bash
+npm run build && npm run docker:build
 ```
 
-### Run your end-to-end tests
-```
-yarn test:e2e
-```
+## Documentation
 
-### Lints and fixes files
-```
-yarn lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+- `docs/idea.md` — product discovery and the locked product decisions
+- `docs/should-be/` — target spec: overview, architecture, data model, roles and permissions,
+  screens, API specification, implementation plan
+- `docs/as-is/` — historical record of the pre-rewrite codebase
+- `CLAUDE.md` — working notes and conventions for AI coding agents
