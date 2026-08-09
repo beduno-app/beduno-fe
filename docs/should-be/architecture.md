@@ -53,9 +53,9 @@
 └──────────────────────────────────────────────────────────┘
 ```
 
-## Frontend Architecture (Web Admin)
+## Frontend Architecture
 
-The current Vue 3 codebase needs significant restructuring. Below is the target architecture.
+The shipped structure is below — it covers both the web admin and the mobile ops surfaces.
 
 ### Directory Structure
 
