@@ -1,8 +1,10 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
+import QRCode from 'qrcode'
 import type { Worker } from '../types/worker.types'
 import { BaseButton, BaseModal } from '@/shared/components'
+import { encodeQrData } from '@/shared/utils/qrCode'
 
 const props = defineProps<{
   workers: Worker[]
@@ -14,23 +16,31 @@ const emit = defineEmits<{
 
 const { t } = useI18n()
 
-const qrUrls = computed(() =>
-  props.workers.map((w) => ({
-    worker: w,
-    url: `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(
-      JSON.stringify({ id: w.id, internalId: w.internalId }),
-    )}`,
-  })),
+// Rendered locally: the badge payload must match what the scanner decodes
+// (`beduno:{workerId}:{checksum}`), and no worker data may leave the app.
+const badges = ref<Array<{ worker: Worker; dataUrl: string }>>([])
+
+watch(
+  () => props.workers,
+  async (workers) => {
+    badges.value = await Promise.all(
+      workers.map(async (w) => ({
+        worker: w,
+        dataUrl: await QRCode.toDataURL(encodeQrData(w.id), { width: 150, margin: 1 }),
+      })),
+    )
+  },
+  { immediate: true },
 )
 
 function printBadges() {
-  const html = props.workers
-    .map((w, i) => {
+  const html = badges.value
+    .map(({ worker: w, dataUrl }) => {
       return `
       <div class="badge">
         <h3>${w.firstName} ${w.lastName}</h3>
         <div class="id">${w.internalId}</div>
-        <img src="${qrUrls.value[i].url}" width="150" height="150" />
+        <img src="${dataUrl}" width="150" height="150" />
       </div>`
     })
     .join('')
@@ -72,7 +82,7 @@ function printBadges() {
     <p>{{ t('workers.batchBadgesHint', { count: workers.length }) }}</p>
     <div class="preview-grid">
       <div
-        v-for="item in qrUrls"
+        v-for="item in badges"
         :key="item.worker.id"
         class="preview-badge"
       >

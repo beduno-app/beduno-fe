@@ -15,6 +15,26 @@ Authorization: Bearer <token>
 
 The JWT contains: `userId`, `agencyId`, `role`, `properties[]` (assigned property IDs), `lang`.
 
+The frontend attaches the header to **every** request once a token is stored, including
+`/auth/**` — the backend should ignore it there rather than reject it.
+
+**401 contract (implemented in `src/shared/composables/useApi.ts`).** The client treats a 401
+as recoverable exactly once:
+
+1. A 401 from any endpoint triggers a single `POST /auth/refresh`; concurrent 401s queue behind
+   that one refresh and are retried with the new token.
+2. A 401 from `/auth/refresh` itself — or a 401 when no refresh token is held — is **terminal**:
+   the client clears its session and redirects to login. This is the device-revocation path.
+3. A retried request is never retried a second time.
+
+Backend changes to 401 semantics will silently break this interceptor, so treat the above as
+part of the contract.
+
+**CSRF signal.** Every request carries `X-Requested-With: XMLHttpRequest`. Browsers never
+attach this header on simple cross-site requests, so its presence marks the call as an
+intentional XHR from the app. **CORS configuration must allow this header** or every
+cross-origin request fails preflight.
+
 ### Pagination
 All list endpoints support pagination:
 ```
