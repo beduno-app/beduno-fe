@@ -58,7 +58,7 @@ async function handleLogin() {
     </div>
     <div class="login-card">
       <h1 class="login-logo">
-        bed!OK
+        {{ t('common.appName') }}
       </h1>
       <form @submit.prevent="handleLogin">
         <div class="form-group">
