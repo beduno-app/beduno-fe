@@ -12,7 +12,7 @@ test.describe('Export generation', () => {
   })
 
   test('export center requires authentication', async ({ page }) => {
-    await page.goto('/reports/exports')
+    await page.goto('/exports')
     await expect(page).toHaveURL(/\/login/)
   })
 })
