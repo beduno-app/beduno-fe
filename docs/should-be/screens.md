@@ -68,7 +68,7 @@ The mobile app is a simplified, touch-optimised subset focused on the three oper
 
 ```
 ┌─────────────────────────────────┐
-│  ☰  BedOK         [Property ▼] │  ← property selector (if user has access to multiple)
+│  ☰  Beduno         [Property ▼] │  ← property selector (if user has access to multiple)
 ├─────────────────────────────────┤
 │                                 │
 │     [Arrivals]  [In-House]      │  ← bottom nav (3 tabs)

@@ -1,4 +1,4 @@
-# Idea #17 - Bedok
+# Idea #17 - Beduno
 
 **Created:** Apr 13 at 9:00 PM
 **Updated:** Apr 14 at 1:31 PM
@@ -8,7 +8,7 @@
 
 ## User - Apr 13 at 9:03 PM
 
-#idea 17: bedok (name and domain reserved, final)
+#idea 17: beduno (name and domain reserved, final)
 
 the problem statement is: owners of temporary work agencies need to move a lot of people at once between far locations, people might have different skillsets, companies have different needs, but those workers always have to sleep somewhere, some of the agency owners own also worker hotels but still need to keep track of who is living where
 
@@ -17,7 +17,7 @@ we want a system for managing those issues, tracking workers, etc., in the later
 ## Assistant - Apr 13 at 9:03 PM
 
 **Restate (1 sentence)**  
-Bedok = an ops system for temp-work agencies to allocate workers to jobs + transport + beds, and keep a live “who is where tonight” roster across multiple locations and skill constraints.
+Beduno = an ops system for temp-work agencies to allocate workers to jobs + transport + beds, and keep a live “who is where tonight” roster across multiple locations and skill constraints.
 
 ---
 
@@ -113,7 +113,7 @@ Pick 3–5 to test first:
 
 ## MVP scope (what to build first)
 ### MVP goal (what we prove)
-**Prove Bedok can be the reliable source of truth for “who sleeps where tonight” for one agency across 1–3 locations.**
+**Prove Beduno can be the reliable source of truth for “who sleeps where tonight” for one agency across 1–3 locations.**
 
 ### Must-have (≤7)
 1) **Entities**: Worker, Bed/Room, Property/Location, Assignment (date-based)  
@@ -197,7 +197,7 @@ MVP is Phase 1 only
 ## Assistant - Apr 13 at 11:05 PM
 
 **Restate (1 sentence)**  
-Bedok MVP = **housing source-of-truth** for PL temp-work agencies: allocate workers to properties/rooms/beds with constraints + audit trail, replacing “Sheets + WhatsApp” for *who sleeps where tonight*.
+Beduno MVP = **housing source-of-truth** for PL temp-work agencies: allocate workers to properties/rooms/beds with constraints + audit trail, replacing “Sheets + WhatsApp” for *who sleeps where tonight*.
 
 ---
 
@@ -717,7 +717,7 @@ MVP must include:
 ## Assistant - Apr 14 at 1:26 PM
 
 ## Locked MVP spec (Phase 1) — based on your answers
-**Bedok v1** = property-side, offline-capable, multi-language mobile ops app + web admin to manage **room-capacity housing**, with **agency proposes → property confirms**.
+**Beduno v1** = property-side, offline-capable, multi-language mobile ops app + web admin to manage **room-capacity housing**, with **agency proposes → property confirms**.
 
 ### Key decisions (and implications)
 - **QR on phone** (worker presents QR on their phone).  
@@ -845,7 +845,7 @@ You pass v1 if, over 14 days:
 ## Assistant - Apr 14 at 1:28 PM
 
 ## Updated MVP spec (locked from your last answers)
-**Bedok v1** = **property-truth** housing ops with **worker QR**, offline-first mobile ops, and full localization (PL/EN/DE/UA/RU).
+**Beduno v1** = **property-truth** housing ops with **worker QR**, offline-first mobile ops, and full localization (PL/EN/DE/UA/RU).
 
 ### Decisions you just made
 - **Worker app by default** to present QR.  

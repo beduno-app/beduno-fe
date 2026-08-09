@@ -3,7 +3,7 @@
  * All offline stores are created here so version upgrades are coordinated.
  */
 
-export const DB_NAME = 'bedok-offline'
+export const DB_NAME = 'beduno-offline'
 export const DB_VERSION = 2
 
 let _db: IDBDatabase | null = null

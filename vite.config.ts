@@ -20,8 +20,8 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.ico', 'pwa-192.svg', 'pwa-512.svg'],
       manifest: {
-        name: 'BedOK',
-        short_name: 'BedOK',
+        name: 'Beduno',
+        short_name: 'Beduno',
         description: 'Agency bed management operations',
         theme_color: '#1a1a2e',
         background_color: '#1a1a2e',

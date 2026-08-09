@@ -66,9 +66,9 @@ describe('useArrivalsStore — stay status transitions', () => {
       store.arrivals = [makeArrival()]
       vi.mocked(arrivalsApi.checkIn).mockResolvedValue(makeArrival({ status: 'CHECKED_IN' }))
 
-      await store.checkIn('stay-1', { qrCode: 'bedok:w1:abcd' })
+      await store.checkIn('stay-1', { qrCode: 'beduno:w1:abcd' })
 
-      expect(arrivalsApi.checkIn).toHaveBeenCalledWith('stay-1', { qrCode: 'bedok:w1:abcd' })
+      expect(arrivalsApi.checkIn).toHaveBeenCalledWith('stay-1', { qrCode: 'beduno:w1:abcd' })
     })
   })
 

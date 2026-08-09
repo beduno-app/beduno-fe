@@ -1,6 +1,6 @@
 export default {
   common: {
-    appName: 'BedOK',
+    appName: 'Beduno',
     loading: 'Загрузка...',
     save: 'Сохранить',
     cancel: 'Отмена',

@@ -1,14 +1,14 @@
 # Project Overview
 
-## What is BedOK?
+## What is Beduno?
 
-BedOK (`bed!OK`) is a Polish bed-rental marketplace platform connecting guests who need accommodation with hosts offering individual beds in shared rooms. Unlike traditional room-rental platforms, BedOK's core unit is the **bed**, not the room — targeting budget accommodation seekers (students, workers, short-stay guests) and hosts looking to maximise rental income per square metre.
+Beduno is a Polish bed-rental marketplace platform connecting guests who need accommodation with hosts offering individual beds in shared rooms. Unlike traditional room-rental platforms, Beduno's core unit is the **bed**, not the room — targeting budget accommodation seekers (students, workers, short-stay guests) and hosts looking to maximise rental income per square metre.
 
 The tagline is *"i masz spanie!"* ("and you've got a place to sleep!").
 
 ## This Repository
 
-`bedok-fe` is the Vue 3 single-page application serving as the customer-facing frontend. It communicates with a separate backend API (not in this repo) over HTTP.
+`beduno-fe` is the Vue 3 single-page application serving as the customer-facing frontend. It communicates with a separate backend API (not in this repo) over HTTP.
 
 ## Target Users
 

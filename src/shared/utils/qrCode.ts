@@ -1,11 +1,11 @@
 /**
- * Utilities for encoding and decoding BedOK QR codes.
+ * Utilities for encoding and decoding Beduno QR codes.
  *
- * Format: bedok:{workerId}:{checksum}
+ * Format: beduno:{workerId}:{checksum}
  * Checksum: 4-character lowercase hex derived from a simple djb2 hash of workerId.
  */
 
-const PREFIX = 'bedok'
+const PREFIX = 'beduno'
 
 function checksum(value: string): string {
   let hash = 5381

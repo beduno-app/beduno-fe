@@ -77,7 +77,7 @@ async function handleQrScanned(rawCode: string) {
   actionError.value = ''
 
   try {
-    // Try decoding as bedok QR format first, fall back to internalId match
+    // Try decoding as beduno QR format first, fall back to internalId match
     const decoded = decodeQrData(rawCode)
 
     // Look up arrival in live store first; fall back to offline snapshot if empty
