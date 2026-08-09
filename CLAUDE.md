@@ -101,7 +101,7 @@ Each module follows the same internal shape: `api/`, `store/`, `composables/`, `
 
 Two route trees in `src/app/router/index.ts`:
 
-- `/ops/*` → `OpsLayout` — the mobile front-desk app (arrivals, in-house, inspection); restricted to `PROPERTY_ADMIN` and `FRONT_DESK`. This is the PWA `start_url`.
+- `/ops/*` → `OpsLayout` — the mobile front-desk app (arrivals, in-house, inspection); restricted to `PROPERTY_ADMIN` and `FRONT_DESK`. `/ops/arrivals` is the PWA `start_url`.
 - `/*` → `AdminLayout` — the desktop web admin (workers, properties, stays, users, audit, exports).
 
 Routes carry `meta.requiresAuth` (default true) and `meta.roles`. A single `router.beforeEach` guard redirects to `Login` when unauthenticated and to `Forbidden` on a role mismatch. Add role restrictions via route meta — do not hand-roll checks in components.
