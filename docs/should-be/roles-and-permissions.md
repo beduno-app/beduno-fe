@@ -84,14 +84,26 @@ This separation exists because:
 | Block/unblock a room | No | **Yes** |
 | Edit room inventory | No | **Yes** (Property Admin only) |
 
+> **⚠ Known gap — not currently enforced by the router.** The policy above is the intended model, but the shipped router diverges from it:
+> - `StayCreate` (`/stays/new`) is reachable by `PROPERTY_ADMIN`, letting a property-side role create/propose planned stays.
+> - `StayDetail` (`/stays/:id`) is reachable by both `PROPERTY_ADMIN` and `FRONT_DESK` alongside the agency-side roles.
+> - `PropertyDetail` (`/properties/:id`) — the only route that reaches room editing (`RoomManagement.vue`) — is gated to `AGENCY_ADMIN, AGENCY_PLANNER` only, which excludes `PROPERTY_ADMIN`, the role this document says owns room inventory.
+>
+> This is a router/policy divergence, not an intentional exception. Recorded here so the gap is tracked, not silently designed around.
+
 ### Dispute Resolution
 
 When the agency and property disagree (e.g. "we sent 5 workers but property only checked in 3"):
 
-1. Both sides can see the **audit log** for the stays in question
-2. Each action is timestamped with actor, role, and device
-3. **Agency Admin** has read access to property audit logs
-4. Resolution is manual (communication between agency and property admin) — the system provides evidence, not arbitration
+1. Each action is timestamped with actor and role (the `AuditEvent` type records `actor` — including `role` — and `timestamp`; there is no device field)
+2. **Agency Admin** has read access to property audit logs
+3. Resolution is manual (communication between agency and property admin) — the system provides evidence, not arbitration
+
+> **Known gap.** The intended policy is that *both* sides can see the audit log for the stays in
+> question. As shipped, the `/audit` route is gated to `AGENCY_ADMIN` alone, so the property side
+> cannot independently inspect the evidence — they must request it from the agency, which
+> weakens the neutrality the propose→confirm model depends on. Widening that gate to Property
+> Admin (scoped to their own property) is open work.
 
 ---
 
@@ -225,16 +237,16 @@ Agency Planner
 | Worker tags/notes | Yes | Yes | No | No |
 | All properties data | Yes | Yes (read) | Own property only | Own property only |
 | Other properties occupancy | Yes | Yes (read) | No | No |
-| Audit log (all) | Yes | Yes (read) | No | No |
-| Audit log (own property) | Yes | Yes (read) | Yes | No |
+| Audit log (all) | Yes | No | No | No |
+| Audit log (own property) | Yes | No | No | No |
 | User accounts | Yes (CRUD) | No | No | No |
 
 ### Session & Device Rules
 
-- **Session timeout**: 8 hours (configurable by Agency Admin)
-- **Max concurrent sessions**: 3 per user
-- **Device registration**: BYOD devices are registered on first login
-- **Instant revocation**: Agency Admin can revoke any user's sessions/devices
+- **Session timeout**: 30-minute idle timeout with a 2-minute countdown warning before auto-logout (hard-coded in `useIdleTimeout.ts`; not configurable by Agency Admin or anyone else)
+- **Max concurrent sessions**: *Planned, not in MVP.* No session-count limit is enforced in the shipped code.
+- **Device registration**: *Planned, not in MVP.* No device registration on first login exists in the shipped code.
+- **Instant revocation**: *Planned, not in MVP.* No admin-triggered session/device revocation exists — `admin.api.ts` has no such endpoint.
 - **PIN/biometric**: recommended for mobile devices (not enforced in MVP)
 
 ### PII Minimisation
