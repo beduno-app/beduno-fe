@@ -182,122 +182,19 @@ type UserRole =
 
 ## Permission Matrix
 
-| Action | Agency Admin | Agency Planner | Property Admin | Front Desk |
-|--------|:-:|:-:|:-:|:-:|
-| Manage users & roles | W | — | — | — |
-| View audit log | R | R | R (own property) | — |
-| Create/edit workers | W | W | — | — |
-| Bulk import workers | W | W | — | — |
-| Create/edit properties | W | — | R (own) | — |
-| Manage rooms (capacity, rules) | — | — | W | — |
-| Block/unblock rooms | — | — | W | W |
-| Create planned stays | W | W | — | — |
-| Check-in (confirm arrival) | — | — | W | W |
-| Check-out | — | — | W | W |
-| Move room (checked-in worker) | — | — | W | W |
-| Mark no-show / redirect | — | — | W | W |
-| View occupancy (all properties) | R | R | — | — |
-| View occupancy (own property) | R | R | R | R |
-| Export reports | W | W | W (own property) | — |
-| Inspection mode | — | — | W | — |
-
-`W` = read + write, `R` = read only, `—` = no access
+See [roles-and-permissions.md](./roles-and-permissions.md), which holds the authoritative
+matrix along with the gaps where the router does not yet enforce the stated policy. The
+duplicate table that used to live here contradicted both that document and the shipped route
+guards, so it has been removed.
 
 ---
 
-## API Endpoints (Target)
+## API Endpoints
 
-### Auth
-```
-POST   /api/v1/auth/login              { email, password } → { token, refreshToken, user }
-POST   /api/v1/auth/refresh            { refreshToken } → { token }
-POST   /api/v1/auth/logout             (revoke session)
-GET    /api/v1/auth/me                 → { user }
-```
-
-### Workers
-```
-GET    /api/v1/workers                 ?page&size&search&status
-GET    /api/v1/workers/:id
-POST   /api/v1/workers                 { internalId, firstName, lastName, phone?, gender, tags[] }
-PUT    /api/v1/workers/:id             (partial update)
-POST   /api/v1/workers/import          multipart/form-data (CSV)
-DELETE /api/v1/workers/:id             (soft delete → INACTIVE)
-GET    /api/v1/workers/:id/stays       → stays for worker
-GET    /api/v1/workers/:id/qr          → QR code image (contains internalId + checksum)
-```
-
-### Properties
-```
-GET    /api/v1/properties              ?status
-GET    /api/v1/properties/:id
-POST   /api/v1/properties              { name, address, type, genderRule }
-PUT    /api/v1/properties/:id
-```
-
-### Rooms
-```
-GET    /api/v1/properties/:propertyId/rooms      ?status&genderRule
-POST   /api/v1/properties/:propertyId/rooms      { roomNumber, capacity, genderRule, floor }
-POST   /api/v1/properties/:propertyId/rooms/bulk  [{ roomNumber, capacity, genderRule, floor }]
-PUT    /api/v1/properties/:propertyId/rooms/:id
-```
-
-### Stays
-```
-GET    /api/v1/stays                   ?propertyId&workerId&status&dateFrom&dateTo&page&size
-POST   /api/v1/stays                   { workerId, propertyId, roomId, dateFrom, dateTo }
-PUT    /api/v1/stays/:id               (update dates, room)
-DELETE /api/v1/stays/:id               (cancel planned stay)
-```
-
-### Operations (property-side actions)
-```
-POST   /api/v1/stays/:id/check-in     { }
-POST   /api/v1/stays/:id/check-out    { reason? }
-POST   /api/v1/stays/:id/no-show      { reason? }
-POST   /api/v1/stays/:id/move         { targetPropertyId?, targetRoomId, reason? }
-```
-
-### Bulk Operations
-```
-POST   /api/v1/stays/bulk-assign       { assignments: [{ workerId, propertyId, roomId, dateFrom, dateTo }] }
-POST   /api/v1/stays/bulk-checkout     { stayIds: string[], reason? }
-```
-
-### Occupancy & Reports
-```
-GET    /api/v1/properties/:id/occupancy           ?date (default today)
-GET    /api/v1/properties/:id/occupancy/export    ?date → CSV/PDF export
-GET    /api/v1/properties/:id/exceptions          ?date (over-capacity, unassigned, etc.)
-GET    /api/v1/stays/arrivals                     ?propertyId&date (default today)
-```
-
-### Inspection
-```
-GET    /api/v1/properties/:id/inspection          ?date
-POST   /api/v1/properties/:id/inspection          { roomId, status, notes? }
-```
-
-### Dashboard
-```
-GET    /api/v1/dashboard                          → agency-wide summary
-GET    /api/v1/properties/:id/dashboard           → property-level summary
-```
-
-### Audit
-```
-GET    /api/v1/audit                   ?entityType&entityId&action&dateFrom&dateTo&page&size
-```
-
-### Users & Roles
-```
-GET    /api/v1/users                   ?role&propertyId
-POST   /api/v1/users                   { email, firstName, lastName, role, assignedPropertyIds?, language }
-PUT    /api/v1/users/:id
-DELETE /api/v1/users/:id               (deactivate)
-PUT    /api/v1/users/me/language       { language }
-```
+The full endpoint contract — paths, request bodies, responses, roles, and error shapes — lives
+in [api-specification.md](./api-specification.md). It is the single source of truth; this
+document previously carried a duplicate summary that drifted out of date, so the copy has been
+removed rather than maintained in two places.
 
 ---
 
