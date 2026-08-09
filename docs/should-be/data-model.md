@@ -206,12 +206,11 @@ When a stay is created or a check-in occurs, the system validates:
 |------|------|-----------|
 | Room at capacity | Hard | Block action; return error with room details |
 | Gender mismatch (if rule enabled) | Soft | Allow with override; return warning |
-| Worker already checked-in elsewhere | Hard | Block check-in; require check-out first |
 | Room is blocked | Hard | Block assignment; show block reason |
 | Property is blocked | Hard | Block assignment; show property status |
-| Double-booking (same worker, overlapping dates) | Hard | Block; return conflicting stay |
+| Double-booking (worker already has an overlapping stay) | Hard | Block; return conflicting stay |
 | Near-capacity (over-planned) | Soft | Allow with override; return warning |
-| Worker tagged 'BLACKLISTED' | Soft | Allow with override; return warning |
+| Worker `status` is `BLACKLISTED` | Soft | Allow with override; return warning |
 
 ### Conflict Response Format
 
@@ -258,7 +257,7 @@ type SoftConstraintType =
 > is what limits misuse. Moving to a signed, expiring token is tracked as an open decision.
 
 **Carriers** (MVP):
-- Printed badge (PDF generation endpoint)
+- Printed badge (rendered client-side and sent to the browser print dialog — there is no PDF endpoint)
 - Paper list (batch print)
 - Future: Apple/Google Wallet pass
 
@@ -275,7 +274,7 @@ coordinated — bump `DB_VERSION` when adding one.
 | `workers` | `id` | Cached workers for the selected property (indexed on `internalId`) |
 | `rooms` | `id` | Cached rooms for the selected property |
 | `arrivals` | `id` | Cached expected arrivals |
-| `meta` | — | Snapshot bookkeeping (`propertyId`, `savedAt`) |
+| `meta` | `key` | Snapshot bookkeeping (`propertyId`, `savedAt`) |
 | `actionQueue` | `id` | Actions performed while offline, awaiting replay |
 
 ```typescript
