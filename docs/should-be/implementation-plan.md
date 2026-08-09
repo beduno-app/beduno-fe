@@ -207,7 +207,7 @@ This plan bridges the current codebase (docs/as-is) to the target product (docs/
 ### 6.3 QR Scanner
 
 - [x] Camera-based QR scanning using a library (e.g. `html5-qrcode` or `jsQR`)
-- [x] Decode `bedok:{workerId}:{checksum}` → validate checksum → resolve worker
+- [x] Decode `beduno:{workerId}:{checksum}` → validate checksum → resolve worker
 - [x] Fallback: manual internal ID search input
 - [x] Works offline (worker data is cached locally)
 

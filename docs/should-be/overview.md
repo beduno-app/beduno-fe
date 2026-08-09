@@ -1,8 +1,8 @@
 # Target Product Overview
 
-## What BedOK Becomes
+## What Beduno Becomes
 
-BedOK is an **operational system for bed occupancy management** used by temporary work agencies in Poland (and later CEE). It replaces spreadsheets and WhatsApp as the single source of truth for *"who sleeps where tonight"*.
+Beduno is an **operational system for bed occupancy management** used by temporary work agencies in Poland (and later CEE). It replaces spreadsheets and WhatsApp as the single source of truth for *"who sleeps where tonight"*.
 
 The platform tracks workers, assigns them to properties/rooms/beds, enforces constraints (capacity, gender rules), and provides audit trails — all across multiple properties with multiple user roles.
 

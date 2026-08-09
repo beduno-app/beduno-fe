@@ -1,4 +1,4 @@
-# bedok-fe
+# beduno-fe
 
 ## Project setup
 ```

@@ -2,11 +2,11 @@ import { describe, it, expect } from 'vitest'
 import { encodeQrData, decodeQrData } from './qrCode'
 
 describe('encodeQrData', () => {
-  it('produces bedok:{workerId}:{checksum} format', () => {
+  it('produces beduno:{workerId}:{checksum} format', () => {
     const result = encodeQrData('worker-123')
     const parts = result.split(':')
     expect(parts).toHaveLength(3)
-    expect(parts[0]).toBe('bedok')
+    expect(parts[0]).toBe('beduno')
     expect(parts[1]).toBe('worker-123')
     expect(parts[2]).toMatch(/^[0-9a-f]{4}$/)
   })
@@ -34,11 +34,11 @@ describe('decodeQrData', () => {
   })
 
   it('returns null for missing parts', () => {
-    expect(decodeQrData('bedok:worker-abc')).toBeNull()
+    expect(decodeQrData('beduno:worker-abc')).toBeNull()
   })
 
   it('returns null for empty workerId', () => {
-    expect(decodeQrData('bedok::1234')).toBeNull()
+    expect(decodeQrData('beduno::1234')).toBeNull()
   })
 
   it('returns null for tampered checksum', () => {

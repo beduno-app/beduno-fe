@@ -308,7 +308,7 @@ When a 422 response is returned:
 
 ## QR Code Specification
 
-**Contents**: `bedok:{workerId}:{checksum}`
+**Contents**: `beduno:{workerId}:{checksum}`
 
 - `workerId` = the worker's `internalId` (not UUID)
 - `checksum` = HMAC-SHA256 truncated to 8 hex chars (prevents forgery)
