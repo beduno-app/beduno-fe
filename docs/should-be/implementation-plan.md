@@ -259,7 +259,7 @@ This plan bridges the current codebase (docs/as-is) to the target product (docs/
 - [x] Security review: XSS, CSRF, token storage, PII exposure
 - [x] Session timeout + auto-logout
 - [x] Device revocation testing
-- [ ] Load test: 500 workers / 50 rooms / 200 stays in a single property view
+- [x] Load test: 500 workers / 50 rooms / 200 stays in a single property view
 
 **Deliverable**: Test suite covering critical paths. Performance verified for target scale.
 

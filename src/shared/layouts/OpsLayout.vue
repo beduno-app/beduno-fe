@@ -135,7 +135,7 @@ async function handleLogout() {
       <ConflictInbox />
       <RouterView />
     </main>
-  <ToastNotifications />
+    <ToastNotifications />
     <nav class="ops-bottom-nav">
       <RouterLink
         to="/ops/arrivals"
