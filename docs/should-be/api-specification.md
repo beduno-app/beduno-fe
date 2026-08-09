@@ -113,20 +113,36 @@ ACTIVE | INACTIVE | BLACKLISTED
 INTERNAL | PARTNER
 ```
 
-### GenderRule
+### GenderRule (Property level)
 ```
-MIXED | MALE_ONLY | FEMALE_ONLY | PER_ROOM
+PER_ROOM | PER_PROPERTY | MIXED
 ```
+Decides *where* the gender rule is enforced.
+
+### RoomGenderRule (Room level)
+```
+MALE_ONLY | FEMALE_ONLY | MIXED
+```
+Decides *what* the rule is. The two enums are distinct and not interchangeable — a property
+never carries `MALE_ONLY`, and a room never carries `PER_ROOM`.
 
 ### Gender
 ```
 MALE | FEMALE | OTHER
 ```
 
-### EntityStatus (Property, Room)
+### PropertyStatus
 ```
-ACTIVE | BLOCKED | MAINTENANCE
+ACTIVE | INACTIVE
 ```
+
+### RoomStatus
+```
+ACTIVE | BLOCKED
+```
+
+Property and room status are separate enums with different members. There is no shared
+`EntityStatus`, and no `MAINTENANCE` state on either.
 
 ### StayStatus
 ```
@@ -144,8 +160,9 @@ PLANNED ──> EXPECTED_TODAY ──> CHECKED_IN ──> CHECKED_OUT
 
 ### AuditAction
 ```
-CREATED | UPDATED | DELETED | CHECKED_IN | CHECKED_OUT | NO_SHOW | MOVED | CANCELLED | IMPORTED | BULK_ASSIGNED | BULK_CHECKED_OUT
+CREATE | UPDATE | DELETE | CHECK_IN | CHECK_OUT | NO_SHOW | MOVE | BULK_ASSIGN | IMPORT | INSPECTION_COMPLETE
 ```
+Imperative, not past tense. There is no `CANCELLED` or `BULK_CHECKED_OUT` action.
 
 ---
 
@@ -812,36 +829,22 @@ When a stay operation violates a constraint, the API returns **422** with this b
 
 ## 8. Arrivals Workflow
 
-### GET /api/v1/stays/arrivals
-Get expected arrivals for a date (default: today).
+### GET /api/v1/stays (expected arrivals)
+There is **no** dedicated `/stays/arrivals` endpoint. The client reads arrivals from the
+standard stay list, filtered by status:
 
-**Query params:** `?propertyId=uuid&date=2026-04-14`
+```
+GET /api/v1/stays?propertyId=uuid&date=2026-04-14&status=EXPECTED_TODAY&page=0&size=20
+```
+
+- `status=EXPECTED_TODAY` is always appended by the client
+- `date` is a single calendar date, distinct from the `dateFrom`/`dateTo` range filters
 
 **Roles:** All authenticated (scoped to assigned properties)
 
-**Response 200:**
-```json
-{
-  "date": "2026-04-14",
-  "property": { "id": "uuid", "name": "Hotel Warszawa", "type": "INTERNAL" },
-  "expected": [
-    {
-      "stayId": "uuid",
-      "worker": { "id": "uuid", "internalId": "W-1234", "firstName": "Andriy", "lastName": "Shevchenko", "gender": "MALE" },
-      "room": { "id": "uuid", "roomNumber": "12", "capacity": 4, "availableSpots": 2 },
-      "dateFrom": "2026-04-14",
-      "dateTo": "2026-05-14",
-      "status": "EXPECTED_TODAY"
-    }
-  ],
-  "summary": {
-    "totalExpected": 12,
-    "checkedIn": 5,
-    "noShow": 1,
-    "pending": 6
-  }
-}
-```
+**Response 200:** the standard `PaginatedResponse<StayResponse>` envelope. There is no
+`summary` block — the arrivals store derives the expected/checked-in/no-show/pending counts
+client-side from the returned page.
 
 ### POST /api/v1/stays/{id}/check-in
 Confirm a worker has arrived.
@@ -851,17 +854,15 @@ Confirm a worker has arrived.
 **Request:**
 ```json
 {
-  "roomId": "uuid",
-  "notes": "Arrived 2h late"
+  "qrCode": "beduno:uuid:a1b2"
 }
 ```
 
-- `roomId` is optional — only send it to override the planned room
-- If `roomId` is sent and differs from planned, constraint engine runs again
+- The body is optional; the client sends `{}` for a manual check-in
+- `qrCode` carries the scanned badge payload when check-in came from the QR scanner
+- There is **no** room-override-at-check-in field. Changing room is a separate `/move` call
 
 **Response 200:** `StayResponse` with `status: "CHECKED_IN"`, `confirmedBy` populated
-
-**Response 422:** If room override violates constraints
 
 ### POST /api/v1/stays/{id}/no-show
 Mark a worker as no-show.
@@ -871,9 +872,15 @@ Mark a worker as no-show.
 **Request:**
 ```json
 {
-  "reasonTag": "NO_CONTACT",
-  "notes": "Called 3 times, no answer"
+  "reason": "DID_NOT_ARRIVE",
+  "note": "Called 3 times, no answer"
 }
+```
+
+`reason` is required, `note` is optional and **singular**. Allowed reasons:
+
+```
+DID_NOT_ARRIVE | REFUSED_ROOM | SENT_ELSEWHERE | CANCELLED_BY_AGENCY | OTHER
 ```
 
 **Response 200:** `StayResponse` with `status: "NO_SHOW"`
@@ -888,10 +895,12 @@ Mark a worker as no-show.
 **Request:**
 ```json
 {
-  "reasonTag": "PLANNED_DEPARTURE",
-  "notes": ""
+  "note": "Left early, transferred to another site"
 }
 ```
+
+The body is optional; the client sends `{}` for a plain check-out. There is no `reasonTag`,
+and the free-text field is `note` (singular).
 
 **Response 200:** `StayResponse` with `status: "CHECKED_OUT"`, `dateTo` set to today if different from planned
 
@@ -903,10 +912,11 @@ Check out multiple workers at once.
 **Request:**
 ```json
 {
-  "stayIds": ["uuid-1", "uuid-2", "uuid-3"],
-  "reasonTag": "PROJECT_ENDED"
+  "stayIds": ["uuid-1", "uuid-2", "uuid-3"]
 }
 ```
+
+No `reasonTag` is sent.
 
 **Response 200:**
 ```json
@@ -915,49 +925,63 @@ Check out multiple workers at once.
   "succeeded": 3,
   "failed": 0,
   "results": [
-    { "stayId": "uuid-1", "status": "CHECKED_OUT" },
-    { "stayId": "uuid-2", "status": "CHECKED_OUT" },
-    { "stayId": "uuid-3", "status": "CHECKED_OUT" }
+    { "stayId": "uuid-1", "status": "CHECKED_OUT" }
   ]
 }
 ```
+
+> The client models only `total`, `succeeded`, and `failed`. It ignores `results[]`, so
+> per-stay failures are currently invisible in the UI — a known frontend gap, not a reason
+> for the backend to omit the array.
 
 ### POST /api/v1/stays/{id}/move
 Move a checked-in worker to a different room (possibly different property).
 
 **Roles:** PROPERTY_ADMIN, FRONT_DESK
 
-**Request:**
+**Request:** two call shapes exist, both hitting the same endpoint.
+
+From Arrivals (cross-property move):
 ```json
 {
   "targetPropertyId": "uuid",
-  "targetRoomId": "uuid",
-  "reasonTag": "ROOM_CONFLICT",
-  "notes": "Moved due to maintenance"
+  "targetRoomId": "uuid"
 }
 ```
+
+From In-House (room change within the current property):
+```json
+{
+  "targetRoomId": "uuid"
+}
+```
+
+`targetPropertyId` must therefore be **optional**, defaulting to the stay's current property.
+Neither client sends `reasonTag` or `notes`.
 
 - Atomically: checks out from current room, creates new stay in target room
 - Constraint engine runs on the target room
 
-**Response 200:**
+**Response 200:** ⚠️ **Unresolved — needs a backend decision.** This spec originally described:
+
 ```json
-{
-  "previousStay": { ... },
-  "newStay": { ... }
-}
+{ "previousStay": { ... }, "newStay": { ... } }
 ```
 
-Both are `StayResponse` objects. Previous has `status: "MOVED"`, new has `status: "CHECKED_IN"`.
+but both clients type the response as a **single stay object** and read `.id`/`.status`
+directly off it (`arrivals.api.ts`, `inhouse.api.ts`). If the backend returns the
+`{previousStay, newStay}` envelope, both callers silently read `undefined`. Settle this before
+integration: either the backend returns the single updated stay, or the two clients must be
+fixed to unwrap `newStay`.
 
 ---
 
-## 10. Occupancy
+## 10. In-House (Nightly Occupancy)
 
-### GET /api/v1/properties/{id}/occupancy
-Current occupancy breakdown by room.
+### GET /api/v1/properties/{id}/in-house
+Current occupancy breakdown by room. The path is `/in-house`, not `/occupancy`.
 
-**Query params:** `?date=2026-04-14` (default: today)
+**Query params:** none. The endpoint is **today-only** — the client sends no `date`.
 
 **Roles:** All authenticated (scoped)
 
@@ -977,27 +1001,45 @@ Current occupancy breakdown by room.
       "status": "ACTIVE",
       "occupants": [
         {
-          "stayId": "uuid",
+          "id": "uuid",
           "worker": { "id": "uuid", "internalId": "W-1234", "firstName": "Andriy", "lastName": "Shevchenko", "gender": "MALE" },
           "dateFrom": "2026-04-10",
           "dateTo": "2026-05-10",
           "status": "CHECKED_IN"
         }
-      ]
+      ],
+      "blocked": false,
+      "blockReason": null
     }
   ],
+  "unassignedWorkers": [],
   "summary": {
+    "totalRooms": 25,
     "totalCapacity": 100,
-    "totalBlocked": 3,
-    "totalOccupied": 72,
-    "totalAvailable": 25,
-    "occupancyRate": 0.74
+    "totalOccupants": 72,
+    "overCapacityRooms": 1,
+    "nearCapacityRooms": 4,
+    "blockedRooms": 2
   }
 }
 ```
 
+Notes on the real shape:
+
+- Each room entry carries a computed `status` of `OK | NEAR_CAPACITY | OVER_CAPACITY | BLOCKED`
+  (`RoomOccupancyStatus`) alongside `blocked` and `blockReason`
+- `unassignedWorkers[]` — workers present at the property with no room — is returned **inline**
+  here, not only via `/exceptions`
+- The summary is a room-count summary. There is no `totalBlocked`, `totalAvailable`, or
+  `occupancyRate` field
+- Occupant entries key on `id` (the stay ID), not `stayId`
+
 ### GET /api/v1/properties/{id}/exceptions
 Current exceptions (problems that need attention).
+
+> **Not called by the frontend.** The In-House view derives over-capacity from each room's
+> `status` and reads unassigned workers from `unassignedWorkers[]` on the in-house response.
+> Keep this endpoint only if another consumer needs it.
 
 **Query params:** `?date=2026-04-14`
 
@@ -1024,14 +1066,18 @@ Current exceptions (problems that need attention).
 }
 ```
 
-### GET /api/v1/properties/{id}/occupancy/export
-Export occupancy report as CSV.
+### GET /api/v1/properties/{id}/in-house/export
+Export the current in-house list.
 
-**Query params:** `?date=2026-04-14&language=PL`
+**Query params:** `?format=csv&lang=PL`
+
+- `format` is `csv` or `pdf` — PDF is supported, not CSV-only
+- the language param is `lang`, not `language`
+- no `date` param; the export follows the today-only in-house view
 
 **Roles:** AGENCY_ADMIN, AGENCY_PLANNER, PROPERTY_ADMIN (own)
 
-**Response 200:** `Content-Type: text/csv` file download
+**Response 200:** binary file download (the client requests `responseType: 'blob'`)
 
 CSV columns (localized): Room Number, Floor, Capacity, Occupancy, Worker ID, Worker Name, Check-in Date, Status
 
@@ -1039,73 +1085,104 @@ CSV columns (localized): Room Number, Floor, Capacity, Occupancy, Worker ID, Wor
 
 ## 11. Inspection Mode
 
-### GET /api/v1/properties/{id}/inspection
-Room-by-room roster for inspection.
+Inspection is a **stateful session resource** at top-level `/inspections`, not a pair of
+calls under a property. An inspection is started, mutated room by room as the walkthrough
+proceeds, then completed. All mutating calls return the full updated `Inspection`.
 
-**Query params:** `?date=2026-04-14`
+**Roles:** PROPERTY_ADMIN, FRONT_DESK
 
-**Roles:** PROPERTY_ADMIN
+### POST /api/v1/inspections
+Start a session.
 
-**Response 200:**
+**Request:** `{ "propertyId": "uuid" }`
+
+**Response 201:** `Inspection`
+
+### GET /api/v1/inspections/{inspectionId}
+Fetch the current session state.
+
+### POST /api/v1/inspections/{inspectionId}/presence
+Record whether an expected occupant was found.
+
 ```json
 {
-  "property": { "id": "uuid", "name": "Hotel Warszawa" },
-  "date": "2026-04-14",
-  "inspectedBy": null,
-  "rooms": [
-    {
-      "id": "uuid",
-      "roomNumber": "12",
-      "floor": 2,
-      "capacity": 4,
-      "expectedOccupants": [
-        {
-          "stayId": "uuid",
-          "worker": { "id": "uuid", "internalId": "W-1234", "firstName": "Andriy", "lastName": "Shevchenko" },
-          "status": "CHECKED_IN"
-        }
-      ]
-    }
-  ]
+  "stayId": "uuid",
+  "presence": "ABSENT",
+  "discrepancyReason": "WRONG_ROOM",
+  "discrepancyNote": "Found in room 14"
 }
 ```
 
-### POST /api/v1/properties/{id}/inspection
-Submit inspection results (discrepancy report).
+`presence` is `PRESENT | ABSENT | UNCHECKED`. `discrepancyReason` and `discrepancyNote` are
+optional.
 
-**Roles:** PROPERTY_ADMIN
+### POST /api/v1/inspections/{inspectionId}/unexpected
+Record someone present who was not expected.
 
-**Request:**
 ```json
 {
-  "date": "2026-04-14",
-  "rooms": [
-    {
-      "roomId": "uuid",
-      "status": "OK"
-    },
-    {
-      "roomId": "uuid",
-      "status": "DISCREPANCY",
-      "missingWorkerIds": ["uuid-1"],
-      "unexpectedWorkerIds": ["uuid-2"],
-      "notes": "Worker W-5678 found in room but not assigned"
-    }
-  ]
+  "roomId": "uuid",
+  "description": "Man, ~40, no badge",
+  "reason": "UNAUTHORIZED_GUEST",
+  "note": "Claims to be a relative"
 }
 ```
 
-**Response 201:**
+### POST /api/v1/inspections/{inspectionId}/verify
+Mark one room as verified: `{ "roomId": "uuid" }`
+
+### POST /api/v1/inspections/{inspectionId}/complete
+Close the session. No request body. Populates `summary`.
+
+### GET /api/v1/inspections/{inspectionId}/export
+**Query params:** `?format=csv|pdf&lang=PL` → binary download (`responseType: 'blob'`)
+
+### DiscrepancyReason
+```
+WORKER_NOT_FOUND | WRONG_ROOM | LEFT_EARLY | ARRIVED_LATE | UNAUTHORIZED_GUEST | OTHER
+```
+
+### Inspection
 ```json
 {
   "id": "uuid",
-  "propertyId": "uuid",
-  "date": "2026-04-14",
-  "inspectedBy": { "id": "uuid", "firstName": "Anna", "lastName": "Nowak" },
+  "property": { "id": "uuid", "name": "Hotel Warszawa", "type": "INTERNAL" },
+  "rooms": [
+    {
+      "room": { "id": "uuid", "roomNumber": "12", "capacity": 4, "availableSpots": 2 },
+      "expected": [
+        {
+          "stayId": "uuid",
+          "worker": { "id": "uuid", "internalId": "W-1234", "firstName": "Andriy", "lastName": "Shevchenko", "gender": "MALE" },
+          "presence": "PRESENT",
+          "discrepancyReason": null,
+          "discrepancyNote": null
+        }
+      ],
+      "unexpected": [],
+      "verified": true,
+      "verifiedAt": "2026-04-14T18:12:00Z",
+      "verifiedBy": "uuid"
+    }
+  ],
+  "startedAt": "2026-04-14T18:00:00Z",
+  "completedAt": null,
+  "startedBy": "uuid",
+  "summary": null
+}
+```
+
+`summary` is `null` until the session is completed, then:
+
+```json
+{
   "totalRooms": 25,
-  "okRooms": 23,
-  "discrepancyRooms": 2,
-  "createdAt": "2026-04-14T18:30:00Z"
+  "verifiedRooms": 25,
+  "totalExpected": 72,
+  "presentCount": 70,
+  "absentCount": 2,
+  "unexpectedCount": 1,
+  "discrepancyCount": 3
 }
 ```
 
@@ -1116,9 +1193,12 @@ Submit inspection results (discrepancy report).
 ### GET /api/v1/audit
 Query audit events.
 
-**Query params:** `?page=0&size=50&entityType=STAY&entityId=uuid&userId=uuid&action=CHECKED_IN&dateFrom=2026-04-01T00:00:00Z&dateTo=2026-04-14T23:59:59Z`
+**Query params:** `?page=0&size=50&entityType=STAY&entityId=uuid&actorId=uuid&action=CHECK_IN&dateFrom=2026-04-01T00:00:00Z&dateTo=2026-04-14T23:59:59Z`
 
-**Roles:** AGENCY_ADMIN (full), PROPERTY_ADMIN (own properties), AGENCY_PLANNER (own scope)
+The actor filter is `actorId`, not `userId`.
+
+**Roles:** AGENCY_ADMIN. The `/audit` route is gated to Agency Admin only — Property Admin and
+Agency Planner cannot reach the screen.
 
 **Response 200:** Paginated `AuditEventResponse[]`
 
@@ -1126,17 +1206,29 @@ Query audit events.
 ```json
 {
   "id": "uuid",
+  "actor": { "id": "uuid", "firstName": "Anna", "lastName": "Nowak", "role": "FRONT_DESK" },
+  "action": "CHECK_IN",
   "entityType": "STAY",
   "entityId": "uuid",
-  "action": "CHECKED_IN",
-  "performedBy": { "id": "uuid", "firstName": "Anna", "lastName": "Nowak", "role": "FRONT_DESK" },
-  "previousState": { "status": "EXPECTED_TODAY" },
-  "newState": { "status": "CHECKED_IN", "confirmedBy": "uuid" },
-  "reasonTag": "ON_TIME",
-  "notes": null,
-  "createdAt": "2026-04-14T14:30:00Z"
+  "entityLabel": "W-1234 · Hotel Warszawa / 12",
+  "diff": [
+    { "field": "status", "before": "EXPECTED_TODAY", "after": "CHECKED_IN" },
+    { "field": "confirmedBy", "before": null, "after": "uuid" }
+  ],
+  "timestamp": "2026-04-14T14:30:00Z",
+  "syncedAt": null
 }
 ```
+
+Differences from the original draft, all driven by the shipped client:
+
+- `performedBy` → `actor`; `createdAt` → `timestamp`
+- `previousState`/`newState` whole-object snapshots are replaced by a flat `diff[]` of
+  `{field, before, after}` entries
+- `reasonTag` and `notes` do not exist on the event
+- `entityLabel` gives the UI something to show without a second fetch
+- `syncedAt` is non-null when the action was replayed from the offline queue; the audit UI
+  badges those rows
 
 ---
 
@@ -1190,25 +1282,55 @@ Property-level summary.
 
 **Response 200:** Same structure, scoped to one property.
 
+> **Neither dashboard endpoint is called by the frontend.** `Dashboard.vue` is the post-login
+> landing page but currently renders without fetching. Wiring it up is open frontend work.
+
+---
+
+## 14. Exports
+
+A dedicated export module, separate from the in-house and inspection exports above. All three
+return a binary download (`responseType: 'blob'`) and take `format` (`csv` | `pdf`) plus `lang`
+(`PL` | `EN` | `DE` | `UA` | `RU`). Export language is chosen independently of UI language.
+
+**Roles:** AGENCY_ADMIN, AGENCY_PLANNER
+
+### GET /api/v1/exports/nightly-occupancy
+`?propertyId=uuid&date=2026-04-14&format=pdf&lang=PL`
+
+### GET /api/v1/exports/exception-report
+`?propertyId=uuid&date=2026-04-14&format=csv&lang=EN`
+
+Unassigned workers and over-capacity rooms for the date.
+
+### GET /api/v1/exports/occupancy-summary
+`?dateFrom=2026-04-01&dateTo=2026-04-30&format=pdf&lang=DE&propertyIds=uuid1&propertyIds=uuid2`
+
+Cross-property summary over a date range. `propertyIds` is optional — omit it for all
+properties in scope.
+
 ---
 
 ## Reason Tags (predefined)
 
-These are sent as string constants. The frontend resolves them to localized labels.
+Sent as string constants; the frontend resolves them to localized labels. Note that the shipped
+flows use **per-operation** enums rather than one shared tag vocabulary, and that check-in,
+check-out, and move carry **no** reason tag at all (check-out takes an optional free-text
+`note`).
 
-| Tag | Used in |
-|-----|---------|
-| `ON_TIME` | Check-in |
-| `ARRIVED_LATE` | Check-in |
-| `DOCS_MISSING` | Check-in, Stay |
-| `NO_CONTACT` | No-show |
-| `TRANSPORT_DELAY` | No-show, Check-in |
-| `PLANNED_DEPARTURE` | Check-out |
-| `PROJECT_ENDED` | Check-out |
-| `EARLY_DEPARTURE` | Check-out |
-| `ROOM_CONFLICT` | Move |
-| `MAINTENANCE` | Move, Room block |
-| `CAPACITY_ISSUE` | Move |
-| `WORKER_REQUEST` | Move |
-| `MANAGER_DECISION` | Any |
-| `OTHER` | Any |
+### No-show reasons (`POST /stays/{id}/no-show`)
+```
+DID_NOT_ARRIVE | REFUSED_ROOM | SENT_ELSEWHERE | CANCELLED_BY_AGENCY | OTHER
+```
+
+### Inspection discrepancy reasons (`/inspections/**`)
+```
+WORKER_NOT_FOUND | WRONG_ROOM | LEFT_EARLY | ARRIVED_LATE | UNAUTHORIZED_GUEST | OTHER
+```
+
+### Room blocking
+Blocking is expressed as a count, not a tag: `PUT /properties/{propertyId}/rooms/{id}` accepts
+`blockedSpots` alongside the room fields. The block reason is captured as free text in the UI.
+
+### Stay override
+`overrideReason` on stay create/update is free text, not an enum.
