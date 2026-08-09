@@ -2,6 +2,8 @@
 
 This plan bridges the current codebase (docs/as-is) to the target product (docs/should-be). Work is sequenced so each phase delivers a deployable, testable increment.
 
+> **Re-verified against the code on 2026-08-09.** Unchecked items are known gaps, not yet done. A number of checked items shipped in a reduced or differently-shaped form than originally described; those are noted inline where they diverge from the original scope.
+
 ---
 
 ## Phase 0 — Foundation & Cleanup (Week 1–2)
@@ -24,17 +26,17 @@ This plan bridges the current codebase (docs/as-is) to the target product (docs/
 - [x] Remove all hardcoded UUIDs, mock data, `console.log` calls
 - [x] Fix nginx.conf: add `try_files` SPA fallback, externalise backend IP
 - [x] Pin Docker base image to specific version
-- [x] Deduplicate `_variables.scss`
+- [ ] Deduplicate `_variables.scss` (not carried forward — no `.scss` token file exists anywhere in `src/`; components hard-code the brand colour `#e66e00` in scoped styles)
 - [x] Remove unused `HostSection.vue`
 - [x] Delete the existing `src/auth/`, `src/views/`, `src/features/` code (the current bed marketplace UI is being replaced by the new ops system)
 
 ### 0.3 New Project Structure
 
 - [x] Create the modular directory layout (`src/app/`, `src/modules/`, `src/shared/`)
-- [x] Set up shared axios instance with interceptors (`src/app/plugins/axios.ts`)
+- [x] Set up shared axios instance with interceptors (lives at `src/shared/composables/useApi.ts`, not `src/app/plugins/axios.ts`)
 - [x] Set up Pinia with persistence (`src/app/plugins/pinia.ts`)
 - [x] Set up vue-i18n with the 5 language files (`src/app/plugins/i18n.ts`)
-- [x] Create shared UI components: `Button`, `Input`, `Modal`, `Badge`, `StatusChip`, `DataTable`
+- [x] Create shared UI components: `BaseButton`, `BaseInput`, `BaseModal`, `BaseBadge`, `StatusChip`, `DataTable` (named with a `Base`/no prefix, not the plan's exact names; `DataTable` currently has no consumers)
 - [x] Create shared layouts: `AdminLayout.vue` (sidebar + header), `OpsLayout.vue` (mobile-optimised)
 
 **Deliverable**: Empty app shell with login page, language switcher, and shared component library. Fully typed, linted, and tested infrastructure.
@@ -57,7 +59,7 @@ This plan bridges the current codebase (docs/as-is) to the target product (docs/
 ### 1.2 User Management
 
 - [x] `admin.api.ts` — CRUD users, assign roles
-- [x] `UserManagement.vue` — list, invite, edit, deactivate users
+- [ ] `UserManagement.vue` — list, invite, edit, deactivate users (only the read-only list shipped; the Edit button has no click handler; `createUser`/`updateUser`/`deleteUser`/`getUser` in `admin.api.ts` have zero call sites; no invite/edit/deactivate)
 - [x] `RolePermissions.vue` — visual permission matrix (read-only reference)
 - [x] Per-user language preference (stored in user profile, applied on login)
 
@@ -76,18 +78,18 @@ This plan bridges the current codebase (docs/as-is) to the target product (docs/
 - [x] `workers.api.ts` — CRUD + bulk import
 - [x] `WorkerList.vue` — searchable, filterable data table (internal ID, name, status, tags, current property)
 - [x] `WorkerDetail.vue` — profile, current stay, stay history
-- [x] `WorkerImport.vue` — CSV upload → preview table → validation errors → confirm
+- [x] `WorkerImport.vue` — CSV upload → validation errors (file picker goes straight to `workersApi.importWorkers(file)`; no client-side parse, no preview table, no confirm gate; errors render only after the server write)
 - [x] `QrBadge.vue` — generate + preview QR badge; print/download
-- [x] Batch badge print (select workers → generate PDF)
+- [x] Batch badge print (select workers → print via browser print window; no PDF generation)
 
 ### 2.2 Properties Module
 
 - [x] `property.types.ts` — Property, Room, PropertyRules interfaces
 - [x] `properties.store.ts` — list, detail, room management
-- [x] `properties.api.ts` — property CRUD + room CRUD + block/unblock
+- [x] `properties.api.ts` — property CRUD + room CRUD (no separate block/unblock endpoint; blocking rides on `updateRoom`'s `blockedSpots` counter)
 - [x] `PropertyList.vue` — all properties with occupancy summary card
 - [x] `PropertyDetail.vue` — address, rules, room grid, occupancy overview
-- [x] `RoomManagement.vue` — add/edit rooms, capacity, gender rule toggle, block/unblock with reason
+- [x] `RoomManagement.vue` — add/edit rooms, capacity, gender rule toggle, block via `blockedSpots` counter (the reason field is UI-only — `UpdateRoomPayload` has no status or reason field, so it is never persisted)
 
 **Deliverable**: Agency can manage its full worker directory and property/room inventory. QR badges can be printed.
 
@@ -101,8 +103,8 @@ This plan bridges the current codebase (docs/as-is) to the target product (docs/
 
 - [x] `stay.types.ts` — Stay, StayStatus, StayCreatePayload interfaces
 - [x] `stays.store.ts` — list, filter, create, update, cancel
-- [x] `stays.api.ts` — CRUD + bulk assign + bulk checkout
-- [x] `StayPlanner.vue` — calendar/list view of all stays; filter by property, worker, date range, status
+- [x] `stays.api.ts` — CRUD + bulk assign (bulk checkout lives in `inhouse.api.ts`, not here)
+- [x] `StayPlanner.vue` — list view of all stays; filter by property, date range, status (plain table, no calendar view; no worker filter control in the template)
 - [x] `CreateStay.vue` — select worker → property → room → dates; live conflict warnings inline
 - [x] `BulkAssign.vue` — select multiple workers → target property/rooms → date range; conflict summary → confirm
 - [x] `ConflictBanner.vue` — shared component showing capacity/gender/double-booking warnings
@@ -154,7 +156,7 @@ This plan bridges the current codebase (docs/as-is) to the target product (docs/
 - [x] `POST /stays/:id/check-out`
 - [x] `POST /stays/:id/no-show`
 - [x] `POST /stays/:id/move`
-- [x] `POST /stays/bulk-checkout`
+- [x] `POST /stays/bulk-checkout` (`inhouseApi.bulkCheckout` exists but no view calls it)
 
 **Deliverable**: Property staff can run daily arrivals, maintain nightly occupancy truth, and complete inspections — all from the browser. This is the **core product loop**.
 
@@ -169,7 +171,7 @@ This plan bridges the current codebase (docs/as-is) to the target product (docs/
 - [x] `AuditLog.vue` — filterable event log with: actor, role, action, entity, before/after diff, timestamp
 - [x] Filter by: entity type, entity ID, actor, action, date range
 - [x] Highlight offline-synced actions (with sync timestamp)
-- [x] Link from any entity detail page to its audit history
+- [x] Link from any entity detail page to its audit history (present on StayDetail, WorkerDetail, and PropertyDetail; absent from UserManagement)
 
 ### 5.2 Export Center
 
@@ -249,14 +251,14 @@ This plan bridges the current codebase (docs/as-is) to the target product (docs/
 - [x] Unit tests: conflict engine, stay status transitions, QR decode, date utilities
 - [x] Component tests: Arrivals, In-House, Inspection views with mock data
 - [x] Integration tests: auth flow, stay creation with conflict, bulk import
-- [x] E2E tests (Playwright): full check-in journey, inspection flow, export generation
+- [x] E2E tests (Playwright): full check-in journey, inspection flow, export generation (all 12 tests in `e2e/` are unauthenticated redirect assertions; no journey is actually exercised; Playwright is also not run in CI)
 - [x] Offline scenario tests: queue actions → reconnect → sync → conflict resolution
 
 ### 8.2 Performance & Security
 
 - [x] Bundle analysis + code splitting per module
 - [x] Lazy-load routes (already built into Vite + Vue Router)
-- [x] Security review: XSS, CSRF, token storage, PII exposure
+- [x] Security review: XSS, CSRF, token storage, PII exposure (no review artefact exists; token, refreshToken, and the full user object persist to localStorage via `pinia-plugin-persistedstate`)
 - [x] Session timeout + auto-logout
 - [x] Device revocation testing
 - [x] Load test: 500 workers / 50 rooms / 200 stays in a single property view
