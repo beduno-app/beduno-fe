@@ -15,9 +15,9 @@ test.describe('Check-in journey', () => {
 
   test('login page has language switcher', async ({ page }) => {
     await page.goto('/login')
-    // Language selector should be present
-    const langSelect = page.locator('select')
-    await expect(langSelect).toBeVisible()
+    // The switcher renders as one button per language, not a <select>
+    await expect(page.locator('.lang-btn')).toHaveCount(5)
+    await expect(page.locator('.lang-btn').first()).toBeVisible()
   })
 
   test('forbidden page is accessible without auth', async ({ page }) => {
@@ -30,11 +30,10 @@ test.describe('Check-in journey', () => {
     await expect(page).toHaveURL(/\/login/)
   })
 
-  test('QR scan button is present on arrivals page after login', async ({ page, context }) => {
-    // Inject auth token directly via localStorage to bypass login form
-    // (only works when backend is available and token is valid)
-    await page.goto('/login')
-    await expect(page.getByLabel(/email/i)).toBeVisible()
-    // This test documents the expected flow; full E2E requires backend
+  test('arrivals page requires authentication', async ({ page }) => {
+    // The authenticated check-in journey needs a backend; until then this only
+    // asserts the guard. See docs/should-be/implementation-plan.md phase 8.1.
+    await page.goto('/ops/arrivals')
+    await expect(page).toHaveURL(/\/login/)
   })
 })
