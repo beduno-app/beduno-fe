@@ -9,6 +9,8 @@ import type {
 } from '../types/arrival.types'
 import { arrivalsApi } from '../api/arrivals.api'
 import { enqueueAction } from '@/shared/services/actionQueue'
+import type { QueuedActionType } from '@/shared/services/actionQueue'
+import { useSyncStore } from '@/modules/ops/store/sync.store'
 
 export const useArrivalsStore = defineStore('arrivals', () => {
   const arrivals = ref<ArrivalStay[]>([])
@@ -58,9 +60,16 @@ export const useArrivalsStore = defineStore('arrivals', () => {
     }
   }
 
+  // Queue an action and refresh the counter, so the offline banner reflects
+  // the queue depth immediately rather than only on reconnect.
+  async function queueOffline(type: QueuedActionType, stayId: string, payload: unknown) {
+    await enqueueAction(type, stayId, payload)
+    await useSyncStore().refreshQueueLength()
+  }
+
   async function checkIn(stayId: string, payload?: CheckInPayload): Promise<ArrivalStay> {
     if (!navigator.onLine) {
-      await enqueueAction('CHECK_IN', stayId, payload ?? {})
+      await queueOffline('CHECK_IN', stayId, payload ?? {})
       const stay = arrivals.value.find((a) => a.id === stayId)
       if (stay) {
         const optimistic = { ...stay, status: 'CHECKED_IN' as const }
@@ -76,7 +85,7 @@ export const useArrivalsStore = defineStore('arrivals', () => {
 
   async function noShow(stayId: string, payload: NoShowPayload): Promise<ArrivalStay> {
     if (!navigator.onLine) {
-      await enqueueAction('NO_SHOW', stayId, payload)
+      await queueOffline('NO_SHOW', stayId, payload)
       const stay = arrivals.value.find((a) => a.id === stayId)
       if (stay) {
         const optimistic = { ...stay, status: 'NO_SHOW' as const }
@@ -92,7 +101,7 @@ export const useArrivalsStore = defineStore('arrivals', () => {
 
   async function move(stayId: string, payload: MovePayload): Promise<ArrivalStay> {
     if (!navigator.onLine) {
-      await enqueueAction('MOVE', stayId, payload)
+      await queueOffline('MOVE', stayId, payload)
       const stay = arrivals.value.find((a) => a.id === stayId)
       if (stay) {
         const optimistic = { ...stay, status: 'MOVED' as const }
