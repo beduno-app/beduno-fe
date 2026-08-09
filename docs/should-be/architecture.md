@@ -61,99 +61,55 @@ The current Vue 3 codebase needs significant restructuring. Below is the target 
 
 ```
 src/
+├── App.vue                            Root shell (RouterView, idle timeout, toasts)
+├── main.ts
 ├── app/
-│   ├── App.vue                        Shell layout
-│   ├── router/
-│   │   ├── index.ts                   Route definitions
-│   │   └── guards.ts                  Auth + role guards
+│   ├── router/index.ts                Route definitions + inline auth/role beforeEach
 │   └── plugins/
-│       ├── axios.ts                   Axios instance + interceptors
-│       ├── i18n.ts                    vue-i18n setup
-│       └── pinia.ts                   Store setup
+│       ├── i18n.ts                    vue-i18n (pl default, en fallback)
+│       └── pinia.ts                   Pinia + persistedstate
 │
-├── modules/                           Feature modules (vertical slices)
-│   ├── auth/
-│   │   ├── views/                     Login.vue, Register.vue
-│   │   ├── composables/               useAuth()
-│   │   ├── store/                     auth.store.ts (Pinia)
-│   │   ├── api/                       auth.api.ts
-│   │   └── types/                     auth.types.ts
-│   │
-│   ├── workers/
-│   │   ├── views/                     WorkerList.vue, WorkerDetail.vue, WorkerImport.vue
-│   │   ├── components/                WorkerCard.vue, WorkerSearchInput.vue, QrBadge.vue
-│   │   ├── composables/               useWorkers(), useWorkerSearch()
-│   │   ├── store/                     workers.store.ts
-│   │   ├── api/                       workers.api.ts
-│   │   └── types/                     worker.types.ts
-│   │
-│   ├── properties/
-│   │   ├── views/                     PropertyList.vue, PropertyDetail.vue, RoomManagement.vue
-│   │   ├── components/                RoomCard.vue, CapacityBadge.vue, GenderRuleToggle.vue
-│   │   ├── composables/               useProperties(), useRooms()
-│   │   ├── store/                     properties.store.ts
-│   │   ├── api/                       properties.api.ts
-│   │   └── types/                     property.types.ts
-│   │
-│   ├── stays/
-│   │   ├── views/                     StayPlanner.vue, BulkAssign.vue
-│   │   ├── components/                StayRow.vue, StayCalendar.vue, ConflictBanner.vue
-│   │   ├── composables/               useStays(), useConflicts()
-│   │   ├── store/                     stays.store.ts
-│   │   ├── api/                       stays.api.ts
-│   │   └── types/                     stay.types.ts
-│   │
-│   ├── arrivals/
-│   │   ├── views/                     ArrivalsToday.vue
-│   │   ├── components/                ArrivalRow.vue, QrCheckin.vue, NoShowAction.vue
-│   │   ├── composables/               useArrivals()
-│   │   └── types/                     arrival.types.ts
-│   │
-│   ├── occupancy/
-│   │   ├── views/                     InHouseView.vue, InspectionMode.vue
-│   │   ├── components/                RoomRoster.vue, OccupancyException.vue, DiscrepancyCapture.vue
-│   │   ├── composables/               useOccupancy(), useInspection()
-│   │   └── types/                     occupancy.types.ts
-│   │
-│   ├── audit/
-│   │   ├── views/                     AuditLog.vue
-│   │   ├── components/                AuditEntry.vue, AuditFilter.vue
-│   │   └── types/                     audit.types.ts
-│   │
-│   ├── exports/
-│   │   ├── views/                     ExportCenter.vue
-│   │   └── composables/               useExport()
-│   │
-│   └── admin/
-│       ├── views/                     UserManagement.vue, RolePermissions.vue
-│       └── types/                     admin.types.ts
+├── modules/
+│   ├── auth/          views/ Login, Dashboard, Forbidden · store/ auth.store.ts · api/ · types/
+│   ├── workers/       views/ WorkerList, WorkerCreate, WorkerDetail, WorkerImport
+│   │                  components/ QrBadge, BatchBadgePrint · store/ · api/ · types/
+│   ├── properties/    views/ PropertyList, PropertyCreate, PropertyDetail
+│   │                  components/ RoomManagement (modal) · store/ · api/ · types/
+│   ├── stays/         views/ StayPlanner, CreateStay, StayDetail, BulkAssign
+│   │                  components/ ConflictBanner · composables/ useConflicts · store/ · api/ · types/
+│   ├── arrivals/      views/ ArrivalsToday
+│   │                  components/ ArrivalRow, QrCheckin, NoShowAction, MoveAction · store/ · api/ · types/
+│   ├── inhouse/       views/ InHouseView
+│   │                  components/ RoomCard, CapacityBadge, UnassignedWorkers · store/ · api/ · types/
+│   ├── inspection/    views/ InspectionMode
+│   │                  components/ RoomInspectionCard, InspectionSummaryReport · store/ · api/ · types/
+│   ├── ops/           components/ ConflictInbox, OfflineBanner
+│   │                  composables/ useOfflineSnapshot · store/ ops.store.ts, sync.store.ts
+│   ├── audit/         views/ AuditLog · components/ AuditEventRow, AuditDiffViewer · store/ · api/ · types/
+│   ├── exports/       views/ ExportCenter · components/ ReportCard
+│   │                  composables/ useExportDownload · api/ · types/
+│   └── admin/         views/ UserManagement, RolePermissions · api/ · types/
 │
 ├── shared/
-│   ├── components/                    Button, Input, Modal, Badge, StatusChip, DataTable
-│   ├── composables/                   useApi(), useOfflineQueue(), useNotifications()
-│   ├── layouts/                       AdminLayout.vue, OpsLayout.vue
-│   ├── types/                         api.types.ts, pagination.types.ts
-│   └── utils/                         date.ts, qr.ts, i18n-helpers.ts
+│   ├── components/    BaseButton, BaseInput, BaseModal, BaseBadge, StatusChip,
+│   │                  DataTable, SkeletonLoader, ToastNotifications (+ index.ts barrel)
+│   ├── composables/   useApi (axios + interceptors), useToast, useIdleTimeout,
+│   │                  usePullToRefresh, useSwipe
+│   ├── services/      db.ts, offlineDb.ts, actionQueue.ts   (IndexedDB offline queue)
+│   ├── layouts/       AdminLayout.vue, OpsLayout.vue
+│   ├── types/         api.types.ts   (PaginatedResponse, ApiError)
+│   └── utils/         formatDate.ts, qrCode.ts
 │
-├── assets/
-│   ├── styles/
-│   │   ├── _variables.scss
-│   │   ├── _mixins.scss
-│   │   └── global.scss
-│   └── translations/
-│       ├── pl.ts
-│       ├── en.ts
-│       ├── de.ts
-│       ├── ua.ts
-│       └── ru.ts
-│
-└── types/
-    └── global.d.ts
+└── assets/translations/   pl.ts, en.ts, de.ts, ua.ts, ru.ts
 ```
+
+There is no `app/plugins/axios.ts` — the axios instance and its interceptors (auth header injection, error handling, refresh token) live in `src/shared/composables/useApi.ts`. There is no `app/router/guards.ts` — the auth/role guard is inline in `src/app/router/index.ts`. `App.vue` lives at `src/App.vue`, not under `app/`. The `occupancy/` module never existed as shipped code; its functionality shipped as the separate `inhouse/` and `inspection/` modules (their empty scaffold directories, if any were ever committed, are gone). The `ops/` module (offline conflict inbox + banner + sync/ops stores) exists but was previously missing from this doc entirely. Shared base components carry a `Base` prefix (`BaseButton`, `BaseInput`, etc.), not the bare names (`Button`, `Input`) shown before.
+
+`src/assets/styles/` holds no files — there is no `_variables.scss`, `_mixins.scss`, or `global.scss`. Global styles are instead an unscoped `<style>` block in `src/App.vue` (box-sizing reset, body font stack), and individual components hard-code their colours (e.g. `#e66e00`) directly in scoped SCSS (`<style scoped lang="scss">`) rather than referencing shared tokens.
 
 ### Key Architectural Changes from As-Is
 
-| Concern | As-Is | Should-Be |
+| Concern | Pre-rewrite baseline (v0.1) | Shipped (v0.2) |
 |---------|-------|-----------|
 | Component style | `vue-class-component` + `@Options` | `<script setup>` Composition API |
 | State management | Empty Vuex store, all component-local | Pinia stores per module |
@@ -164,7 +120,7 @@ src/
 | Routing | 16 flat routes, no guards | Nested routes per module, role-based guards |
 | Offline | Not supported | Service worker + IndexedDB action queue (mobile) |
 | i18n | Polish-only in practice | 5 languages, per-user setting, localized exports |
-| Forms | FormKit (some), raw inputs (rest) | FormKit consistently + Zod/Valibot validation schemas |
+| Forms | FormKit (some), raw inputs (rest) | Hand-rolled inputs + shared `BaseInput`; FormKit and Zod/Valibot validation schemas were considered but deferred and not adopted |
 
 ### Component Conventions (Target)
 
@@ -242,18 +198,29 @@ export const useAuthStore = defineStore('auth', () => {
 ### Route Guards
 
 ```typescript
-// src/app/router/guards.ts
-router.beforeEach((to, from, next) => {
-  const auth = useAuthStore()
-  const requiredRole = to.meta.role
+// src/app/router/index.ts
+declare module 'vue-router' {
+  interface RouteMeta {
+    requiresAuth?: boolean
+    roles?: UserRole[]
+  }
+}
 
-  if (to.meta.requiresAuth && !auth.isAuthenticated) {
-    return next({ name: 'Login' })
+router.beforeEach((to) => {
+  const auth = useAuthStore()
+
+  if (to.meta.requiresAuth !== false && !auth.isAuthenticated) {
+    return { name: 'Login' }
   }
-  if (requiredRole && auth.userRole !== requiredRole) {
-    return next({ name: 'Forbidden' })
+
+  if (to.name === 'Login' && auth.isAuthenticated) {
+    return { name: 'Dashboard' }
   }
-  next()
+
+  const requiredRoles = to.meta.roles
+  if (requiredRoles && auth.userRole && !requiredRoles.includes(auth.userRole)) {
+    return { name: 'Forbidden' }
+  }
 })
 ```
 
@@ -302,8 +269,9 @@ router.beforeEach((to, from, next) => {
 │ name         │       │ name         │
 │ billingInfo  │       │ address      │  (string)
 │ settings     │◄──┐   │ agencyId     │
-└──────────────┘   │   │ genderRule   │  (MIXED|MALE_ONLY|FEMALE_ONLY|PER_ROOM)
-                   │   │ status       │  (ACTIVE|BLOCKED|MAINTENANCE)
+└──────────────┘   │   │ type         │  (INTERNAL|PARTNER)
+                   │   │ genderRule   │  (PER_ROOM|PER_PROPERTY|MIXED)
+                   │   │ status       │  (ACTIVE|INACTIVE)
                    │   │ notes        │
                    │   └──────┬───────┘
 ┌──────────────┐   │          │ 1:N
@@ -314,43 +282,47 @@ router.beforeEach((to, from, next) => {
 │ lastName     │   │   │ propertyId   │
 │ email        │   │   │ roomNumber   │
 │ role         │   │   │ capacity     │
-│ agencyId     │───┘   │ genderRule   │  (MIXED|MALE_ONLY|FEMALE_ONLY|PER_ROOM)
-│ assignedPropertyIds[] │ floor        │
-│ language     │       │ status       │  (ACTIVE|BLOCKED|MAINTENANCE)
-│  (PL|EN|DE|  │       └──────┬───────┘
-│   UA|RU)     │              │
-│ status       │              │
-└──────────────┘              │
+│ agencyId     │───┘   │ blockedSpots │
+│ assignedPropertyIds[] │ availableSpots │
+│ language     │       │ currentOccupancy │
+│  (PL|EN|DE|  │       │ genderRule   │  (MALE_ONLY|FEMALE_ONLY|MIXED)
+│   UA|RU)     │       │ floor        │
+│ status       │       │ status       │  (ACTIVE|BLOCKED)
+└──────────────┘       └──────┬───────┘
                               │
 ┌──────────────┐       ┌──────┴───────┐
 │   Worker     │       │    Stay      │
 │──────────────│       │──────────────│
-│ internalId   │◄──────│ workerId     │
-│ firstName    │       │ propertyId   │
-│ lastName     │       │ roomId       │
-│ phone?       │       │ dateFrom     │
-│ gender       │       │ dateTo       │
-│ tags[]       │       │ status       │ ← planned/expected/checked-in/
-│ notes?       │       │ overrideReason? │ checked-out/no-show/moved
-│ status       │       │ createdBy    │
-│ agencyId     │       │ confirmedBy  │
-└──────────────┘       └──────────────┘
+│ id           │       │ workerId     │
+│ internalId   │◄──────│ propertyId   │
+│ firstName    │       │ roomId       │
+│ lastName     │       │ dateFrom     │
+│ phone        │       │ dateTo       │
+│ gender       │       │ status       │ ← planned/expected/checked-in/
+│ tags[]       │       │ overrideReason? │ checked-out/no-show/moved/cancelled
+│ notes        │       │ createdBy    │
+│ status       │       │ confirmedBy  │
+│ currentStay  │       └──────────────┘
+│ agencyId     │
+└──────────────┘
 
 ┌──────────────────────┐
 │   AuditEvent         │
 │──────────────────────│
 │ id                   │
-│ actorId              │
+│ actor{id,firstName,  │
+│  lastName,role}      │
 │ action               │  ← check-in / check-out / move / assign / etc.
 │ entityType           │
 │ entityId             │
-│ before{}             │
-│ after{}              │
-│ deviceId             │
-│ offlineFlag          │
+│ entityLabel          │
+│ diff[]               │  ← Array<{field, before, after}>
 │ timestamp            │
+│ syncedAt             │  (string | null)
 └──────────────────────┘
 ```
+
+Note: `GenderRule` (property-level: `PER_ROOM | PER_PROPERTY | MIXED`) and `RoomGenderRule` (room-level: `MALE_ONLY | FEMALE_ONLY | MIXED`) are two distinct types, not a shared union. `Worker.phone` and `Worker.notes` are required fields, not optional.
 
 ### Stay Status State Machine
 
