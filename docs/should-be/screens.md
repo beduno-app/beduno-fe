@@ -14,7 +14,7 @@
 
 | Screen | Route | Role | Description |
 |--------|-------|------|-------------|
-| Agency Dashboard | `/` | All (no role restriction in the router) | Summary: total workers housed, occupancy rate, today's arrivals, exceptions, recent audit entries |
+| Agency Dashboard | `/` | All (no role restriction in the router) | **Not implemented beyond a placeholder.** `Dashboard.vue` renders only a heading and the logged-in user's name and role — no data fetch, no summary metrics (workers housed, occupancy rate, arrivals, exceptions, audit entries) exist in the shipped app. |
 | Property Dashboard | `/property/:id` | — | **Not implemented.** No such route exists; property-level operational data is served by the duplicated `/arrivals`, `/in-house`, `/inspection` (and `/ops/*`) routes instead — see the Occupancy Module below. |
 
 ### Workers Module
@@ -26,7 +26,7 @@
 | Worker Detail | `/workers/:id` | Agency Admin, Planner | Profile, stay history, audit trail for this worker |
 | Worker Import | `/workers/import` | Agency Admin, Planner | CSV upload + preview + validation errors + confirm |
 | QR Badge Generation | `/workers/:id/badge` | Agency Admin, Planner | Preview + print/download QR badge |
-| Batch Badge Print | — | Agency Admin, Planner | **No dedicated route.** `BatchBadgePrint.vue` is a modal opened from within `/workers` (`WorkerList.vue`), not a standalone screen. Select workers → generate PDF with all badges |
+| Batch Badge Print | — | Agency Admin, Planner | **No dedicated route.** `BatchBadgePrint.vue` is a modal opened from within `/workers` (`WorkerList.vue`), not a standalone screen. Select workers → print sheet of all badges via the browser's print dialog (no PDF is generated, no badge endpoint exists) |
 
 ### Properties Module
 
@@ -48,7 +48,11 @@
 
 ### Occupancy Module (Core — 3 Must-Not-Fail Screens)
 
-These three screens each exist twice in the route tree — once under the desktop admin layout, once under the mobile `/ops/*` layout — sharing the same view components. **No route takes a property `:id` param.** The active property is instead chosen from a header dropdown bound to store state (`opsStore.selectedPropertyId`), not the URL.
+These three screens each exist twice in the route tree — once under the desktop admin layout, once under the mobile `/ops/*` layout — sharing the same view components. **No route takes a property `:id` param.** Property selection is not consistent across the three screens or the two layouts:
+
+- `OpsLayout.vue` (the `/ops/*` mobile shell) renders a header dropdown bound to `opsStore.selectedPropertyId`, and propagates the choice into `arrivalsStore.propertyIdFilter` / `inhouseStore.propertyIdFilter` and the offline snapshot sync. This dropdown exists only under `/ops/*` — `AdminLayout.vue` (the desktop shell) has no property control at all.
+- `ArrivalsToday.vue` and `InHouseView.vue` each render their **own** in-page `<select>` bound to their own store's `propertyIdFilter`, independent of the layout — so on desktop (`/arrivals`, `/in-house`) the user picks a property directly on the page.
+- `InspectionMode.vue` also renders its own in-page `<select>`, but it's bound to local component state seeded from `opsStore.selectedPropertyId` (which `AdminLayout` never sets, so on desktop it starts empty). The select is still directly editable, so the desktop `/inspection` route does have a way to pick a property — it just isn't wired to a persistent store filter the way Arrivals/In-House are, and it does nothing with whatever `OpsLayout` last set if the user is on the desktop shell.
 
 | Screen | Route | Role | Description |
 |--------|-------|------|-------------|
@@ -61,7 +65,7 @@ These three screens each exist twice in the route tree — once under the deskto
 | Screen | Route | Role | Description |
 |--------|-------|------|-------------|
 | User Management | `/users` | Agency Admin | List users, invite new, assign roles |
-| Role Permissions | `/roles` | Agency Admin | View/manage the role-to-permission mapping |
+| Role Permissions | `/roles` | Agency Admin | View-only role-to-permission matrix. `RolePermissions.vue` renders a hard-coded matrix constant — there is no API call and no handler to edit it |
 | Audit Log | `/audit` | Agency Admin | Filterable event log: actor, action, entity, before/after, timestamp |
 | Export Center | `/exports` | Agency Admin, Planner | Generate nightly reports, occupancy summaries; choose format (CSV/PDF) and language |
 

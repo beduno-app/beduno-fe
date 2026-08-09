@@ -9,7 +9,7 @@ The highest-privilege agency role. Manages the agency's account, users, and has 
 - Create and manage user accounts
 - Assign roles and permissions
 - Review audit logs across all properties
-- Revoke sessions and devices
+- Revoke sessions and devices *(planned — not in MVP; see Session & Device Rules)*
 - Configure agency-level settings
 - Full read access to all data
 
@@ -21,7 +21,7 @@ The day-to-day operator on the agency side. Plans worker assignments and handles
 **Responsibilities:**
 - Manage the worker directory (CRUD, import, tags)
 - Create and manage planned stays (propose assignments)
-- Perform bulk operations (bulk assign, bulk import, bulk checkout)
+- Perform bulk operations (bulk assign, bulk import)
 - View occupancy across all properties (read-only)
 - Generate and print QR badges
 - Export reports
@@ -35,7 +35,7 @@ Manages a specific property's inventory and rules. May be an internal employee o
 - Manage rooms within their property (capacity, gender rules, block/unblock)
 - View and confirm planned stays for their property
 - Perform all operational actions (check-in/out, move, no-show)
-- View occupancy and audit log for their property only
+- View occupancy and audit log for their property only (intended policy — see known-gap callout under Dispute Resolution for the shipped router restriction)
 - Export reports for their property
 
 **Typical person:** Hotel/property manager, hostel manager.
@@ -90,6 +90,12 @@ This separation exists because:
 > - `PropertyDetail` (`/properties/:id`) — the only route that reaches room editing (`RoomManagement.vue`) — is gated to `AGENCY_ADMIN, AGENCY_PLANNER` only, which excludes `PROPERTY_ADMIN`, the role this document says owns room inventory.
 >
 > This is a router/policy divergence, not an intentional exception. Recorded here so the gap is tracked, not silently designed around.
+>
+> **⚠ Known gap — api-specification.md grants what this table forbids.** The same divergence shows up on the backend contract, not just the frontend router:
+> - `PUT /api/v1/stays/{id}` and `DELETE /api/v1/stays/{id}` both list `PROPERTY_ADMIN (own)` as an allowed role, letting the property side modify/cancel a planned stay — which the table above says only the agency side may do.
+> - `POST/PUT/DELETE /api/v1/properties/{propertyId}/rooms{,/{id}}` list `AGENCY_ADMIN` (alongside `PROPERTY_ADMIN (own)`) as an allowed role, letting the agency side edit room inventory — which the table above says is property-side only (Property Admin).
+>
+> A backend implementing api-specification.md as written would reproduce this divergence server-side. Flagged here so it isn't mistaken for the intended model.
 
 ### Dispute Resolution
 
@@ -177,7 +183,7 @@ Creates planned stay
                                       System checks: capacity OK, gender OK
                                       Stay updated: Room 205
                                      
-                                      Audit event: MOVE_ROOM
+                                      Audit event: MOVE
                                       before: { roomId: 101 }
                                       after: { roomId: 205 }
 ```
@@ -201,7 +207,7 @@ Agency Planner
 5. Planner reviews, fixes issues (edit inline or re-upload)
 6. Confirms import
 7. Workers created in system
-8. Audit event: BULK_IMPORT (count: N)
+8. Audit event: IMPORT (count: N)
 ```
 
 ### Bulk Assign (Move Group to Property)
@@ -233,13 +239,15 @@ Agency Planner
 | Data | Agency Admin | Agency Planner | Property Admin | Front Desk |
 |------|:-:|:-:|:-:|:-:|
 | Worker full profile | Yes | Yes | Property's workers only | Name + ID only |
-| Worker phone number | Yes | Yes | No | No |
-| Worker tags/notes | Yes | Yes | No | No |
+| Worker phone number | Yes | Yes | No\* | No\* |
+| Worker tags/notes | Yes | Yes | No\* | No\* |
 | All properties data | Yes | Yes (read) | Own property only | Own property only |
 | Other properties occupancy | Yes | Yes (read) | No | No |
-| Audit log (all) | Yes | No | No | No |
-| Audit log (own property) | Yes | No | No | No |
+| Audit log (all properties) | Yes | No | No | No |
+| Audit log (own property) | Yes | No | Yes (intended — see known-gap callout; shipped router gates `/audit` to Agency Admin only) | No |
 | User accounts | Yes (CRUD) | No | No | No |
+
+\* No screen renders these fields for Property Admin or Front Desk — but both roles reach `/ops/*` (gated to `PROPERTY_ADMIN, FRONT_DESK`), whose offline snapshot caches the full worker record, phone/tags/notes included, on the device. See the PII Minimisation known-gap note below.
 
 ### Session & Device Rules
 
@@ -251,10 +259,12 @@ Agency Planner
 
 ### PII Minimisation
 
-Front Desk screens show **only what's needed for check-in**:
+Front Desk **screens** show **only what's needed for check-in**:
 - Worker name (for visual confirmation)
 - Internal ID (for QR/manual lookup)
 - Assigned room
 - Stay dates and status
 
-They do **not** see: phone numbers, tags, notes, other properties' data, or full audit logs.
+They do **not** display: phone numbers, tags, notes, other properties' data, or full audit logs.
+
+> **Known gap — the offline cache is broader than the screens.** The PII-minimisation claim above describes what Front Desk *screens render*, not what the device *stores*. `useOfflineSnapshot.ts` fetches full `Worker` records (page size 500, no field selection) via `workersApi.getWorkers()` and `offlineDb.ts` writes them wholesale to IndexedDB on the device — including phone number, tags, and notes — so the data reaches the BYOD device even though no screen displays it. Narrowing the offline snapshot payload to only the fields Front Desk screens need is open work.
