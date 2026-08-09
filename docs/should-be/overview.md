@@ -4,7 +4,7 @@
 
 Beduno is an **operational system for bed occupancy management** used by temporary work agencies in Poland (and later CEE). It replaces spreadsheets and WhatsApp as the single source of truth for *"who sleeps where tonight"*.
 
-The platform tracks workers, assigns them to properties/rooms/beds, enforces constraints (capacity, gender rules), and provides audit trails — all across multiple properties with multiple user roles.
+The platform tracks workers, assigns them to properties/rooms (room-capacity based — there is no separate bed entity), enforces constraints (capacity, gender rules), and provides audit trails — all across multiple properties with multiple user roles.
 
 ## Problem Statement
 
@@ -87,6 +87,6 @@ The locked decisions force a specific product architecture:
 
 - GDPR applies (PII: names, IDs, phone numbers, addresses, potentially immigration/work eligibility data)
 - MVP approach: store minimum data, field-level access control, audit trail, retention policy
-- QR codes contain zero PII (internal ID + checksum only)
+- QR codes contain zero PII (`workerId` + checksum only — see "QR check-in" above)
 - BYOD front desk devices see minimal PII — only what's needed for check-in
 - Device/session revocation must work instantly
