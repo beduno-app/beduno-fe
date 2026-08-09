@@ -1,6 +1,6 @@
 # Implementation Plan
 
-This plan bridges the current codebase (docs/as-is) to the target product (docs/should-be). Work is sequenced so each phase delivers a deployable, testable increment.
+This plan took the codebase from the deleted marketplace app (docs/as-is) to the current ops product (docs/should-be). Work was sequenced so each phase delivered a deployable, testable increment.
 
 > **Re-verified against the code on 2026-08-09.** Unchecked items are known gaps, not yet done. A number of checked items shipped in a reduced or differently-shaped form than originally described; those are noted inline where they diverge from the original scope.
 
@@ -156,7 +156,7 @@ This plan bridges the current codebase (docs/as-is) to the target product (docs/
 - [x] `POST /stays/:id/check-out`
 - [x] `POST /stays/:id/no-show`
 - [x] `POST /stays/:id/move`
-- [x] `POST /stays/bulk-checkout` (`inhouseApi.bulkCheckout` exists but no view calls it)
+- [ ] `POST /stays/bulk-checkout` — client defined only; `inhouseApi.bulkCheckout` exists but no view calls it
 
 **Deliverable**: Property staff can run daily arrivals, maintain nightly occupancy truth, and complete inspections — all from the browser. This is the **core product loop**.
 
@@ -251,14 +251,14 @@ This plan bridges the current codebase (docs/as-is) to the target product (docs/
 - [x] Unit tests: conflict engine, stay status transitions, QR decode, date utilities
 - [x] Component tests: Arrivals, In-House, Inspection views with mock data
 - [x] Integration tests: auth flow, stay creation with conflict, bulk import
-- [x] E2E tests (Playwright): full check-in journey, inspection flow, export generation (all 12 tests in `e2e/` are unauthenticated redirect assertions; no journey is actually exercised; Playwright is also not run in CI)
+- [ ] E2E tests (Playwright): full check-in journey, inspection flow, export generation — the 12 specs in `e2e/` only assert route guards; no journey is exercised, and Playwright does not run in CI
 - [x] Offline scenario tests: queue actions → reconnect → sync → conflict resolution
 
 ### 8.2 Performance & Security
 
 - [x] Bundle analysis + code splitting per module
 - [x] Lazy-load routes (already built into Vite + Vue Router)
-- [x] Security review: XSS, CSRF, token storage, PII exposure (no review artefact exists; token, refreshToken, and the full user object persist to localStorage via `pinia-plugin-persistedstate`)
+- [ ] Security review: XSS, CSRF, token storage, PII exposure — no review artefact exists; token, refreshToken and the full user object persist to localStorage via `pinia-plugin-persistedstate`
 - [x] Session timeout + auto-logout
 - [x] Device revocation testing
 - [x] Load test: 500 workers / 50 rooms / 200 stays in a single property view
@@ -291,32 +291,31 @@ After Phase 4, the system is ready for a **concierge pilot** with one agency and
 
 ---
 
-## Migration Strategy: As-Is → Should-Be
+## Migration: what Phase 0 did
 
-The current codebase is a **bed marketplace prototype** (guests search for beds to rent). The target product is an **ops system for agency bed management**. These are fundamentally different applications.
+The repo previously held a **bed marketplace prototype** (guests searching for beds to rent).
+That application was deleted in Phase 0 and replaced by the ops system — a clean break in the
+same repo, keeping the git history. `docs/as-is/` documents what was removed.
 
-### What to Keep
+### Carried forward
 
-- **i18n infrastructure** — the vue-i18n setup and translation file structure are reusable; content will be completely rewritten
-- **SCSS variable system** — the design token approach is sound; colours and values will change
-- **Deployment pipeline** — Docker + nginx pattern stays; config needs fixing
-- **Domain knowledge** — bed, room, property, guest/worker concepts carry over at a conceptual level
+- **i18n infrastructure** — the vue-i18n setup and file-per-locale structure survived; all
+  content was rewritten
+- **Deployment pipeline** — the Docker + nginx pattern stayed; the config was fixed (SPA
+  fallback, backend address externalised to `BACKEND_URL`)
+- **Domain concepts** — room, property, and occupancy carried over conceptually
 
-### What to Discard
+### Discarded
 
-- **All view components** — the marketplace UI (home page, ad creation, ad listing, booking, blog, career, contact, etc.) has no equivalent in the ops system
-- **All feature components** — ad creation forms, ad detail displays, carousel, search, blog cards
-- **Auth components** — Login/Register need complete rewrite for role-based system
-- **Vuex store** — replacing with Pinia (store is empty anyway)
-- **FormKit genesis theme** — may keep FormKit but theming will change for the ops-focused UI
+- **All view and feature components** — the marketplace UI (home, ad creation, ad listing,
+  booking, blog, career, contact, carousel, search) had no equivalent in the ops system
+- **Auth components** — Login was rewritten for the role-based system; Register was dropped
+  entirely, as accounts are created by an Agency Admin
+- **Vuex** — replaced by Pinia (the old store was empty)
+- **Bootstrap 5 and FormKit** — neither was carried forward; forms are hand-rolled around
+  `BaseInput`
+- **The SCSS design-token system** — `_variables.scss` was **not** carried forward. Components
+  now hard-code their colours in scoped styles, which is why phase 0.2's token item above is
+  unchecked
 
-### Recommended Approach
-
-**Clean break, shared repo.** Don't try to incrementally refactor the marketplace code into the ops system. Instead:
-
-1. Keep the repo and git history
-2. In Phase 0, remove all `src/views/`, `src/features/`, `src/auth/` content
-3. Set up the new module structure from scratch
-4. Carry forward only infrastructure: build config, i18n skeleton, SCSS variables, Docker setup
-
-This avoids the risk of old marketplace patterns and types leaking into the new architecture.
+The clean break kept old marketplace patterns and types from leaking into the new architecture.
