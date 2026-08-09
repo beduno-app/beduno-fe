@@ -1,10 +1,10 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { mount, flushPromises } from '@vue/test-utils'
 import { createPinia, setActivePinia } from 'pinia'
 import { createI18n } from 'vue-i18n'
 import en from '@/assets/translations/en'
 import InHouseView from './InHouseView.vue'
-import type { InHouseResponse } from '../types/inhouse.types'
+import type { InHouseResponse, OccupantStay, RoomOccupancy } from '../types/inhouse.types'
 
 vi.mock('../api/inhouse.api', () => ({
   inhouseApi: {
@@ -155,5 +155,161 @@ describe('InHouseView', () => {
 
     await flushPromises()
     expect(wrapper.text()).toContain(en.inhouse.noRooms)
+  })
+})
+
+// ---------------------------------------------------------------------------
+// Load test: 500 workers / 50 rooms / 200 stays in a single property view
+// ---------------------------------------------------------------------------
+
+const ROOMS = 50
+const STAYS = 200   // distributed across rooms (4 per room on average)
+const WORKERS = 500 // 200 assigned + 300 unassigned
+const RENDER_THRESHOLD_MS = 2000
+
+function makeWorkerSummary(index: number) {
+  return {
+    id: `w-${index}`,
+    internalId: `W${String(index).padStart(4, '0')}`,
+    firstName: `First${index}`,
+    lastName: `Last${index}`,
+    gender: (['MALE', 'FEMALE', 'OTHER'] as const)[index % 3],
+  }
+}
+
+function makeOccupantStay(workerIndex: number, roomIndex: number): OccupantStay {
+  return {
+    id: `stay-${workerIndex}-${roomIndex}`,
+    worker: makeWorkerSummary(workerIndex),
+    dateFrom: '2024-01-01',
+    dateTo: null,
+    status: 'CHECKED_IN',
+  }
+}
+
+function makeLargeInHouseResponse(): InHouseResponse {
+  // Distribute STAYS evenly across ROOMS (4 stays each for first 50 rooms)
+  const staysPerRoom = Math.floor(STAYS / ROOMS)
+  let workerIndex = 0
+
+  const rooms: RoomOccupancy[] = Array.from({ length: ROOMS }, (_, roomIdx) => {
+    const occupants: OccupantStay[] = Array.from({ length: staysPerRoom }, () =>
+      makeOccupantStay(workerIndex++, roomIdx),
+    )
+    const isNearCapacity = roomIdx % 10 === 0
+    const isOverCapacity = roomIdx % 25 === 0
+    return {
+      room: {
+        id: `room-${roomIdx}`,
+        roomNumber: String(100 + roomIdx),
+        capacity: staysPerRoom + 2,
+        availableSpots: isOverCapacity ? 0 : isNearCapacity ? 1 : 2,
+      },
+      status: isOverCapacity ? 'OVER_CAPACITY' : isNearCapacity ? 'NEAR_CAPACITY' : 'OK',
+      occupants,
+      blocked: false,
+      blockReason: null,
+    }
+  })
+
+  // Remaining workers are unassigned (300 workers)
+  const unassignedWorkers: OccupantStay[] = Array.from(
+    { length: WORKERS - STAYS },
+    (_, i) => makeOccupantStay(workerIndex + i, -1),
+  )
+
+  return {
+    property: { id: 'prop-load', name: 'Load Test Property', type: 'INTERNAL' },
+    rooms,
+    unassignedWorkers,
+    summary: {
+      totalRooms: ROOMS,
+      totalCapacity: ROOMS * (Math.floor(STAYS / ROOMS) + 2),
+      totalOccupants: STAYS,
+      overCapacityRooms: rooms.filter((r) => r.status === 'OVER_CAPACITY').length,
+      nearCapacityRooms: rooms.filter((r) => r.status === 'NEAR_CAPACITY').length,
+      blockedRooms: 0,
+    },
+  }
+}
+
+describe('InHouseView — load test (500 workers / 50 rooms / 200 stays)', () => {
+  let data: InHouseResponse
+
+  beforeEach(() => {
+    setActivePinia(createPinia())
+    vi.clearAllMocks()
+    data = makeLargeInHouseResponse()
+  })
+
+  afterEach(() => {
+    data = null!
+  })
+
+  it('generates the correct dataset shape', () => {
+    expect(data.rooms).toHaveLength(ROOMS)
+    expect(data.unassignedWorkers).toHaveLength(WORKERS - STAYS)
+    const totalOccupants = data.rooms.reduce((sum, r) => sum + r.occupants.length, 0)
+    expect(totalOccupants).toBe(STAYS)
+    expect(data.summary.totalOccupants).toBe(STAYS)
+  })
+
+  it(`renders all ${ROOMS} RoomCard components within ${RENDER_THRESHOLD_MS}ms`, async () => {
+    const wrapper = mountView()
+    const { useInHouseStore } = await import('../store/inhouse.store')
+    const store = useInHouseStore()
+    store.propertyIdFilter = 'prop-load'
+    store.data = data
+
+    const t0 = performance.now()
+    await flushPromises()
+    const elapsed = performance.now() - t0
+
+    expect(wrapper.findAllComponents({ name: 'RoomCard' })).toHaveLength(ROOMS)
+    expect(elapsed).toBeLessThan(RENDER_THRESHOLD_MS)
+  })
+
+  it('displays accurate summary stats for the large dataset', async () => {
+    const wrapper = mountView()
+    const { useInHouseStore } = await import('../store/inhouse.store')
+    const store = useInHouseStore()
+    store.propertyIdFilter = 'prop-load'
+    store.data = data
+
+    await flushPromises()
+
+    expect(wrapper.text()).toContain(String(ROOMS))      // totalRooms
+    expect(wrapper.text()).toContain(String(STAYS))      // totalOccupants
+  })
+
+  it(`re-renders after a data refresh within ${RENDER_THRESHOLD_MS / 2}ms`, async () => {
+    const wrapper = mountView()
+    const { useInHouseStore } = await import('../store/inhouse.store')
+    const store = useInHouseStore()
+    store.propertyIdFilter = 'prop-load'
+    store.data = data
+    await flushPromises()
+
+    // Simulate a data refresh (e.g. after pull-to-refresh)
+    const refreshed = makeLargeInHouseResponse()
+    // Swap one room number to confirm the view actually updates
+    refreshed.rooms[0].room.roomNumber = '999'
+
+    const t0 = performance.now()
+    store.data = refreshed
+    await flushPromises()
+    const elapsed = performance.now() - t0
+
+    expect(elapsed).toBeLessThan(RENDER_THRESHOLD_MS / 2)
+    expect(wrapper.findAllComponents({ name: 'RoomCard' })).toHaveLength(ROOMS)
+  })
+
+  it('produces unique worker IDs across all rooms and unassigned list', () => {
+    const allIds = [
+      ...data.rooms.flatMap((r) => r.occupants.map((o) => o.worker.id)),
+      ...data.unassignedWorkers.map((o) => o.worker.id),
+    ]
+    const unique = new Set(allIds)
+    expect(unique.size).toBe(WORKERS)
   })
 })
