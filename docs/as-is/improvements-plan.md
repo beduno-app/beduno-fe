@@ -1,12 +1,16 @@
-# Improvements Plan
+# Improvements Plan (pre-rewrite, historical)
+
+> **Historical.** This describes the pre-rewrite bed-marketplace codebase, which was deleted in Phase 0 of `docs/should-be/implementation-plan.md`. It is retained for history and does **not** describe the current application. For current state see `docs/should-be/` and the root `README.md`.
 
 Issues are grouped into phases by dependency and impact. Items within a phase can be tackled in parallel.
+
+> **Status note.** Most of Phase 1, Phase 2's auth/routing items, Phase 3's state-management item, Phase 5's interceptor item, and most of Phase 7 were completed by the rewrite (see `docs/should-be/implementation-plan.md` Phase 0) and are marked `(RESOLVED)` below, verified against the current `nginx.conf`, `Dockerfile`, `package.json`, and `src/`. The `_variables.scss` deduplication item (7.5) is **superseded**, not resolved — that file was deleted outright during the rewrite and its design tokens were never carried forward, so there is nothing left to deduplicate. The remaining unmarked items (Phase 4's data-correctness fixes, Phase 6's feature wiring, most of Phase 3) concern marketplace features (advertisements, ad creation, bookings, guests) that no longer exist in the shipped app — see the historical banner above.
 
 ---
 
 ## Phase 1 — Critical Blockers (nothing works correctly without these)
 
-### 1.1 Fix the nginx SPA fallback
+### 1.1 Fix the nginx SPA fallback (RESOLVED)
 **File**: `nginx.conf`
 
 Replace the static `index` directive with a try_files fallback so that refreshing or deep-linking any route works:
@@ -17,7 +21,7 @@ location / {
 }
 ```
 
-### 1.2 Fix the nginx API proxy path
+### 1.2 Fix the nginx API proxy path (RESOLVED)
 **File**: `nginx.conf`
 
 The app calls `/advertisement/*` and `/host/*`, not `/api/*`. Change the proxy location to match:
@@ -28,12 +32,12 @@ location ~ ^/(advertisement|host)/ {
 ```
 And externalise the backend address via an environment variable rather than a hardcoded IP.
 
-### 1.3 Fix the broken unit test
+### 1.3 Fix the broken unit test (RESOLVED)
 **File**: `tests/unit/example.spec.ts`
 
 Delete or replace — it imports a non-existent `HelloWorld.vue` and will fail on every CI run.
 
-### 1.4 Remove `console.log` of API responses
+### 1.4 Remove `console.log` of API responses (RESOLVED)
 **Files**: `AdvertisementsDetailsView.vue:37`, `OrderSummaryView.vue:88`
 
 Delete both `console.log(advertisement)` calls before any production deployment.
@@ -42,7 +46,7 @@ Delete both `console.log(advertisement)` calls before any production deployment.
 
 ## Phase 2 — Authentication (pre-requisite for most user flows)
 
-### 2.1 Store auth token after login
+### 2.1 Store auth token after login (RESOLVED)
 **File**: `src/auth/Login.vue`
 
 The `/host/login` response must return a token (JWT or session). Store it in `localStorage` or a Vuex module, then attach it to every subsequent axios request via a request interceptor in `main.ts`:
@@ -54,12 +58,12 @@ axiosInstance.interceptors.request.use(config => {
 });
 ```
 
-### 2.2 Add route guards
+### 2.2 Add route guards (RESOLVED)
 **File**: `src/router/index.ts`
 
 Add a `beforeEach` guard that redirects unauthenticated users away from protected routes (`/advertisement`, `/host-advertisements`, `/advertisements-panel-expert`, `/order`).
 
-### 2.3 Replace hardcoded host UUIDs with session identity
+### 2.3 Replace hardcoded host UUIDs with session identity (RESOLVED)
 **Files**: `AdvertisementView.vue`, `HostAdvertisementsView.vue`, `AdvertisementsPanelExpert.vue`
 
 After auth is implemented, read the current user's ID from the auth store instead of the placeholder UUIDs.
@@ -71,7 +75,7 @@ Both `Login.vue` and `Register.vue` have no post-submit navigation. Add `this.$r
 
 ## Phase 3 — State Management
 
-### 3.1 Introduce an auth Vuex module (or migrate to Pinia)
+### 3.1 Introduce an auth Vuex module (or migrate to Pinia) (RESOLVED)
 The current Vuex store is empty. At minimum, add an auth module:
 ```
 store/
@@ -122,7 +126,7 @@ Replace the hardcoded `2` with `advertisementData.guests?.length ?? 0`.
 
 ## Phase 5 — Error Handling
 
-### 5.1 Add global axios error interceptor
+### 5.1 Add global axios error interceptor (RESOLVED)
 **File**: `src/main.ts`
 
 Add a response interceptor that handles 401 (redirect to login), 403, 404, and 5xx responses uniformly:
@@ -185,10 +189,10 @@ Add a Vuex/Pinia module for a favourites list. Wire the heart icon in `SingleAd`
 
 ## Phase 7 — Infrastructure & Quality
 
-### 7.1 Externalise backend address from nginx.conf
+### 7.1 Externalise backend address from nginx.conf (RESOLVED)
 Replace the hardcoded IP with an environment variable passed at container start time using an `envsubst`-based entrypoint script or nginx template.
 
-### 7.2 Pin Docker base image version
+### 7.2 Pin Docker base image version (RESOLVED)
 **File**: `Dockerfile`
 
 Change `FROM nginx:latest` to `FROM nginx:1.27-alpine` (or current stable) to ensure reproducible builds.
@@ -205,22 +209,24 @@ Starting points:
 - Happy path: search → list → details → order summary
 - Ad creation form submission
 
-### 7.4 Add TypeScript interfaces for API objects
+### 7.4 Add TypeScript interfaces for API objects (RESOLVED)
 **New file**: `src/types/api.ts`
 
 Define `Advertisement`, `Guest`, `Host` interfaces. Replace all `any` and `Object` prop/state types with these interfaces. Remove the `@ts-ignore` in `OrderSummaryView`.
 
-### 7.5 Deduplicate `_variables.scss`
+### 7.5 Deduplicate `_variables.scss` (SUPERSEDED)
 **File**: `src/assets/_variables.scss`
 
 The file contains duplicate variable declarations (some defined twice with conflicting values). Remove the first block of duplicates, keeping the second (more complete) set.
 
-### 7.6 Delete or migrate `HostSection.vue`
+**Superseded**: `src/assets/_variables.scss` was deleted in the rewrite rather than deduplicated, and its design tokens were never carried forward — the current app has no shared SCSS token file (see `docs/should-be/architecture.md`).
+
+### 7.6 Delete or migrate `HostSection.vue` (RESOLVED)
 **File**: `src/features/ad/creation/HostSection.vue`
 
 The component is never imported. Either integrate it into `AdvertisementView` (the i18n keys for it exist) or delete it.
 
-### 7.7 Standardise component style
+### 7.7 Standardise component style (RESOLVED)
 Choose one pattern and apply it consistently: either `vue-class-component` + `@Options` (current) or `<script setup>`. `Content.vue` already uses `<script setup>` — this is the recommended Vue 3 approach. A gradual migration from class-based to `<script setup>` would improve maintainability and align with the Vue 3 ecosystem.
 
 ---

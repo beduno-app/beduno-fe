@@ -1,4 +1,6 @@
-# Code Audit
+# Code Audit (pre-rewrite, historical)
+
+> **Historical.** This describes the pre-rewrite bed-marketplace codebase, which was deleted in Phase 0 of `docs/should-be/implementation-plan.md`. It is retained for history and does **not** describe the current application. For current state see `docs/should-be/` and the root `README.md`.
 
 This document catalogues issues found across the codebase, grouped by category and severity.
 
@@ -8,21 +10,27 @@ This document catalogues issues found across the codebase, grouped by category a
 
 ## 1. Security
 
-### [critical] Hardcoded backend IP in nginx.conf
+### [critical] Hardcoded backend IP in nginx.conf (RESOLVED)
 `nginx.conf:11` — the backend address is hardcoded:
 ```nginx
 proxy_pass http://51.20.75.247:8080;
 ```
 If the server is rotated or the IP changes, the deployed container silently stops proxying. The IP is also a public commit-history artifact.
 
-### [critical] No authentication enforcement
+**Resolved**: current `nginx.conf` proxies to `${BACKEND_URL}` via nginx templating, with no literal IP. The secondary point still stands — the old IP remains visible in git history — but the live config no longer hardcodes it.
+
+### [critical] No authentication enforcement (RESOLVED)
 There are no Vue Router guards. Every route (`/host-advertisements`, `/advertisement`, `/advertisements-panel-expert`, `/order`) is accessible by unauthenticated users. The login API response is not stored anywhere — there is no session/token and no mechanism to protect any route.
+
+**Resolved**: the current app has a Pinia `auth.store.ts` holding the token and an inline `beforeEach` guard in `src/app/router/index.ts` enforcing `requiresAuth`/role checks.
 
 ### [high] Login response discarded
 `Login.vue` calls `POST /host/login` but does not handle the response at all. No token is stored (localStorage, cookie, or Vuex). Subsequent API calls carry no `Authorization` header — the backend is effectively unauthenticated from the frontend's perspective.
 
-### [medium] `console.log` of API responses in production paths
+### [medium] `console.log` of API responses in production paths (RESOLVED)
 `AdvertisementsDetailsView.vue:37` and `OrderSummaryView.vue:88` both call `console.log(advertisement)` on the raw API response. This leaks PII (names, addresses, pricing) to the browser console.
+
+**Resolved**: `src/` contains zero `console.log` calls.
 
 ---
 
@@ -173,11 +181,15 @@ The ad creation form (`CurrentGuestsSection`) collects `name`, `birthYear`, and 
 
 ## 7. Tests
 
-### [critical] Unit test references a non-existent component
+### [critical] Unit test references a non-existent component (RESOLVED)
 `tests/unit/example.spec.ts` imports `@/components/HelloWorld.vue` which does not exist. Running `npm run test:unit` will fail immediately.
 
-### [critical] E2E test checks for wrong content
+**Resolved**: the `tests/` directory is gone. The current codebase has 14 co-located Vitest `*.spec.ts` files under `src/`.
+
+### [critical] E2E test checks for wrong content (RESOLVED)
 `tests/e2e/specs/test.js` asserts `cy.contains("h1", "Welcome to Your Vue.js + TypeScript App")` — the boilerplate Vue CLI message. This has nothing to do with the actual application.
+
+**Resolved**: Cypress and the old `tests/e2e/` specs are gone, replaced by Playwright specs under `e2e/` (e.g. `auth.spec.ts`, `checkin.spec.ts`, `exports.spec.ts`, `inspection.spec.ts`).
 
 ### [high] Zero meaningful test coverage
 No component, view, utility, or API integration has a real test. The two test files that exist are both scaffolding leftovers.
@@ -186,18 +198,24 @@ No component, view, utility, or API integration has a real test. The two test fi
 
 ## 8. Infrastructure
 
-### [high] nginx proxy does not cover actual API paths
+### [high] nginx proxy does not cover actual API paths (RESOLVED)
 The nginx proxy rule forwards `/api` → backend. However, the application calls `/advertisement/*` and `/host/*` directly — not prefixed with `/api`. The proxy rule matches nothing and is therefore dead configuration.
 
 Either:
 - The app should prefix all API calls with `/api`, **or**
 - The nginx location should match `/advertisement` and `/host`
 
-### [medium] No SPA fallback in nginx
+**Resolved**: the current app calls `/api/v1/*` (via `VITE_API_BASE_URL`), and `nginx.conf`'s `location /api/ { proxy_pass ${BACKEND_URL}; ... }` matches it.
+
+### [medium] No SPA fallback in nginx (RESOLVED)
 `nginx.conf` serves `index.html` only for `/`. Direct navigation to `/advertisements/123` or browser refresh on any sub-route will result in a 404. A `try_files $uri $uri/ /index.html;` directive is missing.
 
-### [low] Docker image uses `nginx:latest`
+**Resolved**: current `nginx.conf` has `try_files $uri $uri/ /index.html;` in its `location /` block.
+
+### [low] Docker image uses `nginx:latest` (RESOLVED)
 Pinning to `latest` means the image can silently change on rebuild. A specific version tag should be used.
+
+**Resolved**: the `Dockerfile` now pins `FROM nginx:1.27-alpine`.
 
 ---
 
