@@ -29,3 +29,13 @@ node_modules
 .agents/
 .claude/skills/
 skills-lock.json
+
+# 10xDevs course content fetched with `10x get` / `10x sync`. Loaded by Claude
+# Code from these paths, but kept out of the repo — it's licensed course
+# material, not ours to redistribute. Course rules live in .claude/rules/10x-*
+# rather than CLAUDE.md so the tracked file stays ours (10x get --no-course-rules).
+.claude/.10x-cli-manifest.json
+.claude/prompts/
+.claude/config-templates/
+.claude/rules/10x-*.md
+CLAUDE.local.md
