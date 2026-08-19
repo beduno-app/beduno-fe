@@ -30,6 +30,7 @@ CI (`.github/workflows`) runs: lint → typecheck → unit tests → build. Keep
 - `VITE_API_BASE_URL` — API base URL. Defaults to `/api/v1`, which the Vite dev server proxies to `http://localhost:8080` and nginx proxies to `${BACKEND_URL}` in production.
 - The shared axios instance lives in `src/shared/composables/useApi.ts` (exported as `api`) — import it rather than creating new axios instances.
 - `@/` is aliased to `src/`.
+- npm is the only package manager — CI runs `npm ci` against `package-lock.json`. Never use `yarn` or `pnpm` here.
 
 ## Product context
 
@@ -143,3 +144,4 @@ PWA config (manifest, workbox runtime caching) is in `vite.config.ts`.
 - Prettier config is checked in (`.prettierrc`); no semicolons, single quotes.
 - Prefer the existing `Base*` shared components over new one-off elements.
 - Comments explain *why*, not *what* — match the density of the surrounding file.
+- Any change that adds a role, a module, an IndexedDB store, a route tree, or a locale must update the matching section of this file in the same commit — there is no meta-framework carrying conventions; this file does.
