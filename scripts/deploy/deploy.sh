@@ -9,7 +9,7 @@
 # Usage: scripts/deploy/deploy.sh [--skip-build] [--prune] [--invalidate-all]
 #                                 [--no-wait] [--dry-run]
 
-set -euo pipefail
+set -Eeuo pipefail
 export AWS_PAGER=""
 export AWS_DEFAULT_OUTPUT=json
 trap 'echo "FAILED: ${BASH_SOURCE[0]}:${LINENO}" >&2' ERR
@@ -52,7 +52,13 @@ origin="$(aws cloudfront get-distribution-config --id "$DIST_ID" \
   die "distribution $DIST_ID points at $origin, not $S3_ORIGIN_DOMAIN"
 
 echo "==> distribution $DIST_ID -> s3://$S3_BUCKET"
-echo "==> shipping $(git rev-parse --short HEAD)$(git diff --quiet || echo ' (DIRTY)')"
+# --porcelain, not `git diff --quiet`: the latter ignores staged and untracked
+# changes, so a `git add`-ed edit would be reported as a clean SHA it is not in.
+dirty=""
+[ -n "$(git status --porcelain)" ] && dirty=" (DIRTY)"
+echo "==> shipping $(git rev-parse --short HEAD)$dirty"
+# VITE_API_BASE_URL is baked into the bundle, so print what is actually shipping.
+echo "==> VITE_API_BASE_URL=${VITE_API_BASE_URL-<unset -> /api/v1>}"
 
 # --- build ------------------------------------------------------------------
 # VITE_API_BASE_URL is read with ?? in src/shared/composables/useApi.ts, so an
@@ -61,7 +67,10 @@ echo "==> shipping $(git rev-parse --short HEAD)$(git diff --quiet || echo ' (DI
 if [ -n "${VITE_API_BASE_URL+x}" ] && [ -z "${VITE_API_BASE_URL}" ]; then
   die "VITE_API_BASE_URL is set to the empty string; unset it (?? does not treat '' as nullish)"
 fi
-for f in .env .env.local .env.production; do
+# .env.production.local is the HIGHEST priority file Vite loads in production
+# mode, and it is gitignored — so it is invisible in git status and would ship a
+# developer's localhost API URL without any other signal.
+for f in .env .env.local .env.production .env.production.local; do
   [ -f "$f" ] && die "unexpected $f would change the build; remove it or deploy deliberately"
 done
 
@@ -91,6 +100,19 @@ for path in dist/*; do
     workbox-*.js) continue ;;  # content-addressed, caches immutably with pass 1
   esac
   die "dist/$f is not covered by any upload pass; add it to NEVER_CACHE_FILES or ICON_FILES in scripts/deploy/config.sh"
+done
+
+# The root guard above says nothing about dist/assets/, and pass 1 gives that
+# whole directory a one-year immutable header. Vite hashes everything it emits
+# there, but a file copied from public/assets/ or added via assetsInclude would
+# land unhashed and be pinned in every browser cache for a year with no way to
+# bust it. Require the -<hash>. shape.
+for path in dist/assets/*; do
+  f="${path##*/}"
+  case "$f" in
+    *-[A-Za-z0-9_-][A-Za-z0-9_-][A-Za-z0-9_-][A-Za-z0-9_-][A-Za-z0-9_-][A-Za-z0-9_-][A-Za-z0-9_-][A-Za-z0-9_-].*) ;;
+    *) die "dist/assets/$f is not content-hashed but pass 1 would cache it immutably for a year; move it out of assets/ or give it a hashed name" ;;
+  esac
 done
 
 s3() {
@@ -127,7 +149,7 @@ s3 s3 sync dist/ "s3://$S3_BUCKET/" \
   --cache-control "$CC_ICONS" \
   --only-show-errors
 
-# --- pass 3: never-cache, index.html genuinely last -------------------------
+# --- pass 3: never-cache, sw.js genuinely last ------------------------------
 # `cp` not `sync`: unconditional upload, no mtime comparison. Content types are
 # passed explicitly rather than trusting the CLI's bundled mimetypes table.
 echo "==> [3/3] html + service worker (no-cache)"
@@ -161,7 +183,17 @@ else
     echo "    $INV_ID (not waiting)"
   else
     echo "    $INV_ID, waiting..."
-    aws cloudfront wait invalidation-completed --distribution-id "$DIST_ID" --id "$INV_ID"
+    # The waiter gives up after 30 x 20s = 10 min and exits 255. The upload is
+    # already complete and correct at that point, so letting set -e kill the run
+    # would skip verification over a slow invalidation. Warn and continue; the
+    # only cost is that verify.sh may read a not-yet-evicted edge copy, which it
+    # reports as a mismatch rather than a pass.
+    if ! aws cloudfront wait invalidation-completed \
+      --distribution-id "$DIST_ID" --id "$INV_ID"; then
+      echo "    WARNING: invalidation $INV_ID did not complete within the waiter's"
+      echo "    10 minute budget. The upload succeeded. Verification may see stale"
+      echo "    edge copies; re-run scripts/deploy/verify.sh once it settles."
+    fi
   fi
 fi
 
