@@ -1,36 +1,18 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+## Hard rules
 
-## Commands
-
-```bash
-npm run dev            # Vite dev server on port 8081 (proxies /api → localhost:8080)
-npm run build          # Typecheck (vue-tsc) + production build
-npm run build:analyze  # Build with rollup-plugin-visualizer (opens dist/stats.html)
-npm run preview        # Serve the production build locally
-npm run lint           # ESLint over src/ with --fix
-npm run typecheck      # vue-tsc --noEmit
-npm test               # Unit + component tests (Vitest, jsdom)
-npm run test:watch     # Vitest in watch mode
-npm run test:e2e       # Playwright E2E (auto-starts the dev server)
-npm run docker:build   # Build the nginx production image
-```
-
-Run a single unit test file:
-
-```bash
-npx vitest run src/modules/stays/composables/useConflicts.spec.ts
-```
-
-CI (`.github/workflows`) runs: lint → typecheck → unit tests → build. Keep all four green.
-
-## Environment
-
-- `VITE_API_BASE_URL` — API base URL. Defaults to `/api/v1`, which the Vite dev server proxies to `http://localhost:8080` and nginx proxies to `${BACKEND_URL}` in production.
-- The shared axios instance lives in `src/shared/composables/useApi.ts` (exported as `api`) — import it rather than creating new axios instances.
-- `@/` is aliased to `src/`.
+- **Propose → confirm.** Agency roles create *planned* stays; property roles confirm *reality* (check-in/out, moves, no-shows). Agency roles must never be able to mutate confirmed occupancy.
+- **Room capacity, not bed-level.** Workers occupy a spot in a room; there is no bed entity.
+- **Everything is audited.** Operational actions produce audit events with actor, before/after, and timestamp.
+- **Everything is localized** — PL (default), EN, DE, UA, RU. Prefer predefined localized reason codes over free text in operational flows.
+- Every user-facing string goes through `t()` and must be added to **all five** translation files in `src/assets/translations/`.
+- **QR codes carry zero PII.** Format is `beduno:{workerId}:{checksum}` (see `src/shared/utils/qrCode.ts`).
+- Add role restrictions via route meta — do not hand-roll checks in components.
+- `src/shared/services/db.ts` — the single IndexedDB instance (`beduno-offline`); **all** object stores are declared here so version upgrades stay coordinated. Bump `DB_VERSION` when adding a store.
+- Room/capacity/user edits are **online-only** by design — do not add them to the offline queue.
 - npm is the only package manager — CI runs `npm ci` against `package-lock.json`. Never use `yarn` or `pnpm` here.
+- Any change that adds a role, a module, an IndexedDB store, a route tree, or a locale must update the matching section of this file in the same commit — there is no meta-framework carrying conventions; this file does.
 
 ## Product context
 
@@ -43,14 +25,6 @@ The authoritative spec is in `docs/`:
 - `docs/as-is/` — historical record of the pre-rewrite marketplace app; **not** a description of current code
 
 Read `docs/should-be/` before changing domain behaviour.
-
-### Domain rules that constrain the code
-
-- **Propose → confirm.** Agency roles create *planned* stays; property roles confirm *reality* (check-in/out, moves, no-shows). Agency roles must never be able to mutate confirmed occupancy.
-- **Room capacity, not bed-level.** Workers occupy a spot in a room; there is no bed entity.
-- **Everything is audited.** Operational actions produce audit events with actor, before/after, and timestamp.
-- **Everything is localized** — PL (default), EN, DE, UA, RU. Prefer predefined localized reason codes over free text in operational flows.
-- **QR codes carry zero PII.** Format is `beduno:{workerId}:{checksum}` (see `src/shared/utils/qrCode.ts`).
 
 ### Core types
 
@@ -65,36 +39,7 @@ There is no `@Options` / vue-class-component, no Vuex, no Bootstrap, no FormKit 
 
 ### Directory layout
 
-```
-src/
-├── app/
-│   ├── plugins/       i18n.ts, pinia.ts (persisted state)
-│   └── router/        route definitions + auth/role guard
-├── modules/           feature modules — vertical slices
-│   ├── admin/         user management, role matrix
-│   ├── arrivals/      "Arrivals Today" — check-in, no-show, QR scan
-│   ├── audit/         audit log viewer
-│   ├── auth/          login, dashboard, auth store
-│   ├── exports/       export center (CSV/PDF)
-│   ├── inhouse/       "In-House" nightly occupancy list
-│   ├── inspection/    room-by-room inspection walkthrough
-│   ├── ops/           offline plumbing: sync store, conflict inbox, offline banner
-│   ├── properties/    properties + rooms + capacity rules
-│   ├── stays/         stay planner, create/bulk assign, conflict engine
-│   └── workers/       worker directory, CSV import, QR badges
-├── shared/
-│   ├── components/    BaseButton, BaseInput, BaseModal, BaseBadge, StatusChip,
-│   │                  DataTable, SkeletonLoader, ToastNotifications
-│   ├── composables/   useApi (axios instance + interceptors), useToast,
-│   │                  useIdleTimeout, usePullToRefresh, useSwipe
-│   ├── layouts/       AdminLayout.vue (sidebar), OpsLayout.vue (mobile, bottom nav)
-│   ├── services/      db.ts (IndexedDB), offlineDb.ts (snapshot), actionQueue.ts
-│   ├── types/         api.types.ts
-│   └── utils/         formatDate.ts, qrCode.ts
-├── assets/translations/  pl.ts, en.ts, de.ts, ua.ts, ru.ts
-├── App.vue            RouterView + toasts + idle-timeout wiring
-└── main.ts            createApp → pinia, router, i18n
-```
+Directory map: `@README.md`.
 
 Each module follows the same internal shape: `api/`, `store/`, `composables/`, `components/`, `views/`, `types/`. Keep cross-module imports to types and shared code; don't reach into another module's store from a view.
 
@@ -105,7 +50,7 @@ Two route trees in `src/app/router/index.ts`:
 - `/ops/*` → `OpsLayout` — the mobile front-desk app (arrivals, in-house, inspection); restricted to `PROPERTY_ADMIN` and `FRONT_DESK`. `/ops/arrivals` is the PWA `start_url`.
 - `/*` → `AdminLayout` — the desktop web admin (workers, properties, stays, users, audit, exports).
 
-Routes carry `meta.requiresAuth` (default true) and `meta.roles`. A single `router.beforeEach` guard redirects to `Login` when unauthenticated and to `Forbidden` on a role mismatch. Add role restrictions via route meta — do not hand-roll checks in components.
+Routes carry `meta.requiresAuth` (default true) and `meta.roles`. A single `router.beforeEach` guard redirects to `Login` when unauthenticated and to `Forbidden` on a role mismatch.
 
 All route components are lazy-loaded via dynamic import; keep it that way for code splitting.
 
@@ -117,17 +62,15 @@ All route components are lazy-loaded via dynamic import; keep it that way for co
 
 The ops screens are offline-capable:
 
-- `src/shared/services/db.ts` — the single IndexedDB instance (`beduno-offline`); **all** object stores are declared here so version upgrades stay coordinated. Bump `DB_VERSION` when adding a store.
 - `offlineDb.ts` — per-property snapshot of workers/rooms/arrivals for offline lookup.
 - `actionQueue.ts` — queues `CHECK_IN | CHECK_OUT | MOVE | NO_SHOW` while offline.
 - `modules/ops/store/sync.store.ts` — replays queued actions on reconnect. Conflicts go to the **conflict inbox** ("Needs review"); never silently auto-merge.
-- Room/capacity/user edits are **online-only** by design — do not add them to the offline queue.
 
 PWA config (manifest, workbox runtime caching) is in `vite.config.ts`.
 
 ### i18n
 
-`src/app/plugins/i18n.ts` registers all five locales; default `pl`, fallback `en`. Every user-facing string goes through `t()` and must be added to **all five** translation files in `src/assets/translations/`. Export language is selectable independently of UI language.
+`src/app/plugins/i18n.ts` registers all five locales; default `pl`, fallback `en`. Export language is selectable independently of UI language.
 
 ## Testing
 
@@ -135,13 +78,28 @@ PWA config (manifest, workbox runtime caching) is in `vite.config.ts`.
 - E2E specs live in `e2e/` (Playwright, Chromium + Pixel 5 projects), covering auth, check-in, inspection, and exports.
 - `vite.config.ts` excludes `e2e/**` from Vitest — Playwright specs must not be run by `npm test`.
 
-## Deployment
-
-`Dockerfile` copies the prebuilt `dist/` into `nginx:1.27-alpine` and templates `nginx.conf`, which does SPA fallback (`try_files`) and proxies `/api/` to `${BACKEND_URL}`. Build before building the image.
-
 ## Conventions
 
 - Prettier config is checked in (`.prettierrc`); no semicolons, single quotes.
 - Prefer the existing `Base*` shared components over new one-off elements.
 - Comments explain *why*, not *what* — match the density of the surrounding file.
-- Any change that adds a role, a module, an IndexedDB store, a route tree, or a locale must update the matching section of this file in the same commit — there is no meta-framework carrying conventions; this file does.
+
+## Commands
+
+Scripts, configuration variables and deployment steps: `@README.md`.
+
+CI (`.github/workflows`) runs: lint → typecheck → unit tests → build. Keep all four green.
+
+## Environment
+
+- `VITE_API_BASE_URL` — API base URL. Defaults to `/api/v1`; the Vite dev server proxies that to `http://localhost:8080`, and the legacy nginx container proxies it to `${BACKEND_URL}`. Read with `??`, so setting it to an **empty string does not fall back** — leave it unset.
+- The shared axios instance lives in `src/shared/composables/useApi.ts` (exported as `api`) — import it rather than creating new axios instances.
+- `@/` is aliased to `src/`.
+
+## Deployment
+
+Production is AWS S3 + CloudFront (`eu-central-1`), driven by `scripts/deploy/` via the AWS CLI. `Dockerfile`/`nginx.conf` are the retained local full-stack path, **not** production. See `@README.md` and `context/deployment/deploy-plan.md`.
+
+- **Never configure CloudFront custom error responses, and never let `scripts/deploy/cloudfront-function.js` rewrite `/api/*`.** Either turns an API 401 into an HTML 200; the refresh interceptor in `useApi.ts` only fires on a literal 401 status. `scripts/deploy/verify.sh` asserts both — keep those checks passing.
+- Unhashed root files (`index.html`, `sw.js`, `registerSW.js`, `manifest.webmanifest`) upload with `no-cache`; only content-hashed files get `immutable`. A new unhashed root file means updating `NEVER_CACHE_FILES` in `scripts/deploy/config.sh`.
+- Distribution and bucket-policy changes are human-only and live in `bootstrap.sh`; `deploy.sh` must never touch routing.
