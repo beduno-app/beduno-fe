@@ -19,15 +19,18 @@ CF_FUNCTION_NAME="beduno-spa-router"
 # has to change. Must match "Comment" in distribution-config.json.
 CF_DISTRIBUTION_COMMENT="beduno-fe-prod-spa"
 
-# The origin id, the bucket domain and the CallerReference are NOT duplicated
-# here — they live in distribution-config.json, which is the single source of
-# truth for distribution shape. CallerReference is fixed on purpose: reusing it
-# makes CloudFront return DistributionAlreadyExists, which is free server-side
-# idempotency a timestamped value would throw away.
-
-# AWS managed policies (IDs verified against this account).
-CACHE_POLICY_OPTIMIZED="658327ea-f89d-4fab-a63d-7e88639e58f6"
-RESPONSE_HEADERS_SECURITY="67f7725c-6f97-4210-82d7-5512b31e9d03"
+# The origin id and the CallerReference are NOT duplicated here — they live in
+# distribution-config.json, which is the single source of truth for distribution
+# shape. CallerReference is fixed on purpose: reusing it makes CloudFront return
+# DistributionAlreadyExists, which is free server-side idempotency a timestamped
+# value would throw away. S3_ORIGIN_DOMAIN above IS a second copy of the origin's
+# DomainName, deliberately: deploy.sh compares it against the live distribution
+# so a bucket/distribution mismatch aborts before anything is uploaded.
+#
+# The cache-policy and response-headers-policy IDs are NOT mirrored here. They
+# are literals in distribution-config.json, and a copy in this file would be pure
+# drift bait: editing it would look like it changed the distribution while
+# changing nothing at all.
 
 # Cache-Control values. The split is carried by S3 object metadata, not by
 # behaviour TTLs — CachingOptimized honours origin Cache-Control.
@@ -38,7 +41,19 @@ CC_NEVER="no-cache"
 # Unhashed files that must never be cached. Note this is a longer list than
 # context/foundation/infrastructure.md step 4 gives: registerSW.js and
 # manifest.webmanifest are also unhashed and referenced from index.html.
-NEVER_CACHE_FILES="registerSW.js manifest.webmanifest sw.js index.html"
+#
+# ORDER IS LOAD-BEARING: deploy.sh pass 3 uploads these in sequence, and sw.js
+# MUST be last. sw.js is the precache manifest and it pins index.html by content
+# revision. Ship sw.js first and a phone that opens the app in the gap fetches
+# the new sw.js, precaches index.html with cache:'reload' (workbox-precaching
+# PrecacheController.js), receives the OLD index.html because the new one is not
+# up yet, and stores it under the NEW revision key. The revision then matches, so
+# it never re-fetches: that phone serves stale HTML from precache on every
+# navigation until a later deploy changes the manifest again — and with --prune
+# the old chunks it references are gone, so the app is blank. This is the exact
+# 6am failure in prd.md:153. The reverse gap (new index.html, old sw.js) is a
+# transient downgrade that self-heals on the next open.
+NEVER_CACHE_FILES="registerSW.js manifest.webmanifest index.html sw.js"
 
 # Icons are unhashed but workbox revisions them in the precache manifest, so only
 # the browser's direct <link rel=icon> fetch is uncovered.
