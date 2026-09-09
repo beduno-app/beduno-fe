@@ -264,7 +264,9 @@ Express Mode is available in every region supporting ECS and Fargate.
    `index.html`; `workbox-<hash>.js` also sits at the root but is content-addressed and caches
    immutably. Implemented in `scripts/deploy/deploy.sh` as three passes — hashed assets
    `immutable`, icons 7 days, then `registerSW.js`/`manifest.webmanifest`/`sw.js`/`index.html`
-   `no-cache` with `index.html` last. Getting this split wrong is risk row 2.
+   `no-cache` with **`sw.js` last** (corrected 2026-09-09 — `sw.js` is the precache manifest
+   and pins `index.html` by revision, so it must follow the file it pins). Getting this split
+   wrong is risk row 2.
 
 5. **Create the CloudFront distribution** with an S3 origin (via Origin Access Control)
    as the default behaviour and the Express service URL as a second origin bound to an
