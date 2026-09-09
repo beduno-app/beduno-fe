@@ -1,0 +1,84 @@
+{
+  "DistributionConfig": {
+    "CallerReference": "beduno-fe-prod-spa-v1",
+    "Comment": "beduno-fe-prod-spa",
+    "Enabled": true,
+    "DefaultRootObject": "index.html",
+    "PriceClass": "PriceClass_100",
+    "HttpVersion": "http2and3",
+    "IsIPV6Enabled": true,
+    "WebACLId": "",
+    "Aliases": { "Quantity": 0 },
+    "OriginGroups": { "Quantity": 0 },
+    "CustomErrorResponses": { "Quantity": 0 },
+    "Logging": { "Enabled": false, "IncludeCookies": false, "Bucket": "", "Prefix": "" },
+    "Restrictions": { "GeoRestriction": { "RestrictionType": "none", "Quantity": 0 } },
+    "ViewerCertificate": { "CloudFrontDefaultCertificate": true },
+    "Origins": {
+      "Quantity": 1,
+      "Items": [
+        {
+          "Id": "s3-beduno-fe-prod",
+          "DomainName": "beduno-fe-prod-500060134341.s3.eu-central-1.amazonaws.com",
+          "OriginPath": "",
+          "CustomHeaders": { "Quantity": 0 },
+          "S3OriginConfig": { "OriginAccessIdentity": "" },
+          "OriginAccessControlId": "__OAC_ID__"
+        }
+      ]
+    },
+    "DefaultCacheBehavior": {
+      "TargetOriginId": "s3-beduno-fe-prod",
+      "ViewerProtocolPolicy": "redirect-to-https",
+      "Compress": true,
+      "SmoothStreaming": false,
+      "FieldLevelEncryptionId": "",
+      "AllowedMethods": {
+        "Quantity": 2,
+        "Items": ["GET", "HEAD"],
+        "CachedMethods": { "Quantity": 2, "Items": ["GET", "HEAD"] }
+      },
+      "TrustedSigners": { "Enabled": false, "Quantity": 0 },
+      "TrustedKeyGroups": { "Enabled": false, "Quantity": 0 },
+      "LambdaFunctionAssociations": { "Quantity": 0 },
+      "FunctionAssociations": {
+        "Quantity": 1,
+        "Items": [{ "FunctionARN": "__FN_ARN__", "EventType": "viewer-request" }]
+      },
+      "CachePolicyId": "658327ea-f89d-4fab-a63d-7e88639e58f6",
+      "ResponseHeadersPolicyId": "67f7725c-6f97-4210-82d7-5512b31e9d03"
+    },
+    "CacheBehaviors": {
+      "Quantity": 1,
+      "Items": [
+        {
+          "PathPattern": "assets/*",
+          "TargetOriginId": "s3-beduno-fe-prod",
+          "ViewerProtocolPolicy": "redirect-to-https",
+          "Compress": true,
+          "SmoothStreaming": false,
+          "FieldLevelEncryptionId": "",
+          "AllowedMethods": {
+            "Quantity": 2,
+            "Items": ["GET", "HEAD"],
+            "CachedMethods": { "Quantity": 2, "Items": ["GET", "HEAD"] }
+          },
+          "TrustedSigners": { "Enabled": false, "Quantity": 0 },
+          "TrustedKeyGroups": { "Enabled": false, "Quantity": 0 },
+          "LambdaFunctionAssociations": { "Quantity": 0 },
+          "FunctionAssociations": { "Quantity": 0 },
+          "CachePolicyId": "658327ea-f89d-4fab-a63d-7e88639e58f6",
+          "ResponseHeadersPolicyId": "67f7725c-6f97-4210-82d7-5512b31e9d03"
+        }
+      ]
+    }
+  },
+  "Tags": {
+    "Items": [
+      { "Key": "Project", "Value": "beduno" },
+      { "Key": "Component", "Value": "fe-spa" },
+      { "Key": "Environment", "Value": "prod" },
+      { "Key": "ManagedBy", "Value": "scripts/deploy/bootstrap.sh" }
+    ]
+  }
+}
