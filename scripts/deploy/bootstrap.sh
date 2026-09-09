@@ -12,7 +12,7 @@
 #
 # Usage: scripts/deploy/bootstrap.sh [--dry-run] [--yes]
 
-set -euo pipefail
+set -Eeuo pipefail
 export AWS_PAGER=""
 export AWS_DEFAULT_OUTPUT=json
 trap 'echo "FAILED: ${BASH_SOURCE[0]}:${LINENO}" >&2' ERR
@@ -45,11 +45,16 @@ trap 'rm -rf "$TMP"' EXIT
 # fails on EOF, after the slow work is already done. Check reachability up front
 # so a non-interactive run says so immediately instead of at minute three.
 # Only matters when a distribution actually has to be created.
-if [ "$DRY_RUN" -ne 1 ] && [ "$ASSUME_YES" -ne 1 ] && [ ! -t 0 ] &&
-  [ -z "$(find_distribution_id)" ]; then
-  die "stdin is not a terminal, so the step 7 approval prompt cannot be answered.
+if [ "$DRY_RUN" -ne 1 ] && [ "$ASSUME_YES" -ne 1 ] && [ ! -t 0 ]; then
+  # Assign, then test. `[ -z "$(find_distribution_id)" ]` would discard the
+  # helper's exit status, so a throttled list-distributions would read as "no
+  # distribution exists" and produce a confidently wrong diagnosis.
+  preflight_dist="$(find_distribution_id)"
+  if [ -z "$preflight_dist" ]; then
+    die "stdin is not a terminal, so the approval prompt cannot be answered.
        Re-run in an interactive terminal, or pass --yes to record approval at
-       invocation instead (creating the distribution stays a human decision)."
+       invocation instead (the gated actions stay human decisions either way)."
+  fi
 fi
 
 run() {
@@ -58,6 +63,33 @@ run() {
     return 0
   fi
   "$@"
+}
+
+# The human gate. Every action that changes live behaviour routes through this,
+# not just distribution creation: publishing the function to LIVE changes edge
+# routing, and replacing the bucket policy changes who can read the origin.
+# --yes records approval at invocation (the only workable form when a supervising
+# harness has taken stdin); a TTY gets the prompt; neither means abort rather
+# than proceed. Callers must skip no-op changes BEFORE calling this, so a re-run
+# that changes nothing never asks.
+confirm_action() {
+  local what="$1" reply
+  if [ "$DRY_RUN" -eq 1 ]; then
+    echo "    DRY-RUN: would ask to $what"
+    return 0
+  fi
+  if [ "$ASSUME_YES" -eq 1 ]; then
+    echo "    approved at invocation (--yes): $what"
+    return 0
+  fi
+  [ -t 0 ] || die "stdin is not a terminal, so '$what' cannot be approved.
+       Re-run in an interactive terminal, or pass --yes."
+  echo ""
+  echo "    About to $what."
+  echo "    Human-approved action (context/foundation/infrastructure.md, Approval)."
+  printf "    Type 'yes' to continue: "
+  read -r reply
+  [ "$reply" = "yes" ] || die "aborted by user"
 }
 
 echo "==> account $AWS_ACCOUNT_ID, region $AWS_REGION"
@@ -225,6 +257,12 @@ else
     table_rc=0
     run_table aws_route || table_rc=$?
     [ "$table_rc" -ne 2 ] && break
+    # Do not announce (or sleep through) a retry after the last attempt — that
+    # burned a pointless minute on every run during the 2026-08-31 outage.
+    if [ "$attempt" -eq 4 ]; then
+      attempt=5
+      break
+    fi
     echo "    TestFunction unavailable (attempt $attempt/4), retrying in $((attempt * 15))s"
     sleep $((attempt * 15))
     attempt=$((attempt + 1))
@@ -251,9 +289,26 @@ if [ "$DRY_RUN" -eq 1 ]; then
   FN_ARN="arn:aws:cloudfront::${AWS_ACCOUNT_ID}:function/DRYRUN"
   echo "    DRY-RUN: skipped"
 else
-  FN_ARN="$(aws cloudfront publish-function --name "$CF_FUNCTION_NAME" --if-match "$ETAG" \
-    --query 'FunctionSummary.FunctionMetadata.FunctionARN' --output text)"
-  echo "    $FN_ARN"
+  # Publishing changes edge routing for every viewer, so it is gated — but only
+  # when it would actually change something. Compare LIVE with the file we are
+  # about to ship: a re-run for an unrelated reason must neither prompt nor
+  # silently push whatever happens to be on the branch.
+  fn_differs=1
+  if aws cloudfront get-function --name "$CF_FUNCTION_NAME" --stage LIVE \
+    "$TMP/live.js" >/dev/null 2>&1; then
+    cmp -s "$TMP/live.js" "$SRC" && fn_differs=0
+  fi
+
+  if [ "$fn_differs" -eq 0 ]; then
+    echo "    LIVE already matches cloudfront-function.js; not republishing"
+    FN_ARN="$(cf_text aws cloudfront describe-function --name "$CF_FUNCTION_NAME" \
+      --stage LIVE --query 'FunctionSummary.FunctionMetadata.FunctionARN')"
+  else
+    confirm_action "publish $CF_FUNCTION_NAME to LIVE, changing edge routing for all viewers"
+    FN_ARN="$(aws cloudfront publish-function --name "$CF_FUNCTION_NAME" --if-match "$ETAG" \
+      --query 'FunctionSummary.FunctionMetadata.FunctionARN' --output text)"
+    echo "    $FN_ARN"
+  fi
 fi
 
 # --- 7. Distribution (HUMAN-APPROVED) ---------------------------------------
@@ -262,21 +317,16 @@ DIST_ID="$(find_distribution_id)"
 if [ -n "$DIST_ID" ]; then
   echo "    exists: $DIST_ID"
 else
-  if [ "$ASSUME_YES" -ne 1 ] && [ "$DRY_RUN" -ne 1 ]; then
-    echo ""
-    echo "    About to CREATE a CloudFront distribution. This is a human-approved"
-    echo "    action (context/foundation/infrastructure.md, Approval)."
-    printf "    Type 'yes' to continue: "
-    read -r reply
-    [ "$reply" = "yes" ] || die "aborted by user"
-  fi
+  confirm_action "CREATE a CloudFront distribution"
 
   sed -e "s|__OAC_ID__|$OAC_ID|g" \
     -e "s|__FN_ARN__|$FN_ARN|g" \
     "$HERE/distribution-config.json" >"$TMP/dist.json"
 
   if [ "$DRY_RUN" -eq 1 ]; then
-    echo "    DRY-RUN: config rendered to $TMP/dist.json"
+    # Not $TMP: the EXIT trap deletes it before the user can read this line.
+    cp "$TMP/dist.json" ./distribution-config.rendered.json
+    echo "    DRY-RUN: config rendered to ./distribution-config.rendered.json"
     DIST_ID="DRYRUN-DIST"
   else
     DIST_ID="$(aws cloudfront create-distribution-with-tags \
@@ -314,8 +364,26 @@ else
 EOF
   # s3:GetObject only — no ListBucket, so a missing key returns 403 rather than
   # leaking a listing. verify.sh asserts that 403.
-  aws s3api put-bucket-policy --bucket "$S3_BUCKET" --policy "file://$TMP/policy.json"
-  echo "    applied"
+  #
+  # put-bucket-policy REPLACES the document wholesale, so an unprompted re-run
+  # would drop any statement a human added by hand. Compare first (whitespace
+  # normalised, since S3 does not return the document byte-for-byte as sent) and
+  # only ask when the write would actually change something.
+  policy_differs=1
+  if current_policy="$(aws s3api get-bucket-policy --bucket "$S3_BUCKET" \
+    --query Policy --output text 2>/dev/null)"; then
+    want="$(tr -d ' \t\n' <"$TMP/policy.json")"
+    have="$(printf '%s' "$current_policy" | tr -d ' \t\n')"
+    [ "$want" = "$have" ] && policy_differs=0
+  fi
+
+  if [ "$policy_differs" -eq 0 ]; then
+    echo "    already matches; not rewriting"
+  else
+    confirm_action "REPLACE the S3 bucket policy on $S3_BUCKET"
+    aws s3api put-bucket-policy --bucket "$S3_BUCKET" --policy "file://$TMP/policy.json"
+    echo "    applied"
+  fi
 fi
 
 if [ "$DRY_RUN" -eq 1 ]; then
