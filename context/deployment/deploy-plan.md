@@ -80,8 +80,11 @@ from `index.html`. `workbox-<hash>.js` is at the root but content-addressed and 
 immutably. Icons get 7 days rather than `immutable`, because workbox already revisions them in
 the precache manifest and only the browser's direct `<link rel=icon>` fetch is uncovered.
 
-Uploads run in three passes with `index.html` genuinely last, so no client ever receives an
-`index.html` referencing assets not yet uploaded. `--delete` is opt-in (`--prune`): with
+Uploads run in three passes with **`sw.js` genuinely last** — corrected 2026-09-09; it was
+`index.html` last, which is the wrong invariant. `sw.js` is the precache manifest and pins
+`index.html` by content revision, so shipping it first lets a phone precache the *old* HTML
+under the *new* revision key and serve it from precache indefinitely. Assets go up in pass 1,
+so `index.html` is never the file at risk. `--delete` is opt-in (`--prune`): with
 `registerType: 'autoUpdate'` a phone can hold an old `index.html` mid-deploy, and deleting its
 hashed assets 404s the precache fetch.
 
@@ -101,7 +104,7 @@ a database.
 
 ## First deployment record — 2026-09-09
 
-`bootstrap.sh` → `deploy.sh` → `verify.sh` completed; **18/18 assertions pass** against
+`bootstrap.sh` → `deploy.sh` → `verify.sh` completed; **all assertions pass** against
 `https://d3c7tvg5e5bxr3.cloudfront.net`, including the two the design exists to protect:
 `/api/v1/auth/login` returns a real 403 (`application/xml`, not HTML), and
 `CustomErrorResponses.Quantity` is 0.
@@ -136,7 +139,63 @@ runtime accepts the file, and `verify.sh` row (f) proves `/api/*` against the li
 distribution. Re-run `bootstrap.sh` once the API recovers if you want the edge-runtime
 check on record.
 
+## Post-deploy review — 2026-09-09
+
+A three-way review of the shipped scripts found five further defects, all fixed in this
+branch. Two would have caused real production failures:
+
+1. **`sw.js` was uploaded before `index.html`** (`config.sh` `NEVER_CACHE_FILES` order). The
+   invariant recorded above was the wrong one. `sw.js` is the precache manifest and pins
+   `index.html` by revision, so a phone opening the app in the ~1s gap fetches the new
+   `sw.js`, precaches `index.html` with `cache:'reload'`, receives the **old** HTML, and
+   stores it under the **new** revision key — after which the revision matches and it never
+   re-fetches. That phone serves stale HTML from precache until a later deploy changes the
+   manifest, and with `--prune` the chunks it references are gone, so the app is blank. This
+   is the failure the whole cache-header design exists to prevent, and `verify.sh` cannot see
+   it. `sw.js` now uploads last.
+
+2. **`lib.sh` helpers swallowed AWS failures.** Bash does not inherit `set -e` into a command
+   substitution, so `cf_text` and `find_distribution_id` — which pipe their `aws` output
+   through `tr`/`sed` — kept only the last command's status. A throttled `list-distributions`
+   returned an empty string and exit 0, which is indistinguishable from "the resource does not
+   exist": `deploy.sh` would tell you to run `bootstrap.sh`, and `bootstrap.sh` would offer to
+   create a distribution that already exists. Every `aws` call in `lib.sh` now states its own
+   failure. Note the fix does not help `[ -z "$(helper)" ]`, which discards the status
+   regardless — that shape was removed from `bootstrap.sh`'s pre-flight.
+
+3. **The human gate covered only distribution creation.** `deploy-plan.md` and `CLAUDE.md`
+   both claimed routing changes were human-approved, but a re-run published whatever
+   `cloudfront-function.js` was on the branch to LIVE and replaced the bucket policy, both
+   unprompted — as this file's own deployment record shows happening. All three actions now
+   route through one `confirm_action` gate, and each is skipped outright when it would change
+   nothing, so an unrelated re-run neither prompts nor pushes.
+
+4. **`verify.sh`'s compression probe was case-sensitive.** `awk`'s `IGNORECASE` is a gawk
+   extension that macOS awk silently ignores; the row passed only because HTTP/2 lowercases
+   header names. Proven over `--http1.1`, where CloudFront sends `Content-Encoding: br` and the
+   old probe returned nothing. Now uses `tolower($1)`.
+
+5. **Rows (e) and (f) accepted transport failures as passes.** Both asserted only `!= 200`, and
+   `curl` yields `000` on a DNS/TLS/timeout failure — so the two rows the design exists to
+   protect could report `ok` without the request ever reaching S3. Both now assert `403`
+   explicitly, and (f) additionally rejects a `text/html` content-type.
+
+Also fixed: `verify.sh` silently skipped the byte-identity and hashed-asset rows when `dist/`
+was absent while still printing "all checks passed" (it now derives the asset path from the
+live response and says so); the env-file guard missed `.env.production.local`, the
+highest-priority file Vite loads in production and gitignored, so invisible in `git status`;
+`deploy.sh`'s dirty-tree check used `git diff --quiet`, which ignores staged and untracked
+changes; the invalidation waiter's 10-minute timeout sank an otherwise-successful deploy and
+skipped verification; and a new `verify.sh` row (j) compares the LIVE function byte-for-byte
+against `cloudfront-function.js`, which catches a partial console edit that every other row
+would pass.
+
 ## Known gaps
+
+- **The routing function's extension test looks at the last URI segment**, so a route whose
+  FINAL segment carries a dot would 403 instead of loading the SPA. `/workers/:id`,
+  `/properties/:id` and `/stays/:id` all end in their parameter. Safe today because those ids
+  are UUIDs; a dotted id would need a route-aware allowlist, not a longer extension list.
 
 - **No CI deploy.** Deploys are manual by decision this round. The scripts are written to become
   the body of a GitHub Actions job with an OIDC role; credentials today are a long-lived IAM

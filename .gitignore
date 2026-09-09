@@ -39,3 +39,6 @@ skills-lock.json
 .claude/config-templates/
 .claude/rules/10x-*.md
 CLAUDE.local.md
+
+# scripts/deploy/bootstrap.sh --dry-run renders the distribution config here
+distribution-config.rendered.json
