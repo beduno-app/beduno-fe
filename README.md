@@ -79,9 +79,34 @@ a Pixel 5 profile.
 
 ## Deployment
 
-`npm run build`, then build the image — the Dockerfile copies `dist/` into
-`nginx:1.27-alpine` and templates `nginx.conf` (SPA fallback plus an `/api/` proxy to
-`${BACKEND_URL}`).
+Production is **AWS S3 + CloudFront** in `eu-central-1`. Scripts live in `scripts/deploy/`
+and every step goes through the AWS CLI — see `context/deployment/deploy-plan.md` for the
+platform rationale and `context/foundation/infrastructure.md` for the research behind it.
+
+```bash
+./scripts/deploy/bootstrap.sh   # one-time: bucket, OAC, CloudFront function, distribution
+./scripts/deploy/deploy.sh      # repeatable: build, upload, invalidate, verify
+./scripts/deploy/verify.sh      # read-only assertions against the live distribution
+```
+
+> **The deployed SPA cannot log in yet.** Only the frontend is on AWS; `beduno-be` is not
+> deployed, so there is no `/api/*` origin and the axios default (`/api/v1`, same-origin)
+> returns 403. This is a deliberate checkpoint, not a bug.
+
+Two rules that are load-bearing and easy to break:
+
+- **Never add CloudFront custom error responses**, and never let the CloudFront function
+  rewrite `/api/*`. Either turns an API 401 into an HTML 200, and the token-refresh
+  interceptor in `src/shared/composables/useApi.ts` only fires on a literal 401 status.
+  `scripts/deploy/verify.sh` asserts both.
+- **`index.html`, `sw.js`, `registerSW.js` and `manifest.webmanifest` must be uploaded
+  `no-cache`**; only content-hashed files get `immutable`. Getting this wrong pins
+  front-desk phones to a stale build.
+
+### Legacy: Docker + nginx
+
+The `Dockerfile` / `nginx.conf` path is retained because it is still the only way to run
+the SPA and the API behind one origin locally. It is **not** what production serves.
 
 ```bash
 npm run build && npm run docker:build
