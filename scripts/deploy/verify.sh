@@ -73,8 +73,18 @@ done
 
 # (c) hashed assets are immutable and compressed
 echo "(c) hashed assets"
+# Prefer the live HTML row (a) already downloaded, so this row still runs on a
+# fresh clone or in CI where dist/ does not exist. Previously the whole row was
+# skipped without a word and the script still printed "all checks passed".
+ASSET_SRC=""
 if [ -f dist/index.html ]; then
-  ASSET="$(sed -nE 's|.*src="(/assets/[^"]+\.js)".*|\1|p' dist/index.html | head -1)"
+  ASSET_SRC="dist/index.html"
+elif [ -s "$TMP/root.html" ]; then
+  ASSET_SRC="$TMP/root.html"
+  echo "  note dist/ absent — deriving the asset path from the live / response"
+fi
+if [ -n "$ASSET_SRC" ]; then
+  ASSET="$(sed -nE 's|.*src="(/assets/[^"]+\.js)".*|\1|p' "$ASSET_SRC" | head -1)"
   if [ -n "$ASSET" ]; then
     chk "asset cache-control" "$(hdr "https://$D$ASSET" cache-control)" "$CC_IMMUTABLE"
     # GET, not HEAD. CloudFront compresses while streaming a body, so a HEAD
@@ -82,8 +92,12 @@ if [ -f dist/index.html ]; then
     # for a distribution that compresses perfectly well. A fresh deploy always
     # hits that case: the entry chunk's hash changes, so it is always a cold
     # miss. -o /dev/null keeps the body off the terminal; -D - keeps the headers.
+    # tolower(), not IGNORECASE: the latter is a gawk extension that macOS awk
+    # and mawk silently ignore, so this matched only because HTTP/2 lowercases
+    # header names. Over HTTP/1.1 the header is "Content-Encoding" and the row
+    # would report a compressing distribution as uncompressed.
     enc="$(curl -sS -o /dev/null -D - -H 'Accept-Encoding: br, gzip' "https://$D$ASSET" |
-      tr -d '\r' | awk 'BEGIN{IGNORECASE=1}/^content-encoding:/{print $2}')"
+      tr -d '\r' | awk 'tolower($1)=="content-encoding:"{print $2}')"
     if [ -n "$enc" ]; then echo "  ok   asset content-encoding: $enc"; else bad "asset is not compressed"; fi
   else
     bad "could not extract an asset path from dist/index.html"
@@ -106,11 +120,10 @@ chk "manifest content-type" \
 # (e) a missing asset must NOT be rewritten to index.html
 echo "(e) missing asset is not masked"
 c="$(code "https://$D/assets/does-not-exist-00000000.js" "$TMP/miss")"
-if [ "$c" = "200" ]; then
-  bad "missing asset returned 200 (expected 403)"
-else
-  echo "  ok   missing asset returned $c"
-fi
+# Assert the expected status, not merely "not 200". code() yields 000 on a DNS,
+# TLS or timeout failure, which the old `!= 200` test happily reported as ok —
+# so the row could pass without the request ever reaching S3.
+chk "missing asset is 403" "$c" "403"
 grep -q 'id="app"' "$TMP/miss" 2>/dev/null && bad "index.html was served for a missing asset"
 
 # (f) /api/* must NOT be rewritten to index.html
@@ -118,11 +131,14 @@ grep -q 'id="app"' "$TMP/miss" 2>/dev/null && bad "index.html was served for a m
 echo "(f) /api/* is not rewritten"
 c="$(code "https://$D/api/v1/auth/login" "$TMP/api")"
 ct="$(curl -sS -o /dev/null -w '%{content_type}' "https://$D/api/v1/auth/login")"
-if [ "$c" = "200" ]; then
-  bad "/api/v1/auth/login returned 200 — the /api/ denylist is not in effect"
-else
-  echo "  ok   /api/v1/auth/login returned $c ($ct)"
-fi
+# Same reasoning as (e): 000 is not a pass. While there is no /api/* origin the
+# request falls through to S3, which answers 403 with an XML AccessDenied body.
+# When the API origin lands, relax this to "not 200 and not text/html".
+chk "/api/v1/auth/login is 403" "$c" "403"
+case "$ct" in
+  text/html*) bad "/api/v1/auth/login returned HTML ($ct) — token refresh in useApi.ts is broken" ;;
+  *) echo "  ok   /api/v1/auth/login content-type: $ct" ;;
+esac
 grep -q 'id="app"' "$TMP/api" 2>/dev/null &&
   bad "/api/* was rewritten to index.html — token refresh in useApi.ts is broken"
 
@@ -137,6 +153,22 @@ chk "assets/* has no function attached" \
     --output text)" "0"
 chk "bucket is not publicly readable" \
   "$(code "https://$S3_ORIGIN_DOMAIN/index.html")" "403"
+
+# (j) the LIVE function is the one in this repo.
+# Rows (b) and (f) catch the two catastrophic edits, but a partial console edit —
+# say, moving the extension test from the last segment to the whole URI — passes
+# every other row while quietly changing routing. Compare the bytes.
+echo "(j) edge function matches the repo"
+if aws cloudfront get-function --name "$CF_FUNCTION_NAME" --stage LIVE \
+  "$TMP/live.js" >/dev/null 2>&1; then
+  if cmp -s "$TMP/live.js" "$HERE/cloudfront-function.js"; then
+    echo "  ok   LIVE $CF_FUNCTION_NAME is byte-identical to cloudfront-function.js"
+  else
+    bad "LIVE $CF_FUNCTION_NAME differs from scripts/deploy/cloudfront-function.js (console edit?)"
+  fi
+else
+  bad "could not read the LIVE stage of $CF_FUNCTION_NAME"
+fi
 
 echo ""
 if [ "$fail" -eq 0 ]; then
