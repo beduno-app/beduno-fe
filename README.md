@@ -101,7 +101,9 @@ Two rules that are load-bearing and easy to break:
   `scripts/deploy/verify.sh` asserts both.
 - **`index.html`, `sw.js`, `registerSW.js` and `manifest.webmanifest` must be uploaded
   `no-cache`**; only content-hashed files get `immutable`. Getting this wrong pins
-  front-desk phones to a stale build.
+  front-desk phones to a stale build. **`sw.js` uploads last** — it is the precache
+  manifest and pins `index.html` by revision, so shipping it before the HTML it pins
+  lets a phone cache the old build under the new revision key and never re-fetch.
 
 ### Legacy: Docker + nginx
 

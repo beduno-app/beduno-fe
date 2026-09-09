@@ -28,7 +28,7 @@ mobile, offline-capable ops PWA at `/ops`.
 `src/modules/<feature>/` are vertical slices, each with `api/`, `store/`, `composables/`,
 `components/`, `views/`, `types/`. Cross-module imports are limited to types and `src/shared/`;
 don't reach into another module's store from a view. Routing and plugins live in `src/app/`. Full
-map: `@CLAUDE.md`.
+map: `@README.md`.
 
 ## Commands
 
@@ -37,6 +37,26 @@ map: `@CLAUDE.md`.
   green.
 - `npx vitest run src/path/to/file.spec.ts` — run one unit test file.
 - `npm run test:e2e` — Playwright; not wired into CI.
+
+## Deployment
+
+Production is AWS S3 + CloudFront, driven by `scripts/deploy/`. Two rules are load-bearing;
+both have automated assertions in `scripts/deploy/verify.sh` and neither is obvious from the
+code:
+
+- **Never configure CloudFront custom error responses, and never let
+  `scripts/deploy/cloudfront-function.js` rewrite `/api/*`.** Either turns an API 401 into an
+  HTML 200, and the token-refresh interceptor in `src/shared/composables/useApi.ts` only fires
+  on a literal 401 status — so auth refresh dies silently and looks like an app bug.
+- **`sw.js` uploads last.** It is the workbox precache manifest and pins `index.html` by
+  content revision; shipping it before the HTML it pins lets a phone precache the old build
+  under the new revision key and serve it forever. Order lives in `NEVER_CACHE_FILES`
+  (`scripts/deploy/config.sh`). Unhashed root files are `no-cache`; only hashed files are
+  `immutable`.
+
+`deploy.sh` is safe to run unattended. Creating the distribution, publishing the function to
+LIVE, and replacing the bucket policy are human-approved and live in `bootstrap.sh`.
+`nginx.conf` is local-only and does **not** serve production.
 
 ## Coding style
 
