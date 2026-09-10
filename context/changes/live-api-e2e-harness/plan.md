@@ -488,27 +488,27 @@ Not applicable — no data model or schema changes.
 
 #### Automated
 
-- [x] 2.1 Typecheck passes: `npm run typecheck`
-- [x] 2.2 Lint passes: `npm run lint`
-- [x] 2.3 `e2e/.auth/user.json` is git-ignored: `git check-ignore e2e/.auth/user.json` exits 0
+- [x] 2.1 Typecheck passes: `npm run typecheck` — 3d794b4
+- [x] 2.2 Lint passes: `npm run lint` — 3d794b4
+- [x] 2.3 `e2e/.auth/user.json` is git-ignored: `git check-ignore e2e/.auth/user.json` exits 0 — 3d794b4
 
 #### Manual
 
-- [x] 2.4 `npm run test:e2e` with real credentials produces `e2e/.auth/user.json`
-- [x] 2.5 `npm run test:e2e` with unset credentials fails as a named `setup` test with a clear message
+- [x] 2.4 `npm run test:e2e` with real credentials produces `e2e/.auth/user.json` — 3d794b4
+- [x] 2.5 `npm run test:e2e` with unset credentials fails as a named `setup` test with a clear message — 3d794b4
 
 ### Phase 3: Smoke spec
 
 #### Automated
 
-- [ ] 3.1 Typecheck passes: `npm run typecheck`
-- [ ] 3.2 Lint passes: `npm run lint`
-- [ ] 3.3 `npm run test:e2e` — `smoke.spec.ts` passes on `chromium` and `Mobile Chrome`
+- [x] 3.1 Typecheck passes: `npm run typecheck`
+- [x] 3.2 Lint passes: `npm run lint`
+- [x] 3.3 `npm run test:e2e` — `smoke.spec.ts` passes on `chromium` and `Mobile Chrome`
 
 #### Manual
 
-- [ ] 3.4 `e2e/checkin.spec.ts:34-35` comment no longer claims the journey is unreachable
-- [ ] 3.5 Headed run of `smoke.spec.ts` shows property selected and a non-error state
+- [x] 3.4 `e2e/checkin.spec.ts:34-35` comment no longer claims the journey is unreachable
+- [x] 3.5 Headed run of `smoke.spec.ts` shows property selected and a non-error state
 
 ### Phase 4: CI wiring
 
