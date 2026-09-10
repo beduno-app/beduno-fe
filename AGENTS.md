@@ -32,7 +32,7 @@ map: `@README.md`.
 
 ## Commands
 
-- `npm run dev` — dev server on port 8081, proxies `/api` to `localhost:8080`.
+- `npm run dev` — dev server on port 8081, proxies `/api` to `localhost:8080` (configurable via `VITE_DEV_PROXY_TARGET`).
 - `npm run lint`, `npm run typecheck`, `npm test`, `npm run build` — the four CI gates; keep all
   green.
 - `npx vitest run src/path/to/file.spec.ts` — run one unit test file.
