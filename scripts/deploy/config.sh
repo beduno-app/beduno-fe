@@ -76,3 +76,27 @@ ROUTING_CASES="/ops/arrivals|/index.html
 /manifest.webmanifest|/manifest.webmanifest
 /api/v1/auth/login|/api/v1/auth/login
 /api|/api"
+
+# --- API origin ---------------------------------------------------------------
+# The SPA calls its API same-origin (axios baseURL defaults to /api/v1), so
+# CloudFront routes api/* to the beduno-be backend instead of to S3. Same-origin
+# is the security posture, not an accident: it is why the backend's
+# CORS_ALLOWED_ORIGINS can stay empty, which is what stops any third-party site
+# making credentialed calls to the API. Do not "fix" a CORS error by opening that
+# allowlist — a CORS error here means this behaviour is missing or misrouted.
+#
+# A DuckDNS hostname, not the instance IP: the box is stopped when idle to keep
+# it at ~$2.6/month, and a stop changes its public IP. beduno-be's boot.sh
+# repoints the DNS record on the way back up, so the origin stays valid by name.
+# The authoritative value is SSM /beduno/prod/DUCKDNS_DOMAIN in the backend
+# account; this is a public hostname and safe to commit.
+#
+# Duplicated from distribution-config.json for the same reason S3_ORIGIN_DOMAIN
+# is: deploy.sh and verify.sh compare it against the live distribution, so a
+# mismatch aborts instead of deploying against the wrong backend.
+API_ORIGIN_DOMAIN="beduno.duckdns.org"
+API_ORIGIN_ID="api-beduno"
+
+# No leading slash, matching "assets/*" above it. CloudFront treats "api/*" and
+# "/api/*" identically; consistency within the file is the only reason to pick.
+API_PATH_PATTERN="api/*"
