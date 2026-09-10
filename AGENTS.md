@@ -36,7 +36,7 @@ map: `@README.md`.
 - `npm run lint`, `npm run typecheck`, `npm test`, `npm run build` — the four CI gates; keep all
   green.
 - `npx vitest run src/path/to/file.spec.ts` — run one unit test file.
-- `npm run test:e2e` — Playwright; not wired into CI.
+- `npm run test:e2e` — Playwright.
 
 ## Deployment
 
