@@ -46,10 +46,26 @@ DIST_ID="${CF_DISTRIBUTION_ID:-$(find_distribution_id)}"
 [ -n "$DIST_ID" ] ||
   die "no distribution with Comment=${CF_DISTRIBUTION_COMMENT}; run scripts/deploy/bootstrap.sh first"
 
+# Search by domain rather than trusting Items[0]. The distribution carries a
+# second origin for api/*, and CloudFront does not promise to preserve the order
+# an origin was added in — pinning this to index 0 meant an unrelated routing
+# change could abort every deploy with a message about the wrong origin.
 origin="$(aws cloudfront get-distribution-config --id "$DIST_ID" \
-  --query 'DistributionConfig.Origins.Items[0].DomainName' --output text)"
+  --query "DistributionConfig.Origins.Items[?DomainName=='${S3_ORIGIN_DOMAIN}'].DomainName | [0]" \
+  --output text)"
 [ "$origin" = "$S3_ORIGIN_DOMAIN" ] ||
-  die "distribution $DIST_ID points at $origin, not $S3_ORIGIN_DOMAIN"
+  die "distribution $DIST_ID has no origin for $S3_ORIGIN_DOMAIN (found: $origin)"
+
+# What actually matters for an upload-only deploy: the files this script writes
+# to S3 are the ones "/" serves. An api/* behaviour must never capture the
+# default, or the SPA shell would be fetched from the backend.
+default_target="$(aws cloudfront get-distribution-config --id "$DIST_ID" \
+  --query 'DistributionConfig.DefaultCacheBehavior.TargetOriginId' --output text)"
+default_domain="$(aws cloudfront get-distribution-config --id "$DIST_ID" \
+  --query "DistributionConfig.Origins.Items[?Id=='${default_target}'].DomainName | [0]" \
+  --output text)"
+[ "$default_domain" = "$S3_ORIGIN_DOMAIN" ] ||
+  die "the default cache behaviour serves $default_domain, not $S3_ORIGIN_DOMAIN; uploading would not change what / returns"
 
 echo "==> distribution $DIST_ID -> s3://$S3_BUCKET"
 # --porcelain, not `git diff --quiet`: the latter ignores staged and untracked
