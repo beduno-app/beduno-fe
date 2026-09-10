@@ -1,5 +1,8 @@
 import { defineConfig, devices } from '@playwright/test'
 
+const STORAGE_STATE = 'e2e/.auth/user.json'
+const AUTHENTICATED_SPECS = /smoke\.spec\.ts$/
+
 export default defineConfig({
   testDir: './e2e',
   fullyParallel: true,
@@ -13,12 +16,30 @@ export default defineConfig({
   },
   projects: [
     {
+      name: 'setup',
+      testMatch: /.*\.setup\.ts/,
+    },
+    {
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
+      testIgnore: AUTHENTICATED_SPECS,
     },
     {
       name: 'Mobile Chrome',
       use: { ...devices['Pixel 5'] },
+      testIgnore: AUTHENTICATED_SPECS,
+    },
+    {
+      name: 'chromium-authenticated',
+      use: { ...devices['Desktop Chrome'], storageState: STORAGE_STATE },
+      testMatch: AUTHENTICATED_SPECS,
+      dependencies: ['setup'],
+    },
+    {
+      name: 'Mobile Chrome-authenticated',
+      use: { ...devices['Pixel 5'], storageState: STORAGE_STATE },
+      testMatch: AUTHENTICATED_SPECS,
+      dependencies: ['setup'],
     },
   ],
   webServer: {

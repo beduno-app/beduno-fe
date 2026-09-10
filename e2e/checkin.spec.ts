@@ -31,8 +31,8 @@ test.describe('Check-in journey', () => {
   })
 
   test('arrivals page requires authentication', async ({ page }) => {
-    // The authenticated check-in journey needs a backend; until then this only
-    // asserts the guard. See docs/should-be/implementation-plan.md phase 8.1.
+    // For the authenticated proof, see smoke.spec.ts. This spec still only
+    // asserts the guard until S-01 rewrites it into the real check-in journey.
     await page.goto('/ops/arrivals')
     await expect(page).toHaveURL(/\/login/)
   })

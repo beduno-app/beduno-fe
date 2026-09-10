@@ -33,7 +33,7 @@ for arg in "$@"; do
   esac
 done
 
-require_cmd aws
+require_cmd aws jq
 assert_account
 
 TMP="$(mktemp -d)"
@@ -95,7 +95,7 @@ confirm_action() {
 echo "==> account $AWS_ACCOUNT_ID, region $AWS_REGION"
 
 # --- 1. S3 bucket -----------------------------------------------------------
-echo "==> [1/8] bucket $S3_BUCKET"
+echo "==> [1/9] bucket $S3_BUCKET"
 # Branch on the exit code, not on the output. aws-cli >= 2.36 prints a JSON body
 # (BucketArn/BucketRegion/AccessPointAlias) on success where older versions printed
 # nothing, so an "empty output means OK" test reports a healthy bucket as an error.
@@ -126,13 +126,13 @@ fi
 # --- 2. Block all public access ---------------------------------------------
 # PUT semantics, so re-running is harmless. Compatible with the OAC policy in
 # step 8: that grants a service principal, not "*", so S3 does not call it public.
-echo "==> [2/8] public access block"
+echo "==> [2/9] public access block"
 run aws s3api put-public-access-block --bucket "$S3_BUCKET" \
   --public-access-block-configuration \
   'BlockPublicAcls=true,IgnorePublicAcls=true,BlockPublicPolicy=true,RestrictPublicBuckets=true'
 
 # --- 3. Origin Access Control ------------------------------------------------
-echo "==> [3/8] origin access control $CF_OAC_NAME"
+echo "==> [3/9] origin access control $CF_OAC_NAME"
 OAC_ID="$(cf_text aws cloudfront list-origin-access-controls \
   --query "OriginAccessControlList.Items[?Name=='${CF_OAC_NAME}'].Id")"
 if [ -n "$OAC_ID" ]; then
@@ -157,7 +157,7 @@ EOF
 fi
 
 # --- 4. CloudFront Function: create or update -------------------------------
-echo "==> [4/8] function $CF_FUNCTION_NAME"
+echo "==> [4/9] function $CF_FUNCTION_NAME"
 SRC="$HERE/cloudfront-function.js"
 [ -f "$SRC" ] || die "missing $SRC"
 
@@ -193,7 +193,7 @@ fi
 # falls back to evaluating the same file against the same table under node. That
 # proves the routing logic; it does not prove the edge runtime accepts the file,
 # which create-function in step 4 already validated.
-echo "==> [5/8] test-function"
+echo "==> [5/9] test-function"
 
 # Rewrites $1 via the DEVELOPMENT stage, echoing the resulting uri.
 # Exit 2 means the API was unavailable, as distinct from the function answering
@@ -284,7 +284,7 @@ else
 fi
 
 # --- 6. Publish --------------------------------------------------------------
-echo "==> [6/8] publish-function"
+echo "==> [6/9] publish-function"
 if [ "$DRY_RUN" -eq 1 ]; then
   FN_ARN="arn:aws:cloudfront::${AWS_ACCOUNT_ID}:function/DRYRUN"
   echo "    DRY-RUN: skipped"
@@ -312,7 +312,7 @@ else
 fi
 
 # --- 7. Distribution (HUMAN-APPROVED) ---------------------------------------
-echo "==> [7/8] distribution (Comment=$CF_DISTRIBUTION_COMMENT)"
+echo "==> [7/9] distribution (Comment=$CF_DISTRIBUTION_COMMENT)"
 DIST_ID="$(find_distribution_id)"
 if [ -n "$DIST_ID" ]; then
   echo "    exists: $DIST_ID"
@@ -339,7 +339,7 @@ fi
 # --- 8. Bucket policy --------------------------------------------------------
 # Must come after the distribution: it references the distribution ARN. Note the
 # CloudFront ARN has an EMPTY region field. PUT semantics, so idempotent.
-echo "==> [8/8] bucket policy"
+echo "==> [8/9] bucket policy"
 if [ "$DRY_RUN" -eq 1 ]; then
   echo "    DRY-RUN: skipped"
 else
@@ -383,6 +383,86 @@ EOF
     confirm_action "REPLACE the S3 bucket policy on $S3_BUCKET"
     aws s3api put-bucket-policy --bucket "$S3_BUCKET" --policy "file://$TMP/policy.json"
     echo "    applied"
+  fi
+fi
+
+# --- 9. API cache behaviour (HUMAN-APPROVED) ---------------------------------
+# Routes api/* to the beduno-be backend so the SPA reaches its API same-origin.
+# Without this every /api/v1/* call lands on the S3 origin and returns 403, which
+# is the state the first deployment deliberately shipped in.
+#
+# Same-origin is the security posture, not a convenience: it is why the backend's
+# CORS_ALLOWED_ORIGINS stays empty and no third-party site can make credentialed
+# calls to the API. A CORS error against this API means this behaviour is missing
+# or misrouted — never open the backend allowlist to "fix" one.
+#
+# Read-modify-write against the LIVE config rather than re-PUTting
+# distribution-config.json wholesale: CloudFront fills in defaults on create
+# (ConnectionAttempts, OriginShield, GrpcConfig, ...) that the repo file does not
+# carry, so a wholesale PUT would strip them and no comparison could ever report
+# "already matches". The origin and behaviour objects spliced in below are read
+# OUT of distribution-config.json, so that file stays the single source of truth
+# for shape and for the managed-policy IDs, exactly as its header claims.
+echo "==> [9/9] api cache behaviour ($API_PATH_PATTERN -> $API_ORIGIN_DOMAIN)"
+if [ "$DRY_RUN" -eq 1 ] || [ "$DIST_ID" = "DRYRUN-DIST" ]; then
+  echo "    DRY-RUN: skipped"
+else
+  aws cloudfront get-distribution-config --id "$DIST_ID" >"$TMP/live.json" ||
+    die "get-distribution-config failed for $DIST_ID"
+
+  # Idempotency key is the behaviour, not the origin: a half-applied run can
+  # leave the origin present with no behaviour pointing at it.
+  have_behavior="$(jq --arg p "$API_PATH_PATTERN" \
+    '[.DistributionConfig.CacheBehaviors.Items[]? | select(.PathPattern == $p)] | length' \
+    "$TMP/live.json")"
+  have_origin="$(jq --arg id "$API_ORIGIN_ID" \
+    '[.DistributionConfig.Origins.Items[]? | select(.Id == $id)] | length' \
+    "$TMP/live.json")"
+
+  if [ "$have_behavior" != "0" ]; then
+    live_target="$(jq -r --arg p "$API_PATH_PATTERN" \
+      '.DistributionConfig.CacheBehaviors.Items[] | select(.PathPattern == $p) | .TargetOriginId' \
+      "$TMP/live.json")"
+    live_domain="$(jq -r --arg id "$live_target" \
+      '.DistributionConfig.Origins.Items[] | select(.Id == $id) | .DomainName' \
+      "$TMP/live.json")"
+    # Present but pointing somewhere else is worse than absent — it would send
+    # real credentials to the wrong host. Say so rather than reporting success.
+    [ "$live_domain" = "$API_ORIGIN_DOMAIN" ] ||
+      die "$API_PATH_PATTERN already routes to '$live_domain', not $API_ORIGIN_DOMAIN; resolve by hand"
+    echo "    already routes to $API_ORIGIN_DOMAIN; not rewriting"
+  else
+    confirm_action "ADD an $API_PATH_PATTERN cache behaviour on $DIST_ID routing to $API_ORIGIN_DOMAIN"
+
+    ETAG="$(jq -r '.ETag' "$TMP/live.json")"
+    [ -n "$ETAG" ] && [ "$ETAG" != "null" ] || die "could not read the distribution ETag"
+
+    API_ORIGIN_JSON="$(jq -c --arg id "$API_ORIGIN_ID" \
+      '.DistributionConfig.Origins.Items[] | select(.Id == $id)' \
+      "$HERE/distribution-config.json")"
+    API_BEHAVIOR_JSON="$(jq -c --arg p "$API_PATH_PATTERN" \
+      '.DistributionConfig.CacheBehaviors.Items[] | select(.PathPattern == $p)' \
+      "$HERE/distribution-config.json")"
+    [ -n "$API_ORIGIN_JSON" ] && [ -n "$API_BEHAVIOR_JSON" ] ||
+      die "distribution-config.json carries no $API_PATH_PATTERN behaviour or no $API_ORIGIN_ID origin"
+
+    # The behaviour goes FIRST (first match wins) and the origin is APPENDED.
+    # Appending matters: deploy.sh cross-checks the live distribution's S3 origin
+    # and a reordered Origins list would trip that guard on every future deploy.
+    jq --argjson origin "$API_ORIGIN_JSON" \
+       --argjson behavior "$API_BEHAVIOR_JSON" \
+       --argjson add_origin "$([ "$have_origin" = "0" ] && echo true || echo false)" '
+      .DistributionConfig
+      | (if $add_origin then .Origins.Items += [$origin] else . end)
+      | .Origins.Quantity = (.Origins.Items | length)
+      | .CacheBehaviors.Items = ([$behavior] + (.CacheBehaviors.Items // []))
+      | .CacheBehaviors.Quantity = (.CacheBehaviors.Items | length)
+    ' "$TMP/live.json" >"$TMP/next.json" || die "failed to render the updated distribution config"
+
+    aws cloudfront update-distribution --id "$DIST_ID" \
+      --distribution-config "file://$TMP/next.json" --if-match "$ETAG" >/dev/null ||
+      die "update-distribution failed (ETag $ETAG may be stale — another edit landed first)"
+    echo "    added"
   fi
 fi
 
