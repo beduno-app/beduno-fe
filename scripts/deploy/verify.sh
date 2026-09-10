@@ -8,6 +8,10 @@
 # literally being 401. Rows (g)-(i) catch someone later reintroducing the
 # problem through the console.
 #
+# Row (f) asserts the dangerous SHAPE (200-with-HTML, or the SPA shell) rather
+# than a fixed status: the API instance is stopped when idle, and a sleeping
+# backend is not a frontend regression. It warns in that case instead.
+#
 # Usage: scripts/deploy/verify.sh [<cloudfront-domain>]
 
 set -uo pipefail
@@ -22,7 +26,7 @@ ROOT="$(cd "$HERE/../.." && pwd)"
 . "$HERE/lib.sh"
 
 cd "$ROOT" || exit 1
-require_cmd aws curl
+require_cmd aws curl jq
 
 DIST_ID="${CF_DISTRIBUTION_ID:-$(find_distribution_id)}"
 [ -n "$DIST_ID" ] || die "no distribution with Comment=${CF_DISTRIBUTION_COMMENT}"
@@ -126,21 +130,54 @@ c="$(code "https://$D/assets/does-not-exist-00000000.js" "$TMP/miss")"
 chk "missing asset is 403" "$c" "403"
 grep -q 'id="app"' "$TMP/miss" 2>/dev/null && bad "index.html was served for a missing asset"
 
-# (f) /api/* must NOT be rewritten to index.html
-#     If this fails, every API 401 becomes an HTML 200 and auth refresh is dead.
-echo "(f) /api/* is not rewritten"
-c="$(code "https://$D/api/v1/auth/login" "$TMP/api")"
-ct="$(curl -sS -o /dev/null -w '%{content_type}' "https://$D/api/v1/auth/login")"
-# Same reasoning as (e): 000 is not a pass. While there is no /api/* origin the
-# request falls through to S3, which answers 403 with an XML AccessDenied body.
-# When the API origin lands, relax this to "not 200 and not text/html".
-chk "/api/v1/auth/login is 403" "$c" "403"
-case "$ct" in
-  text/html*) bad "/api/v1/auth/login returned HTML ($ct) — token refresh in useApi.ts is broken" ;;
-  *) echo "  ok   /api/v1/auth/login content-type: $ct" ;;
+# (f) /api/* reaches the API, and can never arrive as a successful SPA response
+#
+# The probe is an authenticated endpoint called WITHOUT a token, because that is
+# the exact case the architecture exists to protect: it must come back as a
+# literal 401 so the refresh interceptor in useApi.ts fires. /api/v1/auth/login
+# is a worse probe — it is POST-only, and a GET against it currently 500s.
+#
+# Deliberately NOT /api/v1/auth/me, which 401s just as cleanly: the backend
+# throttles the whole /api/v1/auth/ prefix at 10 requests/minute, so probing
+# under it would spend from a bucket that real logins and token refreshes need.
+# /api/v1/workers is outside that prefix and equally unauthenticated.
+#
+# Status is deliberately NOT asserted to a fixed value. The backend instance is
+# stopped when idle to keep it cheap, and a stopped origin yields a CloudFront
+# 502/504 whose error page is text/html. Hard-failing on "not 200" or on
+# "content-type is html" would report a sleeping box as a routing failure and
+# break every frontend deploy for a reason that has nothing to do with the
+# frontend. Only the genuinely dangerous shape fails: a 200 carrying HTML, or the
+# SPA shell served in place of an API response. A 502 is not 401, so useApi.ts
+# never mistakes it for an expired token.
+echo "(f) /api/* routing"
+API_PROBE="/api/v1/workers"
+c="$(code "https://$D$API_PROBE" "$TMP/api")"
+ct="$(curl -sS -o /dev/null -w '%{content_type}' "https://$D$API_PROBE")"
+
+case "$c:$ct" in
+  200:text/html*) bad "$API_PROBE returned HTML 200 — token refresh in useApi.ts is broken" ;;
 esac
 grep -q 'id="app"' "$TMP/api" 2>/dev/null &&
-  bad "/api/* was rewritten to index.html — token refresh in useApi.ts is broken"
+  bad "$API_PROBE served the SPA shell — token refresh in useApi.ts is broken"
+
+# Tell "the behaviour is missing" apart from "the backend is asleep". With no
+# api/* behaviour the request falls through to the S3 origin, which answers 403
+# with an XML <Error><Code>AccessDenied</Code> body. That is the pre-API state
+# and a real failure; a 502 from a stopped instance is not.
+if grep -q "AccessDenied" "$TMP/api" 2>/dev/null; then
+  bad "$API_PROBE fell through to the S3 origin — the $API_PATH_PATTERN behaviour is missing or misrouted"
+else
+  case "$c" in
+    401) echo "  ok   $API_PROBE is 401 $ct — a real API 401, so token refresh works" ;;
+    000) bad "$API_PROBE: no response at all (DNS, TLS or timeout)" ;;
+    502|503|504)
+      echo "  WARN $API_PROBE is $c — CloudFront reached no backend."
+      echo "       The EC2 instance is stopped when idle; start it and re-run verify.sh."
+      ;;
+    *) echo "  ok   $API_PROBE is $c $ct — routed to the API origin, not to S3" ;;
+  esac
+fi
 
 # (g)-(i) configuration regressions
 echo "(g-i) configuration"
@@ -153,6 +190,25 @@ chk "assets/* has no function attached" \
     --output text)" "0"
 chk "bucket is not publicly readable" \
   "$(code "https://$S3_ORIGIN_DOMAIN/index.html")" "403"
+
+# The api/* behaviour must never gain a function association: the CloudFront
+# function rewrites extension-less paths to /index.html, which is precisely how
+# an API 401 would become an HTML 200. The default behaviour's copy skips /api/
+# internally, but a function attached HERE would have no such guard.
+chk "$API_PATH_PATTERN has no function attached" \
+  "$(aws cloudfront get-distribution-config --id "$DIST_ID" \
+    --query "DistributionConfig.CacheBehaviors.Items[?PathPattern=='${API_PATH_PATTERN}'].FunctionAssociations.Quantity | [0]" \
+    --output text)" "0"
+# Caching an authenticated API response at the edge would serve one user's data
+# to another. Compare against distribution-config.json rather than a literal, so
+# the policy id has exactly one home.
+chk "$API_PATH_PATTERN caching is disabled" \
+  "$(aws cloudfront get-distribution-config --id "$DIST_ID" \
+    --query "DistributionConfig.CacheBehaviors.Items[?PathPattern=='${API_PATH_PATTERN}'].CachePolicyId | [0]" \
+    --output text)" \
+  "$(jq -r --arg p "$API_PATH_PATTERN" \
+    '.DistributionConfig.CacheBehaviors.Items[] | select(.PathPattern == $p) | .CachePolicyId' \
+    "$HERE/distribution-config.json")"
 
 # (j) the LIVE function is the one in this repo.
 # Rows (b) and (f) catch the two catastrophic edits, but a partial console edit —
