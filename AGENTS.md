@@ -40,14 +40,19 @@ map: `@README.md`.
 
 ## Deployment
 
-Production is AWS S3 + CloudFront, driven by `scripts/deploy/`. Two rules are load-bearing;
-both have automated assertions in `scripts/deploy/verify.sh` and neither is obvious from the
+Production is AWS S3 + CloudFront, driven by `scripts/deploy/`. Three rules are load-bearing;
+all have automated assertions in `scripts/deploy/verify.sh` and none is obvious from the
 code:
 
 - **Never configure CloudFront custom error responses, and never let
   `scripts/deploy/cloudfront-function.js` rewrite `/api/*`.** Either turns an API 401 into an
   HTML 200, and the token-refresh interceptor in `src/shared/composables/useApi.ts` only fires
   on a literal 401 status — so auth refresh dies silently and looks like an app bug.
+- **`api/*` routes to the `beduno-be` origin, so the SPA calls its API same-origin.** That is
+  the only reason the backend's `CORS_ALLOWED_ORIGINS` can stay empty and no third-party site
+  can make credentialed calls to it. A CORS error against this API means the behaviour is
+  missing or misrouted — fix the routing, never open the backend allowlist. The behaviour must
+  carry no function association, for the same reason as the rule above.
 - **`sw.js` uploads last.** It is the workbox precache manifest and pins `index.html` by
   content revision; shipping it before the HTML it pins lets a phone precache the old build
   under the new revision key and serve it forever. Order lives in `NEVER_CACHE_FILES`
