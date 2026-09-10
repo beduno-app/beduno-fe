@@ -16,7 +16,9 @@ test.describe('Authentication', () => {
     await page.goto('/login')
     await page.getByLabel(/email/i).fill('invalid@example.com')
     await page.getByLabel(/password/i).fill('wrongpassword')
-    await page.getByRole('button', { name: /login|sign in/i }).click()
+    // i18n.ts hardcodes locale: 'pl' with no browser-locale detection, so a
+    // fresh context always renders the Polish submit label.
+    await page.getByRole('button', { name: 'Zaloguj się' }).click()
     // Should remain on login or show error
     await expect(page).toHaveURL(/\/login/)
   })
