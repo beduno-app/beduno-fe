@@ -501,20 +501,20 @@ Not applicable — no data model or schema changes.
 
 #### Automated
 
-- [x] 3.1 Typecheck passes: `npm run typecheck`
-- [x] 3.2 Lint passes: `npm run lint`
-- [x] 3.3 `npm run test:e2e` — `smoke.spec.ts` passes on `chromium` and `Mobile Chrome`
+- [x] 3.1 Typecheck passes: `npm run typecheck` — a7582be
+- [x] 3.2 Lint passes: `npm run lint` — a7582be
+- [x] 3.3 `npm run test:e2e` — `smoke.spec.ts` passes on `chromium` and `Mobile Chrome` — a7582be
 
 #### Manual
 
-- [x] 3.4 `e2e/checkin.spec.ts:34-35` comment no longer claims the journey is unreachable
-- [x] 3.5 Headed run of `smoke.spec.ts` shows property selected and a non-error state
+- [x] 3.4 `e2e/checkin.spec.ts:34-35` comment no longer claims the journey is unreachable — a7582be
+- [x] 3.5 Headed run of `smoke.spec.ts` shows property selected and a non-error state — a7582be
 
 ### Phase 4: CI wiring
 
 #### Automated
 
-- [ ] 4.1 `.github/workflows/ci.yml` parses as valid YAML (CI run starts)
+- [x] 4.1 `.github/workflows/ci.yml` parses as valid YAML (CI run starts)
 - [ ] 4.2 Pushed branch's Actions run shows Lint/Typecheck/Unit tests/Build passing before the new E2E step starts
 
 #### Manual
@@ -522,4 +522,4 @@ Not applicable — no data model or schema changes.
 - [ ] 4.3 Pushed branch's Actions run shows the E2E step green (once test account + secrets/vars exist)
 - [ ] 4.4 A branch with a deliberate lint failure does not reach the E2E step
 - [ ] 4.5 No secret values appear in the Actions log output
-- [ ] 4.6 `AGENTS.md`'s `test:e2e` line no longer claims it isn't wired into CI
+- [x] 4.6 `AGENTS.md`'s `test:e2e` line no longer claims it isn't wired into CI
