@@ -5,7 +5,7 @@
 - **Scope**: Phase 4 of 4 (full plan review)
 - **Date**: 2026-09-11
 - **Verdict**: REJECTED
-- **Findings**: 1 critical, 0 warnings, 2 observations
+- **Findings**: 2 critical, 0 warnings, 2 observations (F4 added post-triage — surfaced by re-running CI after F1's fix; see F4)
 
 ## Verdicts
 
@@ -62,3 +62,13 @@
 - **Detail**: `AGENTS.md:35` reads `npm run dev — dev server on port 8081, proxies /api to localhost:8080.` — this predates the change and wasn't in Phase 1's scope (which explicitly touched `vite.config.ts`, `CLAUDE.md`, `README.md` only), so it's not a plan violation. But it's now inconsistent with `CLAUDE.md`/`README.md`, which both correctly describe the proxy target as configurable via `VITE_DEV_PROXY_TARGET`.
 - **Fix**: Append "(configurable via `VITE_DEV_PROXY_TARGET`)" to that line, matching the other two docs.
 - **Decision**: FIXED — `AGENTS.md:35` now reads "...proxies /api to localhost:8080 (configurable via VITE_DEV_PROXY_TARGET).", consistent with CLAUDE.md/README.md.
+
+### F4 — Same root cause as F2, but for the password field: `getByLabel(/password/i)` can't match "Hasło" either
+
+- **Severity**: ❌ CRITICAL
+- **Impact**: 🏃 LOW — quick decision; fix is obvious and narrowly scoped
+- **Dimension**: Success Criteria
+- **Location**: e2e/auth.spec.ts:11-12, 17-18 (pre-F1-fix)
+- **Detail**: Discovered by re-running CI after fixing F1: with F1's dependency-scoping fix landed, `auth.spec.ts`'s "shows login form..." and "shows error message on invalid credentials" tests actually executed (instead of being silently skipped, as they always had been) and both failed on both `chromium` and `Mobile Chrome` (4 failures) — `getByLabel(/password/i)` timed out, "element(s) not found". Root cause: `src/assets/translations/pl.ts`'s `auth.password` is `'Hasło'`, which has no English cognate, unlike `auth.email: 'Email'` (kept as-is in Polish) — so `/password/i` can never match, while `/email/i` happens to work by translation coincidence. Same class of bug as F2, just on a field this review's Fix A for F1 caused to actually run for the first time — genuinely was hidden by the pre-existing `dependencies: ['setup']` over-scoping until F1's fix removed it.
+- **Fix**: Replace `getByLabel(/password/i)` with `getByLabel('Hasło')` at both call sites in `auth.spec.ts`, matching F2's exact-text approach, with a comment explaining why.
+- **Decision**: FIXED — both `getByLabel(/password/i)` occurrences in `e2e/auth.spec.ts` now use `getByLabel('Hasło')`. Lint clean; `npx playwright test --list` confirms both tests still discovered on `chromium`/`Mobile Chrome`. Pending: re-verify via a real pushed-branch CI run that all previously-masked guard tests now pass.
