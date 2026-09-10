@@ -238,6 +238,10 @@ The SPA now reaches its API. `beduno-be` went live at `https://beduno.duckdns.or
 | Methods | all seven |
 | Function association | none |
 
+Verified live after the change: `verify.sh` 23/23, a real API `401` arriving as a `401` on
+`/api/v1/workers`, `api/*` carrying no function association, `CachingDisabled` confirmed, and
+a real browser login returning `200` with `x-cache: Miss from cloudfront`.
+
 Applied through `bootstrap.sh` step 9, which is human-gated like steps 6–8 and idempotent: it
 keys on the behaviour rather than the origin (a half-applied run can leave an orphan origin),
 and refuses rather than reporting success if `api/*` already routes somewhere other than the
@@ -261,6 +265,14 @@ backend allowlist.**
    CloudFront HTML error page before this landed.
 3. **`deploy.sh` read `Origins.Items[0]`.** A second origin made every future deploy hostage
    to list order. Now searched by domain, and the default behaviour's target is asserted too.
+
+   This one was nearly missed. The reasoning that it was safe — "the origin is appended, so
+   index 0 stays the bucket" — is wrong: **CloudFront returns origins sorted by `Id`**, and
+   `api-beduno` sorts before `s3-beduno-fe-prod`. Measured against the live distribution
+   immediately after the behaviour landed, `Items[0].DomainName` is `beduno.duckdns.org`, so
+   the old check would have aborted every subsequent deploy with a message blaming the wrong
+   origin. Append-versus-prepend was never the variable. **Treat any index into a CloudFront
+   origins array as unsafe, however the entry was added.**
 4. **`verify.sh` hard-asserted `/api/*` is 403.** True only while there was no API origin. It
    now asserts the dangerous shape — a 200 carrying HTML, or the SPA shell — because that is
    the only thing `useApi.ts` can be fooled by. The instance is stopped when idle and a
