@@ -515,11 +515,11 @@ Not applicable — no data model or schema changes.
 #### Automated
 
 - [x] 4.1 `.github/workflows/ci.yml` parses as valid YAML (CI run starts) — 885df66
-- [x] 4.2 Pushed branch's Actions run shows Lint/Typecheck/Unit tests/Build passing before the new E2E step starts
+- [x] 4.2 Pushed branch's Actions run shows Lint/Typecheck/Unit tests/Build passing before the new E2E step starts — 5cd260e
 
 #### Manual
 
 - [ ] 4.3 Pushed branch's Actions run shows the E2E step green (once test account + secrets/vars exist)
 - [ ] 4.4 A branch with a deliberate lint failure does not reach the E2E step
-- [x] 4.5 No secret values appear in the Actions log output
+- [x] 4.5 No secret values appear in the Actions log output — 5cd260e
 - [x] 4.6 `AGENTS.md`'s `test:e2e` line no longer claims it isn't wired into CI — 885df66
