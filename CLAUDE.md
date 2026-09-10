@@ -92,7 +92,8 @@ CI (`.github/workflows`) runs: lint → typecheck → unit tests → build. Keep
 
 ## Environment
 
-- `VITE_API_BASE_URL` — API base URL. Defaults to `/api/v1`; the Vite dev server proxies that to `http://localhost:8080`, the legacy nginx container proxies it to `${BACKEND_URL}`, and in production CloudFront's `api/*` behaviour routes it to `beduno-be`. Leave it unset so every environment stays same-origin. Read with `??`, so setting it to an **empty string does not fall back** — leave it unset.
+- `VITE_API_BASE_URL` — API base URL. Defaults to `/api/v1`; the Vite dev server proxies that to a configurable target (`localhost:8080` by default — see `VITE_DEV_PROXY_TARGET`), the legacy nginx container proxies it to `${BACKEND_URL}`, and in production CloudFront's `api/*` behaviour routes it to `beduno-be`. Leave it unset so every environment stays same-origin. Read with `??`, so setting it to an **empty string does not fall back** — leave it unset.
+- `VITE_DEV_PROXY_TARGET` — overrides the Vite dev server's `/api` proxy target (default `http://localhost:8080`). Read directly from `process.env` in `vite.config.ts` (Node context, no `VITE_` client-exposure needed) — used only by the dev server's proxy, never by the built app, which always calls same-origin `/api/v1`. Lets CI point the dev server at the live `beduno-be` origin for E2E runs.
 - The shared axios instance lives in `src/shared/composables/useApi.ts` (exported as `api`) — import it rather than creating new axios instances.
 - `@/` is aliased to `src/`.
 
