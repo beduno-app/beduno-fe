@@ -279,14 +279,65 @@ backend allowlist.**
    stopped origin gives a CloudFront 502 with an HTML error page; that warns instead of
    failing, while an S3 fall-through (XML `AccessDenied`) still fails hard.
 
-### Known gap at time of writing
+### Auth through the CDN — verified 2026-09-10
 
 `RateLimitFilter` throttles the `/api/v1/auth/` prefix at 10 requests/minute keyed on
-`getRemoteAddr()`. With CloudFront in front, Tomcat's `RemoteIpValve` resolves the right-most
-untrusted hop — the CloudFront edge — so **every visitor through the CDN shares one throttle
-bucket**, and the SPA's own token refreshes spend it during ordinary use. The fix is entirely
-backend-side (trust CloudFront's origin-facing ranges in Caddy so `{client_ip}` resolves the
-viewer, and overwrite `X-Forwarded-For` rather than appending); it is prepared on
-`fix/cloudfront-client-ip` in `beduno-be` but not yet applied. **Treat auth through the CDN as
-unverified until it is.** `verify.sh` deliberately probes `/api/v1/workers`, outside that
-prefix, so verification does not spend from the shared bucket.
+`getRemoteAddr()`. With CloudFront in front, Tomcat's `RemoteIpValve` resolved the right-most
+untrusted hop — the CloudFront edge — so **every visitor through the CDN shared one throttle
+bucket**, and the SPA's own token refreshes spent it during ordinary use. A handful of
+concurrent users would have locked each other out.
+
+Fixed backend-side: Caddy now trusts CloudFront's origin-facing ranges, so `{client_ip}`
+resolves the viewer, and `X-Forwarded-For` is overwritten with that single value rather than
+appended.
+
+Verified by the `beduno-be` session with a test whose signal is binary: exhaust the throttle
+through CloudFront, then immediately call the origin directly. Direct answered **429**, not
+401 — the two paths therefore resolve to the same key. Had it still been edge-keyed, the
+direct caller's own bucket would have been untouched and answered 401. Not re-run from this
+side: it would 429 a real user's next login for a minute to re-measure a settled result.
+
+**Auth through the CDN is per-client and correct.**
+
+### Backend fixes deployed alongside (image `c6ccc1a`)
+
+Four faults found while wiring this up, all fixed backend-side and confirmed live from here:
+
+| Was | Now |
+| --- | --- |
+| `workers?sort=lastName` → 500 | 200 |
+| `stays?sort=dateFrom` → 500 | 200 |
+| `/api/v1/audit` → 500 on *every* request | 200 |
+| `GET` on POST-only login → 500 | 405 |
+| 401 declared `charset=ISO-8859-1` | `charset=UTF-8` |
+| column names (`last_name`) silently accepted | 400 `error.sort.unsupported_field` |
+
+The sort bug: list endpoints are backed by native queries, and Spring Data appends a
+`Pageable`'s sort straight into the SQL, so the field name had to already *be* a column.
+`lastName` folded to `lastname` and failed as an unknown column. **The contract is camelCase
+API field names — never column names.** Do not "fix" a sort 500 by sending snake_case; that
+now returns 400 by design.
+
+The audit endpoint had never worked in production and no test had ever called it.
+
+### Open — Room contract divergence
+
+The two repos were built against specs that disagree on `Room`, in three places:
+
+| Field | `docs/should-be/` + SPA | Backend (before fix) |
+| --- | --- | --- |
+| identifier | `roomNumber` | `name` |
+| `floor` | `number` | `String` |
+| gender rule | `MALE_ONLY \| FEMALE_ONLY \| MIXED` | `ANY \| MALE_ONLY \| FEMALE_ONLY` |
+
+`currentOccupancy` and `occupants[]` are typed and rendered by the SPA but absent from the
+backend entirely.
+
+Resolved in the SPA's favour: **the backend adopts `docs/should-be/` wholesale**, so the spec
+stands as written and the SPA needs no change. That work needs a Flyway migration and real
+occupancy queries, and is not yet deployed. When `RoomResponse` changes shape the two sides
+land in step — `beduno-be` messages before deploying, not after.
+
+Note for that migration: the SPA **sends** `floor` as a number on room create and update
+(`RoomManagement.vue:154` uses `v-model.number`), so both shapes must be accepted during the
+transition or room creation breaks in the window between the two deploys.
