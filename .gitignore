@@ -22,6 +22,7 @@ node_modules
 # Test results
 /test-results/
 /playwright-report/
+/e2e/.auth/
 
 # Agent skills installed via `npx skills add`. Third-party content under the
 # vendor's own terms — keep it local rather than redistributing it through this

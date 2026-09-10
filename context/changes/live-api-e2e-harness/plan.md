@@ -474,28 +474,28 @@ Not applicable — no data model or schema changes.
 
 #### Automated
 
-- [x] 1.1 Typecheck passes: `npm run typecheck`
-- [x] 1.2 Build passes: `npm run build`
-- [x] 1.3 Lint passes: `npm run lint`
+- [x] 1.1 Typecheck passes: `npm run typecheck` — 99d7ee7
+- [x] 1.2 Build passes: `npm run build` — 99d7ee7
+- [x] 1.3 Lint passes: `npm run lint` — 99d7ee7
 
 #### Manual
 
-- [x] 1.4 `npm run dev` with no env var set still proxies to `localhost:8080`
-- [x] 1.5 `VITE_DEV_PROXY_TARGET=https://beduno.duckdns.org npm run dev` reaches the live API
-- [x] 1.6 `CLAUDE.md` and `README.md` no longer state the proxy target as a fixed fact
+- [x] 1.4 `npm run dev` with no env var set still proxies to `localhost:8080` — 99d7ee7
+- [x] 1.5 `VITE_DEV_PROXY_TARGET=https://beduno.duckdns.org npm run dev` reaches the live API — 99d7ee7
+- [x] 1.6 `CLAUDE.md` and `README.md` no longer state the proxy target as a fixed fact — 99d7ee7
 
 ### Phase 2: Sign-in fixture (setup project + storageState)
 
 #### Automated
 
-- [ ] 2.1 Typecheck passes: `npm run typecheck`
-- [ ] 2.2 Lint passes: `npm run lint`
-- [ ] 2.3 `e2e/.auth/user.json` is git-ignored: `git check-ignore e2e/.auth/user.json` exits 0
+- [x] 2.1 Typecheck passes: `npm run typecheck`
+- [x] 2.2 Lint passes: `npm run lint`
+- [x] 2.3 `e2e/.auth/user.json` is git-ignored: `git check-ignore e2e/.auth/user.json` exits 0
 
 #### Manual
 
-- [ ] 2.4 `npm run test:e2e` with real credentials produces `e2e/.auth/user.json`
-- [ ] 2.5 `npm run test:e2e` with unset credentials fails as a named `setup` test with a clear message
+- [x] 2.4 `npm run test:e2e` with real credentials produces `e2e/.auth/user.json`
+- [x] 2.5 `npm run test:e2e` with unset credentials fails as a named `setup` test with a clear message
 
 ### Phase 3: Smoke spec
 

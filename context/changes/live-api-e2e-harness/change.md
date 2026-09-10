@@ -3,7 +3,7 @@ change_id: live-api-e2e-harness
 title: Authenticated E2E harness against the live API
 status: implementing
 created: 2026-09-10
-updated: 2026-09-10
+updated: 2026-09-11
 archived_at: null
 ---
 
