@@ -18,7 +18,7 @@ vue-router · vue-i18n (PL/EN/DE/UA/RU) · Vitest · Playwright.
 ## Requirements
 
 - Node.js 20+
-- A running backend on `http://localhost:8080` (or set `VITE_API_BASE_URL`)
+- A running backend on `http://localhost:8080` (or point the dev proxy elsewhere with `VITE_DEV_PROXY_TARGET`)
 
 ## Setup
 
@@ -27,7 +27,7 @@ npm install
 npm run dev
 ```
 
-The dev server runs on **http://localhost:8081** and proxies `/api` to `http://localhost:8080`.
+The dev server runs on **http://localhost:8081** and proxies `/api` to `http://localhost:8080` by default — override with `VITE_DEV_PROXY_TARGET` to point it elsewhere (e.g. the live API for E2E runs).
 
 ## Scripts
 
@@ -55,6 +55,7 @@ npx vitest run src/modules/stays/composables/useConflicts.spec.ts
 | Variable | Default | Description |
 |---|---|---|
 | `VITE_API_BASE_URL` | `/api/v1` | API base URL used by the shared axios instance |
+| `VITE_DEV_PROXY_TARGET` | `http://localhost:8080` | Dev server's `/api` proxy target (Vite config only, not the built app) |
 | `BACKEND_URL` | — | Backend upstream for the nginx container (production only) |
 
 ## Project structure
