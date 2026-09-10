@@ -92,7 +92,7 @@ CI (`.github/workflows`) runs: lint → typecheck → unit tests → build. Keep
 
 ## Environment
 
-- `VITE_API_BASE_URL` — API base URL. Defaults to `/api/v1`; the Vite dev server proxies that to `http://localhost:8080`, and the legacy nginx container proxies it to `${BACKEND_URL}`. Read with `??`, so setting it to an **empty string does not fall back** — leave it unset.
+- `VITE_API_BASE_URL` — API base URL. Defaults to `/api/v1`; the Vite dev server proxies that to `http://localhost:8080`, the legacy nginx container proxies it to `${BACKEND_URL}`, and in production CloudFront's `api/*` behaviour routes it to `beduno-be`. Leave it unset so every environment stays same-origin. Read with `??`, so setting it to an **empty string does not fall back** — leave it unset.
 - The shared axios instance lives in `src/shared/composables/useApi.ts` (exported as `api`) — import it rather than creating new axios instances.
 - `@/` is aliased to `src/`.
 
@@ -102,4 +102,5 @@ Production is AWS S3 + CloudFront (`eu-central-1`), driven by `scripts/deploy/` 
 
 - **Never configure CloudFront custom error responses, and never let `scripts/deploy/cloudfront-function.js` rewrite `/api/*`.** Either turns an API 401 into an HTML 200; the refresh interceptor in `useApi.ts` only fires on a literal 401 status. `scripts/deploy/verify.sh` asserts both — keep those checks passing.
 - Unhashed root files (`index.html`, `sw.js`, `registerSW.js`, `manifest.webmanifest`) upload with `no-cache`; only content-hashed files get `immutable`. A new unhashed root file means updating `NEVER_CACHE_FILES` in `scripts/deploy/config.sh` — and **`sw.js` must stay last in that list**, because it is the precache manifest and pins `index.html` by revision.
-- Creating the distribution, publishing the CloudFront function to LIVE, and replacing the bucket policy are human-approved and live in `bootstrap.sh` (each prompts, or takes `--yes`, and is skipped when it would change nothing); `deploy.sh` must never touch routing.
+- Creating the distribution, publishing the CloudFront function to LIVE, replacing the bucket policy, and adding the `api/*` cache behaviour are human-approved and live in `bootstrap.sh` (each prompts, or takes `--yes`, and is skipped when it would change nothing); `deploy.sh` must never touch routing.
+- **`api/*` routes to `beduno-be` so the SPA calls its API same-origin — which is the only reason the backend's `CORS_ALLOWED_ORIGINS` can stay empty.** A CORS error against this API means the behaviour is missing or misrouted; fix the routing, never the backend allowlist. That behaviour must also never gain a function association: the router rewrites extension-less paths to `/index.html`, which is exactly how an API 401 becomes an HTML 200.

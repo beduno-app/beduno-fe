@@ -3,7 +3,9 @@ project: Beduno
 planned_at: 2026-08-30
 deployed_at: 2026-09-09
 platform: AWS
-scope: spa-only
+scope: spa + api origin
+api_connected_at: 2026-09-10
+api_origin: https://beduno.duckdns.org
 distribution_id: E2RRGGPKJTC86F
 domain: https://d3c7tvg5e5bxr3.cloudfront.net
 aws_account: "500060134341"
@@ -37,6 +39,13 @@ discovered during pre-flight and neither anticipated by the research:
 **Consequence: the deployed SPA cannot log in.** There is no `/api/*` origin, so the axios
 default (`/api/v1`, same-origin) returns 403. This is a deliberate, reversible checkpoint — a
 static-shell smoke test, not a usable product.
+
+> **Resolved 2026-09-10.** The two blockers above were answered outside this plan: `beduno-be`
+> runs on a single EC2 instance behind Caddy (Postgres in a container alongside it, not RDS),
+> reached by a DuckDNS hostname, at roughly $2.6/month rather than the $50–55 an ALB + Fargate
+> + RDS path implied. That made the `/api/*` behaviour affordable, and it is now live — see
+> "API origin — 2026-09-10" below. The paragraph above is kept as the record of what the
+> spa-only checkpoint deliberately was.
 
 ## What was provisioned
 
@@ -211,6 +220,61 @@ would pass.
 1. Decide the API's database shape (RDS instance class, or a cheaper Postgres) — this is the
    real blocker, not the ECS work.
 2. Raise the monthly budget to match before any API deploy, or the $5 alarm becomes noise.
-3. Add the `/api/*` cache behaviour: `CachingDisabled`, `AllViewerExceptHostHeader`, all seven
-   methods, **no function attached**.
+3. ~~Add the `/api/*` cache behaviour~~ — done 2026-09-10, see below.
 4. Move `deploy.sh` into GitHub Actions behind an OIDC role and retire the IAM user key.
+
+## API origin — 2026-09-10
+
+The SPA now reaches its API. `beduno-be` went live at `https://beduno.duckdns.org` (EC2
+`i-0f55c17cf69cb20c8`, Caddy + Let's Encrypt), which unblocked step 3 above.
+
+| Piece | Value |
+| --- | --- |
+| Origin id | `api-beduno` |
+| Origin domain | `beduno.duckdns.org` (custom origin, `https-only`, TLSv1.2) |
+| Path pattern | `api/*`, first in `CacheBehaviors` |
+| Cache policy | `Managed-CachingDisabled` |
+| Origin request policy | `Managed-AllViewerExceptHostHeader` |
+| Methods | all seven |
+| Function association | none |
+
+Applied through `bootstrap.sh` step 9, which is human-gated like steps 6–8 and idempotent: it
+keys on the behaviour rather than the origin (a half-applied run can leave an orphan origin),
+and refuses rather than reporting success if `api/*` already routes somewhere other than the
+configured domain.
+
+### Why same-origin rather than CORS
+
+The backend's `CORS_ALLOWED_ORIGINS` is empty, and `WebConfig` registers no CORS mapping at
+all when the list is empty — so every cross-origin request is rejected. That is the desired
+posture and routing `api/*` through CloudFront is what preserves it. **A CORS error against
+this API means this behaviour is missing or misrouted; it is never a reason to open the
+backend allowlist.**
+
+### Four things that bit, or nearly did
+
+1. **Host header.** `AllViewerExceptHostHeader` is required, not cosmetic. Caddy matches its
+   site block on `{$SITE_ADDRESS}`; a forwarded viewer `Host` matches no block and Caddy
+   answers 404. (TLS is fine either way — CloudFront uses the origin domain for the
+   handshake.)
+2. **Methods.** The default behaviour is GET/HEAD only, so a login `POST` returned a
+   CloudFront HTML error page before this landed.
+3. **`deploy.sh` read `Origins.Items[0]`.** A second origin made every future deploy hostage
+   to list order. Now searched by domain, and the default behaviour's target is asserted too.
+4. **`verify.sh` hard-asserted `/api/*` is 403.** True only while there was no API origin. It
+   now asserts the dangerous shape — a 200 carrying HTML, or the SPA shell — because that is
+   the only thing `useApi.ts` can be fooled by. The instance is stopped when idle and a
+   stopped origin gives a CloudFront 502 with an HTML error page; that warns instead of
+   failing, while an S3 fall-through (XML `AccessDenied`) still fails hard.
+
+### Known gap at time of writing
+
+`RateLimitFilter` throttles the `/api/v1/auth/` prefix at 10 requests/minute keyed on
+`getRemoteAddr()`. With CloudFront in front, Tomcat's `RemoteIpValve` resolves the right-most
+untrusted hop — the CloudFront edge — so **every visitor through the CDN shares one throttle
+bucket**, and the SPA's own token refreshes spend it during ordinary use. The fix is entirely
+backend-side (trust CloudFront's origin-facing ranges in Caddy so `{client_ip}` resolves the
+viewer, and overwrite `X-Forwarded-For` rather than appending); it is prepared on
+`fix/cloudfront-client-ip` in `beduno-be` but not yet applied. **Treat auth through the CDN as
+unverified until it is.** `verify.sh` deliberately probes `/api/v1/workers`, outside that
+prefix, so verification does not spend from the shared bucket.
