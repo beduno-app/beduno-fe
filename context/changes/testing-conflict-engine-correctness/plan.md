@@ -288,8 +288,8 @@ Not applicable — pre-production system, no live data.
 
 #### Automated
 
-- [x] 4.1 `test -f context/foundation/test-plan.md`
+- [x] 4.1 `test -f context/foundation/test-plan.md` — 3f14c07
 
 #### Manual
 
-- [x] 4.2 §6.1 and §7 read clearly and accurately reflect what this phase shipped
+- [x] 4.2 §6.1 and §7 read clearly and accurately reflect what this phase shipped — 3f14c07
