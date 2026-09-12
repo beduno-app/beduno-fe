@@ -328,9 +328,9 @@ Not applicable — pre-production system, no live data beyond the pilot-safe tes
 
 #### Automated
 
-- [x] 3.1 Typecheck passes: `npm run typecheck`
-- [x] 3.2 Lint passes: `npm run lint`
-- [x] 3.3 Spec discovered correctly: `npx playwright test --list` shows `inspection-day.spec.ts` under the authenticated projects only
+- [x] 3.1 Typecheck passes: `npm run typecheck` — c822251
+- [x] 3.2 Lint passes: `npm run lint` — c822251
+- [x] 3.3 Spec discovered correctly: `npx playwright test --list` shows `inspection-day.spec.ts` under the authenticated projects only — c822251
 
 #### Manual
 
@@ -341,9 +341,9 @@ Not applicable — pre-production system, no live data beyond the pilot-safe tes
 
 #### Automated
 
-- [ ] 4.1 `npx playwright test --list` shows exactly 4 authenticated specs and confirms guard-only specs stay unauthenticated
-- [ ] 4.2 `test -f context/foundation/test-plan.md`
+- [x] 4.1 `npx playwright test --list` shows exactly 4 authenticated specs and confirms guard-only specs stay unauthenticated
+- [x] 4.2 `test -f context/foundation/test-plan.md`
 
 #### Manual
 
-- [ ] 4.3 §6.3 and §7 read clearly and accurately reflect what this phase shipped
+- [x] 4.3 §6.3 and §7 read clearly and accurately reflect what this phase shipped

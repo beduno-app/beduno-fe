@@ -75,7 +75,7 @@ orchestrator updates Status as artifacts appear on disk.
 | # | Phase name | Goal (one line) | Risks covered | Test types | Status | Change folder |
 |---|---|---|---|---|---|---|
 | 1 | Conflict-engine correctness | Prove hard violations always block and soft violations always require a recorded override, per violation type | #1 | unit + integration | complete | context/changes/testing-conflict-engine-correctness/ |
-| 2 | Live-journey proof against beduno-be | Prove Arrival/Nightly/Inspection Day produce correct results against the real API, not just mocks | #2 | e2e | not started | — |
+| 2 | Live-journey proof against beduno-be | Prove Arrival/Nightly/Inspection Day produce correct results against the real API, not just mocks | #2 | e2e | change opened | context/changes/testing-live-journey-beduno-be/ |
 | 3 | Offline durability | Prove a rejected replay survives reload; prove a 01:00 arrival and no-show reversal behave correctly once Cluster B resolves | #3, #4 | integration | not started | — |
 | 4 | Access-control regression lock | Prove the null-userRole state denies access, not grants it | #5 | unit | not started | — |
 
@@ -130,9 +130,44 @@ the relevant rollout phase ships; before that, the sub-section reads
 
 ### 6.3 Adding an e2e test against the live API
 
-- TBD — see §3 Phase 2 (authenticated journey pattern, extends F-03's
-  `e2e/smoke.spec.ts` and `playwright.config.ts` authenticated-project
-  pair).
+- **Location**: `e2e/`, one file per journey (`arrival-day.spec.ts`,
+  `nightly-list.spec.ts`, `inspection-day.spec.ts`) — never edit an
+  existing guard-only spec (`checkin.spec.ts`, `exports.spec.ts`,
+  `inspection.spec.ts`) to add real assertions; new files only, per the
+  paired-project pattern that avoids re-leaking `storageState` into
+  guard-only specs (the exact bug F-03's own review caught).
+- **Authenticated-project wiring**: add the new filename to
+  `playwright.config.ts`'s `AUTHENTICATED_SPECS` regex so it's picked up
+  by `chromium-authenticated`/`Mobile Chrome-authenticated` and excluded
+  from the unauthenticated projects.
+- **Test data**: dedicated, disposable pilot-safe fixture data (one test
+  account/property, matching `smoke.spec.ts`'s `selectOption({ index: 1
+  })` convention) — no per-test revert/cleanup for ordinary actions.
+- **Assertion style — structural success by default, with named
+  exceptions**: assert reaching a valid post-action state (a toast from
+  `useToast`, e.g. `getByText('Checked in successfully.')`), not exact
+  business data, since live data changes between runs. **Exception**: when
+  the risk being tested is specifically "does this data come back
+  populated at all" (e.g. Nightly List's `occupants[]`), the assertion
+  must NOT be tolerant — a fully tolerant either/or would silently pass in
+  exactly the failure mode the test exists to catch. Assert a specific,
+  known fixture (e.g. `E2E_OCCUPIED_ROOM_NUMBER`) shows real data instead.
+- **Stateful multi-step flows**: pair each state-changing click with
+  `page.waitForResponse(...)` scoped to that action's endpoint, not a
+  toast-text race — toasts can stack when a loop performs several actions
+  in quick succession. For a flow with no delete/cancel endpoint, add a
+  `test.afterEach` hook that always attempts to close out any state still
+  open, regardless of the test body's outcome — an accepted, narrow
+  residual risk (only a hard crash could still orphan state), not a
+  blocker.
+- **Data-driven walkthroughs**: never hardcode a room/occupant count —
+  loop over whatever Playwright locators actually resolve to, since these
+  specs run against live pilot data of unknown shape.
+- **Reference tests**: `e2e/arrival-day.spec.ts` (manual-ID fallback,
+  headless-testable without camera mocking), `e2e/nightly-list.spec.ts`
+  (the non-tolerant-assertion exception, worked example),
+  `e2e/inspection-day.spec.ts` (multi-step flow + `afterEach` cleanup,
+  `waitForResponse` pairing).
 
 ### 6.4 Adding a router-guard regression test
 
@@ -180,6 +215,25 @@ contributors should respect these unless the underlying assumption changes.
   data-model/API-contract decision needing backend coordination, out of
   scope for a testing phase. (Source: `testing-conflict-engine-correctness`
   plan.md, 2026-09-12.)
+- **`inhouse.api.ts`'s `bulkCheckout`** — confirmed dead code (no store
+  wrapper, no UI element anywhere in `RoomCard.vue`/`UnassignedWorkers.vue`/`InHouseView.vue`).
+  Cannot be e2e-tested without first building the UI (FR-015). Re-evaluate
+  once a separate change builds bulk-checkout's UI. (Source:
+  `testing-live-journey-beduno-be` research.md and plan.md, 2026-09-12.)
+- **`ArrivalsToday.spec.ts`'s `page`/`number` pagination-field drift** —
+  a properties-API mock uses `number: 0` where `PaginatedResponse.page` is
+  the actual declared field name. Not yet resolved whether the real API
+  or the fixture is wrong; flagged for verification, not fixed here.
+  (Source: `testing-live-journey-beduno-be` research.md, 2026-09-12.)
+- **Inspection Day's residual orphaned-state risk** — `inspection.api.ts`
+  has no delete/cancel endpoint; a hard test-runner crash (not a normal
+  assertion failure) during `e2e/inspection-day.spec.ts` could still leave
+  one inspection open server-side. Accepted and documented, not
+  eliminated — mitigated by an always-run `test.afterEach` completion
+  attempt. Whether `beduno-be` allows concurrent open inspections per
+  property (which would make this fully harmless) is unverified; a manual
+  check is tracked in that change's plan.md. (Source:
+  `testing-live-journey-beduno-be` research.md and plan.md, 2026-09-12.)
 
 ## 8. Freshness Ledger
 
