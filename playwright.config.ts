@@ -1,7 +1,7 @@
 import { defineConfig, devices } from '@playwright/test'
 
 const STORAGE_STATE = 'e2e/.auth/user.json'
-const AUTHENTICATED_SPECS = /smoke\.spec\.ts$/
+const AUTHENTICATED_SPECS = /(smoke|arrival-day|nightly-list|inspection-day)\.spec\.ts$/
 
 export default defineConfig({
   testDir: './e2e',
