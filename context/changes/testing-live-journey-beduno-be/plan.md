@@ -316,9 +316,9 @@ Not applicable — pre-production system, no live data beyond the pilot-safe tes
 
 #### Automated
 
-- [x] 2.1 Typecheck passes: `npm run typecheck`
-- [x] 2.2 Lint passes: `npm run lint`
-- [x] 2.3 Spec discovered correctly: `npx playwright test --list` shows `nightly-list.spec.ts` under the authenticated projects only
+- [x] 2.1 Typecheck passes: `npm run typecheck` — 38ae3c0
+- [x] 2.2 Lint passes: `npm run lint` — 38ae3c0
+- [x] 2.3 Spec discovered correctly: `npx playwright test --list` shows `nightly-list.spec.ts` under the authenticated projects only — 38ae3c0
 
 #### Manual
 
@@ -328,9 +328,9 @@ Not applicable — pre-production system, no live data beyond the pilot-safe tes
 
 #### Automated
 
-- [ ] 3.1 Typecheck passes: `npm run typecheck`
-- [ ] 3.2 Lint passes: `npm run lint`
-- [ ] 3.3 Spec discovered correctly: `npx playwright test --list` shows `inspection-day.spec.ts` under the authenticated projects only
+- [x] 3.1 Typecheck passes: `npm run typecheck`
+- [x] 3.2 Lint passes: `npm run lint`
+- [x] 3.3 Spec discovered correctly: `npx playwright test --list` shows `inspection-day.spec.ts` under the authenticated projects only
 
 #### Manual
 
