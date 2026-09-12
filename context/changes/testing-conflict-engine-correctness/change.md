@@ -1,7 +1,7 @@
 ---
 change_id: testing-conflict-engine-correctness
 title: Unit and integration tests proving the conflict engine's hard/soft violation classification
-status: implemented
+status: impl_reviewed
 created: 2026-09-11
 updated: 2026-09-12
 archived_at: null

@@ -74,7 +74,7 @@ orchestrator updates Status as artifacts appear on disk.
 
 | # | Phase name | Goal (one line) | Risks covered | Test types | Status | Change folder |
 |---|---|---|---|---|---|---|
-| 1 | Conflict-engine correctness | Prove hard violations always block and soft violations always require a recorded override, per violation type | #1 | unit + integration | change opened | context/changes/testing-conflict-engine-correctness/ |
+| 1 | Conflict-engine correctness | Prove hard violations always block and soft violations always require a recorded override, per violation type | #1 | unit + integration | complete | context/changes/testing-conflict-engine-correctness/ |
 | 2 | Live-journey proof against beduno-be | Prove Arrival/Nightly/Inspection Day produce correct results against the real API, not just mocks | #2 | e2e | not started | — |
 | 3 | Offline durability | Prove a rejected replay survives reload; prove a 01:00 arrival and no-show reversal behave correctly once Cluster B resolves | #3, #4 | integration | not started | — |
 | 4 | Access-control regression lock | Prove the null-userRole state denies access, not grants it | #5 | unit | not started | — |
