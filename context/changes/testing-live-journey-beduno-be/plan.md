@@ -341,9 +341,9 @@ Not applicable — pre-production system, no live data beyond the pilot-safe tes
 
 #### Automated
 
-- [x] 4.1 `npx playwright test --list` shows exactly 4 authenticated specs and confirms guard-only specs stay unauthenticated
-- [x] 4.2 `test -f context/foundation/test-plan.md`
+- [x] 4.1 `npx playwright test --list` shows exactly 4 authenticated specs and confirms guard-only specs stay unauthenticated — 411e1db
+- [x] 4.2 `test -f context/foundation/test-plan.md` — 411e1db
 
 #### Manual
 
-- [x] 4.3 §6.3 and §7 read clearly and accurately reflect what this phase shipped
+- [x] 4.3 §6.3 and §7 read clearly and accurately reflect what this phase shipped — 411e1db
