@@ -140,6 +140,7 @@ export function useConflicts() {
 
     checkPropertyBlocked(propertyStatus)
     checkRoomBlocked(room)
+    checkCapacity(room)
     checkOverPlanned(room, workers.length)
 
     for (const worker of workers) {

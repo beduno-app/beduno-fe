@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach } from 'vitest'
 import { useConflicts } from './useConflicts'
 import type { Room } from '@/modules/properties/types/property.types'
 import type { Worker } from '@/modules/workers/types/worker.types'
-import type { ConstraintViolation } from '../types/stay.types'
+import type { ConstraintViolation, HardConstraintType } from '../types/stay.types'
 
 function makeRoom(overrides: Partial<Room> = {}): Room {
   return {
@@ -250,6 +250,55 @@ describe('useConflicts', () => {
       conflicts.validateBulk(workers, makeRoom({ availableSpots: 4 }))
       expect(conflicts.hardViolations.value.find((v) => v.type === 'DOUBLE_BOOKING')).toBeDefined()
     })
+
+    it('adds CAPACITY_EXCEEDED hard violation when the room has zero available spots', () => {
+      const workers = [makeWorker(), makeWorker({ id: 'w2' })]
+      const room = makeRoom({ availableSpots: 0, capacity: 2, currentOccupancy: 2 })
+      const result = conflicts.validateBulk(workers, room)
+      expect(result).toBe(false)
+      expect(conflicts.hardViolations.value.find((v) => v.type === 'CAPACITY_EXCEEDED')).toBeDefined()
+      expect(conflicts.isBlocked.value).toBe(true)
+    })
+  })
+
+  describe('hard violations cannot be bypassed by a coexisting soft violation', () => {
+    // No override parameter exists anywhere in the hard-check functions today,
+    // so this is the most honest proxy for "cannot be bypassed by an override"
+    // reachable via the public API: a hard violation must stay blocking even
+    // when an overridable soft violation (GENDER_MISMATCH) fires alongside it.
+    const hardCases: Array<{
+      type: HardConstraintType
+      worker: Partial<Worker>
+      room: Partial<Room>
+      propertyStatus?: 'ACTIVE' | 'INACTIVE'
+    }> = [
+      { type: 'CAPACITY_EXCEEDED', worker: {}, room: { availableSpots: 0, capacity: 2, currentOccupancy: 2 } },
+      {
+        type: 'DOUBLE_BOOKING',
+        worker: { currentStay: { propertyId: 'p1', propertyName: 'P1', roomNumber: '1', since: '2024-01-01' } },
+        room: {},
+      },
+      { type: 'ROOM_BLOCKED', worker: {}, room: { status: 'BLOCKED' } },
+      { type: 'PROPERTY_BLOCKED', worker: {}, room: {}, propertyStatus: 'INACTIVE' },
+    ]
+
+    it.each(hardCases)(
+      '$type stays blocking even with a coexisting GENDER_MISMATCH soft violation',
+      ({ type, worker, room, propertyStatus }) => {
+        // FEMALE worker in a MALE_ONLY room triggers the soft GENDER_MISMATCH
+        // violation alongside whichever hard violation the case sets up.
+        const result = conflicts.validate({
+          worker: makeWorker({ gender: 'FEMALE', ...worker }),
+          room: makeRoom({ genderRule: 'MALE_ONLY', ...room }),
+          propertyStatus,
+        })
+
+        expect(result).toBe(false)
+        expect(conflicts.isBlocked.value).toBe(true)
+        expect(conflicts.hardViolations.value.find((v) => v.type === type)).toBeDefined()
+        expect(conflicts.softViolations.value.find((v) => v.type === 'GENDER_MISMATCH')).toBeDefined()
+      },
+    )
   })
 
   describe('setServerViolations()', () => {
