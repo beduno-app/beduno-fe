@@ -52,9 +52,9 @@ offline, and the result is provably correct rather than asserted.
 | F-01 | `clean-dependency-baseline` | (foundation) the dependency tree carries no CRITICAL or HIGH advisory | — | Access Control Changes §4 | ready |
 | F-02 | `worker-data-handling-policy` | (foundation) one written allowlist names every worker field allowed to leave the system | — | NFR (PII minimisation), US-05 | ready |
 | F-03 | `live-api-e2e-harness` | (foundation) an authenticated Playwright journey can run against the live API, in CI | — | Success Criteria §Primary 1, §Secondary 3 | in-progress |
-| S-01 | `arrival-day-proven` | check a worker in by QR or manual search, online and offline, against the live API | F-03 | US-01, FR-010, FR-011, FR-018 | proposed |
-| S-02 | `nightly-list-proven` | see the in-house roster per room and check workers out, singly or in one action | F-03 | FR-013, FR-014, FR-015 | proposed |
-| S-03 | `inspection-day-proven` | complete a room-by-room inspection walkthrough end to end | F-03 | FR-017 | proposed |
+| S-01 | `arrival-day-proven` | check a worker in by QR or manual search, online and offline, against the live API | F-03 | US-01, FR-010, FR-011, FR-018 | in-progress |
+| S-02 | `nightly-list-proven` | see the in-house roster per room and check workers out, singly or in one action | F-03 | FR-013, FR-014, FR-015 | in-progress |
+| S-03 | `inspection-day-proven` | complete a room-by-room inspection walkthrough end to end | F-03 | FR-017 | in-progress |
 | S-04 | `property-scoped-audit` | (Property Admin) read the audit log for their own property | — | US-03, FR-003, FR-004 | ready |
 | S-05 | `governed-soft-overrides` | (Planner) plan stays in bulk where a soft override is a control, not a click-through | — | US-06, FR-021, FR-022 | ready |
 | S-06 | `night-shift-occupancy-truth` | find a 01:00 arrival, and reverse a no-show who turned up after all | S-01 | US-03, FR-010, FR-012 | proposed |
@@ -153,7 +153,8 @@ Foundations below assume these are present and do NOT re-scaffold them.
 - **Unknowns:**
   - Does the live API's arrivals payload match what `arrivals.api.ts` declares, given that three list endpoints were returning 500 until 2026-09-10? — Owner: team. Block: no.
 - **Risk:** This is the north star and it is deliberately not a build slice — the code exists and the PRD says so. The risk is the opposite of the usual one: a slice that "already works" gets waved through without evidence, and the first real disagreement between SPA and API surfaces at 6am in front of the pilot agency instead of in CI. Sequenced immediately after F-03 because `market-feedback` pays for finding that disagreement early.
-- **Status:** proposed
+- **Proven so far:** The online manual-ID check-in path is proven end-to-end against live `beduno-be` by `testing-live-journey-beduno-be` (2026-09-12, `e2e/arrival-day.spec.ts`) — the change that actually delivered this outcome; this roadmap item's own change-id was never invoked. Remaining gap: "the queued action replays correctly on reconnect" is not yet e2e-proven — `arrivals.store.ts:66-72` already queues `CHECK_IN` via `actionQueue.ts` and has unit coverage, so this is a test gap, not a build gap.
+- **Status:** in-progress
 
 ### S-02: Nightly List proven end-to-end on live data
 
@@ -166,7 +167,8 @@ Foundations below assume these are present and do NOT re-scaffold them.
 - **Unknowns:**
   - Does the in-house roster depend on `Room.currentOccupancy` / `occupants[]`, which the SPA types and renders but the backend does not yet implement? — Owner: team. Block: no.
 - **Risk:** The second must-not-fail moment, and the one carrying live dead code: `inhouseApi.bulkCheckout` exists with zero call sites, so FR-015 is a wiring job rather than a build. The risk is scope creep from FR-016 — moving a worker looks like it belongs on this screen and is deliberately held out as S-08, because its response shape is an unmade decision and would block the whole slice.
-- **Status:** proposed
+- **Proven so far:** The roster view and single-worker checkout are proven end-to-end against live `beduno-be` by `testing-live-journey-beduno-be` (2026-09-12, `e2e/nightly-list.spec.ts`) — the change that actually delivered this outcome. Remaining gap is a real build, not a test gap: `bulkCheckout` (FR-015) still has no UI wiring anywhere in `RoomCard.vue` / `UnassignedWorkers.vue` / `InHouseView.vue` (confirmed dead code, logged in `test-plan.md` §7).
+- **Status:** in-progress
 
 ### S-03: Inspection Day proven end-to-end on live data
 
@@ -179,7 +181,8 @@ Foundations below assume these are present and do NOT re-scaffold them.
 - **Unknowns:**
   - Must the pilot's inspection survive losing connectivity mid-walk? `inspection.store.ts` calls the API directly and is absent from `actionQueue.ts:8`, so offline support means a new object store and a `DB_VERSION` bump — the PRD's own constraint 2. — Owner: team. Block: no (the walkthrough can be proven online first).
 - **Risk:** The third must-not-fail moment and the least-exercised one. Sequenced alongside S-01 and S-02 rather than after them because the three are independent and `capacity` is a live question — this is the cheapest parallel agent run available in Stream A. The named unknown is the whole risk: answering it "yes" makes this the largest slice in Stream A rather than the smallest.
-- **Status:** proposed
+- **Proven so far:** The room-by-room walkthrough's "present" happy path is proven end-to-end against live `beduno-be` by `testing-live-journey-beduno-be` (2026-09-12, `e2e/inspection-day.spec.ts`) — the change that actually delivered this outcome. Remaining gap: discrepancy capture (`ABSENT` + reason/note) is not e2e-proven — `RoomInspectionCard.vue`'s `confirmAbsent`/`discrepancyReason` path already exists in code, so this is a test gap, not a build gap.
+- **Status:** in-progress
 
 ### S-04: Both sides of a dispute read the same audit log
 
@@ -333,9 +336,9 @@ Foundations below assume these are present and do NOT re-scaffold them.
 | F-01 | `clean-dependency-baseline` | Clear the CRITICAL and HIGH dependency advisories | yes | Run `/10x-plan clean-dependency-baseline` |
 | F-02 | `worker-data-handling-policy` | Write the worker-data-handling allowlist policy | yes | Run `/10x-plan worker-data-handling-policy` |
 | F-03 | `live-api-e2e-harness` | Authenticated Playwright harness against the live API, in CI | yes | Run `/10x-plan live-api-e2e-harness` — unlocks the north star |
-| S-01 | `arrival-day-proven` | Prove Arrival Day end-to-end on live data | no | Needs F-03 |
-| S-02 | `nightly-list-proven` | Prove the Nightly List end-to-end, and wire bulk checkout | no | Needs F-03 |
-| S-03 | `inspection-day-proven` | Prove Inspection Day end-to-end on live data | no | Needs F-03 |
+| S-01 | `arrival-day-proven` | Prove offline check-in replays correctly on reconnect | yes | Online path proven by `testing-live-journey-beduno-be`; remaining scope is an e2e offline/reconnect test, code already exists |
+| S-02 | `nightly-list-proven` | Wire bulk checkout (FR-015) into the Nightly List UI | yes | Roster + single checkout proven by `testing-live-journey-beduno-be`; `bulkCheckout` is dead code needing real UI work |
+| S-03 | `inspection-day-proven` | Prove discrepancy capture end-to-end on live data | yes | Present-path proven by `testing-live-journey-beduno-be`; remaining scope is an e2e test of the existing ABSENT/discrepancy branch |
 | S-04 | `property-scoped-audit` | Property-scoped audit log for both sides of a dispute | yes | Run `/10x-plan property-scoped-audit` |
 | S-05 | `governed-soft-overrides` | Make soft-violation overrides a control, not a click-through | yes | Run `/10x-plan governed-soft-overrides` |
 | S-06 | `night-shift-occupancy-truth` | Night-shift arrivals window and the no-show reversal path | no | Needs S-01 (unknowns resolved 2026-09-12) |
