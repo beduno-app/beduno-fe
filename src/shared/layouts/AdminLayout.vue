@@ -207,7 +207,7 @@ async function handleLogout() {
   font-size: 0.875rem;
 
   &:hover,
-  &.router-link-active {
+  &.router-link-exact-active {
     background: rgba(255, 255, 255, 0.1);
     color: #fff;
   }
