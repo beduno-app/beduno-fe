@@ -31,15 +31,18 @@ test.describe('Nightly List: roster occupancy and checkout against the live API'
     // assert a specific, known-occupied fixture room genuinely shows a
     // nonzero occupant count.
     const roomCard = page
-      .locator('.room-card')
-      .filter({ has: page.locator('.room-number', { hasText: roomNumber }) })
+      .getByTestId('room-card')
+      .filter({ has: page.getByTestId('room-number').getByText(roomNumber) })
     await expect(roomCard).toBeVisible()
-    await expect(roomCard.locator('.occupant')).not.toHaveCount(0)
+    await expect(roomCard.getByTestId('occupant')).not.toHaveCount(0)
 
     // Checkout is a tolerant structural-success check: any occupant in the
     // known-occupied room proves the action, not the roster's baseline
     // state.
-    await roomCard.getByRole('button', { name: 'Check out' }).first().click()
-    await expect(page.getByText('Checked out successfully.')).toBeVisible()
+    //
+    // i18n.ts hardcodes locale: 'pl', so locators use the real Polish
+    // strings — matching auth.setup.ts's own convention.
+    await roomCard.getByRole('button', { name: 'Wymelduj' }).first().click()
+    await expect(page.getByText('Wymeldowano pomyślnie.')).toBeVisible()
   })
 })

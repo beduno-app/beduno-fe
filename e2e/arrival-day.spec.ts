@@ -20,13 +20,17 @@ test.describe('Arrival Day: manual check-in against the live API', () => {
     // Manual-ID fallback is used instead of QR: it renders outside the
     // camera-permission branch, so it works headlessly without mocking
     // getUserMedia.
-    await page.getByRole('button', { name: 'Scan QR' }).click()
-    await page.getByPlaceholder('Worker internal ID').fill(workerId)
-    await page.getByRole('button', { name: 'Confirm' }).click()
+    //
+    // i18n.ts hardcodes locale: 'pl' with no browser-locale detection, so a
+    // fresh context always renders Polish labels — locators below use the
+    // real Polish strings, matching auth.setup.ts's own convention.
+    await page.getByRole('button', { name: 'Skanuj QR' }).click()
+    await page.getByPlaceholder('Wewnętrzny ID pracownika').fill(workerId)
+    await page.getByRole('button', { name: 'Potwierdź' }).click()
 
     // Structural-success signal: the app's own toast, not a hardcoded row —
     // real per ArrivalsToday.vue's toast.success(t('arrivals.checkInSuccess'))
     // call on both check-in paths.
-    await expect(page.getByText('Checked in successfully.')).toBeVisible()
+    await expect(page.getByText('Zameldowano pomyślnie.')).toBeVisible()
   })
 })

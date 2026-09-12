@@ -1,7 +1,7 @@
 ---
 change_id: testing-live-journey-beduno-be
 title: E2E proof of Arrival/Nightly/Inspection Day against the live beduno-be API
-status: implemented
+status: impl_reviewed
 created: 2026-09-12
 updated: 2026-09-12
 archived_at: null

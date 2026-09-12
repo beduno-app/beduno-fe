@@ -39,11 +39,15 @@ function confirmMove() {
 <template>
   <div
     class="room-card"
+    data-testid="room-card"
     :class="{ 'room-card--blocked': room.blocked }"
   >
     <div class="room-header">
       <div class="room-info">
-        <span class="room-number">{{ room.room.roomNumber }}</span>
+        <span
+          class="room-number"
+          data-testid="room-number"
+        >{{ room.room.roomNumber }}</span>
         <span class="room-capacity">
           {{ room.occupants.length }}/{{ room.room.capacity }}
         </span>
@@ -66,6 +70,7 @@ function confirmMove() {
         v-for="occ in room.occupants"
         :key="occ.id"
         class="occupant"
+        data-testid="occupant"
       >
         <div class="occupant-info">
           <span class="occupant-name">{{ occ.worker.lastName }}, {{ occ.worker.firstName }}</span>
