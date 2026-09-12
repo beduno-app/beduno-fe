@@ -211,10 +211,12 @@ question rather than acceptance criteria, because the resolution is pending.
   is `NO_SHOW` with no route back, and the queued action replays against a stay
   the agency may since have cancelled
 
-> Unresolved: four separate defects produce one outcome — the nightly count is
-> wrong and the audit trail cannot explain it. Fixing them individually leaves
-> the outcome intact. Blocks the guardrails "the nightly count is wrong" and
-> "nobody can explain what happened".
+> Resolved 2026-09-12: the worker still shows in tonight's arrivals (shift
+> window, not calendar date); their NO_SHOW is reversible via an explicit
+> undo action with its own audit event; the replayed queued action carries
+> the state it was valid against, so a stale write is detected rather than
+> silently applied; the conflict, if one still lands in the review inbox,
+> is owned by the user who queued it.
 
 ### US-04: An 8pm walk-in with a free bed (Cluster C — FR-001, FR-002)
 
@@ -305,13 +307,13 @@ commitment.
 
 - [preserved] FR-010: Front Desk can see today's expected arrivals for their property. Priority: must-have
   > Socratic: "Today" is ambiguous on a night shift: a worker arriving at 01:00 is tomorrow by date and tonight by shift, so the arrivals list silently drops them and nobody notices until the bed is empty.
-  > Resolution: pending.
+  > Resolution: resolved (2026-09-12) — "today" is an operational night-shift window, not the calendar date. A 01:00 arrival still shows under tonight's list.
 - [preserved] FR-011: Front Desk can check a worker in by QR scan or manual search. Priority: must-have
   > Socratic: Considered: the QR checksum is forgeable; camera access on BYOD is not guaranteed; manual search exposes the worker directory.
   > Resolution: kept as written — two independent paths to the same action is correct design.
 - [preserved] FR-012: Front Desk can mark a no-show with a localized reason code. Priority: must-have
   > Socratic: The undo path is undefined: a worker marked no-show at 20:00 who turns up at 23:00 leaves the stay in NO_SHOW with no documented route back to CHECKED_IN, making the nightly count wrong.
-  > Resolution: pending.
+  > Resolution: resolved (2026-09-12) — Front Desk gets an explicit "undo no-show" action that reverses NO_SHOW back to CHECKED_IN (or EXPECTED_TODAY, depending on time), producing its own distinct audit event.
 
 ### Nightly List
 
@@ -338,10 +340,10 @@ commitment.
 
 - [preserved] FR-018: Operational actions taken offline are queued and replayed on reconnect. Priority: must-have
   > Socratic: Replay assumes the server state did not move: a queued action carries the stayId, not the state it was valid against, so it can write into a world that no longer exists.
-  > Resolution: pending.
+  > Resolution: resolved (2026-09-12) — a queued action snapshots the state it was valid against at queue-time (e.g. room capacity/occupants read), not just the stayId, so replay can detect precisely what changed.
 - [preserved] FR-019: Conflicts on replay land in a review inbox, never auto-merged. Priority: must-have
   > Socratic: Nobody owns the inbox. "Needs review" with no assignee, no SLA and no escalation is a queue that only grows; the design correctly refuses to auto-merge and then leaves the decision homeless.
-  > Resolution: pending.
+  > Resolution: resolved (2026-09-12) — a conflict is owned by the Front Desk user whose action was rejected; no SLA/escalation yet, matching current single-property small-team scale. Revisit if team size grows.
 - [modified] FR-020: The offline snapshot carries only fields the ops screens render. Priority: must-have
   > Socratic: "What the screens render" is a moving target defined by current UI rather than by policy, so any new field on any ops screen silently widens the snapshot again.
   > Resolution: pending.
@@ -575,11 +577,13 @@ limits, device registration and admin-triggered revocation do not exist.
     the reconciliation point — probably a bounded offline session lifetime —
     before any of the three is implemented. Owner: team. Block: yes for FR-006,
     FR-007, FR-008.
-13. **Cluster B — occupancy truth decays over time.** FR-010 ("today" is
-    ambiguous on a night shift), FR-012 (no-show has no undo), FR-018 (replay
-    assumes unchanged server state) and FR-019 (nobody owns the conflict inbox)
-    all end at the same guardrail: the nightly count is wrong and nobody can
-    explain why. These are one problem, not four. Owner: team. Block: yes.
+13. ~~**Cluster B — occupancy truth decays over time.**~~ — *Resolved
+    2026-09-12:* "today" on the arrivals list is an operational night-shift
+    window, not the calendar date (FR-010); Front Desk gets an explicit
+    undo action reversing NO_SHOW → CHECKED_IN with a distinct audit event
+    (FR-012); a queued offline action snapshots the state it was valid
+    against at queue-time (FR-018); a rejected replay is owned by the user
+    who queued it, no SLA/escalation yet at current team scale (FR-019).
 14. **Cluster C — the permission model has unowned edges.** FR-001 (capacity is
     a contract term, not an operational one) and FR-002 (exclusive agency
     ownership bottlenecks the 8pm walk-in) both say the two-sided model is

@@ -3,7 +3,7 @@ project: Beduno
 version: 1
 status: draft
 created: 2026-09-10
-updated: 2026-09-10
+updated: 2026-09-12
 prd_version: 1
 main_goal: market-feedback
 top_blocker: decisions
@@ -57,8 +57,8 @@ offline, and the result is provably correct rather than asserted.
 | S-03 | `inspection-day-proven` | complete a room-by-room inspection walkthrough end to end | F-03 | FR-017 | proposed |
 | S-04 | `property-scoped-audit` | (Property Admin) read the audit log for their own property | — | US-03, FR-003, FR-004 | ready |
 | S-05 | `governed-soft-overrides` | (Planner) plan stays in bulk where a soft override is a control, not a click-through | — | US-06, FR-021, FR-022 | ready |
-| S-06 | `night-shift-occupancy-truth` | find a 01:00 arrival, and reverse a no-show who turned up after all | S-01 | US-03, FR-010, FR-012 | blocked |
-| S-07 | `durable-conflict-inbox` | recover a replayed action the server rejected, after a reload | S-01 | US-03, FR-018, FR-019 | blocked |
+| S-06 | `night-shift-occupancy-truth` | find a 01:00 arrival, and reverse a no-show who turned up after all | S-01 | US-03, FR-010, FR-012 | proposed |
+| S-07 | `durable-conflict-inbox` | recover a replayed action the server rejected, after a reload | S-01 | US-03, FR-018, FR-019 | proposed |
 | S-08 | `move-contract-resolution` | move a worker between rooms or properties and get one answer | S-02 | FR-016 | blocked |
 | S-09 | `rbac-authority-correction` | (Property Admin) manage their own room inventory; only agency roles touch planned stays | beduno-be Room migration deployed | US-04, FR-001, FR-002 | blocked |
 | S-10 | `offline-safe-token-storage` | stay signed in at 6am with no signal, without tokens in `localStorage` | F-01 | US-02, FR-008, FR-009 | blocked |
@@ -215,11 +215,9 @@ Foundations below assume these are present and do NOT re-scaffold them.
 - **Prerequisites:** S-01
 - **Parallel with:** S-07, S-08, S-09, S-10
 - **Blockers:** —
-- **Unknowns:**
-  - What is "today" for an arrivals list on a night shift — calendar date or operational shift window? (PRD Open Question 13, Cluster B.) — Owner: team. Block: yes.
-  - What is the documented route from `NO_SHOW` back to `CHECKED_IN`, and does it produce a distinct audit event? — Owner: team. Block: yes.
+- **Unknowns:** Resolved 2026-09-12 (PRD Open Question 13, Cluster B) — "today" is an operational night-shift window, not the calendar date; `NO_SHOW` gets an explicit undo action back to `CHECKED_IN`, producing a distinct audit event.
 - **Risk:** Half of the PRD's Cluster B, which it insists is "one problem, not four" — split here from S-07 by user-visible outcome (finding a person) rather than by layer, so each half can be planned coherently while sharing one decision. Sequenced after S-01 because changing what the arrivals list contains before proving it works confuses two failure modes. The guardrail is unforgiving: a wrong nightly count destroys the single claim the product makes about itself.
-- **Status:** blocked
+- **Status:** proposed (unknowns resolved; still waiting on prerequisite S-01)
 
 ### S-07: A rejected replay is recoverable
 
@@ -229,11 +227,9 @@ Foundations below assume these are present and do NOT re-scaffold them.
 - **Prerequisites:** S-01
 - **Parallel with:** S-06, S-08, S-09, S-10
 - **Blockers:** —
-- **Unknowns:**
-  - Does a queued action carry the state it was valid against, or only the `stayId`? (PRD Open Question 13, Cluster B.) — Owner: team. Block: yes.
-  - Who owns the conflict inbox — is there an assignee, an SLA, an escalation? — Owner: team. Block: yes.
+- **Unknowns:** Resolved 2026-09-12 (PRD Open Question 13, Cluster B) — a queued action snapshots the state it was valid against at queue-time, not just the `stayId`; a conflict is owned by the user who queued the rejected action, no SLA/escalation yet at current team scale.
 - **Risk:** The baseline is worse than the PRD assumed. `sync.store.ts:80-86` pushes a `SyncConflict` and *deletes* the queued action, and conflicts live in an in-memory `ref` (`:27`) rather than IndexedDB — so a rejected check-in disappears on reload with no route back. The design correctly refuses to auto-merge and then loses the decision it refused to make. Sequenced after S-01 because the replay path has to be proven before its payload changes.
-- **Status:** blocked
+- **Status:** proposed (unknowns resolved; still waiting on prerequisite S-01)
 
 ### S-08: A move has one answer on both sides of the wire
 
@@ -342,8 +338,8 @@ Foundations below assume these are present and do NOT re-scaffold them.
 | S-03 | `inspection-day-proven` | Prove Inspection Day end-to-end on live data | no | Needs F-03 |
 | S-04 | `property-scoped-audit` | Property-scoped audit log for both sides of a dispute | yes | Run `/10x-plan property-scoped-audit` |
 | S-05 | `governed-soft-overrides` | Make soft-violation overrides a control, not a click-through | yes | Run `/10x-plan governed-soft-overrides` |
-| S-06 | `night-shift-occupancy-truth` | Night-shift arrivals window and the no-show reversal path | no | Blocked on Cluster B (OQ 13) |
-| S-07 | `durable-conflict-inbox` | Make rejected replays survive a reload and get resolved | no | Blocked on Cluster B (OQ 13) |
+| S-06 | `night-shift-occupancy-truth` | Night-shift arrivals window and the no-show reversal path | no | Needs S-01 (unknowns resolved 2026-09-12) |
+| S-07 | `durable-conflict-inbox` | Make rejected replays survive a reload and get resolved | no | Needs S-01 (unknowns resolved 2026-09-12) |
 | S-08 | `move-contract-resolution` | Settle the `POST /stays/{id}/move` response shape | no | Blocked on OQ 18 |
 | S-09 | `rbac-authority-correction` | Correct the RBAC inversion in router and API spec | no | Blocked on Cluster C (OQ 14) |
 | S-10 | `offline-safe-token-storage` | Move tokens out of `localStorage` without breaking offline | no | Blocked on Cluster A (OQ 12, OQ 7) |
