@@ -80,7 +80,7 @@ describe('useStaysStore — stay creation with conflict', () => {
       vi.mocked(staysApi.createStay).mockResolvedValue(stay)
 
       const store = useStaysStore()
-      const result = await store.createStay({
+      await store.createStay({
         workerId: 'w1',
         propertyId: 'prop-1',
         roomId: 'room-1',
@@ -89,7 +89,12 @@ describe('useStaysStore — stay creation with conflict', () => {
         overrideReason: 'Manager approval',
       })
 
-      expect(result.overrideReason).toBe('Manager approval')
+      // Asserts what the store actually SENDS, not just what a mocked
+      // response echoes back — a payload that dropped overrideReason
+      // before forwarding it would fail this test.
+      expect(staysApi.createStay).toHaveBeenCalledWith(
+        expect.objectContaining({ overrideReason: 'Manager approval' }),
+      )
     })
   })
 
@@ -133,18 +138,20 @@ describe('useStaysStore — stay creation with conflict', () => {
       vi.mocked(staysApi.bulkAssign).mockResolvedValue(response)
 
       const store = useStaysStore()
-      const result = await store.bulkAssign({
-        assignments: [
-          { workerId: 'w1', propertyId: 'prop-1', roomId: 'room-1', dateFrom: '2024-03-15' },
-          { workerId: 'w2', propertyId: 'prop-1', roomId: 'room-1', dateFrom: '2024-03-15' },
-          { workerId: 'w3', propertyId: 'prop-1', roomId: 'room-1', dateFrom: '2024-03-15' },
-        ],
-      })
+      const assignments = [
+        { workerId: 'w1', propertyId: 'prop-1', roomId: 'room-1', dateFrom: '2024-03-15' },
+        { workerId: 'w2', propertyId: 'prop-1', roomId: 'room-1', dateFrom: '2024-03-15' },
+        { workerId: 'w3', propertyId: 'prop-1', roomId: 'room-1', dateFrom: '2024-03-15' },
+      ]
+      const result = await store.bulkAssign({ assignments })
 
       expect(result.total).toBe(3)
       expect(result.succeeded).toBe(2)
       expect(result.failed).toBe(1)
       expect(result.results[2].status).toBe('FAILED')
+      // The exact request payload must reach the API unchanged — a future
+      // refactor that mutates it before forwarding would be caught here.
+      expect(staysApi.bulkAssign).toHaveBeenCalledWith({ assignments })
     })
 
     it('propagates error when bulk assign fails entirely', async () => {

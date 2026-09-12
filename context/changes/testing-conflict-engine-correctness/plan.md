@@ -254,21 +254,21 @@ Not applicable — pre-production system, no live data.
 
 #### Automated
 
-- [x] 1.1 Typecheck passes: `npm run typecheck`
-- [x] 1.2 Lint passes: `npm run lint`
-- [x] 1.3 Composable tests pass: `npx vitest run src/modules/stays/composables/useConflicts.spec.ts`
+- [x] 1.1 Typecheck passes: `npm run typecheck` — 2c67441
+- [x] 1.2 Lint passes: `npm run lint` — 2c67441
+- [x] 1.3 Composable tests pass: `npx vitest run src/modules/stays/composables/useConflicts.spec.ts` — 2c67441
 
 #### Manual
 
-- [x] 1.4 Bulk-assigning into a full room is now blocked in the running app
+- [x] 1.4 Bulk-assigning into a full room is now blocked in the running app — 2c67441
 
 ### Phase 2: Store behavioral tests
 
 #### Automated
 
-- [ ] 2.1 Typecheck passes: `npm run typecheck`
-- [ ] 2.2 Lint passes: `npm run lint`
-- [ ] 2.3 Store tests pass: `npx vitest run src/modules/stays/store/stays.store.spec.ts`
+- [x] 2.1 Typecheck passes: `npm run typecheck`
+- [x] 2.2 Lint passes: `npm run lint`
+- [x] 2.3 Store tests pass: `npx vitest run src/modules/stays/store/stays.store.spec.ts`
 
 ### Phase 3: Component-level coverage
 
