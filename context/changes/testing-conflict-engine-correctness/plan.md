@@ -274,22 +274,22 @@ Not applicable — pre-production system, no live data.
 
 #### Automated
 
-- [x] 3.1 Typecheck passes: `npm run typecheck`
-- [x] 3.2 Lint passes: `npm run lint`
-- [x] 3.3 New component tests pass: `npx vitest run src/modules/stays/views/CreateStay.spec.ts src/modules/stays/views/BulkAssign.spec.ts`
-- [x] 3.4 Full unit suite still green: `npm test`
+- [x] 3.1 Typecheck passes: `npm run typecheck` — 1eebd3f
+- [x] 3.2 Lint passes: `npm run lint` — 1eebd3f
+- [x] 3.3 New component tests pass: `npx vitest run src/modules/stays/views/CreateStay.spec.ts src/modules/stays/views/BulkAssign.spec.ts` — 1eebd3f
+- [x] 3.4 Full unit suite still green: `npm test` — 1eebd3f
 
 #### Manual
 
-- [x] 3.5 Save button returns to normal state after a blocked single-stay creation
-- [x] 3.6 Bulk-assignment blocking re-confirmed at the UI layer
+- [x] 3.5 Save button returns to normal state after a blocked single-stay creation — 1eebd3f
+- [x] 3.6 Bulk-assignment blocking re-confirmed at the UI layer — 1eebd3f
 
 ### Phase 4: Cookbook + follow-ups
 
 #### Automated
 
-- [ ] 4.1 `test -f context/foundation/test-plan.md`
+- [x] 4.1 `test -f context/foundation/test-plan.md`
 
 #### Manual
 
-- [ ] 4.2 §6.1 and §7 read clearly and accurately reflect what this phase shipped
+- [x] 4.2 §6.1 and §7 read clearly and accurately reflect what this phase shipped
