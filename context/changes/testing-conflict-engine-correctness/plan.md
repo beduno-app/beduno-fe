@@ -266,23 +266,23 @@ Not applicable — pre-production system, no live data.
 
 #### Automated
 
-- [x] 2.1 Typecheck passes: `npm run typecheck`
-- [x] 2.2 Lint passes: `npm run lint`
-- [x] 2.3 Store tests pass: `npx vitest run src/modules/stays/store/stays.store.spec.ts`
+- [x] 2.1 Typecheck passes: `npm run typecheck` — 4f2732a
+- [x] 2.2 Lint passes: `npm run lint` — 4f2732a
+- [x] 2.3 Store tests pass: `npx vitest run src/modules/stays/store/stays.store.spec.ts` — 4f2732a
 
 ### Phase 3: Component-level coverage
 
 #### Automated
 
-- [ ] 3.1 Typecheck passes: `npm run typecheck`
-- [ ] 3.2 Lint passes: `npm run lint`
-- [ ] 3.3 New component tests pass: `npx vitest run src/modules/stays/views/CreateStay.spec.ts src/modules/stays/views/BulkAssign.spec.ts`
-- [ ] 3.4 Full unit suite still green: `npm test`
+- [x] 3.1 Typecheck passes: `npm run typecheck`
+- [x] 3.2 Lint passes: `npm run lint`
+- [x] 3.3 New component tests pass: `npx vitest run src/modules/stays/views/CreateStay.spec.ts src/modules/stays/views/BulkAssign.spec.ts`
+- [x] 3.4 Full unit suite still green: `npm test`
 
 #### Manual
 
-- [ ] 3.5 Save button returns to normal state after a blocked single-stay creation
-- [ ] 3.6 Bulk-assignment blocking re-confirmed at the UI layer
+- [x] 3.5 Save button returns to normal state after a blocked single-stay creation
+- [x] 3.6 Bulk-assignment blocking re-confirmed at the UI layer
 
 ### Phase 4: Cookbook + follow-ups
 

@@ -77,7 +77,10 @@ async function save() {
   isSaving.value = true
   error.value = ''
 
-  if (conflicts.isBlocked.value) return
+  if (conflicts.isBlocked.value) {
+    isSaving.value = false
+    return
+  }
 
   try {
     const payload: StayCreatePayload = { ...form.value }
