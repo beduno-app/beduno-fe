@@ -43,6 +43,17 @@ export default {
     users: 'Users',
     roles: 'Roles & Permissions',
   },
+  dashboard: {
+    greeting: 'Welcome, {name}',
+    loadFailed: 'Failed to load dashboard.',
+    properties: 'Properties',
+    propertiesActive: 'active',
+    workers: 'Workers',
+    workersActive: 'active',
+    currentlyHoused: 'Currently housed',
+    expectedToday: 'Expected today',
+    noShowsToday: 'No-shows today',
+  },
   roles: {
     AGENCY_ADMIN: 'Agency Admin',
     AGENCY_PLANNER: 'Agency Planner',

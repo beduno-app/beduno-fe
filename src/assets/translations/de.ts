@@ -43,6 +43,17 @@ export default {
     users: 'Benutzer',
     roles: 'Rollen & Berechtigungen',
   },
+  dashboard: {
+    greeting: 'Willkommen, {name}',
+    loadFailed: 'Dashboard konnte nicht geladen werden.',
+    properties: 'Objekte',
+    propertiesActive: 'aktiv',
+    workers: 'Arbeiter',
+    workersActive: 'aktiv',
+    currentlyHoused: 'Derzeit untergebracht',
+    expectedToday: 'Heute erwartet',
+    noShowsToday: 'Nichterscheinen heute',
+  },
   roles: {
     AGENCY_ADMIN: 'Agentur-Admin',
     AGENCY_PLANNER: 'Agentur-Planer',

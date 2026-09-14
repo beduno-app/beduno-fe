@@ -43,6 +43,17 @@ export default {
     users: 'Пользователи',
     roles: 'Роли и разрешения',
   },
+  dashboard: {
+    greeting: 'Добро пожаловать, {name}',
+    loadFailed: 'Не удалось загрузить панель.',
+    properties: 'Объекты',
+    propertiesActive: 'активные',
+    workers: 'Работники',
+    workersActive: 'активные',
+    currentlyHoused: 'Сейчас проживают',
+    expectedToday: 'Ожидаются сегодня',
+    noShowsToday: 'Неприбытия сегодня',
+  },
   roles: {
     AGENCY_ADMIN: 'Администратор агентства',
     AGENCY_PLANNER: 'Планировщик агентства',

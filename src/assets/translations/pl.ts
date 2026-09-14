@@ -49,6 +49,17 @@ export default {
     PROPERTY_ADMIN: 'Administrator obiektu',
     FRONT_DESK: 'Recepcja',
   },
+  dashboard: {
+    greeting: 'Witaj, {name}',
+    loadFailed: 'Błąd ładowania panelu.',
+    properties: 'Obiekty',
+    propertiesActive: 'aktywne',
+    workers: 'Pracownicy',
+    workersActive: 'aktywni',
+    currentlyHoused: 'Obecnie zakwaterowani',
+    expectedToday: 'Oczekiwani dziś',
+    noShowsToday: 'Nieprzyjazdy dziś',
+  },
   permissions: {
     title: 'Uprawnienia ról',
     subtitle: 'Przegląd uprawnień przypisanych do każdej roli.',
