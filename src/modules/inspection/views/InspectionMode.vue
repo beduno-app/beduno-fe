@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch, onMounted } from 'vue'
+import { ref, watch, onMounted, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useInspectionStore } from '../store/inspection.store'
 import { usePropertiesStore } from '@/modules/properties/store/properties.store'
@@ -7,61 +7,59 @@ import { useOpsStore } from '@/modules/ops/store/ops.store'
 import { BaseButton } from '@/shared/components'
 import RoomInspectionCard from '../components/RoomInspectionCard.vue'
 import InspectionSummaryReport from '../components/InspectionSummaryReport.vue'
-import type { PresenceStatus, DiscrepancyReason } from '../types/inspection.types'
 import { useToast } from '@/shared/composables/useToast'
 
-const { t, locale } = useI18n()
+const { t } = useI18n()
 const store = useInspectionStore()
 const propertiesStore = usePropertiesStore()
 const opsStore = useOpsStore()
 const toast = useToast()
 
 const propertyId = ref(opsStore.selectedPropertyId)
+const started = ref(false)
 
 watch(
   () => opsStore.selectedPropertyId,
   (id) => {
-    if (id && !store.inspection) propertyId.value = id
+    if (id && !started.value) propertyId.value = id
   },
+)
+
+const currentRoomVerified = computed(() =>
+  store.currentRoom ? store.isRoomVerified(store.currentRoom.roomId) : false,
+)
+const currentRoomPresent = computed(() =>
+  store.currentRoom ? store.presentSet(store.currentRoom.roomId) : new Set<string>(),
+)
+const currentRoomUnexpected = computed(() =>
+  store.currentRoom ? store.unexpectedWorkerIds(store.currentRoom.roomId) : [],
 )
 
 async function startNew() {
   if (!propertyId.value) return
   await store.startInspection(propertyId.value)
+  started.value = true
 }
 
-async function handleMarkPresence(
-  stayId: string,
-  presence: PresenceStatus,
-  reason?: DiscrepancyReason,
-  note?: string,
-) {
-  try {
-    await store.markPresence(stayId, presence, reason, note)
-    toast.success(t('inspection.presenceUpdated'))
-  } catch (e) {
-    toast.error(e instanceof Error ? e.message : t('inspection.presenceFailed'))
-  }
-}
-
-async function handleAddUnexpected(description: string, reason: DiscrepancyReason, note?: string) {
+function handleTogglePresence(workerId: string, present: boolean) {
   if (!store.currentRoom) return
-  try {
-    await store.addUnexpected(store.currentRoom.room.id, description, reason, note)
-    toast.success(t('inspection.unexpectedAdded'))
-  } catch (e) {
-    toast.error(e instanceof Error ? e.message : t('inspection.unexpectedFailed'))
-  }
+  store.markPresence(store.currentRoom.roomId, workerId, present)
 }
 
-async function handleVerify() {
+function handleAddUnexpected(workerId: string) {
   if (!store.currentRoom) return
-  try {
-    await store.verifyRoom(store.currentRoom.room.id)
-    toast.success(t('inspection.roomVerified'))
-  } catch (e) {
-    toast.error(e instanceof Error ? e.message : t('inspection.verifyFailed'))
-  }
+  store.addUnexpectedWorker(store.currentRoom.roomId, workerId)
+}
+
+function handleRemoveUnexpected(workerId: string) {
+  if (!store.currentRoom) return
+  store.removeUnexpectedWorker(store.currentRoom.roomId, workerId)
+}
+
+function handleVerify() {
+  if (!store.currentRoom) return
+  store.verifyRoom(store.currentRoom.roomId)
+  toast.success(t('inspection.roomVerified'))
 }
 
 async function handleComplete() {
@@ -87,7 +85,7 @@ onMounted(() => {
 
     <!-- Start form (no active inspection) -->
     <div
-      v-if="!store.inspection"
+      v-if="!started"
       class="start-section"
     >
       <div class="start-form">
@@ -128,15 +126,15 @@ onMounted(() => {
         <div class="room-progress">
           <span
             v-for="(room, idx) in store.rooms"
-            :key="room.room.id"
+            :key="room.roomId"
             class="room-dot"
             :class="{
               'room-dot--active': idx === store.currentRoomIndex,
-              'room-dot--verified': room.verified,
+              'room-dot--verified': store.isRoomVerified(room.roomId),
             }"
             @click="store.goToRoom(idx)"
           >
-            {{ room.room.roomNumber }}
+            {{ room.roomNumber }}
           </span>
         </div>
         <span class="room-counter">
@@ -148,8 +146,12 @@ onMounted(() => {
       <RoomInspectionCard
         v-if="store.currentRoom"
         :room="store.currentRoom"
-        @mark-presence="handleMarkPresence"
+        :present-worker-ids="currentRoomPresent"
+        :unexpected-worker-ids="currentRoomUnexpected"
+        :verified="currentRoomVerified"
+        @toggle-presence="handleTogglePresence"
         @add-unexpected="handleAddUnexpected"
+        @remove-unexpected="handleRemoveUnexpected"
         @verify="handleVerify"
       />
 
@@ -171,7 +173,7 @@ onMounted(() => {
           {{ t('inspection.nextRoom') }}
         </BaseButton>
         <BaseButton
-          v-else-if="store.allVerified && !store.inspection.completedAt"
+          v-else-if="store.allVerified && !store.completedAt"
           size="sm"
           @click="handleComplete"
         >
@@ -181,11 +183,9 @@ onMounted(() => {
 
       <!-- Summary (shown after completion) -->
       <InspectionSummaryReport
-        v-if="store.summary && store.inspection.completedAt"
+        v-if="store.completedAt"
         :summary="store.summary"
-        :completed-at="store.inspection.completedAt"
-        @export-csv="store.exportReport('csv', locale)"
-        @export-pdf="store.exportReport('pdf', locale)"
+        :completed-at="store.completedAt"
       />
     </template>
   </div>

@@ -16,17 +16,10 @@ export const useArrivalsStore = defineStore('arrivals', () => {
   const arrivals = ref<ArrivalStay[]>([])
   const isLoading = ref(false)
   const error = ref('')
-  const page = ref(0)
-  const totalPages = ref(0)
-  const totalElements = ref(0)
-  const size = ref(50)
 
   // Filters
   const propertyIdFilter = ref('')
   const dateFilter = ref(new Date().toISOString().slice(0, 10))
-
-  const hasNextPage = computed(() => page.value < totalPages.value - 1)
-  const hasPreviousPage = computed(() => page.value > 0)
 
   const checkedInCount = computed(() =>
     arrivals.value.filter((a) => a.status === 'CHECKED_IN').length,
@@ -39,8 +32,6 @@ export const useArrivalsStore = defineStore('arrivals', () => {
     return {
       propertyId: propertyIdFilter.value,
       date: dateFilter.value,
-      page: page.value,
-      size: size.value,
     }
   }
 
@@ -49,10 +40,7 @@ export const useArrivalsStore = defineStore('arrivals', () => {
     isLoading.value = true
     error.value = ''
     try {
-      const response = await arrivalsApi.getArrivals(buildParams())
-      arrivals.value = response.content
-      totalPages.value = response.totalPages
-      totalElements.value = response.totalElements
+      arrivals.value = await arrivalsApi.getArrivals(buildParams())
     } catch (e) {
       error.value = e instanceof Error ? e.message : 'Failed to load arrivals'
     } finally {
@@ -104,7 +92,10 @@ export const useArrivalsStore = defineStore('arrivals', () => {
       await queueOffline('MOVE', stayId, payload)
       const stay = arrivals.value.find((a) => a.id === stayId)
       if (stay) {
-        const optimistic = { ...stay, status: 'MOVED' as const }
+        // The real move operation checks this stay out and creates a new one
+        // in the target room — CHECKED_OUT is the closest local approximation
+        // until the queued action replays and the real result comes back.
+        const optimistic = { ...stay, status: 'CHECKED_OUT' as const }
         updateStayInList(stayId, optimistic)
         return optimistic
       }
@@ -122,29 +113,17 @@ export const useArrivalsStore = defineStore('arrivals', () => {
     }
   }
 
-  function setPage(p: number) {
-    page.value = p
-    return fetchArrivals()
-  }
-
   return {
     arrivals,
     isLoading,
     error,
-    page,
-    totalPages,
-    totalElements,
-    size,
     propertyIdFilter,
     dateFilter,
-    hasNextPage,
-    hasPreviousPage,
     checkedInCount,
     pendingCount,
     fetchArrivals,
     checkIn,
     noShow,
     move,
-    setPage,
   }
 })

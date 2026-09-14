@@ -4,47 +4,23 @@ export type StayStatus =
   | 'CHECKED_IN'
   | 'CHECKED_OUT'
   | 'NO_SHOW'
-  | 'MOVED'
   | 'CANCELLED'
 
-export interface WorkerSummary {
-  id: string
-  internalId: string
-  firstName: string
-  lastName: string
-  gender: 'MALE' | 'FEMALE' | 'OTHER'
-}
-
-export interface PropertySummary {
-  id: string
-  name: string
-  type: 'INTERNAL' | 'PARTNER'
-}
-
-export interface RoomSummary {
-  id: string
-  roomNumber: string
-  capacity: number
-  availableSpots: number
-}
-
-export interface UserSummary {
-  id: string
-  firstName: string
-  lastName: string
-}
-
+// The real API returns a flat record — worker/property/room are IDs, not nested
+// objects. Resolve display data via `useEntityLookup` (src/shared/composables).
 export interface Stay {
   id: string
-  worker: WorkerSummary
-  property: PropertySummary
-  room: RoomSummary
+  workerId: string
+  propertyId: string
+  roomId: string
+  bedId: string | null
+  bedAutoAssigned: boolean | null
   dateFrom: string
   dateTo: string | null
   status: StayStatus
   overrideReason: string | null
-  createdBy: UserSummary
-  confirmedBy: UserSummary | null
+  noShowReason: string | null
+  notes: string | null
   createdAt: string
   updatedAt: string
 }
@@ -53,15 +29,20 @@ export interface StayCreatePayload {
   workerId: string
   propertyId: string
   roomId: string
+  bedId?: string
   dateFrom: string
-  dateTo: string
+  dateTo?: string
   overrideReason?: string
+  notes?: string
 }
 
 export interface UpdateStayPayload {
-  roomId?: string
-  dateFrom?: string
+  roomId: string
+  bedId?: string
+  dateFrom: string
   dateTo?: string
+  overrideReason?: string
+  notes?: string
 }
 
 export interface GetStaysParams {
@@ -70,18 +51,39 @@ export interface GetStaysParams {
   sort?: string
   workerId?: string
   propertyId?: string
-  roomId?: string
   status?: StayStatus
   dateFrom?: string
   dateTo?: string
+}
+
+export interface NoShowPayload {
+  noShowReason: string
+}
+
+export interface MovePayload {
+  targetRoomId: string
+  targetBedId?: string
+  overrideReason?: string
+}
+
+export interface CheckOutPayload {
+  actualDateTo?: string
+}
+
+export interface CheckInPayload {
+  roomId?: string
+  bedId?: string
+  overrideReason?: string
 }
 
 export interface BulkAssignmentItem {
   workerId: string
   propertyId: string
   roomId: string
+  bedId?: string
   dateFrom: string
   dateTo?: string
+  overrideReason?: string
 }
 
 export interface BulkAssignPayload {
@@ -89,23 +91,34 @@ export interface BulkAssignPayload {
 }
 
 export interface BulkAssignResultItem {
+  index: number
   workerId: string
   stayId?: string
+  bedId?: string
   status: 'CREATED' | 'FAILED'
-  error?: ConstraintError
+  errorCode?: string
 }
 
 export interface BulkAssignResponse {
-  total: number
-  succeeded: number
-  failed: number
+  created: number
+  errors: number
   results: BulkAssignResultItem[]
 }
 
-export interface ConstraintError {
-  type: ConstraintType
-  message: string
-  params: Record<string, string | number>
+export interface BulkCheckoutPayload {
+  stayIds: string[]
+}
+
+export interface BulkCheckoutResultItem {
+  stayId: string
+  status: string
+  errorCode?: string
+}
+
+export interface BulkCheckoutResponse {
+  checkedOut: number
+  errors: number
+  results: BulkCheckoutResultItem[]
 }
 
 export type HardConstraintType = 'CAPACITY_EXCEEDED' | 'DOUBLE_BOOKING' | 'ROOM_BLOCKED' | 'PROPERTY_BLOCKED'

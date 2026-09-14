@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import type { AuditDiff } from '../types/audit.types'
+import { computed } from 'vue'
 
-defineProps<{
-  diff: AuditDiff
+const props = defineProps<{
+  previousState: Record<string, unknown> | null
+  newState: Record<string, unknown> | null
 }>()
 
 function formatValue(value: unknown): string {
@@ -10,6 +11,21 @@ function formatValue(value: unknown): string {
   if (typeof value === 'object') return JSON.stringify(value)
   return String(value)
 }
+
+const diff = computed(() => {
+  const before = props.previousState ?? {}
+  const after = props.newState ?? {}
+  const fields = new Set([...Object.keys(before), ...Object.keys(after)])
+  const rows: { field: string; before: unknown; after: unknown }[] = []
+  for (const field of fields) {
+    const b = before[field]
+    const a = after[field]
+    if (JSON.stringify(b) !== JSON.stringify(a)) {
+      rows.push({ field, before: b, after: a })
+    }
+  }
+  return rows
+})
 </script>
 
 <template>

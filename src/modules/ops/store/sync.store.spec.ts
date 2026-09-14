@@ -21,9 +21,9 @@ vi.mock('@/modules/arrivals/api/arrivals.api', () => ({
 vi.mock('@/modules/inhouse/api/inhouse.api', () => ({
   inhouseApi: {
     checkOut: vi.fn(),
-    getInHouse: vi.fn(),
     moveRoom: vi.fn(),
-    exportInHouse: vi.fn(),
+    bulkCheckout: vi.fn(),
+    exportOccupancy: vi.fn(),
   },
 }))
 
@@ -31,23 +31,29 @@ import { getPendingActions, removeAction, getQueueLength } from '@/shared/servic
 import { arrivalsApi } from '@/modules/arrivals/api/arrivals.api'
 import { inhouseApi } from '@/modules/inhouse/api/inhouse.api'
 import type { ArrivalStay } from '@/modules/arrivals/types/arrival.types'
-import type { OccupantStay } from '@/modules/inhouse/types/inhouse.types'
+import type { Stay } from '@/modules/stays/types/stay.types'
 
-const mockOccupantStay: OccupantStay = {
+// The real API returns a flat record for every stay endpoint — no nested
+// worker/property/room objects.
+const mockStay: Stay = {
   id: 'stay-1',
-  worker: { id: 'w1', internalId: 'W001', firstName: 'Jan', lastName: 'Kowalski', gender: 'MALE' },
+  workerId: 'w1',
+  propertyId: 'prop-1',
+  roomId: 'room-1',
+  bedId: 'bed-1',
+  bedAutoAssigned: false,
   dateFrom: '2024-03-15',
   dateTo: null,
   status: 'CHECKED_OUT',
+  overrideReason: null,
+  noShowReason: null,
+  notes: null,
+  createdAt: '2024-03-15T10:00:00Z',
+  updatedAt: '2024-03-15T10:00:00Z',
 }
 
 const mockArrivalStay: ArrivalStay = {
-  id: 'stay-1',
-  worker: { id: 'w1', internalId: 'W001', firstName: 'Jan', lastName: 'Kowalski', gender: 'MALE' },
-  property: { id: 'prop-1', name: 'Hotel A', type: 'INTERNAL' },
-  room: { id: 'room-1', roomNumber: '101', capacity: 4, availableSpots: 3 },
-  dateFrom: '2024-03-15',
-  dateTo: null,
+  ...mockStay,
   status: 'CHECKED_IN',
 }
 
@@ -102,38 +108,38 @@ describe('useSyncStore', () => {
     })
 
     it('replays queued NO_SHOW action', async () => {
-      const action = makeAction({ type: 'NO_SHOW', stayId: 'stay-2', payload: { reason: 'DID_NOT_ARRIVE' } })
+      const action = makeAction({ type: 'NO_SHOW', stayId: 'stay-2', payload: { noShowReason: 'DID_NOT_ARRIVE' } })
       vi.mocked(getPendingActions).mockResolvedValue([action])
       vi.mocked(arrivalsApi.noShow).mockResolvedValue(mockArrivalStay)
 
       const store = useSyncStore()
       const result = await store.syncQueue()
 
-      expect(arrivalsApi.noShow).toHaveBeenCalledWith('stay-2', { reason: 'DID_NOT_ARRIVE' })
+      expect(arrivalsApi.noShow).toHaveBeenCalledWith('stay-2', { noShowReason: 'DID_NOT_ARRIVE' })
       expect(result.synced).toBe(1)
     })
 
     it('replays queued CHECK_OUT action', async () => {
-      const action = makeAction({ type: 'CHECK_OUT', stayId: 'stay-3', payload: { note: 'Early checkout' } })
+      const action = makeAction({ type: 'CHECK_OUT', stayId: 'stay-3', payload: { actualDateTo: '2024-03-16' } })
       vi.mocked(getPendingActions).mockResolvedValue([action])
-      vi.mocked(inhouseApi.checkOut).mockResolvedValue(mockOccupantStay)
+      vi.mocked(inhouseApi.checkOut).mockResolvedValue(mockStay)
 
       const store = useSyncStore()
       const result = await store.syncQueue()
 
-      expect(inhouseApi.checkOut).toHaveBeenCalledWith('stay-3', { note: 'Early checkout' })
+      expect(inhouseApi.checkOut).toHaveBeenCalledWith('stay-3', { actualDateTo: '2024-03-16' })
       expect(result.synced).toBe(1)
     })
 
     it('replays queued MOVE action', async () => {
-      const action = makeAction({ type: 'MOVE', stayId: 'stay-4', payload: { targetPropertyId: 'p2', targetRoomId: 'r2' } })
+      const action = makeAction({ type: 'MOVE', stayId: 'stay-4', payload: { targetRoomId: 'r2', targetBedId: 'b2' } })
       vi.mocked(getPendingActions).mockResolvedValue([action])
       vi.mocked(arrivalsApi.move).mockResolvedValue(mockArrivalStay)
 
       const store = useSyncStore()
       const result = await store.syncQueue()
 
-      expect(arrivalsApi.move).toHaveBeenCalledWith('stay-4', { targetPropertyId: 'p2', targetRoomId: 'r2' })
+      expect(arrivalsApi.move).toHaveBeenCalledWith('stay-4', { targetRoomId: 'r2', targetBedId: 'b2' })
       expect(result.synced).toBe(1)
     })
 

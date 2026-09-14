@@ -1,42 +1,27 @@
-import type { UserRole } from '@/modules/auth/types/auth.types'
-
-export type AuditEntityType = 'WORKER' | 'PROPERTY' | 'ROOM' | 'STAY' | 'USER'
+export type AuditEntityType = 'STAY' | 'WORKER' | 'ROOM' | 'PROPERTY' | 'BED' | 'USER'
 
 export type AuditAction =
-  | 'CREATE'
-  | 'UPDATE'
-  | 'DELETE'
-  | 'CHECK_IN'
-  | 'CHECK_OUT'
+  | 'CREATED'
+  | 'UPDATED'
+  | 'DELETED'
+  | 'CHECKED_IN'
+  | 'CHECKED_OUT'
   | 'NO_SHOW'
-  | 'MOVE'
-  | 'BULK_ASSIGN'
-  | 'IMPORT'
-  | 'INSPECTION_COMPLETE'
-
-export interface AuditActor {
-  id: string
-  firstName: string
-  lastName: string
-  role: UserRole
-}
-
-export type AuditDiff = Array<{
-  field: string
-  before: unknown
-  after: unknown
-}>
+  | 'CANCELLED'
+  | 'MOVED'
+  | 'BULK_ASSIGNED'
+  | 'BULK_CHECKED_OUT'
 
 export interface AuditEvent {
   id: string
-  actor: AuditActor
-  action: AuditAction
   entityType: AuditEntityType
   entityId: string
-  entityLabel: string
-  diff: AuditDiff
-  timestamp: string
-  syncedAt: string | null
+  action: AuditAction
+  actorUserId: string
+  previousState: Record<string, unknown> | null
+  newState: Record<string, unknown> | null
+  reason: string | null
+  createdAt: string
 }
 
 export interface GetAuditParams {
@@ -44,8 +29,7 @@ export interface GetAuditParams {
   size?: number
   entityType?: AuditEntityType
   entityId?: string
-  actorId?: string
-  action?: AuditAction
+  actorUserId?: string
   dateFrom?: string
   dateTo?: string
 }

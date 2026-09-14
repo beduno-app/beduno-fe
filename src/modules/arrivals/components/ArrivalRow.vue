@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { ArrivalStay } from '../types/arrival.types'
 import { BaseButton, StatusChip } from '@/shared/components'
 import { useSwipe } from '@/shared/composables/useSwipe'
+import { useEntityLookup } from '@/shared/composables/useEntityLookup'
 
 const props = defineProps<{
   arrival: ArrivalStay
@@ -16,10 +17,28 @@ const emit = defineEmits<{
 }>()
 
 const { t } = useI18n()
+const lookup = useEntityLookup()
 
 const isPending = props.arrival.status === 'EXPECTED_TODAY'
 const rowRef = ref<HTMLElement | null>(null)
 const swipeHint = ref<'' | 'checkin' | 'noshow'>('')
+
+const workerName = ref('')
+const workerInternalId = ref('')
+const roomNumber = ref('')
+
+async function resolveDisplay() {
+  const [worker, room] = await Promise.all([
+    lookup.getWorker(props.arrival.workerId),
+    lookup.getRoom(props.arrival.propertyId, props.arrival.roomId),
+  ])
+  workerName.value = worker ? `${worker.lastName}, ${worker.firstName}` : props.arrival.workerId
+  workerInternalId.value = worker?.internalId ?? ''
+  roomNumber.value = room?.roomNumber ?? props.arrival.roomId
+}
+
+onMounted(resolveDisplay)
+watch(() => props.arrival.id, resolveDisplay)
 
 useSwipe(rowRef, {
   onSwipeRight: () => {
@@ -52,10 +71,10 @@ useSwipe(rowRef, {
     }"
   >
     <td class="worker-cell">
-      <span class="worker-name">{{ arrival.worker.lastName }}, {{ arrival.worker.firstName }}</span>
-      <span class="worker-id">{{ arrival.worker.internalId }}</span>
+      <span class="worker-name">{{ workerName }}</span>
+      <span class="worker-id">{{ workerInternalId }}</span>
     </td>
-    <td>{{ arrival.room.roomNumber }}</td>
+    <td>{{ roomNumber }}</td>
     <td>
       <StatusChip :status="arrival.status" />
     </td>

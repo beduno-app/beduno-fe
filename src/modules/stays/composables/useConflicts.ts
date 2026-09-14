@@ -3,9 +3,17 @@ import type { ConstraintViolation, HardConstraintType, SoftConstraintType } from
 import type { Room } from '@/modules/properties/types/property.types'
 import type { Worker } from '@/modules/workers/types/worker.types'
 
+// The API no longer embeds a worker's active stay on the Worker record — the
+// caller resolves it (via the stays list + useEntityLookup) and passes it in.
+export interface ActiveStayInfo {
+  propertyName: string
+  roomNumber: string
+}
+
 export interface ConflictCheckInput {
   worker: Worker | null
   room: Room | null
+  workerActiveStay?: ActiveStayInfo | null
   propertyStatus?: 'ACTIVE' | 'INACTIVE'
 }
 
@@ -32,10 +40,10 @@ export function useConflicts() {
   }
 
   function checkCapacity(room: Room): boolean {
-    if (room.availableSpots <= 0) {
+    if (room.availableBedCount <= 0) {
       addHard('CAPACITY_EXCEEDED', 'constraint.room.capacity.full', {
         roomNumber: room.roomNumber,
-        capacity: room.capacity,
+        capacity: room.bedCount,
         current: room.currentOccupancy,
       })
       return false
@@ -78,22 +86,12 @@ export function useConflicts() {
     return true
   }
 
-  function checkDoubleBooking(worker: Worker): boolean {
-    if (worker.currentStay) {
+  function checkDoubleBooking(worker: Worker, activeStay: ActiveStayInfo | null | undefined): boolean {
+    if (activeStay) {
       addHard('DOUBLE_BOOKING', 'constraint.worker.double_booking', {
         workerName: `${worker.firstName} ${worker.lastName}`,
-        currentProperty: worker.currentStay.propertyName,
-        currentRoom: worker.currentStay.roomNumber,
-      })
-      return false
-    }
-    return true
-  }
-
-  function checkBlacklisted(worker: Worker): boolean {
-    if (worker.status === 'BLACKLISTED') {
-      addSoft('WORKER_BLACKLISTED', 'constraint.worker.blacklisted', {
-        workerName: `${worker.firstName} ${worker.lastName}`,
+        currentProperty: activeStay.propertyName,
+        currentRoom: activeStay.roomNumber,
       })
       return false
     }
@@ -101,11 +99,11 @@ export function useConflicts() {
   }
 
   function checkOverPlanned(room: Room, additionalWorkers: number): boolean {
-    if (room.availableSpots > 0 && room.availableSpots < additionalWorkers) {
+    if (room.availableBedCount > 0 && room.availableBedCount < additionalWorkers) {
       addSoft('OVER_PLANNED', 'constraint.room.over_planned', {
         roomNumber: room.roomNumber,
-        capacity: room.capacity,
-        available: room.availableSpots,
+        capacity: room.bedCount,
+        available: room.availableBedCount,
         requested: additionalWorkers,
       })
       return false
@@ -115,16 +113,15 @@ export function useConflicts() {
 
   function validate(input: ConflictCheckInput): boolean {
     clear()
-    const { worker, room, propertyStatus } = input
+    const { worker, room, propertyStatus, workerActiveStay } = input
 
     if (!worker || !room) return true
 
     checkPropertyBlocked(propertyStatus)
     checkRoomBlocked(room)
     checkCapacity(room)
-    checkDoubleBooking(worker)
+    checkDoubleBooking(worker, workerActiveStay)
     checkGender(worker, room)
-    checkBlacklisted(worker)
 
     return !hasHardViolations.value
   }
@@ -133,6 +130,7 @@ export function useConflicts() {
     workers: Worker[],
     room: Room | null,
     propertyStatus?: 'ACTIVE' | 'INACTIVE',
+    activeStaysByWorkerId?: Map<string, ActiveStayInfo | null>,
   ): boolean {
     clear()
 
@@ -144,9 +142,8 @@ export function useConflicts() {
     checkOverPlanned(room, workers.length)
 
     for (const worker of workers) {
-      checkDoubleBooking(worker)
+      checkDoubleBooking(worker, activeStaysByWorkerId?.get(worker.id))
       checkGender(worker, room)
-      checkBlacklisted(worker)
     }
 
     return !hasHardViolations.value

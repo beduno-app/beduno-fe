@@ -6,9 +6,14 @@ import { useStaysStore } from '../store/stays.store'
 import { usePropertiesStore } from '@/modules/properties/store/properties.store'
 import { useWorkersStore } from '@/modules/workers/store/workers.store'
 import { useConflicts } from '../composables/useConflicts'
-import type { BulkAssignmentItem, BulkAssignResponse } from '../types/stay.types'
+import type { ActiveStayInfo } from '../composables/useConflicts'
+import type { BulkAssignmentItem, BulkAssignResponse, StayStatus } from '../types/stay.types'
 import { BaseButton, BaseBadge } from '@/shared/components'
 import ConflictBanner from '../components/ConflictBanner.vue'
+import { staysApi } from '../api/stays.api'
+import { useEntityLookup } from '@/shared/composables/useEntityLookup'
+
+const ACTIVE_STAY_STATUSES: StayStatus[] = ['PLANNED', 'EXPECTED_TODAY', 'CHECKED_IN']
 
 const router = useRouter()
 const { t } = useI18n()
@@ -16,6 +21,7 @@ const staysStore = useStaysStore()
 const propertiesStore = usePropertiesStore()
 const workersStore = useWorkersStore()
 const conflicts = useConflicts()
+const lookup = useEntityLookup()
 
 const selectedWorkerIds = ref<string[]>([])
 const propertyId = ref('')
@@ -46,14 +52,32 @@ watch(
   },
 )
 
+async function resolveActiveStay(workerId: string): Promise<ActiveStayInfo | null> {
+  const response = await staysApi.getStays({ workerId })
+  const active = response.content.find((s) => ACTIVE_STAY_STATUSES.includes(s.status))
+  if (!active) return null
+  const [property, room] = await Promise.all([
+    lookup.getProperty(active.propertyId),
+    lookup.getRoom(active.propertyId, active.roomId),
+  ])
+  return {
+    propertyName: property?.name ?? active.propertyId,
+    roomNumber: room?.roomNumber ?? active.roomId,
+  }
+}
+
 // Live pre-submit validation
 watch(
   [selectedWorkers, selectedRoom, selectedProperty],
-  () => {
+  async () => {
+    const entries = await Promise.all(
+      selectedWorkers.value.map(async (w) => [w.id, await resolveActiveStay(w.id)] as const),
+    )
     conflicts.validateBulk(
       selectedWorkers.value,
       selectedRoom.value,
       selectedProperty.value?.status,
+      new Map(entries),
     )
   },
 )
@@ -140,15 +164,15 @@ propertiesStore.fetchProperties()
     >
       <h3>{{ t('stays.bulkResult') }}</h3>
       <div class="result-summary">
-        <span>{{ t('stays.total') }}: {{ result.total }}</span>
+        <span>{{ t('stays.total') }}: {{ result.created + result.errors }}</span>
         <BaseBadge variant="success">
-          {{ t('stays.succeeded') }}: {{ result.succeeded }}
+          {{ t('stays.succeeded') }}: {{ result.created }}
         </BaseBadge>
         <BaseBadge
-          v-if="result.failed > 0"
+          v-if="result.errors > 0"
           variant="danger"
         >
-          {{ t('stays.failed') }}: {{ result.failed }}
+          {{ t('stays.failed') }}: {{ result.errors }}
         </BaseBadge>
       </div>
       <table
@@ -173,7 +197,7 @@ propertiesStore.fetchProperties()
                 {{ r.status }}
               </BaseBadge>
             </td>
-            <td>{{ r.error ? t(`stays.conflicts.${r.error.type}`) : '—' }}</td>
+            <td>{{ r.errorCode ?? '—' }}</td>
           </tr>
         </tbody>
       </table>
@@ -256,7 +280,7 @@ propertiesStore.fetchProperties()
               :key="r.id"
               :value="r.id"
             >
-              {{ r.roomNumber }} ({{ r.availableSpots }}/{{ r.capacity }})
+              {{ r.roomNumber }} ({{ r.availableBedCount }}/{{ r.bedCount }})
             </option>
           </select>
         </div>

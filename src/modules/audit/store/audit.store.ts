@@ -1,6 +1,6 @@
 import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
-import type { AuditEvent, AuditEntityType, AuditAction, GetAuditParams } from '../types/audit.types'
+import type { AuditEvent, AuditEntityType, GetAuditParams } from '../types/audit.types'
 import { auditApi } from '../api/audit.api'
 
 export const useAuditStore = defineStore('audit', () => {
@@ -15,8 +15,7 @@ export const useAuditStore = defineStore('audit', () => {
   // Filters
   const entityTypeFilter = ref<AuditEntityType | ''>('')
   const entityIdFilter = ref('')
-  const actorIdFilter = ref('')
-  const actionFilter = ref<AuditAction | ''>('')
+  const actorUserIdFilter = ref('')
   const dateFromFilter = ref('')
   const dateToFilter = ref('')
 
@@ -30,8 +29,7 @@ export const useAuditStore = defineStore('audit', () => {
     }
     if (entityTypeFilter.value) params.entityType = entityTypeFilter.value
     if (entityIdFilter.value) params.entityId = entityIdFilter.value
-    if (actorIdFilter.value) params.actorId = actorIdFilter.value
-    if (actionFilter.value) params.action = actionFilter.value
+    if (actorUserIdFilter.value) params.actorUserId = actorUserIdFilter.value
     if (dateFromFilter.value) params.dateFrom = dateFromFilter.value
     if (dateToFilter.value) params.dateTo = dateToFilter.value
     return params
@@ -60,8 +58,7 @@ export const useAuditStore = defineStore('audit', () => {
   function resetFilters() {
     entityTypeFilter.value = ''
     entityIdFilter.value = ''
-    actorIdFilter.value = ''
-    actionFilter.value = ''
+    actorUserIdFilter.value = ''
     dateFromFilter.value = ''
     dateToFilter.value = ''
     page.value = 0
@@ -77,8 +74,7 @@ export const useAuditStore = defineStore('audit', () => {
     size,
     entityTypeFilter,
     entityIdFilter,
-    actorIdFilter,
-    actionFilter,
+    actorUserIdFilter,
     dateFromFilter,
     dateToFilter,
     hasNextPage,

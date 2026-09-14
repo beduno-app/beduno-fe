@@ -1,35 +1,53 @@
 import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
-import type {
-  InHouseResponse,
-  RoomOccupancy,
-  OccupantStay,
-  InHouseSummary,
-  CheckOutPayload,
-  RoomMovePayload,
-  ExportFormat,
-} from '../types/inhouse.types'
+import type { RoomOccupancy, CheckOutPayload, RoomMovePayload, RoomOccupancyStatus } from '../types/inhouse.types'
 import { inhouseApi } from '../api/inhouse.api'
+import { usePropertiesStore } from '@/modules/properties/store/properties.store'
 import { enqueueAction } from '@/shared/services/actionQueue'
 import type { QueuedActionType } from '@/shared/services/actionQueue'
 import { useSyncStore } from '@/modules/ops/store/sync.store'
 
+export interface InHouseSummary {
+  totalRooms: number
+  totalCapacity: number
+  totalOccupants: number
+  overCapacityRooms: number
+  nearCapacityRooms: number
+  blockedRooms: number
+}
+
 export const useInHouseStore = defineStore('inhouse', () => {
-  const data = ref<InHouseResponse | null>(null)
+  const rooms = ref<RoomOccupancy[]>([])
   const isLoading = ref(false)
   const error = ref('')
   const propertyIdFilter = ref('')
 
-  const rooms = computed<RoomOccupancy[]>(() => data.value?.rooms ?? [])
-  const unassignedWorkers = computed<OccupantStay[]>(() => data.value?.unassignedWorkers ?? [])
-  const summary = computed<InHouseSummary | null>(() => data.value?.summary ?? null)
+  function roomStatus(room: RoomOccupancy): RoomOccupancyStatus {
+    const properties = usePropertiesStore()
+    const roomDetail = properties.rooms.find((r) => r.id === room.roomId)
+    if (roomDetail?.status === 'BLOCKED') return 'BLOCKED'
+    if (room.occupiedSpots > room.bedCount) return 'OVER_CAPACITY'
+    if (room.bedCount > 0 && room.occupiedSpots === room.bedCount) return 'NEAR_CAPACITY'
+    return 'OK'
+  }
+
+  const summary = computed<InHouseSummary>(() => ({
+    totalRooms: rooms.value.length,
+    totalCapacity: rooms.value.reduce((sum, r) => sum + r.bedCount, 0),
+    totalOccupants: rooms.value.reduce((sum, r) => sum + r.occupiedSpots, 0),
+    overCapacityRooms: rooms.value.filter((r) => roomStatus(r) === 'OVER_CAPACITY').length,
+    nearCapacityRooms: rooms.value.filter((r) => roomStatus(r) === 'NEAR_CAPACITY').length,
+    blockedRooms: rooms.value.filter((r) => roomStatus(r) === 'BLOCKED').length,
+  }))
 
   async function fetchInHouse() {
     if (!propertyIdFilter.value) return
     isLoading.value = true
     error.value = ''
     try {
-      data.value = await inhouseApi.getInHouse(propertyIdFilter.value)
+      const properties = usePropertiesStore()
+      await properties.fetchRooms(propertyIdFilter.value)
+      rooms.value = await inhouseApi.getOccupancy(propertyIdFilter.value)
     } catch (e) {
       error.value = e instanceof Error ? e.message : 'Failed to load occupancy'
     } finally {
@@ -62,27 +80,33 @@ export const useInHouseStore = defineStore('inhouse', () => {
     await fetchInHouse()
   }
 
-  async function exportData(format: ExportFormat, lang: string): Promise<void> {
-    const blob = await inhouseApi.exportInHouse(propertyIdFilter.value, format, lang)
+  async function bulkCheckout(stayIds: string[]): Promise<{ checkedOut: number; errors: number }> {
+    const result = await inhouseApi.bulkCheckout(stayIds)
+    await fetchInHouse()
+    return result
+  }
+
+  async function exportData(lang: string): Promise<void> {
+    const blob = await inhouseApi.exportOccupancy(propertyIdFilter.value, lang)
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
     a.href = url
-    a.download = `in-house-${propertyIdFilter.value}.${format}`
+    a.download = `occupancy-${propertyIdFilter.value}.csv`
     a.click()
     URL.revokeObjectURL(url)
   }
 
   return {
-    data,
+    rooms,
     isLoading,
     error,
     propertyIdFilter,
-    rooms,
-    unassignedWorkers,
     summary,
+    roomStatus,
     fetchInHouse,
     checkOut,
     moveRoom,
+    bulkCheckout,
     exportData,
   }
 })

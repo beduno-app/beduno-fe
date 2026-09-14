@@ -4,24 +4,49 @@ import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { workersApi } from '../api/workers.api'
 import type { Worker, UpdateWorkerPayload, Gender } from '../types/worker.types'
-import type { Stay } from '@/modules/stays/types/stay.types'
+import type { Stay, StayStatus } from '@/modules/stays/types/stay.types'
 import { BaseButton, BaseInput, BaseBadge, StatusChip } from '@/shared/components'
 import { useAuthStore } from '@/modules/auth/store/auth.store'
 import { formatDate } from '@/shared/utils/formatDate'
+import { useEntityLookup } from '@/shared/composables/useEntityLookup'
 
 const route = useRoute()
 const router = useRouter()
 const { t, locale } = useI18n()
 const auth = useAuthStore()
+const lookup = useEntityLookup()
+
+const ACTIVE_STAY_STATUSES: StayStatus[] = ['PLANNED', 'EXPECTED_TODAY', 'CHECKED_IN']
 
 const worker = ref<Worker | null>(null)
 const stays = ref<Stay[]>([])
+const stayDisplay = ref<Map<string, { propertyName: string; roomNumber: string }>>(new Map())
 const isLoading = ref(true)
 const isSaving = ref(false)
 const error = ref('')
 const isEditing = ref(false)
 
-const editForm = ref<UpdateWorkerPayload>({})
+const activeStay = computed(() => stays.value.find((s) => ACTIVE_STAY_STATUSES.includes(s.status)) ?? null)
+const activeStayDisplay = computed(() =>
+  activeStay.value ? (stayDisplay.value.get(activeStay.value.id) ?? null) : null,
+)
+
+async function resolveStayDisplays() {
+  await Promise.all(
+    stays.value.map(async (s) => {
+      const [property, room] = await Promise.all([
+        lookup.getProperty(s.propertyId),
+        lookup.getRoom(s.propertyId, s.roomId),
+      ])
+      stayDisplay.value.set(s.id, {
+        propertyName: property?.name ?? s.propertyId,
+        roomNumber: room?.roomNumber ?? s.roomId,
+      })
+    }),
+  )
+}
+
+const editForm = ref<Partial<UpdateWorkerPayload>>({})
 const tagsInput = ref('')
 
 const workerId = computed(() => route.params.id as string)
@@ -42,6 +67,7 @@ async function loadWorker() {
     ])
     worker.value = w
     stays.value = stayResponse.content
+    await resolveStayDisplays()
   } catch (e) {
     error.value = e instanceof Error ? e.message : 'Failed to load worker'
   } finally {
@@ -52,11 +78,11 @@ async function loadWorker() {
 function startEdit() {
   if (!worker.value) return
   editForm.value = {
-    internalId: worker.value.internalId,
     firstName: worker.value.firstName,
     lastName: worker.value.lastName,
     phone: worker.value.phone,
     gender: worker.value.gender,
+    status: worker.value.status,
     notes: worker.value.notes,
   }
   tagsInput.value = worker.value.tags.join(', ')
@@ -75,7 +101,7 @@ async function saveEdit() {
       .split(',')
       .map((t) => t.trim())
       .filter(Boolean)
-    const updated = await workersApi.updateWorker(workerId.value, editForm.value)
+    const updated = await workersApi.updateWorker(workerId.value, editForm.value as UpdateWorkerPayload)
     worker.value = updated
     isEditing.value = false
   } catch (e) {
@@ -184,7 +210,7 @@ onMounted(loadWorker)
           <div class="info-item">
             <span class="info-label">{{ t('workers.statusLabel') }}</span>
             <BaseBadge
-              :variant="worker.status === 'ACTIVE' ? 'success' : worker.status === 'BLACKLISTED' ? 'danger' : 'default'"
+              :variant="worker.status === 'ACTIVE' ? 'success' : worker.status === 'DELETED' ? 'danger' : 'default'"
             >
               {{ t(`workers.status.${worker.status}`) }}
             </BaseBadge>
@@ -204,11 +230,11 @@ onMounted(loadWorker)
             </span>
           </div>
           <div
-            v-if="worker.currentStay"
+            v-if="activeStayDisplay"
             class="info-item"
           >
             <span class="info-label">{{ t('workers.currentProperty') }}</span>
-            <span>{{ worker.currentStay.propertyName }} — {{ t('workers.room') }} {{ worker.currentStay.roomNumber }}</span>
+            <span>{{ activeStayDisplay.propertyName }} — {{ t('workers.room') }} {{ activeStayDisplay.roomNumber }}</span>
           </div>
           <div
             v-if="worker.notes"
@@ -226,11 +252,6 @@ onMounted(loadWorker)
         class="info-card"
       >
         <div class="edit-form">
-          <BaseInput
-            v-model="editForm.internalId!"
-            :label="t('workers.internalId')"
-            required
-          />
           <BaseInput
             v-model="editForm.firstName!"
             :label="t('workers.firstName')"
@@ -308,8 +329,8 @@ onMounted(loadWorker)
               v-for="stay in stays"
               :key="stay.id"
             >
-              <td>{{ stay.property.name }}</td>
-              <td>{{ stay.room.roomNumber }}</td>
+              <td>{{ stayDisplay.get(stay.id)?.propertyName ?? '—' }}</td>
+              <td>{{ stayDisplay.get(stay.id)?.roomNumber ?? '—' }}</td>
               <td>{{ formatDate(stay.dateFrom, locale) }}</td>
               <td>{{ formatDate(stay.dateTo, locale) }}</td>
               <td>

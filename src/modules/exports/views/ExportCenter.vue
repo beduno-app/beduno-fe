@@ -22,32 +22,20 @@ const langOptions: Array<{ value: ExportLanguage; label: string }> = [
   { value: 'RU', label: 'Русский' },
 ]
 
-// Nightly occupancy filters
-const nightlyPropertyId = ref('')
-const nightlyDate = ref(new Date().toISOString().slice(0, 10))
-const nightlyExport = useExportDownload()
+// Occupancy export filters
+const occupancyPropertyId = ref('')
+const occupancyDate = ref(new Date().toISOString().slice(0, 10))
+const occupancyExport = useExportDownload()
 
 // Exception report filters
 const exceptionPropertyId = ref('')
 const exceptionDate = ref(new Date().toISOString().slice(0, 10))
 const exceptionExport = useExportDownload()
 
-// Occupancy summary filters
-const summaryDateFrom = ref(new Date().toISOString().slice(0, 10))
-const summaryDateTo = ref(new Date().toISOString().slice(0, 10))
-const summaryExport = useExportDownload()
-
-function nightlyFilename(format: 'csv' | 'pdf') {
-  return `nightly-occupancy-${nightlyDate.value}.${format}`
-}
-
-function exceptionFilename(format: 'csv' | 'pdf') {
-  return `exception-report-${exceptionDate.value}.${format}`
-}
-
-function summaryFilename(format: 'csv' | 'pdf') {
-  return `occupancy-summary-${summaryDateFrom.value}-${summaryDateTo.value}.${format}`
-}
+// Arrivals export filters
+const arrivalsPropertyId = ref('')
+const arrivalsDate = ref(new Date().toISOString().slice(0, 10))
+const arrivalsExport = useExportDownload()
 
 onMounted(() => {
   propertiesStore.fetchProperties()
@@ -82,13 +70,13 @@ onMounted(() => {
       <ReportCard
         :title="t('exports.nightlyOccupancy.title')"
         :description="t('exports.nightlyOccupancy.description')"
-        :error="nightlyExport.error.value"
+        :error="occupancyExport.error.value"
       >
         <template #filters>
           <div class="field-group">
             <label class="field-label">{{ t('exports.selectProperty') }}</label>
             <select
-              v-model="nightlyPropertyId"
+              v-model="occupancyPropertyId"
               class="field-select"
             >
               <option value="">
@@ -106,7 +94,7 @@ onMounted(() => {
           <div class="field-group">
             <label class="field-label">{{ t('exports.selectDate') }}</label>
             <input
-              v-model="nightlyDate"
+              v-model="occupancyDate"
               type="date"
               class="field-input"
             >
@@ -115,24 +103,14 @@ onMounted(() => {
         <template #actions>
           <BaseButton
             variant="secondary"
-            :disabled="!nightlyPropertyId"
-            :loading="nightlyExport.isGenerating.value"
-            @click="nightlyExport.download(
-              () => exportsApi.exportNightlyOccupancy({ propertyId: nightlyPropertyId, date: nightlyDate, format: 'csv', lang: exportLang }),
-              nightlyFilename('csv')
+            :disabled="!occupancyPropertyId"
+            :loading="occupancyExport.isGenerating.value"
+            @click="occupancyExport.download(
+              () => exportsApi.exportOccupancy({ propertyId: occupancyPropertyId, date: occupancyDate, language: exportLang }),
+              `occupancy-${occupancyDate}.csv`
             )"
           >
             {{ t('exports.exportCsv') }}
-          </BaseButton>
-          <BaseButton
-            :disabled="!nightlyPropertyId"
-            :loading="nightlyExport.isGenerating.value"
-            @click="nightlyExport.download(
-              () => exportsApi.exportNightlyOccupancy({ propertyId: nightlyPropertyId, date: nightlyDate, format: 'pdf', lang: exportLang }),
-              nightlyFilename('pdf')
-            )"
-          >
-            {{ t('exports.exportPdf') }}
           </BaseButton>
         </template>
       </ReportCard>
@@ -177,44 +155,44 @@ onMounted(() => {
             :disabled="!exceptionPropertyId"
             :loading="exceptionExport.isGenerating.value"
             @click="exceptionExport.download(
-              () => exportsApi.exportExceptionReport({ propertyId: exceptionPropertyId, date: exceptionDate, format: 'csv', lang: exportLang }),
-              exceptionFilename('csv')
+              () => exportsApi.exportExceptions({ propertyId: exceptionPropertyId, date: exceptionDate, language: exportLang }),
+              `exceptions-${exceptionDate}.csv`
             )"
           >
             {{ t('exports.exportCsv') }}
           </BaseButton>
-          <BaseButton
-            :disabled="!exceptionPropertyId"
-            :loading="exceptionExport.isGenerating.value"
-            @click="exceptionExport.download(
-              () => exportsApi.exportExceptionReport({ propertyId: exceptionPropertyId, date: exceptionDate, format: 'pdf', lang: exportLang }),
-              exceptionFilename('pdf')
-            )"
-          >
-            {{ t('exports.exportPdf') }}
-          </BaseButton>
         </template>
       </ReportCard>
 
-      <!-- Occupancy Summary -->
+      <!-- Arrivals -->
       <ReportCard
-        :title="t('exports.occupancySummary.title')"
-        :description="t('exports.occupancySummary.description')"
-        :error="summaryExport.error.value"
+        :title="t('exports.arrivals.title')"
+        :description="t('exports.arrivals.description')"
+        :error="arrivalsExport.error.value"
       >
         <template #filters>
           <div class="field-group">
-            <label class="field-label">{{ t('exports.dateFrom') }}</label>
-            <input
-              v-model="summaryDateFrom"
-              type="date"
-              class="field-input"
+            <label class="field-label">{{ t('exports.selectProperty') }}</label>
+            <select
+              v-model="arrivalsPropertyId"
+              class="field-select"
             >
+              <option value="">
+                {{ t('exports.selectProperty') }}
+              </option>
+              <option
+                v-for="p in propertiesStore.properties"
+                :key="p.id"
+                :value="p.id"
+              >
+                {{ p.name }}
+              </option>
+            </select>
           </div>
           <div class="field-group">
-            <label class="field-label">{{ t('exports.dateTo') }}</label>
+            <label class="field-label">{{ t('exports.selectDate') }}</label>
             <input
-              v-model="summaryDateTo"
+              v-model="arrivalsDate"
               type="date"
               class="field-input"
             >
@@ -223,22 +201,14 @@ onMounted(() => {
         <template #actions>
           <BaseButton
             variant="secondary"
-            :loading="summaryExport.isGenerating.value"
-            @click="summaryExport.download(
-              () => exportsApi.exportOccupancySummary({ dateFrom: summaryDateFrom, dateTo: summaryDateTo, format: 'csv', lang: exportLang }),
-              summaryFilename('csv')
+            :disabled="!arrivalsPropertyId"
+            :loading="arrivalsExport.isGenerating.value"
+            @click="arrivalsExport.download(
+              () => exportsApi.exportArrivals({ propertyId: arrivalsPropertyId, date: arrivalsDate, language: exportLang }),
+              `arrivals-${arrivalsDate}.csv`
             )"
           >
             {{ t('exports.exportCsv') }}
-          </BaseButton>
-          <BaseButton
-            :loading="summaryExport.isGenerating.value"
-            @click="summaryExport.download(
-              () => exportsApi.exportOccupancySummary({ dateFrom: summaryDateFrom, dateTo: summaryDateTo, format: 'pdf', lang: exportLang }),
-              summaryFilename('pdf')
-            )"
-          >
-            {{ t('exports.exportPdf') }}
           </BaseButton>
         </template>
       </ReportCard>

@@ -6,8 +6,11 @@ import type {
   UpdatePropertyPayload,
   Room,
   CreateRoomPayload,
-  BulkCreateRoomsPayload,
   UpdateRoomPayload,
+  Bed,
+  CreateBedPayload,
+  UpdateBedPayload,
+  BulkGenerateBedsPayload,
   GetPropertiesParams,
   GetRoomsParams,
 } from '../types/property.types'
@@ -39,12 +42,32 @@ export const propertiesApi = {
   createRoom: (propertyId: string, payload: CreateRoomPayload) =>
     api.post<Room>(`/properties/${propertyId}/rooms`, payload).then((r) => r.data),
 
-  bulkCreateRooms: (propertyId: string, payload: BulkCreateRoomsPayload) =>
-    api.post<Room[]>(`/properties/${propertyId}/rooms/bulk`, payload).then((r) => r.data),
-
   updateRoom: (propertyId: string, roomId: string, payload: UpdateRoomPayload) =>
     api.put<Room>(`/properties/${propertyId}/rooms/${roomId}`, payload).then((r) => r.data),
 
   deleteRoom: (propertyId: string, roomId: string) =>
     api.delete(`/properties/${propertyId}/rooms/${roomId}`),
+
+  // Beds
+  getBeds: (propertyId: string, roomId: string) =>
+    api.get<Bed[]>(`/properties/${propertyId}/rooms/${roomId}/beds`).then((r) => r.data),
+
+  getBed: (propertyId: string, roomId: string, bedId: string) =>
+    api.get<Bed>(`/properties/${propertyId}/rooms/${roomId}/beds/${bedId}`).then((r) => r.data),
+
+  createBed: (propertyId: string, roomId: string, payload: CreateBedPayload) =>
+    api.post<Bed>(`/properties/${propertyId}/rooms/${roomId}/beds`, payload).then((r) => r.data),
+
+  updateBed: (propertyId: string, roomId: string, bedId: string, payload: UpdateBedPayload) =>
+    api
+      .put<Bed>(`/properties/${propertyId}/rooms/${roomId}/beds/${bedId}`, payload)
+      .then((r) => r.data),
+
+  deleteBed: (propertyId: string, roomId: string, bedId: string) =>
+    api.delete(`/properties/${propertyId}/rooms/${roomId}/beds/${bedId}`),
+
+  bulkGenerateBeds: (propertyId: string, roomId: string, payload: BulkGenerateBedsPayload) =>
+    api
+      .post<Bed[]>(`/properties/${propertyId}/rooms/${roomId}/beds/bulk-generate`, payload)
+      .then((r) => r.data),
 }

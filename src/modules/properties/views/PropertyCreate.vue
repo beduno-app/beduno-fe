@@ -3,7 +3,7 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { propertiesApi } from '../api/properties.api'
-import type { CreatePropertyPayload, PropertyType, GenderRule } from '../types/property.types'
+import type { CreatePropertyPayload } from '../types/property.types'
 import { BaseButton, BaseInput } from '@/shared/components'
 
 const router = useRouter()
@@ -12,23 +12,11 @@ const { t } = useI18n()
 const form = ref<CreatePropertyPayload>({
   name: '',
   address: '',
-  type: 'INTERNAL',
-  genderRule: 'PER_ROOM',
+  city: '',
   notes: '',
 })
 const isSaving = ref(false)
 const error = ref('')
-
-const typeOptions: { value: PropertyType; label: string }[] = [
-  { value: 'INTERNAL', label: t('properties.type.INTERNAL') },
-  { value: 'PARTNER', label: t('properties.type.PARTNER') },
-]
-
-const genderRuleOptions: { value: GenderRule; label: string }[] = [
-  { value: 'PER_ROOM', label: t('properties.genderRule.PER_ROOM') },
-  { value: 'PER_PROPERTY', label: t('properties.genderRule.PER_PROPERTY') },
-  { value: 'MIXED', label: t('properties.genderRule.MIXED') },
-]
 
 async function save() {
   isSaving.value = true
@@ -72,40 +60,13 @@ async function save() {
         required
       />
       <BaseInput
-        v-model="form.address"
+        v-model="form.address!"
         :label="t('properties.address')"
-        required
       />
-      <div class="input-group">
-        <label class="input-label">{{ t('properties.typeLabel') }}</label>
-        <select
-          v-model="form.type"
-          class="filter-select"
-        >
-          <option
-            v-for="opt in typeOptions"
-            :key="opt.value"
-            :value="opt.value"
-          >
-            {{ opt.label }}
-          </option>
-        </select>
-      </div>
-      <div class="input-group">
-        <label class="input-label">{{ t('properties.genderRuleLabel') }}</label>
-        <select
-          v-model="form.genderRule"
-          class="filter-select"
-        >
-          <option
-            v-for="opt in genderRuleOptions"
-            :key="opt.value"
-            :value="opt.value"
-          >
-            {{ opt.label }}
-          </option>
-        </select>
-      </div>
+      <BaseInput
+        v-model="form.city!"
+        :label="t('properties.city')"
+      />
       <BaseInput
         v-model="form.notes!"
         :label="t('properties.notes')"

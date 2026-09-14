@@ -1,30 +1,15 @@
-import type { WorkerSummary, PropertySummary, RoomSummary, StayStatus } from '@/modules/stays/types/stay.types'
+import type { Stay, CheckInPayload, NoShowPayload, MovePayload } from '@/modules/stays/types/stay.types'
 
-export interface ArrivalStay {
-  id: string
-  worker: WorkerSummary
-  property: PropertySummary
-  room: RoomSummary
-  dateFrom: string
-  dateTo: string | null
-  status: StayStatus
-}
+// The real API's GET /stays/arrivals returns the same flat Stay shape as
+// every other stay endpoint — no separate arrival-specific response type.
+export type ArrivalStay = Stay
 
 export interface GetArrivalsParams {
   propertyId: string
-  date: string
-  page?: number
-  size?: number
+  date?: string
 }
 
-export interface CheckInPayload {
-  qrCode?: string
-}
-
-export interface NoShowPayload {
-  reason: NoShowReason
-  note?: string
-}
+export type { CheckInPayload, NoShowPayload, MovePayload }
 
 export type NoShowReason =
   | 'DID_NOT_ARRIVE'
@@ -32,8 +17,3 @@ export type NoShowReason =
   | 'SENT_ELSEWHERE'
   | 'CANCELLED_BY_AGENCY'
   | 'OTHER'
-
-export interface MovePayload {
-  targetPropertyId: string
-  targetRoomId: string
-}

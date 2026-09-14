@@ -3,7 +3,7 @@ import { onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useAuditStore } from '../store/audit.store'
-import type { AuditEntityType, AuditAction } from '../types/audit.types'
+import type { AuditEntityType } from '../types/audit.types'
 import { BaseButton } from '@/shared/components'
 import AuditEventRow from '../components/AuditEventRow.vue'
 
@@ -16,31 +16,13 @@ const entityTypeOptions: Array<{ value: AuditEntityType | ''; label: string }> =
   { value: 'WORKER', label: t('audit.entityTypes.WORKER') },
   { value: 'PROPERTY', label: t('audit.entityTypes.PROPERTY') },
   { value: 'ROOM', label: t('audit.entityTypes.ROOM') },
+  { value: 'BED', label: t('audit.entityTypes.BED') },
   { value: 'STAY', label: t('audit.entityTypes.STAY') },
   { value: 'USER', label: t('audit.entityTypes.USER') },
 ]
 
-const actionOptions: Array<{ value: AuditAction | ''; label: string }> = [
-  { value: '', label: t('audit.allActions') },
-  { value: 'CREATE', label: t('audit.actions.CREATE') },
-  { value: 'UPDATE', label: t('audit.actions.UPDATE') },
-  { value: 'DELETE', label: t('audit.actions.DELETE') },
-  { value: 'CHECK_IN', label: t('audit.actions.CHECK_IN') },
-  { value: 'CHECK_OUT', label: t('audit.actions.CHECK_OUT') },
-  { value: 'NO_SHOW', label: t('audit.actions.NO_SHOW') },
-  { value: 'MOVE', label: t('audit.actions.MOVE') },
-  { value: 'BULK_ASSIGN', label: t('audit.actions.BULK_ASSIGN') },
-  { value: 'IMPORT', label: t('audit.actions.IMPORT') },
-  { value: 'INSPECTION_COMPLETE', label: t('audit.actions.INSPECTION_COMPLETE') },
-]
-
 function onEntityTypeChange(e: Event) {
   store.entityTypeFilter = (e.target as HTMLSelectElement).value as AuditEntityType | ''
-  store.setPage(0)
-}
-
-function onActionChange(e: Event) {
-  store.actionFilter = (e.target as HTMLSelectElement).value as AuditAction | ''
   store.setPage(0)
 }
 
@@ -49,7 +31,7 @@ function onEntityIdChange(e: Event) {
 }
 
 function onActorIdChange(e: Event) {
-  store.actorIdFilter = (e.target as HTMLInputElement).value
+  store.actorUserIdFilter = (e.target as HTMLInputElement).value
 }
 
 function onDateFromChange(e: Event) {
@@ -130,29 +112,12 @@ onMounted(() => {
         <input
           class="filter-input"
           type="text"
-          :value="store.actorIdFilter"
+          :value="store.actorUserIdFilter"
           :placeholder="t('audit.filterActor')"
           @input="onActorIdChange"
           @keydown.enter="applyTextFilters"
           @blur="applyTextFilters"
         >
-      </div>
-
-      <div class="filter-group">
-        <label class="filter-label">{{ t('audit.filterAction') }}</label>
-        <select
-          class="filter-select"
-          :value="store.actionFilter"
-          @change="onActionChange"
-        >
-          <option
-            v-for="opt in actionOptions"
-            :key="opt.value"
-            :value="opt.value"
-          >
-            {{ opt.label }}
-          </option>
-        </select>
       </div>
 
       <div class="filter-group">
@@ -208,7 +173,6 @@ onMounted(() => {
             <th>{{ t('audit.filterActor') }}</th>
             <th>{{ t('audit.filterAction') }}</th>
             <th>{{ t('audit.filterEntityType') }}</th>
-            <th />
             <th />
           </tr>
         </thead>

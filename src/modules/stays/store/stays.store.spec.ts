@@ -19,15 +19,17 @@ import { staysApi } from '../api/stays.api'
 function makeStay(overrides: Partial<Stay> = {}): Stay {
   return {
     id: 'stay-1',
-    worker: { id: 'w1', internalId: 'W001', firstName: 'Jan', lastName: 'Kowalski', gender: 'MALE' },
-    property: { id: 'prop-1', name: 'Hotel A', type: 'INTERNAL' },
-    room: { id: 'room-1', roomNumber: '101', capacity: 4, availableSpots: 3 },
+    workerId: 'w1',
+    propertyId: 'prop-1',
+    roomId: 'room-1',
+    bedId: null,
+    bedAutoAssigned: null,
     dateFrom: '2024-03-15',
     dateTo: '2024-03-20',
     status: 'PLANNED',
     overrideReason: null,
-    createdBy: { id: 'user-1', firstName: 'Admin', lastName: 'User' },
-    confirmedBy: null,
+    noShowReason: null,
+    notes: null,
     createdAt: '2024-03-01T10:00:00Z',
     updatedAt: '2024-03-01T10:00:00Z',
     ...overrides,
@@ -126,13 +128,12 @@ describe('useStaysStore — stay creation with conflict', () => {
   describe('bulkAssign()', () => {
     it('returns bulk assignment results from API', async () => {
       const response: BulkAssignResponse = {
-        total: 3,
-        succeeded: 2,
-        failed: 1,
+        created: 2,
+        errors: 1,
         results: [
-          { workerId: 'w1', stayId: 'stay-1', status: 'CREATED' },
-          { workerId: 'w2', stayId: 'stay-2', status: 'CREATED' },
-          { workerId: 'w3', status: 'FAILED', error: { type: 'CAPACITY_EXCEEDED', message: 'Full', params: {} } },
+          { index: 0, workerId: 'w1', stayId: 'stay-1', bedId: 'bed-1', status: 'CREATED' },
+          { index: 1, workerId: 'w2', stayId: 'stay-2', bedId: 'bed-2', status: 'CREATED' },
+          { index: 2, workerId: 'w3', status: 'FAILED', errorCode: 'CAPACITY_EXCEEDED' },
         ],
       }
       vi.mocked(staysApi.bulkAssign).mockResolvedValue(response)
@@ -145,9 +146,8 @@ describe('useStaysStore — stay creation with conflict', () => {
       ]
       const result = await store.bulkAssign({ assignments })
 
-      expect(result.total).toBe(3)
-      expect(result.succeeded).toBe(2)
-      expect(result.failed).toBe(1)
+      expect(result.created).toBe(2)
+      expect(result.errors).toBe(1)
       expect(result.results[2].status).toBe('FAILED')
       // The exact request payload must reach the API unchanged — a future
       // refactor that mutates it before forwarding would be caught here.

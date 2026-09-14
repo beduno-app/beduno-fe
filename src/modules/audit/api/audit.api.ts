@@ -10,7 +10,7 @@ export const auditApi = {
     entityType: AuditEntityType,
     entityId: string,
     params?: Pick<GetAuditParams, 'page' | 'size'>,
-  ) =>
+  ): Promise<PaginatedResponse<AuditEvent>> =>
     api
       .get<PaginatedResponse<AuditEvent>>('/audit', { params: { ...params, entityType, entityId } })
       .then((r) => r.data),

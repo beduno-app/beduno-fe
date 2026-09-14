@@ -11,6 +11,13 @@ vi.mock('vue-router', () => ({
   useRouter: () => ({ push: vi.fn() }),
 }))
 
+// useEntityLookup pulls in workersApi/propertiesApi (mocked below), but those
+// modules also import the shared axios instance, which imports the real
+// app router (`@/app/router`) for its 401-refresh redirect. That module calls
+// vue-router's real `createRouter` at import time, which the mock above
+// doesn't provide — stub it out so it's never evaluated.
+vi.mock('@/app/router', () => ({ default: { push: vi.fn() } }))
+
 vi.mock('../api/stays.api', () => ({
   staysApi: {
     getStays: vi.fn(),
@@ -27,6 +34,7 @@ vi.mock('@/modules/properties/api/properties.api', () => ({
     getProperties: vi.fn(),
     getProperty: vi.fn(),
     getRooms: vi.fn(),
+    getRoom: vi.fn(),
     createProperty: vi.fn(),
     updateProperty: vi.fn(),
     createRoom: vi.fn(),
@@ -58,10 +66,12 @@ function makeWorker(overrides: Partial<Worker> = {}): Worker {
     lastName: 'Kowalski',
     phone: '+48123456789',
     gender: 'MALE',
+    nationality: 'PL',
+    email: 'jan.kowalski@example.com',
+    dateOfBirth: '1990-01-01',
     tags: [],
     notes: '',
     status: 'ACTIVE',
-    currentStay: null,
     createdAt: '2024-01-01T00:00:00Z',
     updatedAt: '2024-01-01T00:00:00Z',
     ...overrides,
@@ -73,11 +83,9 @@ function makeProperty(overrides: Partial<Property> = {}): Property {
     id: 'prop-1',
     name: 'Hotel A',
     address: 'Main St 1',
-    type: 'INTERNAL',
-    genderRule: 'MIXED',
+    city: 'Warsaw',
     status: 'ACTIVE',
     notes: '',
-    roomSummary: { totalRooms: 1, totalCapacity: 4, totalBlockedSpots: 0, currentOccupancy: 0 },
     createdAt: '2024-01-01T00:00:00Z',
     updatedAt: '2024-01-01T00:00:00Z',
     ...overrides,
@@ -89,9 +97,8 @@ function makeRoom(overrides: Partial<Room> = {}): Room {
     id: 'room-1',
     propertyId: 'prop-1',
     roomNumber: '101',
-    capacity: 4,
-    blockedSpots: 0,
-    availableSpots: 4,
+    bedCount: 4,
+    availableBedCount: 4,
     currentOccupancy: 0,
     genderRule: 'MIXED',
     floor: 1,
@@ -99,6 +106,7 @@ function makeRoom(overrides: Partial<Room> = {}): Room {
     notes: '',
     occupants: [],
     createdAt: '2024-01-01T00:00:00Z',
+    updatedAt: '2024-01-01T00:00:00Z',
     ...overrides,
   }
 }
@@ -138,10 +146,14 @@ describe('BulkAssign', () => {
     )
     vi.mocked(propertiesApi.getProperties).mockResolvedValue(paginated([makeProperty()]))
     vi.mocked(propertiesApi.getRooms).mockResolvedValue(paginated([makeRoom()]))
+    // No active stay for any selected worker by default — the conflict-check
+    // watcher in BulkAssign.vue resolves this via staysApi.getStays({ workerId })
+    // before calling conflicts.validateBulk().
+    vi.mocked(staysApi.getStays).mockResolvedValue(paginated([]))
   })
 
   it('disables submission when the target room has zero available spots (hard violation)', async () => {
-    vi.mocked(propertiesApi.getRooms).mockResolvedValue(paginated([makeRoom({ availableSpots: 0 })]))
+    vi.mocked(propertiesApi.getRooms).mockResolvedValue(paginated([makeRoom({ availableBedCount: 0 })]))
 
     const wrapper = mountView()
     await flushPromises()
@@ -157,16 +169,18 @@ describe('BulkAssign', () => {
     // override reason for a soft violation, unlike CreateStay.vue. See
     // research.md and PRD Open Question 16 (roadmap S-05). Locked here, not
     // fixed — fixing it is a product decision, not a testing one.
+    //
+    // WorkerStatus no longer has a 'BLACKLISTED' value (client-side blacklist
+    // checking was removed — see useConflicts.ts), so the soft violation here
+    // is triggered via GENDER_MISMATCH instead: a MALE worker (default
+    // fixture) targeting a FEMALE_ONLY room.
     'does not disable submission for a soft violation, and sends no override reason for it',
     async () => {
-      vi.mocked(workersApi.getWorkers).mockResolvedValue(
-        paginated([makeWorker({ id: 'worker-1', internalId: 'W001', status: 'BLACKLISTED' })]),
-      )
+      vi.mocked(propertiesApi.getRooms).mockResolvedValue(paginated([makeRoom({ genderRule: 'FEMALE_ONLY' })]))
       vi.mocked(staysApi.bulkAssign).mockResolvedValue({
-        total: 1,
-        succeeded: 1,
-        failed: 0,
-        results: [{ workerId: 'worker-1', stayId: 'stay-1', status: 'CREATED' }],
+        created: 1,
+        errors: 0,
+        results: [{ index: 0, workerId: 'worker-1', stayId: 'stay-1', status: 'CREATED' }],
       })
 
       const wrapper = mountView()

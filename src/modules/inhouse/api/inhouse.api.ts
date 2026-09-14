@@ -1,30 +1,29 @@
 import { api } from '@/shared/composables/useApi'
-import type {
-  InHouseResponse,
-  CheckOutPayload,
-  RoomMovePayload,
-  BulkCheckoutPayload,
-  BulkCheckoutResponse,
-  ExportFormat,
-  OccupantStay,
-} from '../types/inhouse.types'
+import type { RoomOccupancy, CheckOutPayload, RoomMovePayload } from '../types/inhouse.types'
+import type { Stay } from '@/modules/stays/types/stay.types'
 
 export const inhouseApi = {
-  getInHouse: (propertyId: string) =>
-    api.get<InHouseResponse>(`/properties/${propertyId}/in-house`).then((r) => r.data),
+  getOccupancy: (propertyId: string, date?: string) =>
+    api
+      .get<RoomOccupancy[]>(`/properties/${propertyId}/occupancy`, { params: { date } })
+      .then((r) => r.data),
 
   checkOut: (stayId: string, payload?: CheckOutPayload) =>
-    api.post<OccupantStay>(`/stays/${stayId}/check-out`, payload ?? {}).then((r) => r.data),
+    api.post<Stay>(`/stays/${stayId}/check-out`, payload ?? {}).then((r) => r.data),
 
   moveRoom: (stayId: string, payload: RoomMovePayload) =>
-    api.post<OccupantStay>(`/stays/${stayId}/move`, payload).then((r) => r.data),
+    api.post<Stay>(`/stays/${stayId}/move`, payload).then((r) => r.data),
 
-  bulkCheckout: (payload: BulkCheckoutPayload) =>
-    api.post<BulkCheckoutResponse>('/stays/bulk-checkout', payload).then((r) => r.data),
+  bulkCheckout: (stayIds: string[]) =>
+    api
+      .post<{ checkedOut: number; errors: number }>('/stays/bulk-checkout', { stayIds })
+      .then((r) => r.data),
 
-  exportInHouse: (propertyId: string, format: ExportFormat, lang: string) =>
-    api.get(`/properties/${propertyId}/in-house/export`, {
-      params: { format, lang },
-      responseType: 'blob',
-    }).then((r) => r.data as Blob),
+  exportOccupancy: (propertyId: string, lang: string) =>
+    api
+      .get(`/properties/${propertyId}/occupancy/export`, {
+        params: { language: lang },
+        responseType: 'blob',
+      })
+      .then((r) => r.data as Blob),
 }

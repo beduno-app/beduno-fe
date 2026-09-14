@@ -37,17 +37,62 @@ vi.mock('@/shared/composables/useToast', () => ({
   useToast: () => ({ success: vi.fn(), error: vi.fn() }),
 }))
 
+// ArrivalRow (rendered un-stubbed below) resolves worker/room display data via
+// useEntityLookup on mount — stub it so rows don't depend on real API calls.
+vi.mock('@/shared/composables/useEntityLookup', () => ({
+  useEntityLookup: () => ({
+    getWorker: vi.fn().mockResolvedValue({
+      id: 'w1',
+      internalId: 'W001',
+      firstName: 'Jan',
+      lastName: 'Kowalski',
+      gender: 'MALE',
+      nationality: 'PL',
+      phone: '',
+      email: '',
+      dateOfBirth: '1990-01-01',
+      tags: [],
+      notes: '',
+      status: 'ACTIVE',
+      createdAt: '2024-01-01T00:00:00.000Z',
+      updatedAt: '2024-01-01T00:00:00.000Z',
+    }),
+    getRoom: vi.fn().mockResolvedValue({
+      id: 'room-1',
+      propertyId: 'prop-1',
+      roomNumber: '101',
+      floor: 1,
+      bedCount: 4,
+      availableBedCount: 3,
+      genderRule: 'MIXED',
+      status: 'ACTIVE',
+      notes: '',
+      currentOccupancy: 1,
+      occupants: [],
+      createdAt: '2024-01-01T00:00:00.000Z',
+      updatedAt: '2024-01-01T00:00:00.000Z',
+    }),
+  }),
+}))
+
 const i18n = createI18n({ legacy: false, locale: 'en', messages: { en } })
 
 function makeArrival(overrides: Partial<ArrivalStay> = {}): ArrivalStay {
   return {
     id: 'stay-1',
-    worker: { id: 'w1', internalId: 'W001', firstName: 'Jan', lastName: 'Kowalski', gender: 'MALE' },
-    property: { id: 'prop-1', name: 'Hotel A', type: 'INTERNAL' },
-    room: { id: 'room-1', roomNumber: '101', capacity: 4, availableSpots: 3 },
+    workerId: 'w1',
+    propertyId: 'prop-1',
+    roomId: 'room-1',
+    bedId: null,
+    bedAutoAssigned: null,
     dateFrom: '2024-03-15',
     dateTo: null,
     status: 'EXPECTED_TODAY',
+    overrideReason: null,
+    noShowReason: null,
+    notes: null,
+    createdAt: '2024-03-01T00:00:00.000Z',
+    updatedAt: '2024-03-01T00:00:00.000Z',
     ...overrides,
   }
 }
@@ -110,13 +155,7 @@ describe('ArrivalsToday', () => {
 
   it('renders arrival rows when arrivals are loaded', async () => {
     const { arrivalsApi } = await import('../api/arrivals.api')
-    vi.mocked(arrivalsApi.getArrivals).mockResolvedValue({
-      content: [makeArrival()],
-      totalPages: 1,
-      totalElements: 1,
-      size: 50,
-      page: 0,
-    })
+    vi.mocked(arrivalsApi.getArrivals).mockResolvedValue([makeArrival()])
 
     const wrapper = mountView()
     const { useArrivalsStore } = await import('../store/arrivals.store')

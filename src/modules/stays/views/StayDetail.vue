@@ -10,6 +10,9 @@ import { BaseButton, StatusChip } from '@/shared/components'
 import ConflictBanner from '../components/ConflictBanner.vue'
 import { AxiosError } from 'axios'
 import { useAuthStore } from '@/modules/auth/store/auth.store'
+import { useEntityLookup } from '@/shared/composables/useEntityLookup'
+import type { Worker } from '@/modules/workers/types/worker.types'
+import type { Property } from '@/modules/properties/types/property.types'
 
 const route = useRoute()
 const router = useRouter()
@@ -17,18 +20,24 @@ const { t } = useI18n()
 const staysStore = useStaysStore()
 const propertiesStore = usePropertiesStore()
 const conflicts = useConflicts()
+const lookup = useEntityLookup()
 
 const isLoading = ref(true)
 const isSaving = ref(false)
 const error = ref('')
 const isEditing = ref(false)
 
-const editForm = ref<UpdateStayPayload>({})
+const editForm = ref<Partial<UpdateStayPayload>>({})
+const stayWorker = ref<Worker | null>(null)
+const stayProperty = ref<Property | null>(null)
 
 const auth = useAuthStore()
 const stayId = computed(() => route.params.id as string)
 const stay = computed(() => staysStore.currentStay)
 const canEdit = computed(() => stay.value?.status === 'PLANNED')
+const stayRoom = computed(() =>
+  stay.value ? (propertiesStore.rooms.find((r) => r.id === stay.value!.roomId) ?? null) : null,
+)
 
 async function loadStay() {
   isLoading.value = true
@@ -36,7 +45,13 @@ async function loadStay() {
   try {
     await staysStore.fetchStay(stayId.value)
     if (stay.value) {
-      await propertiesStore.fetchRooms(stay.value.property.id)
+      const [worker, property] = await Promise.all([
+        lookup.getWorker(stay.value.workerId),
+        lookup.getProperty(stay.value.propertyId),
+      ])
+      stayWorker.value = worker
+      stayProperty.value = property
+      await propertiesStore.fetchRooms(stay.value.propertyId)
     }
   } catch (e) {
     error.value = e instanceof Error ? e.message : 'Failed to load stay'
@@ -48,7 +63,7 @@ async function loadStay() {
 function startEdit() {
   if (!stay.value) return
   editForm.value = {
-    roomId: stay.value.room.id,
+    roomId: stay.value.roomId,
     dateFrom: stay.value.dateFrom,
     dateTo: stay.value.dateTo ?? undefined,
   }
@@ -75,7 +90,7 @@ async function saveEdit() {
   conflicts.clear()
 
   try {
-    await staysStore.updateStay(stayId.value, editForm.value)
+    await staysStore.updateStay(stayId.value, editForm.value as UpdateStayPayload)
     isEditing.value = false
   } catch (e) {
     if (e instanceof AxiosError && e.response?.status === 422) {
@@ -131,8 +146,8 @@ onMounted(loadStay)
     <template v-else-if="stay">
       <div class="detail-header">
         <div>
-          <h2>{{ stay.worker.lastName }}, {{ stay.worker.firstName }}</h2>
-          <span class="sub-info">{{ stay.worker.internalId }} — {{ stay.property.name }}</span>
+          <h2>{{ stayWorker ? `${stayWorker.lastName}, ${stayWorker.firstName}` : stay.workerId }}</h2>
+          <span class="sub-info">{{ stayWorker?.internalId ?? '—' }} — {{ stayProperty?.name ?? stay.propertyId }}</span>
         </div>
         <div class="detail-actions">
           <StatusChip :status="stay.status" />
@@ -179,15 +194,16 @@ onMounted(loadStay)
         <div class="info-grid">
           <div class="info-item">
             <span class="info-label">{{ t('stays.worker') }}</span>
-            <span>{{ stay.worker.lastName }}, {{ stay.worker.firstName }}</span>
+            <span>{{ stayWorker ? `${stayWorker.lastName}, ${stayWorker.firstName}` : stay.workerId }}</span>
           </div>
           <div class="info-item">
             <span class="info-label">{{ t('stays.property') }}</span>
-            <span>{{ stay.property.name }}</span>
+            <span>{{ stayProperty?.name ?? stay.propertyId }}</span>
           </div>
           <div class="info-item">
             <span class="info-label">{{ t('stays.room') }}</span>
-            <span>{{ stay.room.roomNumber }} ({{ stay.room.availableSpots }}/{{ stay.room.capacity }})</span>
+            <span v-if="stayRoom">{{ stayRoom.roomNumber }} ({{ stayRoom.availableBedCount }}/{{ stayRoom.bedCount }})</span>
+            <span v-else>{{ stay.roomId }}</span>
           </div>
           <div class="info-item">
             <span class="info-label">{{ t('stays.statusLabel') }}</span>
@@ -207,17 +223,6 @@ onMounted(loadStay)
           >
             <span class="info-label">{{ t('stays.overrideReason') }}</span>
             <span>{{ stay.overrideReason }}</span>
-          </div>
-          <div class="info-item">
-            <span class="info-label">{{ t('stays.createdBy') }}</span>
-            <span>{{ stay.createdBy.firstName }} {{ stay.createdBy.lastName }}</span>
-          </div>
-          <div
-            v-if="stay.confirmedBy"
-            class="info-item"
-          >
-            <span class="info-label">{{ t('stays.confirmedBy') }}</span>
-            <span>{{ stay.confirmedBy.firstName }} {{ stay.confirmedBy.lastName }}</span>
           </div>
         </div>
       </div>
@@ -239,7 +244,7 @@ onMounted(loadStay)
                 :key="r.id"
                 :value="r.id"
               >
-                {{ r.roomNumber }} ({{ r.availableSpots }}/{{ r.capacity }})
+                {{ r.roomNumber }} ({{ r.availableBedCount }}/{{ r.bedCount }})
               </option>
             </select>
           </div>

@@ -1,25 +1,22 @@
-export type WorkerStatus = 'ACTIVE' | 'INACTIVE' | 'BLACKLISTED'
+export type WorkerStatus = 'ACTIVE' | 'INACTIVE' | 'DELETED'
 
 export type Gender = 'MALE' | 'FEMALE' | 'OTHER'
 
-export interface CurrentStay {
-  propertyId: string
-  propertyName: string
-  roomNumber: string
-  since: string
-}
-
+// The API worker record does not carry the worker's active stay — resolve it
+// via the stays list (see WorkerDetail.vue) when needed.
 export interface Worker {
   id: string
   internalId: string
   firstName: string
   lastName: string
-  phone: string
   gender: Gender
+  nationality: string
+  phone: string
+  email: string
+  dateOfBirth: string
   tags: string[]
   notes: string
   status: WorkerStatus
-  currentStay: CurrentStay | null
   createdAt: string
   updatedAt: string
 }
@@ -28,13 +25,27 @@ export interface CreateWorkerPayload {
   internalId: string
   firstName: string
   lastName: string
-  phone: string
   gender: Gender
-  tags: string[]
+  nationality?: string
+  phone?: string
+  email?: string
+  dateOfBirth?: string
+  tags?: string[]
   notes?: string
 }
 
-export type UpdateWorkerPayload = Partial<CreateWorkerPayload>
+export interface UpdateWorkerPayload {
+  firstName: string
+  lastName: string
+  gender: Gender
+  status: WorkerStatus
+  nationality?: string
+  phone?: string
+  email?: string
+  dateOfBirth?: string
+  tags?: string[]
+  notes?: string
+}
 
 export interface ImportResult {
   totalRows: number

@@ -1,16 +1,10 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
-import type { InspectionSummary } from '../types/inspection.types'
-import { BaseButton } from '@/shared/components'
+import type { InspectionSummary } from '../store/inspection.store'
 
 defineProps<{
   summary: InspectionSummary
   completedAt: string | null
-}>()
-
-const emit = defineEmits<{
-  'export-csv': []
-  'export-pdf': []
 }>()
 
 const { t } = useI18n()
@@ -50,23 +44,6 @@ const { t } = useI18n()
       class="completed-info"
     >
       {{ t('inspection.completedAt') }}: {{ completedAt }}
-    </div>
-
-    <div class="export-actions">
-      <BaseButton
-        variant="secondary"
-        size="sm"
-        @click="emit('export-csv')"
-      >
-        {{ t('inspection.exportCsv') }}
-      </BaseButton>
-      <BaseButton
-        variant="secondary"
-        size="sm"
-        @click="emit('export-pdf')"
-      >
-        {{ t('inspection.exportPdf') }}
-      </BaseButton>
     </div>
   </div>
 </template>

@@ -15,7 +15,7 @@ const statusOptions: { value: WorkerStatus | ''; label: string }[] = [
   { value: '', label: t('workers.allStatuses') },
   { value: 'ACTIVE', label: t('workers.status.ACTIVE') },
   { value: 'INACTIVE', label: t('workers.status.INACTIVE') },
-  { value: 'BLACKLISTED', label: t('workers.status.BLACKLISTED') },
+  { value: 'DELETED', label: t('workers.status.DELETED') },
 ]
 
 const genderOptions: { value: Gender | ''; label: string }[] = [
@@ -83,7 +83,7 @@ function statusVariant(status: WorkerStatus): 'success' | 'default' | 'danger' {
   const map: Record<WorkerStatus, 'success' | 'default' | 'danger'> = {
     ACTIVE: 'success',
     INACTIVE: 'default',
-    BLACKLISTED: 'danger',
+    DELETED: 'danger',
   }
   return map[status]
 }
@@ -189,7 +189,6 @@ onMounted(() => {
             <th>{{ t('workers.phone') }}</th>
             <th>{{ t('workers.statusLabel') }}</th>
             <th>{{ t('workers.tags') }}</th>
-            <th>{{ t('workers.currentProperty') }}</th>
             <th>{{ t('common.edit') }}</th>
           </tr>
         </thead>
@@ -223,16 +222,6 @@ onMounted(() => {
                 :key="tag"
                 class="tag"
               >{{ tag }}</span>
-            </td>
-            <td>
-              <template v-if="worker.currentStay">
-                {{ worker.currentStay.propertyName }} — {{ t('workers.room') }}
-                {{ worker.currentStay.roomNumber }}
-              </template>
-              <span
-                v-else
-                class="muted"
-              >—</span>
             </td>
             <td>
               <BaseButton

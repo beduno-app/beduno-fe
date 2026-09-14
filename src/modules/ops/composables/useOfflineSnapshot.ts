@@ -8,10 +8,10 @@ const MAX_PAGE_SIZE = 500
 export async function syncOfflineSnapshot(propertyId: string, date: string): Promise<void> {
   if (!propertyId || !navigator.onLine) return
 
-  const [workersPage, roomsPage, arrivalsPage] = await Promise.all([
+  const [workersPage, roomsPage, arrivals] = await Promise.all([
     workersApi.getWorkers({ size: MAX_PAGE_SIZE }),
     propertiesApi.getRooms(propertyId, { size: MAX_PAGE_SIZE }),
-    arrivalsApi.getArrivals({ propertyId, date, size: MAX_PAGE_SIZE }),
+    arrivalsApi.getArrivals({ propertyId, date }),
   ])
 
   await saveSnapshot({
@@ -19,6 +19,6 @@ export async function syncOfflineSnapshot(propertyId: string, date: string): Pro
     savedAt: new Date().toISOString(),
     workers: workersPage.content,
     rooms: roomsPage.content,
-    arrivals: arrivalsPage.content,
+    arrivals,
   })
 }

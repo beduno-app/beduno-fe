@@ -3,13 +3,13 @@
 ## Hard rules
 
 - **Propose → confirm.** Agency roles create *planned* stays; property roles confirm *reality* (check-in/out, moves, no-shows). Agency roles must never be able to mutate confirmed occupancy.
-- **Room capacity, not bed-level.** Workers occupy a spot in a room; there is no bed entity.
+- **Bed-level occupancy.** Rooms have `bedCount`/`availableBedCount`; each room owns a set of `Bed` records (`src/modules/properties/types/property.types.ts`), managed via `propertiesApi`'s bed endpoints and the Bed UI in `RoomManagement.vue`. A stay optionally pins `bedId`; `bedAutoAssigned` says whether the server picked it. *(Superseded 2026-09-14 — this repo previously had no bed entity; the real `beduno-be` contract does.)*
 - **Everything is audited.** Operational actions produce audit events with actor, before/after, and timestamp.
 - **Everything is localized** — PL (default), EN, DE, UA, RU. Prefer predefined localized reason codes over free text in operational flows.
 - Every user-facing string goes through `t()` and must be added to **all five** translation files in `src/assets/translations/`.
 - **QR codes carry zero PII.** Format is `beduno:{workerId}:{checksum}` (see `src/shared/utils/qrCode.ts`).
 - Add role restrictions via route meta — do not hand-roll checks in components.
-- `src/shared/services/db.ts` — the single IndexedDB instance (`beduno-offline`); **all** object stores are declared here so version upgrades stay coordinated. Bump `DB_VERSION` when adding a store.
+- `src/shared/services/db.ts` — the single IndexedDB instance (`beduno-offline`, `DB_VERSION` 3); **all** object stores are declared here so version upgrades stay coordinated. Bump `DB_VERSION` when adding a store or changing an index (the `onupgradeneeded` handler must migrate existing stores via `e.oldVersion`, not just guard on `objectStoreNames.contains`).
 - Room/capacity/user edits are **online-only** by design — do not add them to the offline queue.
 - npm is the only package manager — CI runs `npm ci` against `package-lock.json`. Never use `yarn` or `pnpm` here.
 - Any change that adds a role, a module, an IndexedDB store, a route tree, or a locale must update the matching section of this file in the same commit — there is no meta-framework carrying conventions; this file does.
@@ -29,7 +29,9 @@ Read `docs/should-be/` before changing domain behaviour.
 ### Core types
 
 - `UserRole` — `AGENCY_ADMIN | AGENCY_PLANNER | PROPERTY_ADMIN | FRONT_DESK` (`src/modules/auth/types/auth.types.ts`)
-- `StayStatus` — `PLANNED | EXPECTED_TODAY | CHECKED_IN | CHECKED_OUT | NO_SHOW | MOVED | CANCELLED` (`src/modules/stays/types/stay.types.ts`)
+- `StayStatus` — `PLANNED | EXPECTED_TODAY | CHECKED_IN | CHECKED_OUT | NO_SHOW | CANCELLED` (`src/modules/stays/types/stay.types.ts`) — no `MOVED` status; a move checks the stay out of its old room/bed and creates a new stay in the target.
+- `WorkerStatus` — `ACTIVE | INACTIVE | DELETED` (`src/modules/workers/types/worker.types.ts`) — no `BLACKLISTED`.
+- **`Stay` (and every other API response type) is flat** — `workerId`/`propertyId`/`roomId`/`bedId` are IDs, never nested objects. Resolve IDs to display data via `useEntityLookup` (`src/shared/composables/useEntityLookup.ts`), which caches lookups against `workersApi`/`propertiesApi`/`adminApi`. Don't reintroduce nested `worker`/`property`/`room` fields on API types — the backend doesn't send them.
 
 ## Architecture
 
@@ -89,6 +91,12 @@ PWA config (manifest, workbox runtime caching) is in `vite.config.ts`.
 Scripts, configuration variables and deployment steps: `@README.md`.
 
 CI (`.github/workflows`) runs: lint → typecheck → unit tests → build. Keep all four green.
+
+## API contract
+
+- `openapi.yaml` (repo root) is a checked-in snapshot of `beduno-be`'s real OpenAPI spec — copy it from the backend repo (`../beduno-be/openapi.yaml`) when the contract changes, don't hand-edit it.
+- `npm run generate:api-types` regenerates `src/shared/types/api-schema.d.ts` from `openapi.yaml` (via `openapi-typescript`). That file is a generated reference for spotting drift — it is **not** imported by application code. Every module's hand-written `api/*.ts` + `types/*.types.ts` pair is the actual source of truth the app runs on and must be kept in sync with the spec by hand; the generated file exists so a diff against it is cheap.
+- When the spec changes, re-generate, diff the changed `paths`/`components.schemas` against the affected module's hand-written types, and update both together in the same change.
 
 ## Environment
 

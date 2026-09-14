@@ -25,12 +25,19 @@ import { enqueueAction } from '@/shared/services/actionQueue'
 function makeArrival(overrides: Partial<ArrivalStay> = {}): ArrivalStay {
   return {
     id: 'stay-1',
-    worker: { id: 'w1', internalId: 'W001', firstName: 'Jan', lastName: 'Kowalski', gender: 'MALE' },
-    property: { id: 'prop-1', name: 'Hotel A', type: 'INTERNAL' },
-    room: { id: 'room-1', roomNumber: '101', capacity: 4, availableSpots: 3 },
+    workerId: 'w1',
+    propertyId: 'prop-1',
+    roomId: 'room-1',
+    bedId: null,
+    bedAutoAssigned: null,
     dateFrom: '2024-03-15',
     dateTo: null,
     status: 'EXPECTED_TODAY',
+    overrideReason: null,
+    noShowReason: null,
+    notes: null,
+    createdAt: '2024-03-01T00:00:00.000Z',
+    updatedAt: '2024-03-01T00:00:00.000Z',
     ...overrides,
   }
 }
@@ -63,14 +70,17 @@ describe('useArrivalsStore — stay status transitions', () => {
       expect(store.arrivals[0].status).toBe('CHECKED_IN')
     })
 
-    it('passes qrCode payload to API', async () => {
+    it('passes check-in payload (room override) to API', async () => {
       const store = useArrivalsStore()
       store.arrivals = [makeArrival()]
       vi.mocked(arrivalsApi.checkIn).mockResolvedValue(makeArrival({ status: 'CHECKED_IN' }))
 
-      await store.checkIn('stay-1', { qrCode: 'beduno:w1:abcd' })
+      await store.checkIn('stay-1', { roomId: 'room-2', overrideReason: 'Different room assigned' })
 
-      expect(arrivalsApi.checkIn).toHaveBeenCalledWith('stay-1', { qrCode: 'beduno:w1:abcd' })
+      expect(arrivalsApi.checkIn).toHaveBeenCalledWith('stay-1', {
+        roomId: 'room-2',
+        overrideReason: 'Different room assigned',
+      })
     })
   })
 
@@ -112,9 +122,9 @@ describe('useArrivalsStore — stay status transitions', () => {
       const updated = makeArrival({ status: 'NO_SHOW' })
       vi.mocked(arrivalsApi.noShow).mockResolvedValue(updated)
 
-      const result = await store.noShow('stay-1', { reason: 'DID_NOT_ARRIVE' })
+      const result = await store.noShow('stay-1', { noShowReason: 'DID_NOT_ARRIVE' })
 
-      expect(arrivalsApi.noShow).toHaveBeenCalledWith('stay-1', { reason: 'DID_NOT_ARRIVE' })
+      expect(arrivalsApi.noShow).toHaveBeenCalledWith('stay-1', { noShowReason: 'DID_NOT_ARRIVE' })
       expect(result.status).toBe('NO_SHOW')
       expect(store.arrivals[0].status).toBe('NO_SHOW')
     })
@@ -124,68 +134,64 @@ describe('useArrivalsStore — stay status transitions', () => {
     it('enqueues NO_SHOW action and updates status optimistically', async () => {
       Object.defineProperty(navigator, 'onLine', { value: false, configurable: true })
       vi.mocked(enqueueAction).mockResolvedValue({
-        id: 'q2', type: 'NO_SHOW', stayId: 'stay-1', payload: { reason: 'REFUSED_ROOM' }, queuedAt: new Date().toISOString(),
+        id: 'q2', type: 'NO_SHOW', stayId: 'stay-1', payload: { noShowReason: 'REFUSED_ROOM' }, queuedAt: new Date().toISOString(),
       })
 
       const store = useArrivalsStore()
       store.arrivals = [makeArrival()]
 
-      const result = await store.noShow('stay-1', { reason: 'REFUSED_ROOM' })
+      const result = await store.noShow('stay-1', { noShowReason: 'REFUSED_ROOM' })
 
-      expect(enqueueAction).toHaveBeenCalledWith('NO_SHOW', 'stay-1', { reason: 'REFUSED_ROOM' })
+      expect(enqueueAction).toHaveBeenCalledWith('NO_SHOW', 'stay-1', { noShowReason: 'REFUSED_ROOM' })
       expect(result.status).toBe('NO_SHOW')
     })
   })
 
   describe('move (online)', () => {
-    it('calls API and updates status to MOVED', async () => {
+    it('calls API and updates status from the server response', async () => {
       const store = useArrivalsStore()
       store.arrivals = [makeArrival()]
-      const updated = makeArrival({ status: 'MOVED' })
+      // The real move operation checks the original stay out and creates a new
+      // stay in the target room — the server response reflects that.
+      const updated = makeArrival({ status: 'CHECKED_OUT' })
       vi.mocked(arrivalsApi.move).mockResolvedValue(updated)
 
-      const result = await store.move('stay-1', { targetPropertyId: 'prop-2', targetRoomId: 'room-2' })
+      const result = await store.move('stay-1', { targetRoomId: 'room-2' })
 
-      expect(arrivalsApi.move).toHaveBeenCalledWith('stay-1', { targetPropertyId: 'prop-2', targetRoomId: 'room-2' })
-      expect(result.status).toBe('MOVED')
-      expect(store.arrivals[0].status).toBe('MOVED')
+      expect(arrivalsApi.move).toHaveBeenCalledWith('stay-1', { targetRoomId: 'room-2' })
+      expect(result.status).toBe('CHECKED_OUT')
+      expect(store.arrivals[0].status).toBe('CHECKED_OUT')
     })
   })
 
   describe('move (offline)', () => {
-    it('enqueues MOVE action and updates status optimistically', async () => {
+    it('enqueues MOVE action and optimistically checks the stay out', async () => {
       Object.defineProperty(navigator, 'onLine', { value: false, configurable: true })
       vi.mocked(enqueueAction).mockResolvedValue({
-        id: 'q3', type: 'MOVE', stayId: 'stay-1', payload: { targetPropertyId: 'prop-2', targetRoomId: 'room-2' }, queuedAt: new Date().toISOString(),
+        id: 'q3', type: 'MOVE', stayId: 'stay-1', payload: { targetRoomId: 'room-2' }, queuedAt: new Date().toISOString(),
       })
 
       const store = useArrivalsStore()
       store.arrivals = [makeArrival()]
 
-      const result = await store.move('stay-1', { targetPropertyId: 'prop-2', targetRoomId: 'room-2' })
+      const result = await store.move('stay-1', { targetRoomId: 'room-2' })
 
-      expect(enqueueAction).toHaveBeenCalledWith('MOVE', 'stay-1', { targetPropertyId: 'prop-2', targetRoomId: 'room-2' })
-      expect(result.status).toBe('MOVED')
+      expect(enqueueAction).toHaveBeenCalledWith('MOVE', 'stay-1', { targetRoomId: 'room-2' })
+      // CHECKED_OUT is the closest local approximation until the queued action
+      // replays and the real server result comes back — 'MOVED' no longer exists.
+      expect(result.status).toBe('CHECKED_OUT')
     })
   })
 
   describe('fetchArrivals', () => {
-    it('loads arrivals and updates pagination state', async () => {
+    it('loads arrivals into the store', async () => {
       const store = useArrivalsStore()
       store.propertyIdFilter = 'prop-1'
-      vi.mocked(arrivalsApi.getArrivals).mockResolvedValue({
-        content: [makeArrival()],
-        totalPages: 2,
-        totalElements: 51,
-        size: 50,
-        page: 0,
-      })
+      vi.mocked(arrivalsApi.getArrivals).mockResolvedValue([makeArrival()])
 
       await store.fetchArrivals()
 
       expect(store.arrivals).toHaveLength(1)
-      expect(store.totalPages).toBe(2)
-      expect(store.totalElements).toBe(51)
       expect(store.isLoading).toBe(false)
     })
 

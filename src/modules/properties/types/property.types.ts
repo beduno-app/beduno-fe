@@ -1,52 +1,48 @@
-export type PropertyType = 'INTERNAL' | 'PARTNER'
-
 export type PropertyStatus = 'ACTIVE' | 'INACTIVE'
-
-export type GenderRule = 'PER_ROOM' | 'PER_PROPERTY' | 'MIXED'
 
 export type RoomGenderRule = 'MALE_ONLY' | 'FEMALE_ONLY' | 'MIXED'
 
 export type RoomStatus = 'ACTIVE' | 'BLOCKED'
 
-export interface RoomSummary {
-  totalRooms: number
-  totalCapacity: number
-  totalBlockedSpots: number
-  currentOccupancy: number
-}
+export type BedStatus = 'ACTIVE' | 'BLOCKED'
 
 export interface Property {
   id: string
   name: string
   address: string
-  type: PropertyType
-  genderRule: GenderRule
+  city: string
   status: PropertyStatus
   notes: string
-  roomSummary: RoomSummary
   createdAt: string
   updatedAt: string
 }
 
 export interface CreatePropertyPayload {
   name: string
-  address: string
-  type: PropertyType
-  genderRule: GenderRule
+  address?: string
+  city?: string
   notes?: string
 }
 
-export type UpdatePropertyPayload = Partial<CreatePropertyPayload>
+export interface UpdatePropertyPayload {
+  name: string
+  address?: string
+  city?: string
+  notes?: string
+  status: PropertyStatus
+}
+
+export interface OccupantWorker {
+  id: string
+  internalId: string
+  firstName: string
+  lastName: string
+  gender: 'MALE' | 'FEMALE' | 'OTHER'
+}
 
 export interface RoomOccupant {
   stayId: string
-  worker: {
-    id: string
-    internalId: string
-    firstName: string
-    lastName: string
-    gender: 'MALE' | 'FEMALE' | 'OTHER'
-  }
+  worker: OccupantWorker
   dateFrom: string
   dateTo: string | null
   status: string
@@ -56,33 +52,53 @@ export interface Room {
   id: string
   propertyId: string
   roomNumber: string
-  capacity: number
-  blockedSpots: number
-  availableSpots: number
-  currentOccupancy: number
-  genderRule: RoomGenderRule
   floor: number
+  bedCount: number
+  availableBedCount: number
+  genderRule: RoomGenderRule
   status: RoomStatus
   notes: string
+  currentOccupancy: number
   occupants: RoomOccupant[]
   createdAt: string
+  updatedAt: string
 }
 
 export interface CreateRoomPayload {
   roomNumber: string
-  capacity: number
-  genderRule?: RoomGenderRule
   floor?: number
+  genderRule?: RoomGenderRule
   notes?: string
 }
 
-export interface BulkCreateRoomsPayload {
-  rooms: Omit<CreateRoomPayload, 'genderRule'>[]
-  defaultGenderRule: RoomGenderRule
+export interface UpdateRoomPayload {
+  roomNumber: string
+  floor?: number
+  genderRule: RoomGenderRule
+  status: RoomStatus
+  notes?: string
 }
 
-export type UpdateRoomPayload = Partial<CreateRoomPayload> & {
-  blockedSpots?: number
+export interface Bed {
+  id: string
+  roomId: string
+  label: string
+  status: BedStatus
+  createdAt: string
+  updatedAt: string
+}
+
+export interface CreateBedPayload {
+  label: string
+}
+
+export interface UpdateBedPayload {
+  label: string
+  status: BedStatus
+}
+
+export interface BulkGenerateBedsPayload {
+  count: number
 }
 
 export interface GetPropertiesParams {
@@ -90,7 +106,6 @@ export interface GetPropertiesParams {
   size?: number
   sort?: string
   status?: PropertyStatus
-  type?: PropertyType
   search?: string
 }
 
@@ -98,6 +113,4 @@ export interface GetRoomsParams {
   page?: number
   size?: number
   sort?: string
-  status?: RoomStatus
-  floor?: number
 }

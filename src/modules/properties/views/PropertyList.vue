@@ -4,7 +4,7 @@ import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { usePropertiesStore } from '../store/properties.store'
 import { BaseButton, BaseInput, BaseBadge } from '@/shared/components'
-import type { PropertyStatus, PropertyType } from '../types/property.types'
+import type { PropertyStatus } from '../types/property.types'
 
 const { t } = useI18n()
 const router = useRouter()
@@ -14,12 +14,6 @@ const statusOptions: { value: PropertyStatus | ''; label: string }[] = [
   { value: '', label: t('properties.allStatuses') },
   { value: 'ACTIVE', label: t('properties.status.ACTIVE') },
   { value: 'INACTIVE', label: t('properties.status.INACTIVE') },
-]
-
-const typeOptions: { value: PropertyType | ''; label: string }[] = [
-  { value: '', label: t('properties.allTypes') },
-  { value: 'INTERNAL', label: t('properties.type.INTERNAL') },
-  { value: 'PARTNER', label: t('properties.type.PARTNER') },
 ]
 
 let searchTimeout: ReturnType<typeof setTimeout> | null = null
@@ -39,18 +33,8 @@ function onStatusChange(e: Event) {
   store.setPage(0)
 }
 
-function onTypeChange(e: Event) {
-  store.typeFilter = (e.target as HTMLSelectElement).value as PropertyType | ''
-  store.setPage(0)
-}
-
 function viewDetail(id: string) {
   router.push({ name: 'PropertyDetail', params: { id } })
-}
-
-function occupancyPercent(current: number, total: number): number {
-  if (total === 0) return 0
-  return Math.round((current / total) * 100)
 }
 
 onMounted(() => {
@@ -82,19 +66,6 @@ onMounted(() => {
       >
         <option
           v-for="opt in statusOptions"
-          :key="opt.value"
-          :value="opt.value"
-        >
-          {{ opt.label }}
-        </option>
-      </select>
-      <select
-        class="filter-select"
-        :value="store.typeFilter"
-        @change="onTypeChange"
-      >
-        <option
-          v-for="opt in typeOptions"
           :key="opt.value"
           :value="opt.value"
         >
@@ -135,35 +106,16 @@ onMounted(() => {
             </BaseBadge>
           </div>
           <p class="card-address">
-            {{ prop.address }}
+            {{ prop.address }}<template v-if="prop.city">
+              , {{ prop.city }}
+            </template>
           </p>
-          <div class="card-meta">
-            <BaseBadge>{{ t(`properties.type.${prop.type}`) }}</BaseBadge>
-            <span class="card-rule">{{ t(`properties.genderRule.${prop.genderRule}`) }}</span>
-          </div>
-          <div class="occupancy-section">
-            <div class="occupancy-header">
-              <span class="occupancy-label">{{ t('properties.occupancy') }}</span>
-              <span class="occupancy-value">
-                {{ prop.roomSummary.currentOccupancy }} / {{ prop.roomSummary.totalCapacity }}
-              </span>
-            </div>
-            <div class="occupancy-bar">
-              <div
-                class="occupancy-fill"
-                :style="{ width: occupancyPercent(prop.roomSummary.currentOccupancy, prop.roomSummary.totalCapacity) + '%' }"
-              />
-            </div>
-            <div class="occupancy-stats">
-              <span>{{ prop.roomSummary.totalRooms }} {{ t('properties.rooms') }}</span>
-              <span
-                v-if="prop.roomSummary.totalBlockedSpots > 0"
-                class="blocked-info"
-              >
-                {{ prop.roomSummary.totalBlockedSpots }} {{ t('properties.blocked') }}
-              </span>
-            </div>
-          </div>
+          <p
+            v-if="prop.notes"
+            class="card-notes"
+          >
+            {{ prop.notes }}
+          </p>
         </div>
       </div>
       <p
@@ -273,6 +225,12 @@ onMounted(() => {
   font-size: 0.875rem;
   color: #6b7280;
   margin: 0.375rem 0 0.75rem;
+}
+
+.card-notes {
+  font-size: 0.8125rem;
+  color: #9ca3af;
+  margin: 0 0 0.75rem;
 }
 
 .card-meta {

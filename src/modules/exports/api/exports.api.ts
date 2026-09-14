@@ -1,23 +1,32 @@
 import { api } from '@/shared/composables/useApi'
-import type {
-  NightlyOccupancyParams,
-  ExceptionReportParams,
-  OccupancySummaryParams,
-} from '../types/export.types'
+import type { PropertyExportParams } from '../types/export.types'
+
+function toParams({ date, language }: PropertyExportParams) {
+  return { date, language }
+}
 
 export const exportsApi = {
-  exportNightlyOccupancy: (params: NightlyOccupancyParams) =>
+  exportOccupancy: (params: PropertyExportParams) =>
     api
-      .get('/exports/nightly-occupancy', { params, responseType: 'blob' })
+      .get(`/properties/${params.propertyId}/occupancy/export`, {
+        params: toParams(params),
+        responseType: 'blob',
+      })
       .then((r) => r.data as Blob),
 
-  exportExceptionReport: (params: ExceptionReportParams) =>
+  exportExceptions: (params: PropertyExportParams) =>
     api
-      .get('/exports/exception-report', { params, responseType: 'blob' })
+      .get(`/properties/${params.propertyId}/exceptions/export`, {
+        params: toParams(params),
+        responseType: 'blob',
+      })
       .then((r) => r.data as Blob),
 
-  exportOccupancySummary: (params: OccupancySummaryParams) =>
+  exportArrivals: (params: PropertyExportParams) =>
     api
-      .get('/exports/occupancy-summary', { params, responseType: 'blob' })
+      .get(`/properties/${params.propertyId}/arrivals/export`, {
+        params: toParams(params),
+        responseType: 'blob',
+      })
       .then((r) => r.data as Blob),
 }

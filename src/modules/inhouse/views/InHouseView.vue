@@ -5,14 +5,17 @@ import { useInHouseStore } from '../store/inhouse.store'
 import { usePropertiesStore } from '@/modules/properties/store/properties.store'
 import { BaseButton, SkeletonLoader } from '@/shared/components'
 import RoomCard from '../components/RoomCard.vue'
-import UnassignedWorkers from '../components/UnassignedWorkers.vue'
 import { usePullToRefresh } from '@/shared/composables/usePullToRefresh'
 import { useToast } from '@/shared/composables/useToast'
+import { computed } from 'vue'
 
 const { t, locale } = useI18n()
 const store = useInHouseStore()
 const propertiesStore = usePropertiesStore()
 const toast = useToast()
+
+const roomsWithStatus = computed(() => store.rooms.map((room) => ({ room, status: store.roomStatus(room) })))
+const selectedStayIds = ref<Set<string>>(new Set())
 
 const containerRef = ref<HTMLElement | null>(null)
 const { isRefreshing } = usePullToRefresh(containerRef, async () => {
@@ -45,12 +48,28 @@ async function handleMoveRoom(stayId: string, targetRoomId: string) {
   }
 }
 
-function exportCsv() {
-  store.exportData('csv', locale.value)
+function toggleSelected(stayId: string) {
+  if (selectedStayIds.value.has(stayId)) {
+    selectedStayIds.value.delete(stayId)
+  } else {
+    selectedStayIds.value.add(stayId)
+  }
 }
 
-function exportPdf() {
-  store.exportData('pdf', locale.value)
+async function handleBulkCheckout() {
+  if (!selectedStayIds.value.size) return
+  if (!confirm(t('inhouse.confirmBulkCheckOut', { count: selectedStayIds.value.size }))) return
+  try {
+    const result = await store.bulkCheckout([...selectedStayIds.value])
+    selectedStayIds.value.clear()
+    toast.success(t('inhouse.bulkCheckOutSuccess', { count: result.checkedOut }))
+  } catch (e) {
+    toast.error(e instanceof Error ? e.message : t('inhouse.checkOutFailed'))
+  }
+}
+
+function exportCsv() {
+  store.exportData(locale.value)
 }
 
 onMounted(() => {
@@ -75,22 +94,23 @@ onMounted(() => {
     <div class="page-header">
       <h2>{{ t('nav.occupancy') }}</h2>
       <div
-        v-if="store.propertyIdFilter && store.data"
+        v-if="store.propertyIdFilter"
         class="header-actions"
       >
+        <BaseButton
+          v-if="selectedStayIds.size"
+          variant="danger"
+          size="sm"
+          @click="handleBulkCheckout"
+        >
+          {{ t('inhouse.bulkCheckOut', { count: selectedStayIds.size }) }}
+        </BaseButton>
         <BaseButton
           variant="secondary"
           size="sm"
           @click="exportCsv"
         >
           {{ t('inhouse.exportCsv') }}
-        </BaseButton>
-        <BaseButton
-          variant="secondary"
-          size="sm"
-          @click="exportPdf"
-        >
-          {{ t('inhouse.exportPdf') }}
         </BaseButton>
       </div>
     </div>
@@ -116,7 +136,7 @@ onMounted(() => {
 
     <!-- Summary -->
     <div
-      v-if="store.summary"
+      v-if="store.propertyIdFilter && !store.isLoading"
       class="stats-bar"
     >
       <span class="stat">
@@ -167,17 +187,17 @@ onMounted(() => {
     >
       {{ store.error }}
     </div>
-    <template v-else-if="store.data">
-      <UnassignedWorkers :workers="store.unassignedWorkers" />
-
+    <template v-else-if="store.propertyIdFilter">
       <div class="rooms-grid">
         <RoomCard
-          v-for="room in store.rooms"
-          :key="room.room.id"
-          :room="room"
-          :all-rooms="store.rooms"
+          v-for="entry in roomsWithStatus"
+          :key="entry.room.roomId"
+          :room="entry.room"
+          :status="entry.status"
+          :all-rooms="roomsWithStatus"
           @check-out="handleCheckOut"
           @move-room="handleMoveRoom"
+          @toggle-select="toggleSelected"
         />
       </div>
 

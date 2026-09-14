@@ -9,7 +9,7 @@ defineProps<{
 }>()
 
 const emit = defineEmits<{
-  confirm: [targetPropertyId: string, targetRoomId: string]
+  confirm: [targetRoomId: string]
   cancel: []
 }>()
 
@@ -28,7 +28,7 @@ watch(targetPropertyId, async (newId) => {
 
 function submit() {
   if (!targetPropertyId.value || !targetRoomId.value) return
-  emit('confirm', targetPropertyId.value, targetRoomId.value)
+  emit('confirm', targetRoomId.value)
 }
 </script>
 
@@ -72,7 +72,7 @@ function submit() {
           :key="r.id"
           :value="r.id"
         >
-          {{ r.roomNumber }} ({{ r.availableSpots }}/{{ r.capacity }})
+          {{ r.roomNumber }} ({{ r.availableBedCount }}/{{ r.bedCount }})
         </option>
       </select>
     </div>

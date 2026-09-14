@@ -2,8 +2,15 @@
 import { ref, computed, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { propertiesApi } from '../api/properties.api'
-import type { Room, CreateRoomPayload, UpdateRoomPayload, RoomGenderRule } from '../types/property.types'
-import { BaseButton, BaseInput, BaseModal } from '@/shared/components'
+import type {
+  Room,
+  Bed,
+  CreateRoomPayload,
+  UpdateRoomPayload,
+  RoomGenderRule,
+  RoomStatus,
+} from '../types/property.types'
+import { BaseButton, BaseInput, BaseModal, BaseBadge } from '@/shared/components'
 
 const props = defineProps<{
   propertyId: string
@@ -21,17 +28,23 @@ const isEdit = computed(() => !!props.room)
 
 const form = ref({
   roomNumber: '',
-  capacity: 4,
   genderRule: 'MIXED' as RoomGenderRule,
   floor: 1,
   notes: '',
-  blockedSpots: 0,
+  status: 'ACTIVE' as RoomStatus,
 })
 
-const blockReason = ref('')
 const isSaving = ref(false)
 const isDeleting = ref(false)
 const error = ref('')
+
+const beds = ref<Bed[]>([])
+const isLoadingBeds = ref(false)
+const bedError = ref('')
+const newBedLabel = ref('')
+const bulkGenerateCount = ref(4)
+const editingBedId = ref<string | null>(null)
+const editingBedLabel = ref('')
 
 const genderRuleOptions: { value: RoomGenderRule; label: string }[] = [
   { value: 'MALE_ONLY', label: t('properties.roomGender.MALE_ONLY') },
@@ -43,14 +56,27 @@ onMounted(() => {
   if (props.room) {
     form.value = {
       roomNumber: props.room.roomNumber,
-      capacity: props.room.capacity,
       genderRule: props.room.genderRule,
       floor: props.room.floor,
       notes: props.room.notes,
-      blockedSpots: props.room.blockedSpots,
+      status: props.room.status,
     }
+    loadBeds()
   }
 })
+
+async function loadBeds() {
+  if (!props.room) return
+  isLoadingBeds.value = true
+  bedError.value = ''
+  try {
+    beds.value = await propertiesApi.getBeds(props.propertyId, props.room.id)
+  } catch (e) {
+    bedError.value = e instanceof Error ? e.message : 'Failed to load beds'
+  } finally {
+    isLoadingBeds.value = false
+  }
+}
 
 async function save() {
   if (!navigator.onLine) {
@@ -63,17 +89,15 @@ async function save() {
     if (isEdit.value && props.room) {
       const payload: UpdateRoomPayload = {
         roomNumber: form.value.roomNumber,
-        capacity: form.value.capacity,
         genderRule: form.value.genderRule,
         floor: form.value.floor,
         notes: form.value.notes || undefined,
-        blockedSpots: form.value.blockedSpots,
+        status: form.value.status,
       }
       await propertiesApi.updateRoom(props.propertyId, props.room.id, payload)
     } else {
       const payload: CreateRoomPayload = {
         roomNumber: form.value.roomNumber,
-        capacity: form.value.capacity,
         genderRule: form.value.genderRule,
         floor: form.value.floor,
         notes: form.value.notes || undefined,
@@ -107,15 +131,79 @@ async function deleteRoom() {
   }
 }
 
-function incrementBlocked() {
-  if (form.value.blockedSpots < form.value.capacity) {
-    form.value.blockedSpots++
+async function addBed() {
+  if (!props.room || !newBedLabel.value.trim()) return
+  bedError.value = ''
+  try {
+    const bed = await propertiesApi.createBed(props.propertyId, props.room.id, {
+      label: newBedLabel.value.trim(),
+    })
+    beds.value.push(bed)
+    newBedLabel.value = ''
+  } catch (e) {
+    bedError.value = e instanceof Error ? e.message : 'Failed to add bed'
   }
 }
 
-function decrementBlocked() {
-  if (form.value.blockedSpots > 0) {
-    form.value.blockedSpots--
+async function bulkGenerate() {
+  if (!props.room || bulkGenerateCount.value < 1) return
+  bedError.value = ''
+  try {
+    const created = await propertiesApi.bulkGenerateBeds(props.propertyId, props.room.id, {
+      count: bulkGenerateCount.value,
+    })
+    beds.value.push(...created)
+  } catch (e) {
+    bedError.value = e instanceof Error ? e.message : 'Failed to generate beds'
+  }
+}
+
+function startRenameBed(bed: Bed) {
+  editingBedId.value = bed.id
+  editingBedLabel.value = bed.label
+}
+
+async function saveRenameBed(bed: Bed) {
+  if (!props.room) return
+  bedError.value = ''
+  try {
+    const updated = await propertiesApi.updateBed(props.propertyId, props.room.id, bed.id, {
+      label: editingBedLabel.value.trim() || bed.label,
+      status: bed.status,
+    })
+    const idx = beds.value.findIndex((b) => b.id === bed.id)
+    if (idx !== -1) beds.value[idx] = updated
+  } catch (e) {
+    bedError.value = e instanceof Error ? e.message : 'Failed to rename bed'
+  } finally {
+    editingBedId.value = null
+  }
+}
+
+async function toggleBedStatus(bed: Bed) {
+  if (!props.room) return
+  bedError.value = ''
+  try {
+    const updated = await propertiesApi.updateBed(props.propertyId, props.room.id, bed.id, {
+      label: bed.label,
+      status: bed.status === 'ACTIVE' ? 'BLOCKED' : 'ACTIVE',
+    })
+    const idx = beds.value.findIndex((b) => b.id === bed.id)
+    if (idx !== -1) beds.value[idx] = updated
+  } catch (e) {
+    bedError.value = e instanceof Error ? e.message : 'Failed to update bed'
+  }
+}
+
+async function deleteBed(bed: Bed) {
+  if (!props.room) return
+  if (!confirm(t('properties.confirmDeleteBed'))) return
+  bedError.value = ''
+  try {
+    await propertiesApi.deleteBed(props.propertyId, props.room.id, bed.id)
+    beds.value = beds.value.filter((b) => b.id !== bed.id)
+  } catch (e) {
+    bedError.value = e instanceof Error ? e.message : 'Failed to delete bed'
   }
 }
 </script>
@@ -140,15 +228,6 @@ function decrementBlocked() {
 
     <div class="form-row">
       <div class="input-group">
-        <label class="input-label">{{ t('properties.capacity') }}</label>
-        <input
-          v-model.number="form.capacity"
-          type="number"
-          min="1"
-          class="number-input"
-        >
-      </div>
-      <div class="input-group">
         <label class="input-label">{{ t('properties.floor') }}</label>
         <input
           v-model.number="form.floor"
@@ -156,6 +235,23 @@ function decrementBlocked() {
           min="0"
           class="number-input"
         >
+      </div>
+      <div
+        v-if="isEdit"
+        class="input-group"
+      >
+        <label class="input-label">{{ t('properties.statusLabel') }}</label>
+        <select
+          v-model="form.status"
+          class="filter-select"
+        >
+          <option value="ACTIVE">
+            {{ t('properties.status.ACTIVE') }}
+          </option>
+          <option value="BLOCKED">
+            {{ t('properties.status.BLOCKED') }}
+          </option>
+        </select>
       </div>
     </div>
 
@@ -180,36 +276,109 @@ function decrementBlocked() {
       :label="t('properties.notes')"
     />
 
-    <!-- Block/unblock -->
+    <!-- Beds -->
     <div
       v-if="isEdit"
-      class="block-section"
+      class="beds-section"
     >
-      <label class="input-label">{{ t('properties.blockedSpots') }}</label>
-      <div class="block-controls">
-        <button
-          class="block-btn"
-          :disabled="form.blockedSpots === 0"
-          @click="decrementBlocked"
-        >
-          −
-        </button>
-        <span class="block-value">{{ form.blockedSpots }}</span>
-        <button
-          class="block-btn"
-          :disabled="form.blockedSpots >= form.capacity"
-          @click="incrementBlocked"
-        >
-          +
-        </button>
-        <span class="block-hint">/ {{ form.capacity }}</span>
+      <label class="input-label">{{ t('properties.beds') }} ({{ room?.currentOccupancy ?? 0 }}/{{ beds.length }})</label>
+
+      <div
+        v-if="bedError"
+        class="error"
+      >
+        {{ bedError }}
       </div>
-      <BaseInput
-        v-if="form.blockedSpots > 0"
-        v-model="blockReason"
-        :label="t('properties.blockReason')"
-        :placeholder="t('properties.blockReasonPlaceholder')"
-      />
+
+      <div
+        v-if="isLoadingBeds"
+        class="muted"
+      >
+        {{ t('common.loading') }}
+      </div>
+      <div
+        v-else
+        class="bed-list"
+      >
+        <div
+          v-for="bed in beds"
+          :key="bed.id"
+          class="bed-row"
+        >
+          <template v-if="editingBedId === bed.id">
+            <input
+              v-model="editingBedLabel"
+              class="bed-label-input"
+              @keyup.enter="saveRenameBed(bed)"
+            >
+            <BaseButton
+              size="sm"
+              variant="secondary"
+              @click="saveRenameBed(bed)"
+            >
+              {{ t('common.save') }}
+            </BaseButton>
+          </template>
+          <template v-else>
+            <span
+              class="bed-label"
+              @click="startRenameBed(bed)"
+            >{{ bed.label }}</span>
+            <BaseBadge :variant="bed.status === 'ACTIVE' ? 'success' : 'danger'">
+              {{ t(`properties.status.${bed.status}`) }}
+            </BaseBadge>
+            <button
+              class="bed-action"
+              @click="toggleBedStatus(bed)"
+            >
+              {{ bed.status === 'ACTIVE' ? t('properties.blockBed') : t('properties.unblockBed') }}
+            </button>
+            <button
+              class="bed-action bed-action--danger"
+              @click="deleteBed(bed)"
+            >
+              {{ t('common.delete') }}
+            </button>
+          </template>
+        </div>
+        <p
+          v-if="!beds.length"
+          class="muted"
+        >
+          {{ t('properties.noBeds') }}
+        </p>
+      </div>
+
+      <div class="bed-add-row">
+        <input
+          v-model="newBedLabel"
+          class="bed-label-input"
+          :placeholder="t('properties.bedLabelPlaceholder')"
+          @keyup.enter="addBed"
+        >
+        <BaseButton
+          size="sm"
+          variant="secondary"
+          @click="addBed"
+        >
+          {{ t('properties.addBed') }}
+        </BaseButton>
+      </div>
+      <div class="bed-add-row">
+        <input
+          v-model.number="bulkGenerateCount"
+          type="number"
+          min="1"
+          class="number-input number-input--sm"
+        >
+        <BaseButton
+          size="sm"
+          variant="secondary"
+          @click="bulkGenerate"
+        >
+          {{ t('properties.bulkGenerateBeds') }}
+        </BaseButton>
+      </div>
     </div>
 
     <!-- Occupants (read-only) -->
@@ -292,6 +461,10 @@ function decrementBlocked() {
   }
 }
 
+.number-input--sm {
+  width: 5rem;
+}
+
 .filter-select {
   width: 100%;
   padding: 0.5rem 0.75rem;
@@ -307,51 +480,56 @@ function decrementBlocked() {
   }
 }
 
-.block-section {
+.beds-section {
   border-top: 1px solid #e5e7eb;
   padding-top: 1rem;
   margin-top: 0.5rem;
 }
 
-.block-controls {
+.bed-list {
+  margin: 0.5rem 0;
+}
+
+.bed-row {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  margin-bottom: 0.75rem;
+  padding: 0.375rem 0;
+  border-bottom: 1px solid #f3f4f6;
 }
 
-.block-btn {
-  width: 2rem;
-  height: 2rem;
-  border: 1px solid #d1d5db;
-  border-radius: 0.375rem;
-  background: #fff;
-  font-size: 1rem;
+.bed-label {
+  font-weight: 600;
   cursor: pointer;
+  min-width: 3rem;
+}
+
+.bed-label-input {
+  padding: 0.375rem 0.5rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.25rem;
+  font-size: 0.8125rem;
+  flex: 1;
+}
+
+.bed-action {
+  border: none;
+  background: none;
+  color: #6b7280;
+  font-size: 0.75rem;
+  cursor: pointer;
+  text-decoration: underline;
+  margin-left: auto;
+
+  &--danger {
+    color: #dc2626;
+  }
+}
+
+.bed-add-row {
   display: flex;
-  align-items: center;
-  justify-content: center;
-
-  &:hover:not(:disabled) {
-    background: #f3f4f6;
-  }
-
-  &:disabled {
-    opacity: 0.3;
-    cursor: not-allowed;
-  }
-}
-
-.block-value {
-  font-size: 1.125rem;
-  font-weight: 700;
-  min-width: 1.5rem;
-  text-align: center;
-}
-
-.block-hint {
-  font-size: 0.875rem;
-  color: #9ca3af;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
 }
 
 .occupants-section {
@@ -387,6 +565,11 @@ function decrementBlocked() {
 
 .spacer {
   flex: 1;
+}
+
+.muted {
+  color: #9ca3af;
+  font-size: 0.875rem;
 }
 
 .error {

@@ -4,7 +4,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { usePropertiesStore } from '../store/properties.store'
 import { propertiesApi } from '../api/properties.api'
-import type { UpdatePropertyPayload, GenderRule, PropertyType, Room } from '../types/property.types'
+import type { UpdatePropertyPayload, Room } from '../types/property.types'
 import RoomManagement from '../components/RoomManagement.vue'
 import { BaseButton, BaseInput, BaseBadge } from '@/shared/components'
 import { useAuthStore } from '@/modules/auth/store/auth.store'
@@ -18,23 +18,24 @@ const isLoading = ref(true)
 const isSaving = ref(false)
 const error = ref('')
 const isEditing = ref(false)
-const editForm = ref<UpdatePropertyPayload>({})
+const editForm = ref<Partial<UpdatePropertyPayload>>({})
 const selectedRoom = ref<Room | null>(null)
 const showRoomManagement = ref(false)
 
 const auth = useAuthStore()
 const propertyId = computed(() => route.params.id as string)
 
-const typeOptions: { value: PropertyType; label: string }[] = [
-  { value: 'INTERNAL', label: t('properties.type.INTERNAL') },
-  { value: 'PARTNER', label: t('properties.type.PARTNER') },
-]
-
-const genderRuleOptions: { value: GenderRule; label: string }[] = [
-  { value: 'PER_ROOM', label: t('properties.genderRule.PER_ROOM') },
-  { value: 'PER_PROPERTY', label: t('properties.genderRule.PER_PROPERTY') },
-  { value: 'MIXED', label: t('properties.genderRule.MIXED') },
-]
+// The API no longer aggregates room occupancy on the property record — derive
+// it client-side from the already-fetched room list.
+const roomSummary = computed(() => {
+  const rooms = store.rooms
+  return {
+    totalRooms: rooms.length,
+    totalBedCount: rooms.reduce((sum, r) => sum + r.bedCount, 0),
+    currentOccupancy: rooms.reduce((sum, r) => sum + r.currentOccupancy, 0),
+    blockedRooms: rooms.filter((r) => r.status === 'BLOCKED').length,
+  }
+})
 
 function occupancyPercent(current: number, total: number): number {
   if (total === 0) return 0
@@ -43,8 +44,8 @@ function occupancyPercent(current: number, total: number): number {
 
 function roomOccupancyVariant(room: Room): 'success' | 'warning' | 'danger' | 'default' {
   if (room.status === 'BLOCKED') return 'danger'
-  if (room.availableSpots === 0) return 'danger'
-  if (room.availableSpots <= 1) return 'warning'
+  if (room.availableBedCount === 0) return 'danger'
+  if (room.availableBedCount <= 1) return 'warning'
   return 'success'
 }
 
@@ -65,8 +66,8 @@ function startEdit() {
   editForm.value = {
     name: store.currentProperty.name,
     address: store.currentProperty.address,
-    type: store.currentProperty.type,
-    genderRule: store.currentProperty.genderRule,
+    city: store.currentProperty.city,
+    status: store.currentProperty.status,
     notes: store.currentProperty.notes,
   }
   isEditing.value = true
@@ -80,7 +81,10 @@ async function saveEdit() {
   isSaving.value = true
   error.value = ''
   try {
-    store.currentProperty = await propertiesApi.updateProperty(propertyId.value, editForm.value)
+    store.currentProperty = await propertiesApi.updateProperty(
+      propertyId.value,
+      editForm.value as UpdatePropertyPayload,
+    )
     isEditing.value = false
   } catch (e) {
     error.value = e instanceof Error ? e.message : 'Failed to save property'
@@ -188,18 +192,17 @@ onMounted(load)
       >
         <div class="info-grid">
           <div class="info-item">
-            <span class="info-label">{{ t('properties.typeLabel') }}</span>
-            <BaseBadge>{{ t(`properties.type.${store.currentProperty.type}`) }}</BaseBadge>
-          </div>
-          <div class="info-item">
             <span class="info-label">{{ t('properties.statusLabel') }}</span>
             <BaseBadge :variant="store.currentProperty.status === 'ACTIVE' ? 'success' : 'default'">
               {{ t(`properties.status.${store.currentProperty.status}`) }}
             </BaseBadge>
           </div>
-          <div class="info-item">
-            <span class="info-label">{{ t('properties.genderRuleLabel') }}</span>
-            <span>{{ t(`properties.genderRule.${store.currentProperty.genderRule}`) }}</span>
+          <div
+            v-if="store.currentProperty.city"
+            class="info-item"
+          >
+            <span class="info-label">{{ t('properties.city') }}</span>
+            <span>{{ store.currentProperty.city }}</span>
           </div>
           <div
             v-if="store.currentProperty.notes"
@@ -215,25 +218,25 @@ onMounted(load)
           <div class="occupancy-header">
             <span class="occupancy-label">{{ t('properties.occupancy') }}</span>
             <span class="occupancy-value">
-              {{ store.currentProperty.roomSummary.currentOccupancy }} /
-              {{ store.currentProperty.roomSummary.totalCapacity }}
-              ({{ occupancyPercent(store.currentProperty.roomSummary.currentOccupancy, store.currentProperty.roomSummary.totalCapacity) }}%)
+              {{ roomSummary.currentOccupancy }} /
+              {{ roomSummary.totalBedCount }}
+              ({{ occupancyPercent(roomSummary.currentOccupancy, roomSummary.totalBedCount) }}%)
             </span>
           </div>
           <div class="occupancy-bar">
             <div
               class="occupancy-fill"
-              :style="{ width: occupancyPercent(store.currentProperty.roomSummary.currentOccupancy, store.currentProperty.roomSummary.totalCapacity) + '%' }"
+              :style="{ width: occupancyPercent(roomSummary.currentOccupancy, roomSummary.totalBedCount) + '%' }"
             />
           </div>
           <div class="occupancy-stats">
-            <span>{{ store.currentProperty.roomSummary.totalRooms }} {{ t('properties.rooms') }}</span>
-            <span>{{ t('properties.capacity') }}: {{ store.currentProperty.roomSummary.totalCapacity }}</span>
+            <span>{{ roomSummary.totalRooms }} {{ t('properties.rooms') }}</span>
+            <span>{{ t('properties.capacity') }}: {{ roomSummary.totalBedCount }}</span>
             <span
-              v-if="store.currentProperty.roomSummary.totalBlockedSpots > 0"
+              v-if="roomSummary.blockedRooms > 0"
               class="blocked-info"
             >
-              {{ store.currentProperty.roomSummary.totalBlockedSpots }} {{ t('properties.blocked') }}
+              {{ roomSummary.blockedRooms }} {{ t('properties.blocked') }}
             </span>
           </div>
         </div>
@@ -253,38 +256,11 @@ onMounted(load)
           <BaseInput
             v-model="editForm.address!"
             :label="t('properties.address')"
-            required
           />
-          <div class="input-group">
-            <label class="input-label">{{ t('properties.typeLabel') }}</label>
-            <select
-              v-model="editForm.type"
-              class="filter-select"
-            >
-              <option
-                v-for="opt in typeOptions"
-                :key="opt.value"
-                :value="opt.value"
-              >
-                {{ opt.label }}
-              </option>
-            </select>
-          </div>
-          <div class="input-group">
-            <label class="input-label">{{ t('properties.genderRuleLabel') }}</label>
-            <select
-              v-model="editForm.genderRule"
-              class="filter-select"
-            >
-              <option
-                v-for="opt in genderRuleOptions"
-                :key="opt.value"
-                :value="opt.value"
-              >
-                {{ opt.label }}
-              </option>
-            </select>
-          </div>
+          <BaseInput
+            v-model="editForm.city!"
+            :label="t('properties.city')"
+          />
           <BaseInput
             v-model="editForm.notes!"
             :label="t('properties.notes')"
@@ -345,15 +321,15 @@ onMounted(load)
               >F{{ room.floor }}</span>
             </div>
             <div class="room-occupancy">
-              {{ room.currentOccupancy }} / {{ room.capacity }}
+              {{ room.currentOccupancy }} / {{ room.bedCount }}
             </div>
             <div class="room-meta">
               <span class="room-rule">{{ t(`properties.roomGender.${room.genderRule}`) }}</span>
               <span
-                v-if="room.blockedSpots > 0"
+                v-if="room.status === 'BLOCKED'"
                 class="room-blocked"
               >
-                {{ room.blockedSpots }} {{ t('properties.blocked') }}
+                {{ t('properties.blocked') }}
               </span>
             </div>
             <div

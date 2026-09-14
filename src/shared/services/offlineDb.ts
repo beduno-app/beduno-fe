@@ -96,12 +96,15 @@ export async function getWorkerByInternalId(internalId: string): Promise<Worker 
 }
 
 export async function getArrivalsByWorkerInternalId(internalId: string): Promise<ArrivalStay[]> {
+  const worker = await getWorkerByInternalId(internalId)
+  if (!worker) return []
+
   const db = await openDb()
 
   return new Promise((resolve, reject) => {
     const tx = db.transaction('arrivals', 'readonly')
-    const index = tx.objectStore('arrivals').index('workerInternalId')
-    const req = index.getAll(internalId)
+    const index = tx.objectStore('arrivals').index('workerId')
+    const req = index.getAll(worker.id)
     req.onsuccess = () => resolve(req.result as ArrivalStay[])
     req.onerror = () => reject(req.error)
   })

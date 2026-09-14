@@ -1,17 +1,19 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { AuditEvent, AuditEntityType } from '../types/audit.types'
-import { BaseBadge } from '@/shared/components'
 import AuditDiffViewer from './AuditDiffViewer.vue'
 import { formatDateTime } from '@/shared/utils/formatDate'
+import { useEntityLookup } from '@/shared/composables/useEntityLookup'
 
-defineProps<{
+const props = defineProps<{
   event: AuditEvent
 }>()
 
 const { t, locale } = useI18n()
+const lookup = useEntityLookup()
 const expanded = ref(false)
+const actorName = ref('')
 
 function formatTimestamp(ts: string): string {
   return formatDateTime(ts, locale.value)
@@ -23,29 +25,29 @@ function buildEntityLink(type: AuditEntityType, id: string): object {
     STAY: 'StayDetail',
     PROPERTY: 'PropertyDetail',
     ROOM: 'PropertyDetail',
+    BED: 'PropertyDetail',
     USER: 'UserManagement',
   }
-  if (type === 'ROOM') {
+  if (type === 'ROOM' || type === 'BED') {
     return { name: routeMap[type] }
   }
   return { name: routeMap[type], params: { id } }
 }
+
+onMounted(async () => {
+  const user = await lookup.getUser(props.event.actorUserId)
+  actorName.value = user ? `${user.firstName} ${user.lastName}` : props.event.actorUserId
+})
 </script>
 
 <template>
   <tbody class="event-row-group">
     <tr class="event-row">
       <td class="cell-timestamp">
-        {{ formatTimestamp(event.timestamp) }}
+        {{ formatTimestamp(event.createdAt) }}
       </td>
       <td class="cell-actor">
-        {{ event.actor.firstName }} {{ event.actor.lastName }}
-        <BaseBadge
-          variant="info"
-          class="role-badge"
-        >
-          {{ t(`roles.${event.actor.role}`) }}
-        </BaseBadge>
+        {{ actorName }}
       </td>
       <td class="cell-action">
         {{ t(`audit.actions.${event.action}`) }}
@@ -56,17 +58,8 @@ function buildEntityLink(type: AuditEntityType, id: string): object {
           :to="buildEntityLink(event.entityType, event.entityId)"
           class="entity-link"
         >
-          {{ event.entityLabel }}
+          {{ event.entityId }}
         </RouterLink>
-      </td>
-      <td class="cell-sync">
-        <span
-          v-if="event.syncedAt"
-          class="synced-offline"
-          :title="t('audit.syncedAtTooltip', { time: formatTimestamp(event.syncedAt) })"
-        >
-          <BaseBadge variant="warning">{{ t('audit.syncedOffline') }}</BaseBadge>
-        </span>
       </td>
       <td class="cell-details">
         <button
@@ -81,8 +74,17 @@ function buildEntityLink(type: AuditEntityType, id: string): object {
       v-if="expanded"
       class="diff-row"
     >
-      <td colspan="6">
-        <AuditDiffViewer :diff="event.diff" />
+      <td colspan="5">
+        <p
+          v-if="event.reason"
+          class="reason"
+        >
+          {{ t('audit.reason') }}: {{ event.reason }}
+        </p>
+        <AuditDiffViewer
+          :previous-state="event.previousState"
+          :new-state="event.newState"
+        />
       </td>
     </tr>
   </tbody>
@@ -119,10 +121,6 @@ function buildEntityLink(type: AuditEntityType, id: string): object {
   flex-wrap: wrap;
 }
 
-.role-badge {
-  flex-shrink: 0;
-}
-
 .cell-entity {
   display: flex;
   flex-direction: column;
@@ -144,8 +142,10 @@ function buildEntityLink(type: AuditEntityType, id: string): object {
   }
 }
 
-.synced-offline {
-  cursor: help;
+.reason {
+  font-size: 0.8125rem;
+  color: #374151;
+  margin: 0 0 0.5rem;
 }
 
 .toggle-btn {

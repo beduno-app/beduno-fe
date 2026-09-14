@@ -5,7 +5,6 @@ import type {
   Room,
   GetPropertiesParams,
   PropertyStatus,
-  PropertyType,
 } from '../types/property.types'
 import { propertiesApi } from '../api/properties.api'
 
@@ -24,7 +23,6 @@ export const usePropertiesStore = defineStore('properties', () => {
   // Filters
   const search = ref('')
   const statusFilter = ref<PropertyStatus | ''>('')
-  const typeFilter = ref<PropertyType | ''>('')
 
   const hasNextPage = computed(() => page.value < totalPages.value - 1)
   const hasPreviousPage = computed(() => page.value > 0)
@@ -37,7 +35,6 @@ export const usePropertiesStore = defineStore('properties', () => {
     }
     if (search.value) params.search = search.value
     if (statusFilter.value) params.status = statusFilter.value
-    if (typeFilter.value) params.type = typeFilter.value
     return params
   }
 
@@ -84,7 +81,6 @@ export const usePropertiesStore = defineStore('properties', () => {
   function resetFilters() {
     search.value = ''
     statusFilter.value = ''
-    typeFilter.value = ''
     page.value = 0
   }
 
@@ -101,7 +97,6 @@ export const usePropertiesStore = defineStore('properties', () => {
     size,
     search,
     statusFilter,
-    typeFilter,
     hasNextPage,
     hasPreviousPage,
     fetchProperties,

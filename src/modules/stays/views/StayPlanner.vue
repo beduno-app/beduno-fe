@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useStaysStore } from '../store/stays.store'
@@ -7,11 +7,35 @@ import { usePropertiesStore } from '@/modules/properties/store/properties.store'
 import { BaseButton, StatusChip, SkeletonLoader } from '@/shared/components'
 import type { StayStatus } from '../types/stay.types'
 import { formatDate } from '@/shared/utils/formatDate'
+import { useEntityLookup } from '@/shared/composables/useEntityLookup'
 
 const { t, locale } = useI18n()
 const router = useRouter()
 const store = useStaysStore()
 const propertiesStore = usePropertiesStore()
+const lookup = useEntityLookup()
+
+const stayDisplay = ref<Map<string, { workerName: string; propertyName: string; roomNumber: string }>>(new Map())
+
+watch(
+  () => store.stays,
+  async (stays) => {
+    await Promise.all(
+      stays.map(async (s) => {
+        const [worker, property, room] = await Promise.all([
+          lookup.getWorker(s.workerId),
+          lookup.getProperty(s.propertyId),
+          lookup.getRoom(s.propertyId, s.roomId),
+        ])
+        stayDisplay.value.set(s.id, {
+          workerName: worker ? `${worker.lastName}, ${worker.firstName}` : s.workerId,
+          propertyName: property?.name ?? s.propertyId,
+          roomNumber: room?.roomNumber ?? s.roomId,
+        })
+      }),
+    )
+  },
+)
 
 const statusOptions: { value: StayStatus | ''; label: string }[] = [
   { value: '', label: t('stays.allStatuses') },
@@ -167,9 +191,9 @@ onMounted(() => {
             class="stay-row"
             @click="viewDetail(stay.id)"
           >
-            <td>{{ stay.worker.lastName }}, {{ stay.worker.firstName }}</td>
-            <td>{{ stay.property.name }}</td>
-            <td>{{ stay.room.roomNumber }}</td>
+            <td>{{ stayDisplay.get(stay.id)?.workerName ?? '—' }}</td>
+            <td>{{ stayDisplay.get(stay.id)?.propertyName ?? '—' }}</td>
+            <td>{{ stayDisplay.get(stay.id)?.roomNumber ?? '—' }}</td>
             <td>{{ formatDate(stay.dateFrom, locale) }}</td>
             <td>{{ formatDate(stay.dateTo, locale) }}</td>
             <td>

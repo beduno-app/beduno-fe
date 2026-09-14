@@ -1,18 +1,20 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import type { RoomOccupancy } from '../types/inhouse.types'
+import type { RoomOccupancy, RoomOccupancyStatus } from '../types/inhouse.types'
 import { BaseButton } from '@/shared/components'
 import CapacityBadge from './CapacityBadge.vue'
 
 defineProps<{
   room: RoomOccupancy
-  allRooms: RoomOccupancy[]
+  status: RoomOccupancyStatus
+  allRooms: { room: RoomOccupancy; status: RoomOccupancyStatus }[]
 }>()
 
 const emit = defineEmits<{
   'check-out': [stayId: string]
   'move-room': [stayId: string, targetRoomId: string]
+  'toggle-select': [stayId: string]
 }>()
 
 const { t } = useI18n()
@@ -40,26 +42,19 @@ function confirmMove() {
   <div
     class="room-card"
     data-testid="room-card"
-    :class="{ 'room-card--blocked': room.blocked }"
+    :class="{ 'room-card--blocked': status === 'BLOCKED' }"
   >
     <div class="room-header">
       <div class="room-info">
         <span
           class="room-number"
           data-testid="room-number"
-        >{{ room.room.roomNumber }}</span>
+        >{{ room.roomNumber }}</span>
         <span class="room-capacity">
-          {{ room.occupants.length }}/{{ room.room.capacity }}
+          {{ room.occupiedSpots }}/{{ room.bedCount }}
         </span>
       </div>
-      <CapacityBadge :status="room.status" />
-    </div>
-
-    <div
-      v-if="room.blocked && room.blockReason"
-      class="block-reason"
-    >
-      {{ room.blockReason }}
+      <CapacityBadge :status="status" />
     </div>
 
     <div
@@ -68,16 +63,25 @@ function confirmMove() {
     >
       <div
         v-for="occ in room.occupants"
-        :key="occ.id"
+        :key="occ.stayId"
         class="occupant"
         data-testid="occupant"
       >
         <div class="occupant-info">
-          <span class="occupant-name">{{ occ.worker.lastName }}, {{ occ.worker.firstName }}</span>
-          <span class="occupant-id">{{ occ.worker.internalId }}</span>
+          <label class="occupant-select">
+            <input
+              type="checkbox"
+              @change="emit('toggle-select', occ.stayId)"
+            >
+            <span class="occupant-name">{{ occ.lastName }}, {{ occ.firstName }}</span>
+          </label>
+          <span
+            v-if="occ.bedLabel"
+            class="occupant-id"
+          >{{ occ.bedLabel }}</span>
         </div>
         <div class="occupant-actions">
-          <template v-if="movingStayId === occ.id">
+          <template v-if="movingStayId === occ.stayId">
             <select
               v-model="targetRoomId"
               class="move-select"
@@ -87,11 +91,11 @@ function confirmMove() {
               </option>
               <option
                 v-for="r in allRooms"
-                :key="r.room.id"
-                :value="r.room.id"
-                :disabled="r.room.id === room.room.id || r.blocked"
+                :key="r.room.roomId"
+                :value="r.room.roomId"
+                :disabled="r.room.roomId === room.roomId || r.status === 'BLOCKED'"
               >
-                {{ r.room.roomNumber }} ({{ r.room.availableSpots }}/{{ r.room.capacity }})
+                {{ r.room.roomNumber }} ({{ r.room.availableBedCount }}/{{ r.room.bedCount }})
               </option>
             </select>
             <BaseButton
@@ -113,14 +117,14 @@ function confirmMove() {
             <BaseButton
               variant="ghost"
               size="sm"
-              @click="startMove(occ.id)"
+              @click="startMove(occ.stayId)"
             >
               {{ t('inhouse.moveRoom') }}
             </BaseButton>
             <BaseButton
               variant="danger"
               size="sm"
-              @click="emit('check-out', occ.id)"
+              @click="emit('check-out', occ.stayId)"
             >
               {{ t('inhouse.checkOut') }}
             </BaseButton>
@@ -173,16 +177,6 @@ function confirmMove() {
   color: #6b7280;
 }
 
-.block-reason {
-  font-size: 0.8125rem;
-  color: #6b7280;
-  font-style: italic;
-  margin-bottom: 0.75rem;
-  padding: 0.375rem 0.5rem;
-  background: #f3f4f6;
-  border-radius: 0.25rem;
-}
-
 .occupant {
   display: flex;
   align-items: center;
@@ -201,6 +195,13 @@ function confirmMove() {
   display: flex;
   flex-direction: column;
   gap: 0.125rem;
+}
+
+.occupant-select {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  cursor: pointer;
 }
 
 .occupant-name {

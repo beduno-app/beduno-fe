@@ -13,6 +13,13 @@ vi.mock('vue-router', () => ({
   useRouter: () => ({ push: pushMock }),
 }))
 
+// useEntityLookup pulls in workersApi/propertiesApi (mocked below), but those
+// modules also import the shared axios instance, which imports the real
+// app router (`@/app/router`) for its 401-refresh redirect. That module calls
+// vue-router's real `createRouter` at import time, which the mock above
+// doesn't provide — stub it out so it's never evaluated.
+vi.mock('@/app/router', () => ({ default: { push: vi.fn() } }))
+
 vi.mock('../api/stays.api', () => ({
   staysApi: {
     getStays: vi.fn(),
@@ -29,6 +36,7 @@ vi.mock('@/modules/properties/api/properties.api', () => ({
     getProperties: vi.fn(),
     getProperty: vi.fn(),
     getRooms: vi.fn(),
+    getRoom: vi.fn(),
     createProperty: vi.fn(),
     updateProperty: vi.fn(),
     createRoom: vi.fn(),
@@ -60,10 +68,12 @@ function makeWorker(overrides: Partial<Worker> = {}): Worker {
     lastName: 'Kowalski',
     phone: '+48123456789',
     gender: 'MALE',
+    nationality: 'PL',
+    email: 'jan.kowalski@example.com',
+    dateOfBirth: '1990-01-01',
     tags: [],
     notes: '',
     status: 'ACTIVE',
-    currentStay: null,
     createdAt: '2024-01-01T00:00:00Z',
     updatedAt: '2024-01-01T00:00:00Z',
     ...overrides,
@@ -75,11 +85,9 @@ function makeProperty(overrides: Partial<Property> = {}): Property {
     id: 'prop-1',
     name: 'Hotel A',
     address: 'Main St 1',
-    type: 'INTERNAL',
-    genderRule: 'MIXED',
+    city: 'Warsaw',
     status: 'ACTIVE',
     notes: '',
-    roomSummary: { totalRooms: 1, totalCapacity: 4, totalBlockedSpots: 0, currentOccupancy: 0 },
     createdAt: '2024-01-01T00:00:00Z',
     updatedAt: '2024-01-01T00:00:00Z',
     ...overrides,
@@ -91,9 +99,8 @@ function makeRoom(overrides: Partial<Room> = {}): Room {
     id: 'room-1',
     propertyId: 'prop-1',
     roomNumber: '101',
-    capacity: 4,
-    blockedSpots: 0,
-    availableSpots: 4,
+    bedCount: 4,
+    availableBedCount: 4,
     currentOccupancy: 0,
     genderRule: 'MIXED',
     floor: 1,
@@ -101,6 +108,7 @@ function makeRoom(overrides: Partial<Room> = {}): Room {
     notes: '',
     occupants: [],
     createdAt: '2024-01-01T00:00:00Z',
+    updatedAt: '2024-01-01T00:00:00Z',
     ...overrides,
   }
 }
@@ -124,13 +132,17 @@ describe('CreateStay', () => {
     vi.mocked(workersApi.getWorkers).mockResolvedValue(paginated([makeWorker()]))
     vi.mocked(propertiesApi.getProperties).mockResolvedValue(paginated([makeProperty()]))
     vi.mocked(propertiesApi.getRooms).mockResolvedValue(paginated([makeRoom()]))
+    // No active stay for the selected worker by default — the conflict-check
+    // watcher in CreateStay.vue resolves this via staysApi.getStays({ workerId })
+    // before calling conflicts.validate().
+    vi.mocked(staysApi.getStays).mockResolvedValue(paginated([]))
   })
 
   it('blocks submission on a hard violation and leaves the form usable afterward', async () => {
     // A full room (0 available spots) triggers CAPACITY_EXCEEDED — a hard
     // violation. This also exercises the fix for the isSaving-stuck bug:
     // the Save button must not stay in a loading state after a blocked attempt.
-    vi.mocked(propertiesApi.getRooms).mockResolvedValue(paginated([makeRoom({ availableSpots: 0 })]))
+    vi.mocked(propertiesApi.getRooms).mockResolvedValue(paginated([makeRoom({ availableBedCount: 0 })]))
 
     const wrapper = mountView()
     await flushPromises()
@@ -171,15 +183,17 @@ describe('CreateStay', () => {
       .mockRejectedValueOnce(constraintError)
       .mockResolvedValueOnce({
         id: 'stay-1',
-        worker: { id: 'worker-1', internalId: 'W001', firstName: 'Jan', lastName: 'Kowalski', gender: 'MALE' },
-        property: { id: 'prop-1', name: 'Hotel A', type: 'INTERNAL' },
-        room: { id: 'room-1', roomNumber: '101', capacity: 4, availableSpots: 4 },
+        workerId: 'worker-1',
+        propertyId: 'prop-1',
+        roomId: 'room-1',
+        bedId: null,
+        bedAutoAssigned: null,
         dateFrom: '2024-03-15',
         dateTo: '2024-03-20',
         status: 'PLANNED',
         overrideReason: 'Manager approval',
-        createdBy: { id: 'user-1', firstName: 'Admin', lastName: 'User' },
-        confirmedBy: null,
+        noShowReason: null,
+        notes: null,
         createdAt: '2024-03-15T10:00:00Z',
         updatedAt: '2024-03-15T10:00:00Z',
       })

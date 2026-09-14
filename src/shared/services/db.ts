@@ -4,7 +4,7 @@
  */
 
 export const DB_NAME = 'beduno-offline'
-export const DB_VERSION = 2
+export const DB_VERSION = 3
 
 let _db: IDBDatabase | null = null
 
@@ -16,6 +16,7 @@ export function openDb(): Promise<IDBDatabase> {
 
     req.onupgradeneeded = (e) => {
       const db = (e.target as IDBOpenDBRequest).result
+      const tx = (e.target as IDBOpenDBRequest).transaction!
 
       // Snapshot stores (v1)
       if (!db.objectStoreNames.contains('workers')) {
@@ -27,7 +28,17 @@ export function openDb(): Promise<IDBDatabase> {
       }
       if (!db.objectStoreNames.contains('arrivals')) {
         const as = db.createObjectStore('arrivals', { keyPath: 'id' })
-        as.createIndex('workerInternalId', 'worker.internalId', { unique: false })
+        as.createIndex('workerId', 'workerId', { unique: false })
+      } else if (e.oldVersion < 3) {
+        // v3: the real API's stay records are flat (workerId, not a nested
+        // worker.internalId) — swap the stale nested-path index for a flat one.
+        const as = tx.objectStore('arrivals')
+        if (as.indexNames.contains('workerInternalId')) {
+          as.deleteIndex('workerInternalId')
+        }
+        if (!as.indexNames.contains('workerId')) {
+          as.createIndex('workerId', 'workerId', { unique: false })
+        }
       }
       if (!db.objectStoreNames.contains('meta')) {
         db.createObjectStore('meta', { keyPath: 'key' })

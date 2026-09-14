@@ -14,6 +14,7 @@ import { decodeQrData } from '@/shared/utils/qrCode'
 import { loadSnapshot } from '@/shared/services/offlineDb'
 import { useToast } from '@/shared/composables/useToast'
 import { SkeletonLoader } from '@/shared/components'
+import { workersApi } from '@/modules/workers/api/workers.api'
 
 const { t } = useI18n()
 const store = useArrivalsStore()
@@ -34,12 +35,12 @@ const POLL_MS = 30_000
 
 function onPropertyChange(e: Event) {
   store.propertyIdFilter = (e.target as HTMLSelectElement).value
-  store.setPage(0)
+  store.fetchArrivals()
 }
 
 function onDateChange(e: Event) {
   store.dateFilter = (e.target as HTMLInputElement).value
-  store.setPage(0)
+  store.fetchArrivals()
 }
 
 function openQrCheckin() {
@@ -87,19 +88,27 @@ async function handleQrScanned(rawCode: string) {
       if (snapshot) sourceArrivals = snapshot.arrivals
     }
 
-    const arrival = decoded
-      ? sourceArrivals.find(
-          (a) => a.worker.id === decoded.workerId && a.status === 'EXPECTED_TODAY',
-        )
-      : sourceArrivals.find(
-          (a) => a.worker.internalId === rawCode && a.status === 'EXPECTED_TODAY',
-        )
+    let matchWorkerId = decoded?.workerId
+    if (!matchWorkerId) {
+      // Manual entry / non-beduno QR: resolve internalId to a workerId.
+      if (navigator.onLine) {
+        const results = await workersApi.getWorkers({ search: rawCode })
+        matchWorkerId = results.content.find((w) => w.internalId === rawCode)?.id
+      } else {
+        const snapshot = await loadSnapshot()
+        matchWorkerId = snapshot?.workers.find((w) => w.internalId === rawCode)?.id
+      }
+    }
+
+    const arrival = matchWorkerId
+      ? sourceArrivals.find((a) => a.workerId === matchWorkerId && a.status === 'EXPECTED_TODAY')
+      : undefined
 
     if (!arrival) {
       actionError.value = t('arrivals.workerNotFound')
       return
     }
-    await store.checkIn(arrival.id, { qrCode: decoded ? rawCode : undefined })
+    await store.checkIn(arrival.id)
     toast.success(t('arrivals.checkInSuccess'))
     closePanel()
   } catch (e) {
@@ -107,10 +116,10 @@ async function handleQrScanned(rawCode: string) {
   }
 }
 
-async function handleNoShowConfirm(reason: NoShowReason, note: string) {
+async function handleNoShowConfirm(reason: NoShowReason) {
   actionError.value = ''
   try {
-    await store.noShow(activeStayId.value, { reason, note: note || undefined })
+    await store.noShow(activeStayId.value, { noShowReason: reason })
     toast.success(t('arrivals.noShowSuccess'))
     closePanel()
   } catch (e) {
@@ -118,10 +127,10 @@ async function handleNoShowConfirm(reason: NoShowReason, note: string) {
   }
 }
 
-async function handleMoveConfirm(targetPropertyId: string, targetRoomId: string) {
+async function handleMoveConfirm(targetRoomId: string) {
   actionError.value = ''
   try {
-    await store.move(activeStayId.value, { targetPropertyId, targetRoomId })
+    await store.move(activeStayId.value, { targetRoomId })
     toast.success(t('arrivals.moveSuccess'))
     closePanel()
   } catch (e) {
@@ -223,7 +232,7 @@ onUnmounted(stopPolling)
         {{ t('arrivals.checkedIn') }}: <strong>{{ store.checkedInCount }}</strong>
       </span>
       <span class="stat">
-        {{ t('arrivals.total') }}: <strong>{{ store.totalElements }}</strong>
+        {{ t('arrivals.total') }}: <strong>{{ store.arrivals.length }}</strong>
       </span>
     </div>
 
@@ -309,31 +318,6 @@ onUnmounted(stopPolling)
       >
         {{ t('arrivals.noArrivals') }}
       </p>
-
-      <div
-        v-if="store.totalPages > 1"
-        class="pagination"
-      >
-        <BaseButton
-          variant="secondary"
-          size="sm"
-          :disabled="!store.hasPreviousPage"
-          @click="store.setPage(store.page - 1)"
-        >
-          {{ t('common.back') }}
-        </BaseButton>
-        <span class="page-info">
-          {{ store.page + 1 }} / {{ store.totalPages }}
-        </span>
-        <BaseButton
-          variant="secondary"
-          size="sm"
-          :disabled="!store.hasNextPage"
-          @click="store.setPage(store.page + 1)"
-        >
-          {{ t('arrivals.next') }}
-        </BaseButton>
-      </div>
     </template>
   </div>
 </template>

@@ -1,64 +1,58 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import type { RoomInspection, PresenceStatus, DiscrepancyReason } from '../types/inspection.types'
+import type { InspectionRoomEntry, OccupantSummary } from '../types/inspection.types'
 import { BaseButton } from '@/shared/components'
+import { workersApi } from '@/modules/workers/api/workers.api'
 
-defineProps<{
-  room: RoomInspection
+const props = defineProps<{
+  room: InspectionRoomEntry
+  presentWorkerIds: Set<string>
+  unexpectedWorkerIds: string[]
+  verified: boolean
 }>()
 
 const emit = defineEmits<{
-  'mark-presence': [stayId: string, presence: PresenceStatus, reason?: DiscrepancyReason, note?: string]
-  'add-unexpected': [description: string, reason: DiscrepancyReason, note?: string]
+  'toggle-presence': [workerId: string, present: boolean]
+  'add-unexpected': [workerId: string]
+  'remove-unexpected': [workerId: string]
   verify: []
 }>()
 
 const { t } = useI18n()
 
-const discrepancyReasons: DiscrepancyReason[] = [
-  'WORKER_NOT_FOUND',
-  'WRONG_ROOM',
-  'LEFT_EARLY',
-  'ARRIVED_LATE',
-  'UNAUTHORIZED_GUEST',
-  'OTHER',
-]
+const showUnexpectedSearch = ref(false)
+const searchQuery = ref('')
+const searchResults = ref<{ id: string; internalId: string; firstName: string; lastName: string }[]>([])
+const searchError = ref('')
 
-// Absent reason state per occupant
-const absentData = ref<Record<string, { reason: DiscrepancyReason; note: string }>>({})
-
-function markPresent(stayId: string) {
-  emit('mark-presence', stayId, 'PRESENT')
+// Expected occupants plus already-checked-in occupants not in the expected
+// list (e.g. checked in outside the planned window) form the roster shown.
+function displayOccupants(): OccupantSummary[] {
+  const seen = new Set(props.room.expectedOccupants.map((o) => o.workerId))
+  const extra = props.room.checkedInOccupants.filter((o) => !seen.has(o.workerId))
+  return [...props.room.expectedOccupants, ...extra]
 }
 
-function showAbsentForm(stayId: string) {
-  absentData.value[stayId] = { reason: 'WORKER_NOT_FOUND', note: '' }
+async function runSearch() {
+  searchError.value = ''
+  if (!searchQuery.value.trim()) {
+    searchResults.value = []
+    return
+  }
+  try {
+    const response = await workersApi.getWorkers({ search: searchQuery.value.trim(), size: 5 })
+    searchResults.value = response.content
+  } catch (e) {
+    searchError.value = e instanceof Error ? e.message : 'Search failed'
+  }
 }
 
-function confirmAbsent(stayId: string) {
-  const data = absentData.value[stayId]
-  if (!data) return
-  emit('mark-presence', stayId, 'ABSENT', data.reason, data.note || undefined)
-  delete absentData.value[stayId]
-}
-
-function cancelAbsent(stayId: string) {
-  delete absentData.value[stayId]
-}
-
-// Unexpected presence form
-const showUnexpectedForm = ref(false)
-const unexpectedDesc = ref('')
-const unexpectedReason = ref<DiscrepancyReason>('UNAUTHORIZED_GUEST')
-const unexpectedNote = ref('')
-
-function addUnexpected() {
-  if (!unexpectedDesc.value) return
-  emit('add-unexpected', unexpectedDesc.value, unexpectedReason.value, unexpectedNote.value || undefined)
-  showUnexpectedForm.value = false
-  unexpectedDesc.value = ''
-  unexpectedNote.value = ''
+function pickUnexpected(workerId: string) {
+  emit('add-unexpected', workerId)
+  showUnexpectedSearch.value = false
+  searchQuery.value = ''
+  searchResults.value = []
 }
 </script>
 
@@ -66,171 +60,105 @@ function addUnexpected() {
   <div class="room-inspection">
     <div class="room-header">
       <h3 class="room-number">
-        {{ room.room.roomNumber }}
+        {{ room.roomNumber }}
       </h3>
       <span
-        v-if="room.verified"
+        v-if="verified"
         class="verified-badge"
       >
         {{ t('inspection.verified') }}
       </span>
     </div>
 
-    <!-- Expected occupants -->
+    <!-- Roster -->
     <div class="occupants-section">
       <h4 class="section-label">
-        {{ t('inspection.expected') }} ({{ room.expected.length }})
+        {{ t('inspection.expected') }} ({{ displayOccupants().length }})
       </h4>
       <div
-        v-for="occ in room.expected"
-        :key="occ.stayId"
+        v-for="occ in displayOccupants()"
+        :key="occ.workerId"
         class="occupant-row"
-        :class="`occupant-row--${occ.presence.toLowerCase()}`"
+        :class="{ 'occupant-row--present': presentWorkerIds.has(occ.workerId) }"
       >
-        <div class="occupant-info">
-          <span class="occupant-name">{{ occ.worker.lastName }}, {{ occ.worker.firstName }}</span>
-          <span class="occupant-id">{{ occ.worker.internalId }}</span>
-          <span
-            v-if="occ.presence !== 'UNCHECKED'"
-            class="presence-label"
-            :class="`presence-label--${occ.presence.toLowerCase()}`"
-          >
-            {{ t(`inspection.presence.${occ.presence}`) }}
-          </span>
-          <span
-            v-if="occ.discrepancyReason"
-            class="discrepancy-tag"
-          >
-            {{ t(`inspection.reasons.${occ.discrepancyReason}`) }}
-          </span>
-        </div>
-
-        <div
-          v-if="occ.presence === 'UNCHECKED' && !absentData[occ.stayId]"
-          class="check-actions"
-        >
-          <BaseButton
-            size="sm"
-            @click="markPresent(occ.stayId)"
-          >
-            {{ t('inspection.present') }}
-          </BaseButton>
-          <BaseButton
-            variant="danger"
-            size="sm"
-            @click="showAbsentForm(occ.stayId)"
-          >
-            {{ t('inspection.absent') }}
-          </BaseButton>
-        </div>
-
-        <!-- Absent reason form -->
-        <div
-          v-if="absentData[occ.stayId]"
-          class="absent-form"
-        >
-          <select
-            v-model="absentData[occ.stayId].reason"
-            class="form-select"
-          >
-            <option
-              v-for="r in discrepancyReasons"
-              :key="r"
-              :value="r"
-            >
-              {{ t(`inspection.reasons.${r}`) }}
-            </option>
-          </select>
+        <label class="occupant-checkbox">
           <input
-            v-model="absentData[occ.stayId].note"
-            type="text"
-            class="form-input"
-            :placeholder="t('inspection.notePlaceholder')"
+            type="checkbox"
+            :checked="presentWorkerIds.has(occ.workerId)"
+            @change="emit('toggle-presence', occ.workerId, ($event.target as HTMLInputElement).checked)"
           >
-          <div class="absent-form-actions">
-            <BaseButton
-              variant="danger"
-              size="sm"
-              @click="confirmAbsent(occ.stayId)"
-            >
-              {{ t('common.confirm') }}
-            </BaseButton>
-            <BaseButton
-              variant="ghost"
-              size="sm"
-              @click="cancelAbsent(occ.stayId)"
-            >
-              {{ t('common.cancel') }}
-            </BaseButton>
-          </div>
-        </div>
+          <span class="occupant-name">{{ occ.lastName }}, {{ occ.firstName }}</span>
+        </label>
+        <span
+          v-if="occ.bedLabel"
+          class="occupant-id"
+        >{{ occ.bedLabel }}</span>
       </div>
+      <p
+        v-if="!displayOccupants().length"
+        class="muted"
+      >
+        {{ t('inspection.noExpected') }}
+      </p>
     </div>
 
     <!-- Unexpected presences -->
     <div class="unexpected-section">
       <h4 class="section-label">
-        {{ t('inspection.unexpected') }} ({{ room.unexpected.length }})
+        {{ t('inspection.unexpected') }} ({{ unexpectedWorkerIds.length }})
       </h4>
       <div
-        v-for="u in room.unexpected"
-        :key="u.id"
+        v-for="workerId in unexpectedWorkerIds"
+        :key="workerId"
         class="unexpected-item"
       >
-        <span>{{ u.description }}</span>
-        <span class="discrepancy-tag">{{ t(`inspection.reasons.${u.reason}`) }}</span>
+        <span>{{ workerId }}</span>
+        <button
+          class="remove-btn"
+          @click="emit('remove-unexpected', workerId)"
+        >
+          {{ t('common.delete') }}
+        </button>
       </div>
 
       <div
-        v-if="showUnexpectedForm"
+        v-if="showUnexpectedSearch"
         class="unexpected-form"
       >
         <input
-          v-model="unexpectedDesc"
+          v-model="searchQuery"
           type="text"
           class="form-input"
-          :placeholder="t('inspection.unexpectedDescPlaceholder')"
+          :placeholder="t('inspection.searchWorkerPlaceholder')"
+          @input="runSearch"
         >
-        <select
-          v-model="unexpectedReason"
-          class="form-select"
+        <div
+          v-if="searchError"
+          class="muted"
         >
-          <option
-            v-for="r in discrepancyReasons"
-            :key="r"
-            :value="r"
-          >
-            {{ t(`inspection.reasons.${r}`) }}
-          </option>
-        </select>
-        <input
-          v-model="unexpectedNote"
-          type="text"
-          class="form-input"
-          :placeholder="t('inspection.notePlaceholder')"
-        >
-        <div class="unexpected-form-actions">
-          <BaseButton
-            size="sm"
-            @click="addUnexpected"
-          >
-            {{ t('common.confirm') }}
-          </BaseButton>
-          <BaseButton
-            variant="ghost"
-            size="sm"
-            @click="showUnexpectedForm = false"
-          >
-            {{ t('common.cancel') }}
-          </BaseButton>
+          {{ searchError }}
         </div>
+        <div
+          v-for="w in searchResults"
+          :key="w.id"
+          class="search-result"
+          @click="pickUnexpected(w.id)"
+        >
+          {{ w.lastName }}, {{ w.firstName }} ({{ w.internalId }})
+        </div>
+        <BaseButton
+          variant="ghost"
+          size="sm"
+          @click="showUnexpectedSearch = false"
+        >
+          {{ t('common.cancel') }}
+        </BaseButton>
       </div>
-
       <BaseButton
-        v-if="!showUnexpectedForm"
+        v-else
         variant="ghost"
         size="sm"
-        @click="showUnexpectedForm = true"
+        @click="showUnexpectedSearch = true"
       >
         {{ t('inspection.addUnexpected') }}
       </BaseButton>
@@ -238,7 +166,7 @@ function addUnexpected() {
 
     <!-- Verify button -->
     <div
-      v-if="!room.verified"
+      v-if="!verified"
       class="verify-section"
     >
       <BaseButton
@@ -247,12 +175,6 @@ function addUnexpected() {
       >
         {{ t('inspection.markVerified') }}
       </BaseButton>
-    </div>
-    <div
-      v-else
-      class="verified-info"
-    >
-      {{ t('inspection.verifiedAt') }}: {{ room.verifiedAt }}
     </div>
   </div>
 </template>
@@ -302,7 +224,8 @@ function addUnexpected() {
   padding: 0.625rem 0;
   border-bottom: 1px solid #f3f4f6;
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
   gap: 0.5rem;
 
   &:last-child {
@@ -312,20 +235,13 @@ function addUnexpected() {
   &--present {
     opacity: 0.7;
   }
-
-  &--absent {
-    background: #fef2f2;
-    margin: 0 -0.5rem;
-    padding: 0.625rem 0.5rem;
-    border-radius: 0.25rem;
-  }
 }
 
-.occupant-info {
+.occupant-checkbox {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  flex-wrap: wrap;
+  cursor: pointer;
 }
 
 .occupant-name {
@@ -339,50 +255,6 @@ function addUnexpected() {
   color: #6b7280;
 }
 
-.presence-label {
-  font-size: 0.75rem;
-  font-weight: 600;
-  padding: 0.125rem 0.5rem;
-  border-radius: 1rem;
-
-  &--present {
-    background: #dcfce7;
-    color: #166534;
-  }
-
-  &--absent {
-    background: #fee2e2;
-    color: #991b1b;
-  }
-}
-
-.discrepancy-tag {
-  font-size: 0.6875rem;
-  background: #fef3c7;
-  color: #92400e;
-  padding: 0.125rem 0.5rem;
-  border-radius: 1rem;
-}
-
-.check-actions {
-  display: flex;
-  gap: 0.375rem;
-}
-
-.absent-form {
-  display: flex;
-  flex-direction: column;
-  gap: 0.375rem;
-  padding: 0.5rem;
-  background: #fef2f2;
-  border-radius: 0.375rem;
-}
-
-.absent-form-actions {
-  display: flex;
-  gap: 0.375rem;
-}
-
 .unexpected-section {
   margin-top: 1rem;
   padding-top: 1rem;
@@ -392,9 +264,19 @@ function addUnexpected() {
 .unexpected-item {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 0.5rem;
   padding: 0.375rem 0;
   font-size: 0.875rem;
+}
+
+.remove-btn {
+  border: none;
+  background: none;
+  color: #dc2626;
+  font-size: 0.75rem;
+  cursor: pointer;
+  text-decoration: underline;
 }
 
 .unexpected-form {
@@ -404,12 +286,18 @@ function addUnexpected() {
   margin: 0.5rem 0;
 }
 
-.unexpected-form-actions {
-  display: flex;
-  gap: 0.375rem;
+.search-result {
+  padding: 0.375rem 0.625rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.375rem;
+  font-size: 0.8125rem;
+  cursor: pointer;
+
+  &:hover {
+    background: #f9fafb;
+  }
 }
 
-.form-select,
 .form-input {
   padding: 0.375rem 0.625rem;
   border: 1px solid #d1d5db;
@@ -430,11 +318,8 @@ function addUnexpected() {
   border-top: 1px solid #e5e7eb;
 }
 
-.verified-info {
-  margin-top: 1rem;
-  padding-top: 0.75rem;
-  border-top: 1px solid #e5e7eb;
+.muted {
+  color: #9ca3af;
   font-size: 0.8125rem;
-  color: #166534;
 }
 </style>

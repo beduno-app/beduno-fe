@@ -6,10 +6,15 @@ import { useStaysStore } from '../store/stays.store'
 import { usePropertiesStore } from '@/modules/properties/store/properties.store'
 import { useWorkersStore } from '@/modules/workers/store/workers.store'
 import { useConflicts } from '../composables/useConflicts'
-import type { StayCreatePayload, ConstraintViolationResponse } from '../types/stay.types'
+import type { ActiveStayInfo } from '../composables/useConflicts'
+import type { StayCreatePayload, ConstraintViolationResponse, StayStatus } from '../types/stay.types'
 import { BaseButton, BaseInput } from '@/shared/components'
 import ConflictBanner from '../components/ConflictBanner.vue'
 import { AxiosError } from 'axios'
+import { staysApi } from '../api/stays.api'
+import { useEntityLookup } from '@/shared/composables/useEntityLookup'
+
+const ACTIVE_STAY_STATUSES: StayStatus[] = ['PLANNED', 'EXPECTED_TODAY', 'CHECKED_IN']
 
 const router = useRouter()
 const { t } = useI18n()
@@ -17,6 +22,7 @@ const staysStore = useStaysStore()
 const propertiesStore = usePropertiesStore()
 const workersStore = useWorkersStore()
 const conflicts = useConflicts()
+const lookup = useEntityLookup()
 
 const form = ref<StayCreatePayload>({
   workerId: '',
@@ -50,15 +56,33 @@ watch(
   },
 )
 
+async function resolveActiveStay(workerId: string): Promise<ActiveStayInfo | null> {
+  const response = await staysApi.getStays({ workerId })
+  const active = response.content.find((s) => ACTIVE_STAY_STATUSES.includes(s.status))
+  if (!active) return null
+  const [property, room] = await Promise.all([
+    lookup.getProperty(active.propertyId),
+    lookup.getRoom(active.propertyId, active.roomId),
+  ])
+  return {
+    propertyName: property?.name ?? active.propertyId,
+    roomNumber: room?.roomNumber ?? active.roomId,
+  }
+}
+
 // Live pre-submit validation on form changes
 watch(
   [selectedWorker, selectedRoom, selectedProperty],
-  () => {
+  async () => {
     showOverride.value = false
     overrideReason.value = ''
+    const workerActiveStay = selectedWorker.value
+      ? await resolveActiveStay(selectedWorker.value.id)
+      : null
     conflicts.validate({
       worker: selectedWorker.value,
       room: selectedRoom.value,
+      workerActiveStay,
       propertyStatus: selectedProperty.value?.status,
     })
   },
@@ -191,7 +215,7 @@ propertiesStore.fetchProperties()
             :key="r.id"
             :value="r.id"
           >
-            {{ r.roomNumber }} ({{ r.availableSpots }}/{{ r.capacity }})
+            {{ r.roomNumber }} ({{ r.availableBedCount }}/{{ r.bedCount }})
           </option>
         </select>
       </div>
