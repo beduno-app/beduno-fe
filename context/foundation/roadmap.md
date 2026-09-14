@@ -3,7 +3,7 @@ project: Beduno
 version: 1
 status: draft
 created: 2026-09-10
-updated: 2026-09-12
+updated: 2026-09-14
 prd_version: 1
 main_goal: market-feedback
 top_blocker: decisions
@@ -58,7 +58,7 @@ offline, and the result is provably correct rather than asserted.
 | S-04 | `property-scoped-audit` | (Property Admin) read the audit log for their own property | — | US-03, FR-003, FR-004 | ready |
 | S-05 | `governed-soft-overrides` | (Planner) plan stays in bulk where a soft override is a control, not a click-through | — | US-06, FR-021, FR-022 | ready |
 | S-06 | `night-shift-occupancy-truth` | find a 01:00 arrival, and reverse a no-show who turned up after all | S-01 | US-03, FR-010, FR-012 | proposed |
-| S-07 | `durable-conflict-inbox` | recover a replayed action the server rejected, after a reload | S-01 | US-03, FR-018, FR-019 | proposed |
+| S-07 | `durable-conflict-inbox` | recover a replayed action the server rejected, after a reload | S-01 | US-03, FR-018, FR-019 | planning |
 | S-08 | `move-contract-resolution` | move a worker between rooms or properties and get one answer | S-02 | FR-016 | blocked |
 | S-09 | `rbac-authority-correction` | (Property Admin) manage their own room inventory; only agency roles touch planned stays | beduno-be Room migration deployed | US-04, FR-001, FR-002 | blocked |
 | S-10 | `offline-safe-token-storage` | stay signed in at 6am with no signal, without tokens in `localStorage` | F-01 | US-02, FR-008, FR-009 | blocked |
@@ -232,7 +232,7 @@ Foundations below assume these are present and do NOT re-scaffold them.
 - **Blockers:** —
 - **Unknowns:** Resolved 2026-09-12 (PRD Open Question 13, Cluster B) — a queued action snapshots the state it was valid against at queue-time, not just the `stayId`; a conflict is owned by the user who queued the rejected action, no SLA/escalation yet at current team scale.
 - **Risk:** The baseline is worse than the PRD assumed. `sync.store.ts:80-86` pushes a `SyncConflict` and *deletes* the queued action, and conflicts live in an in-memory `ref` (`:27`) rather than IndexedDB — so a rejected check-in disappears on reload with no route back. The design correctly refuses to auto-merge and then loses the decision it refused to make. Sequenced after S-01 because the replay path has to be proven before its payload changes.
-- **Status:** proposed (unknowns resolved; still waiting on prerequisite S-01)
+- **Status:** planning — planned in `context/changes/refactor-opportunities/plan.md` (proceeding ahead of S-01 completing; manual offline-toggle verification substitutes for S-01's still-blocked E2E automation, see that plan's Open Risks)
 
 ### S-08: A move has one answer on both sides of the wire
 
