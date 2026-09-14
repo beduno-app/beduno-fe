@@ -146,8 +146,8 @@ Playwright harness.
 ### Phase 1: Stay lifecycle e2e spec
 
 #### Automated
-- [x] 1.1 Spec resolves with `--list`, no syntax/type errors
-- [x] 1.2 lint + typecheck pass
+- [x] 1.1 Spec resolves with `--list`, no syntax/type errors — 29bdf3c
+- [x] 1.2 lint + typecheck pass — 29bdf3c
 
 #### Manual
 - [ ] 1.3 Run against live API once secrets + worker fixture exist and confirm pass

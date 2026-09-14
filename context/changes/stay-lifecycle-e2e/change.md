@@ -1,7 +1,7 @@
 ---
 change_id: stay-lifecycle-e2e
 title: Prove the full stay lifecycle (create -> check-in -> check-out -> occupancy) against the live API
-status: new
+status: implemented
 created: 2026-09-14
 updated: 2026-09-14
 archived_at: null
