@@ -19,17 +19,17 @@ function formatTimestamp(ts: string): string {
   return formatDateTime(ts, locale.value)
 }
 
-function buildEntityLink(type: AuditEntityType, id: string): object {
-  const routeMap: Record<AuditEntityType, string> = {
+function buildEntityLink(type: AuditEntityType, id: string): object | null {
+  // ROOM/BED audit events carry only the room/bed id, not the owning
+  // property id, so there's no valid PropertyDetail route to link to.
+  if (type === 'ROOM' || type === 'BED') {
+    return null
+  }
+  const routeMap: Record<Exclude<AuditEntityType, 'ROOM' | 'BED'>, string> = {
     WORKER: 'WorkerDetail',
     STAY: 'StayDetail',
     PROPERTY: 'PropertyDetail',
-    ROOM: 'PropertyDetail',
-    BED: 'PropertyDetail',
     USER: 'UserManagement',
-  }
-  if (type === 'ROOM' || type === 'BED') {
-    return { name: routeMap[type] }
   }
   return { name: routeMap[type], params: { id } }
 }
@@ -55,11 +55,18 @@ onMounted(async () => {
       <td class="cell-entity">
         <span class="entity-type">{{ t(`audit.entityTypes.${event.entityType}`) }}</span>
         <RouterLink
-          :to="buildEntityLink(event.entityType, event.entityId)"
+          v-if="buildEntityLink(event.entityType, event.entityId)"
+          :to="buildEntityLink(event.entityType, event.entityId)!"
           class="entity-link"
         >
           {{ event.entityId }}
         </RouterLink>
+        <span
+          v-else
+          class="entity-id"
+        >
+          {{ event.entityId }}
+        </span>
       </td>
       <td class="cell-details">
         <button
@@ -140,6 +147,11 @@ onMounted(async () => {
   &:hover {
     text-decoration: underline;
   }
+}
+
+.entity-id {
+  color: #374151;
+  font-weight: 500;
 }
 
 .reason {
